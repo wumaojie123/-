@@ -3,7 +3,7 @@
 import Layout from '@/views/layout/Layout'
 
 const businessCharts = {
-  path: '/charts',
+  path: '/businessCharts',
   component: Layout,
   redirect: 'noredirect',
   name: 'businessCharts',

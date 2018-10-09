@@ -11,6 +11,7 @@ import businessChartsRouter from './modules/businessCharts'
 import agentManageRouter from './modules/agentManage'
 import deviceManageRouter from './modules/deviceManage'
 import userCenterRouter from './modules/userCenter'
+import contentManageRouter from './modules/contentManage'
 
 /** note: Submenu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -71,7 +72,7 @@ export const constantRouterMap = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: '主页', icon: 'dashboard', noCache: true }
+        meta: { title: '首页', icon: 'dashboard', noCache: true }
       }
     ]
   }
@@ -142,6 +143,7 @@ export const asyncRouterMap = [
   //   ]
   // },
   /** When your routing deviceManage is too long, you can split it into small modules**/
+  contentManageRouter,
   businessChartsRouter,
   deviceManageRouter,
   agentManageRouter,

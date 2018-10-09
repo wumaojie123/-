@@ -25,7 +25,7 @@
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              {{ '主页' }}
+              {{ '首页' }}
             </el-dropdown-item>
           </router-link>
           <router-link to="/userCenter/userInfo">
@@ -34,7 +34,7 @@
             </el-dropdown-item>
           </router-link>
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
+            <span style="display:block;" @click="logout">{{ '退出登录' }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
