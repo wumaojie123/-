@@ -7,67 +7,73 @@ const contentManage = {
   redirect: 'noredirect',
   name: 'contentManage',
   meta: {
-    title: '内容管理',
+    title: '内部管理',
     icon: 'peoples'
   },
   children: [
     {
       path: 'agentRoleManage',
       component: () => import('@/views/charts/keyboard'),
-      name: 'agentManage',
+      name: 'agentRoleManage',
       meta: { title: '一级代理商管理', noCache: true },
+      // alwaysShow: true,
       children: [
         {
-          path: 'querySubAgent',
+          path: 'agentRoleList',
           component: () => import('@/views/charts/keyboard'),
-          name: 'Menu1-1',
+          name: 'agentRoleList',
+          meta: { title: '代理商列表' },
+          hidden: false
+        },
+        {
+          path: 'querySubAgent/:id(\\d+)',
+          component: () => import('@/views/charts/keyboard'),
+          name: 'querySubAgent',
           meta: { title: '查看下级代理' },
           hidden: true
         },
         {
-          path: 'edit',
-          component: () => import('@/views/charts/keyboard'),
-          name: 'Menu1-2',
-          redirect: '/nested/menu1/menu1-2/menu1-2-1',
-          meta: { title: '编辑' },
-          hidden: true,
-          children: [
-            {
-              path: 'add',
-              component: () => import('@/views/charts/keyboard'),
-              name: 'Menu1-2-1',
-              meta: { title: '新增' },
-              hidden: true
-            },
-            {
-              path: 'modi',
-              component: () => import('@/views/charts/keyboard'),
-              name: 'modi',
-              meta: { title: '修改' },
-              hidden: true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      path: 'BDRoleManage',
-      component: () => import('@/views/charts/keyboard'),
-      name: 'BDRoleManage',
-      meta: { title: 'BD人员管理', noCache: true },
-      children: [
-        {
-          path: 'add',
+          path: 'edit/add',
           component: () => import('@/views/charts/keyboard'),
           name: 'add',
-          meta: { title: '新增' },
+          meta: { title: '代理商新增' },
           hidden: true
         },
         {
-          path: 'modify',
+          path: 'edit/modify/:id(\\d+)',
           component: () => import('@/views/charts/keyboard'),
-          name: 'modify',
-          meta: { title: '修改' },
+          name: 'agentModify',
+          meta: { title: '代理商编辑' },
+          hidden: true
+        }
+      ]
+    },
+
+    {
+      path: 'bdRoleManage',
+      component: () => import('@/views/charts/keyboard'),
+      name: 'bdRoleManage',
+      meta: { title: 'BD管理', noCache: true },
+      children: [
+        {
+          path: 'bdList',
+          component: () => import('@/views/charts/keyboard'),
+          name: 'bdList',
+          meta: { title: 'BD人员列表' },
+          hidden: false
+        },
+        {
+          path: 'edit/dbAdd',
+          component: () => import('@/views/charts/keyboard'),
+          name: 'dbAdd',
+          meta: { title: '新增BD' },
+          hidden: true
+        },
+        {
+          path: 'edit/dbModify/:id(\\d+)',
+          component: () => import('@/views/charts/keyboard'),
+          name: 'dbModify',
+          meta: { title: '修改BD' },
           hidden: true
         }
       ]
