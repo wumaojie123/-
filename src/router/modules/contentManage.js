@@ -15,6 +15,7 @@ const contentManage = {
       path: 'agentRoleManage',
       component: () => import('@/views/charts/keyboard'),
       name: 'agentRoleManage',
+      redirect: '/roleManage/agentRoleManage/agentRoleList',
       meta: { title: '一级代理商管理', noCache: true },
       // alwaysShow: true,
       children: [
@@ -52,6 +53,7 @@ const contentManage = {
     {
       path: 'bdRoleManage',
       component: () => import('@/views/charts/keyboard'),
+      redirect: '/roleManage/bdRoleManage/bdList',
       name: 'bdRoleManage',
       meta: { title: 'BD管理', noCache: true },
       children: [
