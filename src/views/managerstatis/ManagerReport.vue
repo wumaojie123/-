@@ -70,6 +70,13 @@ export default {
       this.queryParams.startTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
       this.queryParams.endTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     },
+    handleQueryParams() {
+      if (this.queryParams.phone && validateTel(this.queryParams.phone)) {
+        this.queryList(this.pageInfo.currPage)
+      } else {
+        this.$message('请输入正确得手机号码')
+      }
+    },
     queryList(page = 1) {
       this.list = []
       this.pageInfo.currPage = page
@@ -83,21 +90,7 @@ export default {
     handleCurrentChange(page) {
       console.log('curChange:', page)
       this.queryList(page)
-    },
-    handleQueryParams() {
-      if (this.queryParams.phone && validateTel(this.queryParams.phone)) {
-        this.queryList(this.pageInfo.currPage)
-      } else {
-        this.$message('请输入正确得手机号码')
-      }
     }
   }
 }
 </script>
-
-<style>
-.content-area{
-	padding-top: 20px;
-	padding-left: 20px;
-}
-</style>
