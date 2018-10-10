@@ -19,13 +19,15 @@ const agentManage = {
       meta: { title: '代理商列表', noCache: true }
     },
     {
-      path: 'editAgent',
+      path: 'agentsList/editAgent',
+      hidden: true,
       component: () => import('@/views/angentManage/EditAngent'),
       name: 'editAgent',
       meta: { title: '编辑代理商', noCache: true }
     },
     {
-      path: 'addAgent',
+      path: 'agentsList/addAgent',
+      hidden: true,
       component: () => import('@/views/angentManage/NewAngent'),
       name: 'addAgent',
       meta: { title: '新增代理商', noCache: true }

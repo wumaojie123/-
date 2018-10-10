@@ -2,26 +2,30 @@
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="100px" label-position="left">
       <el-form-item label="代理商名称" >
-        <el-input placeholder="请输入代理商名称"/>
+        <el-input placeholder="请输入代理商名称" maxlength="64" clearable />
       </el-form-item>
       <el-form-item label="代理商账号">
-        <el-input placeholder="请输入代理商账号"/>
+        <el-input placeholder="请输入代理商账号" maxlength="11" clearable />
       </el-form-item>
       <el-form-item label="商家账号">
-        <el-input placeholder="请输入商家账号"/>
+        <el-input placeholder="请输入商家账号" maxlength="32" clearable />
       </el-form-item>
       <p/>
       <el-form-item label="联系人">
-        <el-input placeholder="请输入联系人"/>
+        <el-input placeholder="请输入联系人" maxlength="32" clearable />
       </el-form-item>
       <el-form-item label="联系手机">
-        <el-input placeholder="请输入手机号码"/>
+        <el-input placeholder="请输入手机号码" maxlength="11" clearable />
       </el-form-item>
       <p/>
-      <el-button type="primary" @click="queryList">查询</el-button>
-      <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
-      <el-button type="primary" @click="resetQueryParams">编辑</el-button>
-      <el-button type="primary" @click="toAdd">新增</el-button>
+      <div class="flex-layout">
+        <div class="flex-item">
+          <el-button type="primary" @click="queryList">查询</el-button>
+          <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
+          <el-button type="primary" @click="toEditPage">编辑代理商</el-button>
+        </div>
+        <router-link :to="{path: 'agentsList/addAgent'}"><el-button type="primary" icon="el-icon-circle-plus" @click="toAdd">新增代理商</el-button></router-link>
+      </div>
     </el-form>
     <!-- 列表 -->
     <el-table :data="list" border style="width: 100%;margin-bottom: 20px;">
@@ -39,6 +43,7 @@
 </template>
 
 <script>
+import { validateTel } from '@/utils/validate'
 export default {
   data() {
     return {
@@ -57,14 +62,31 @@ export default {
     resetQueryParams() {
       this.queryParams = { startTime: '', endTime: '' }
     },
-    queryList() {
-      this.queryParams = { startTime: '', endTime: '' }
+    queryList(page = 1) {
+      this.list = []
+      this.pageInfo.currPage = page
     },
-    handleSizeChange() {
-      this.queryParams = { startTime: '', endTime: '' }
+    toAdd() {
+      // this.$router.push({ path: 'addAgent' })
     },
-    handleCurrentChange() {
-      this.queryParams = { startTime: '', endTime: '' }
+    toEditPage() {
+      this.$router.push({ path: 'agentsList/editAgent' })
+    },
+    handleSizeChange(pageSize) {
+      console.log('sizeChange', pageSize)
+      this.pageInfo.pageSize = pageSize
+      this.queryList(this.pageInfo.currPage)
+    },
+    handleCurrentChange(page) {
+      console.log('curChange:', page)
+      this.queryList(page)
+    },
+    handleQueryParams() {
+      if (this.queryParams.phone && validateTel(this.queryParams.phone)) {
+        this.queryList(this.pageInfo.currPage)
+      } else {
+        this.$message('请输入正确得手机号码')
+      }
     }
   }
 }
@@ -74,5 +96,11 @@ export default {
 .content-area{
 	padding-top: 20px;
 	padding-left: 20px;
+}
+.flex-layout{
+  display: flex;
+  padding: 0 20px;
+  /* align-content: space-between; */
+  justify-content: space-between;
 }
 </style>

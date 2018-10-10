@@ -59,7 +59,7 @@ export default {
     }
   },
   beforeMount() {
-    console.log('即将mount')
+    console.log('mount')
     this.queryParams.startTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.queryParams.endTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.queryList()
