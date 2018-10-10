@@ -2,8 +2,8 @@
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="100px" label-position="right">
       <el-form-item label="统计日期">
-        <el-date-picker type="date" placeholder="选择日期"/> -
-        <el-date-picker type="date" placeholder="选择日期"/>
+        <el-date-picker v-model="queryParams.startTime" type="date" placeholder="选择日期"/> -
+        <el-date-picker v-model="queryParams.endTime" type="date" placeholder="选择日期"/>
       </el-form-item>
       <p/>
       <el-form-item label="代理商名称">
@@ -20,7 +20,7 @@
       <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" border show-summary style="width: 100%;margin-bottom: 20px;">
+    <el-table :data="list" border style="width: 100%;margin-bottom: 20px;">
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable"/>
     </el-table>
     <el-pagination
@@ -35,13 +35,14 @@
 </template>
 
 <script>
+import { parseTime } from '@/utils/index'
 export default {
   data() {
     return {
       queryParams: { startTime: '', endTime: '' },
       list: [],
       colums: [
-        { key: 'name', label: '代理商名称' },
+        { key: 'name', label: '代理商名称', width: 180 },
         { key: 'info', label: '关联商家信息', width: 180 },
         { key: 'total', label: '设备总数', width: 180, sortable: true },
         { key: 'inline', label: '在线设备数量', width: 180 },
@@ -53,6 +54,11 @@ export default {
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 }
     }
+  },
+  beforeMount() {
+    console.log('即将mount')
+    this.queryParams.startTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+    this.queryParams.endTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
   },
   methods: {
     resetQueryParams() {

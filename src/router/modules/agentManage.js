@@ -21,7 +21,7 @@ const agentManage = {
     {
       path: 'agentsEdit',
       component: () => import('@/views/angentManage/EditAngent'),
-      name: 'agentsList',
+      name: 'editAgents',
       meta: { title: '编辑代理商列表', noCache: true }
     }
   ]
