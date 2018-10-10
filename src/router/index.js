@@ -11,7 +11,7 @@ import businessChartsRouter from './modules/businessCharts'
 import agentManageRouter from './modules/agentManage'
 import deviceManageRouter from './modules/deviceManage'
 import userCenterRouter from './modules/userCenter'
-import contentManageRouter from './modules/contentManage'
+import insideManageRouter from './modules/insideManage'
 
 /** note: Submenu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -117,7 +117,7 @@ export const asyncRouterMap = [
   //   ]
   // },
   /** When your routing deviceManage is too long, you can split it into small modules**/
-  contentManageRouter,
+  insideManageRouter,
   businessChartsRouter,
   deviceManageRouter,
   agentManageRouter,
