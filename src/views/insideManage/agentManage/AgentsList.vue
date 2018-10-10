@@ -31,7 +31,7 @@
       highlight-current-row
       style="width: 100%;">
       <el-table-column :label="`操作`" fixed align="center" width="65">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-radio :label="scope.row.id" v-model="checked" class="radio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
         </template>
       </el-table-column>
@@ -269,7 +269,7 @@ export default {
         if (!this.checkedRow) {
           this.$notify({
             title: '提示',
-            message: '操作失败,请选中某一条数据',
+            message: '操作失败,请选中某一条数据进行操作',
             type: 'error',
             duration: 2000
           })
@@ -280,13 +280,13 @@ export default {
       }
       if (type === 'add') { // 新增代理商
         // this.$route.
-        this.$router.push({ path: '/insideManage/agentRoleManage/add', query: { plan: 'private' }})
+        this.$router.push({ path: '/insideManage/agentRoleManage/createAgent', query: { plan: 'private' }})
       } else {
         if (!checkIsNull()) {
           return false
         }
         if (type === 'edit') { // 编辑代理商
-          this.$router.push({ path: '/insideManage/agentRoleManage/edit' + '/' + this.checkedRow.id, query: { id: this.checkedRow.id }})
+          this.$router.push({ path: '/insideManage/agentRoleManage/agentEdit' + '/' + this.checkedRow.id, query: { id: this.checkedRow.id }})
         } else if (type === 'showSubAgentList') {
           this.$router.push({ path: '/insideManage/agentRoleManage/subAgent' + '/' + this.checkedRow.id, query: { id: this.checkedRow.id }})
         } else if (type === 'delete') {

@@ -34,16 +34,16 @@ const insideManage = {
           hidden: true
         },
         {
-          path: 'add',
+          path: 'createAgent',
           component: () => import('@/views/insideManage/agentManage/AddAgent'),
-          name: 'add',
+          name: 'createAgent',
           meta: { title: '代理商新增' },
           hidden: true
         },
         {
-          path: 'edit/:id(\\d+)',
+          path: 'agentEdit/:id(\\d+)',
           component: () => import('@/views/insideManage/agentManage/EditAgent'),
-          name: 'editAgent',
+          name: 'agentEdit',
           meta: { title: '代理商编辑' },
           hidden: true
         }
@@ -65,16 +65,16 @@ const insideManage = {
           hidden: false
         },
         {
-          path: 'add',
+          path: 'addBD',
           component: () => import('@/views/insideManage/bdManage/AddBd'),
-          name: 'add',
+          name: 'addBD',
           meta: { title: '新增BD' },
           hidden: true
         },
         {
-          path: 'edit/:id(\\d+)',
+          path: 'editBD/:id(\\d+)',
           component: () => import('@/views/insideManage/bdManage/editBd'),
-          name: 'editBd',
+          name: 'editBD',
           meta: { title: '修改BD' },
           hidden: true
         }

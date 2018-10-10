@@ -13,7 +13,7 @@
       highlight-current-row
       style="width: 100%;">
       <el-table-column :label="`序号`" fixed align="center" width="65">
-        <template scope="scope">
+        <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
       </el-table-column>
