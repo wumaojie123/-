@@ -13,7 +13,7 @@ const userCenter = {
   children: [
     {
       path: 'userInfo',
-      component: () => import('@/views/charts/keyboard'),
+      component: () => import('@/views/baseInfo/baseInfo'),
       name: 'userInfo',
       meta: { title: '基本资料', noCache: true }
     },
