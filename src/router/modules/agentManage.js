@@ -14,9 +14,15 @@ const agentManage = {
   children: [
     {
       path: 'agentsList',
-      component: () => import('@/views/charts/keyboard'),
+      component: () => import('@/views/angentManage/AngentList'),
       name: 'agentsList',
       meta: { title: '代理商列表', noCache: true }
+    },
+    {
+      path: 'agentsEdit',
+      component: () => import('@/views/angentManage/EditAngent'),
+      name: 'agentsList',
+      meta: { title: '编辑代理商列表', noCache: true }
     }
   ]
 }
