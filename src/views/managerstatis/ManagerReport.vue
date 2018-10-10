@@ -21,13 +21,14 @@
     </el-form>
     <!-- 列表 -->
     <el-table :data="list" border style="width: 100%;margin-bottom: 20px;">
-      <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable"/>
+      <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
     <el-pagination
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pageInfo.pageSize"
       :total="pageInfo.total"
       :current-page="pageInfo.currPage"
+      background
       layout="total, prev, pager, next, sizes, jumper"
       @size-change="handleSizeChange"
       @prev-click="handleCurrentChange"
@@ -47,13 +48,13 @@ export default {
       colums: [
         { key: 'name', label: '代理商名称', width: 180 },
         { key: 'info', label: '关联商家信息', width: 180 },
-        { key: 'total', label: '设备总数', width: 180, sortable: true },
-        { key: 'inline', label: '在线设备数量', width: 180 },
-        { key: 'total', label: '订单数量', width: 180, sortable: true },
-        { key: 'total', label: '收入总额', width: 180, sortable: true },
-        { key: 'total', label: '在线收入', width: 180, sortable: true },
-        { key: 'total', label: '现金收入', width: 180, sortable: true },
-        { key: 'total', label: '广告收入', width: 180, sortable: true }
+        { key: 'total', label: '设备总数', width: 120, sortable: true },
+        { key: 'inline', label: '在线设备数量', width: 140, sortable: true },
+        { key: 'total', label: '订单数量', width: 120, sortable: true },
+        { key: 'total', label: '收入总额', width: 120, sortable: true },
+        { key: 'total', label: '在线收入', width: 120, sortable: true },
+        { key: 'total', label: '现金收入', width: 120, sortable: true },
+        { key: 'total', label: '广告收入', width: 120, sortable: true }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 }
     }
