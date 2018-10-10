@@ -22,13 +22,15 @@
         <div class="flex-item">
           <el-button type="primary" @click="queryList">查询</el-button>
           <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
-          <el-button type="primary" @click="toEditPage">编辑代理商</el-button>
+          <el-button type="primary" @click="handleEdit">编辑代理商</el-button>
+          <el-button type="primary" @click="handleDel">删除代理商</el-button>
         </div>
-        <router-link :to="{path: 'agentsList/addAgent'}"><el-button type="primary" icon="el-icon-circle-plus" @click="toAdd">新增代理商</el-button></router-link>
+        <router-link :to="{path: 'agentsList/addAgent'}"><el-button type="primary" icon="el-icon-circle-plus">新增代理商</el-button></router-link>
       </div>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" border style="width: 100%;margin-bottom: 20px;">
+    <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" @selection-change="handleItem" >
+      <el-table-column type="selection" width="55"/>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable"/>
     </el-table>
     <el-pagination
@@ -55,7 +57,8 @@ export default {
         { key: 'total', label: '设备总数', width: 180, sortable: true },
         { key: 'inline', label: '在线设备数量', width: 180 }
       ],
-      pageInfo: { total: 20, pageSize: 10, currPage: 1 }
+      pageInfo: { total: 20, pageSize: 10, currPage: 1 },
+      angentInfo: []
     }
   },
   methods: {
@@ -63,14 +66,38 @@ export default {
       this.queryParams = { startTime: '', endTime: '' }
     },
     queryList(page = 1) {
+      this.angentInfo = []
       this.list = []
       this.pageInfo.currPage = page
     },
-    toAdd() {
-      // this.$router.push({ path: 'addAgent' })
+    handleItem(value) {
+      console.log(JSON.stringify(value))
+      this.angentInfo = value
     },
-    toEditPage() {
-      this.$router.push({ path: 'agentsList/editAgent' })
+    handleEdit() {
+      if (this.angentInfo.length === 1) {
+        this.$router.push({ path: 'agentsList/editAgent', query: { angentInfo: encodeURIComponent(JSON.stringify(this.angentInfo[0])) }})
+      } else if (this.angentInfo.length > 1) {
+        this.$message({ message: '只能编辑一条代理商信息', type: 'error' })
+      } else {
+        this.$message({ message: '请选中一条代理商信息！！', type: 'error' })
+      }
+    },
+    handleDel() {
+      if (this.angentInfo.length === 1) {
+        this.$confirm('是否删除该代理商信息', {
+          callback: action => {
+            if (action === 'confirm') {
+              console.log('确认删除数据')
+            }
+          }
+        })
+        console.log('删除代理商数据')
+      } else if (this.angentInfo.length > 1) {
+        this.$message({ message: '只能编辑一条代理商信息', type: 'error' })
+      } else {
+        this.$message({ message: '请选中一条代理商信息！！', type: 'error' })
+      }
     },
     handleSizeChange(pageSize) {
       console.log('sizeChange', pageSize)
@@ -91,16 +118,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.content-area{
-	padding-top: 20px;
-	padding-left: 20px;
-}
-.flex-layout{
-  display: flex;
-  padding: 0 20px;
-  /* align-content: space-between; */
-  justify-content: space-between;
-}
-</style>

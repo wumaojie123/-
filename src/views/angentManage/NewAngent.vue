@@ -89,18 +89,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.content{
-	padding-left: 20px;
-  margin-bottom: 30px;
-}
-.input-300{
-  width: 300px;
-}
-.input-anno{
-  margin-left: 20px;
-  font-size: 12px;
-  color:#b1a8a8;
-}
-</style>
