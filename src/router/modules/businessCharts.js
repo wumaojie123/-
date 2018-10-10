@@ -15,7 +15,7 @@ const businessCharts = {
   children: [
     {
       path: 'businessList',
-      component: () => import('@/views/charts/keyboard'),
+      component: () => import('@/views/managerstatis/ManagerReport'),
       name: 'KeyboardChart',
       meta: { title: '经营报表', noCache: true }
     },
