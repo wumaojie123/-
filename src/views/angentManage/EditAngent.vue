@@ -5,16 +5,16 @@
     </el-menu>
     <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfoRules" label-width="120px" label-position="left" style="margin-top: 20px;">
       <el-form-item label="代理商名称" prop="angentName">
-        <el-input v-model="baseInfo.angentName" placeholder="请输入代理商名称" class="input-300" maxlength="64" />
+        <el-input v-model="baseInfo.angentName" placeholder="请输入代理商名称" type="text" class="input-300" maxlength="64" clearable />
       </el-form-item>
       <el-form-item label="联系人姓名" prop="name">
-        <el-input v-model="baseInfo.name" placeholder="请输入联系人姓名" class="input-300" maxlength="32" />
+        <el-input v-model="baseInfo.name" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="32" clearable />
       </el-form-item>
       <el-form-item label="手机号码" prop="phone">
-        <el-input v-model="baseInfo.phone" placeholder="请输入手机号" class="input-300" maxlength="11" />
+        <el-input v-model="baseInfo.phone" placeholder="请输入手机号" type="tel" class="input-300" maxlength="11" clearable />
       </el-form-item>
       <el-form-item label="联系地址" prop="address">
-        <el-input v-model="baseInfo.address" placeholder="请输入联系地址" style="width: 600px;" maxlength="256" />
+        <el-input v-model="baseInfo.address" placeholder="请输入联系地址" type="text" style="width: 600px;" maxlength="256" clearable />
       </el-form-item>
       <p/>
       <el-button type="primary" @click="handleBaseInfo">保存</el-button>
@@ -25,14 +25,14 @@
     </el-menu>
     <el-form ref="accountInfoRef" :model="accountInfo" :rules="accountInfoRules" style="margin-top: 20px;" label-width="120px" label-position="left">
       <el-form-item label="代理商账号" prop="account">
-        <el-input v-model="accountInfo.account" placeholder="请输入代理商账号" class="input-300" maxlength="11" />
+        <el-input v-model="accountInfo.account" placeholder="请输入代理商账号" class="input-300" maxlength="11" clearable />
       </el-form-item>
       <el-form-item label="代理商密码" prop="password">
-        <el-input v-model="accountInfo.password" type="password" placeholder="请输入代理商密码" class="input-300" maxlength="16" />
+        <el-input v-model="accountInfo.password" type="password" placeholder="请输入代理商密码" class="input-300" maxlength="16" clearable />
         <span class="input-anno">请输入6-16位的数字或字母</span>
       </el-form-item>
       <el-form-item label="关联商家账号" prop="acc">
-        <el-input v-model="accountInfo.acc" placeholder="请输入关联商家账号" class="input-300" maxlength="32" />
+        <el-input v-model="accountInfo.acc" placeholder="请输入关联商家账号" class="input-300" maxlength="32" clearable />
         <span class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>
       </el-form-item>
       <p/>
@@ -81,6 +81,10 @@ export default {
 </script>
 
 <style>
+.content-area{
+	padding-top: 20px;
+	padding-left: 20px;
+}
 .input-300{
   width: 300px;
 }

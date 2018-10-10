@@ -7,16 +7,16 @@
       </el-form-item>
       <p/>
       <el-form-item label="代理商名称">
-        <el-input placeholder="请输入代理商名称"/>
+        <el-input type="text" placeholder="请输入代理商名称"/>
       </el-form-item>
       <el-form-item label="商家名称">
-        <el-input placeholder="请输入商家名称"/>
+        <el-input type="text" placeholder="请输入商家名称"/>
       </el-form-item>
       <el-form-item label="商家手机号码">
-        <el-input placeholder="请输入商家手机号码"/>
+        <el-input v-model="queryParams.phone" type="tel" placeholder="请输入商家手机号码"/>
       </el-form-item>
       <p/>
-      <el-button type="primary" @click="queryList">查询</el-button>
+      <el-button type="primary" @click="handleQueryParams">查询</el-button>
       <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
     </el-form>
     <!-- 列表 -->
@@ -30,12 +30,15 @@
       :current-page="pageInfo.currPage"
       layout="total, prev, pager, next, sizes, jumper"
       @size-change="handleSizeChange"
+      @prev-click="handleCurrentChange"
+      @next-click="handleCurrentChange"
       @current-change="handleCurrentChange"/>
   </div>
 </template>
 
 <script>
 import { parseTime } from '@/utils/index'
+import { validateTel } from '@/utils/validate'
 export default {
   data() {
     return {
@@ -59,19 +62,34 @@ export default {
     console.log('即将mount')
     this.queryParams.startTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.queryParams.endTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+    this.queryList()
   },
   methods: {
     resetQueryParams() {
-      this.queryParams = { startTime: '', endTime: '' }
+      this.queryParams = { startTime: '', endTime: '', phone: '' }
+      this.queryParams.startTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+      this.queryParams.endTime = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     },
-    queryList() {
-      this.queryParams = { startTime: '', endTime: '' }
+    queryList(page = 1) {
+      this.list = []
+      this.pageInfo.currPage = page
+      console.log('查询列表')
     },
-    handleSizeChange() {
-      this.queryParams = { startTime: '', endTime: '' }
+    handleSizeChange(pageSize) {
+      console.log('sizeChange', pageSize)
+      this.pageInfo.pageSize = pageSize
+      this.queryList(this.pageInfo.currPage)
     },
-    handleCurrentChange() {
-      this.queryParams = { startTime: '', endTime: '' }
+    handleCurrentChange(page) {
+      console.log('curChange:', page)
+      this.queryList(page)
+    },
+    handleQueryParams() {
+      if (this.queryParams.phone && validateTel(this.queryParams.phone)) {
+        this.queryList(this.pageInfo.currPage)
+      } else {
+        this.$message('请输入正确得手机号码')
+      }
     }
   }
 }

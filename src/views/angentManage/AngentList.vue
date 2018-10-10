@@ -21,7 +21,7 @@
       <el-button type="primary" @click="queryList">查询</el-button>
       <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
       <el-button type="primary" @click="resetQueryParams">编辑</el-button>
-      <el-button type="primary" @click="resetQueryParams">新增</el-button>
+      <el-button type="primary" @click="toAdd">新增</el-button>
     </el-form>
     <!-- 列表 -->
     <el-table :data="list" border style="width: 100%;margin-bottom: 20px;">
