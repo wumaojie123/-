@@ -12,7 +12,7 @@
       height="550"
       highlight-current-row
       style="width: 100%;">
-      <el-table-column :label="`序号`" fixed align="center" width="65">
+      <el-table-column :label="`序号`" align="center" width="65px">
         <template slot-scope="scope">
           <span>{{ scope.row.id }}</span>
         </template>
@@ -44,7 +44,7 @@
       </el-table-column>
       <el-table-column :label="`再下级代理商数量`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ 121212 }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`创建日期`" width="150px" align="center">
@@ -113,6 +113,8 @@ export default {
     }
   },
   created() {
+    // todo 获取id号,并且根据id拉取数据列表
+    console.log(this.$route)
     this.getList()
   },
   methods: {
