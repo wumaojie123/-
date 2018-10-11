@@ -20,12 +20,12 @@
       <p/>
       <div class="flex-layout">
         <div class="flex-item">
-          <el-button type="primary" @click="queryList">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="queryList">查询</el-button>
           <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
-          <el-button type="primary" @click="handleEdit">编辑代理商</el-button>
-          <el-button type="primary" @click="handleDel">删除代理商</el-button>
+          <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理商</el-button>
+          <el-button type="primary" icon="el-icon-delete" @click="handleAngent('del')">删除代理商</el-button>
         </div>
-        <router-link :to="{path: 'add'}"><el-button type="primary" icon="el-icon-circle-plus">新增代理商</el-button></router-link>
+        <router-link :to="{path: 'add'}"><el-button type="primary" icon="el-icon-plus">新增代理商</el-button></router-link>
       </div>
     </el-form>
     <!-- 列表 -->
@@ -79,25 +79,20 @@ export default {
       console.log(JSON.stringify(value))
       this.angentInfo = value
     },
-    handleEdit() {
+    handleAngent(type) {
       if (this.angentInfo.length === 1) {
-        this.$router.push({ path: '/agentManage/angentList/edit', query: { angentInfo: encodeURIComponent(JSON.stringify(this.angentInfo[0])) }})
-      } else if (this.angentInfo.length > 1) {
-        this.$message({ message: '只能编辑一条代理商信息', type: 'error' })
-      } else {
-        this.$message({ message: '请选中一条代理商信息！！', type: 'error' })
-      }
-    },
-    handleDel() {
-      if (this.angentInfo.length === 1) {
-        this.$confirm('是否删除该代理商信息', {
-          callback: action => {
-            if (action === 'confirm') {
-              console.log('确认删除数据')
+        if (type === 'edit') {
+          this.$router.push({ path: '/agentManage/angentList/edit', query: { angentInfo: encodeURIComponent(JSON.stringify(this.angentInfo[0])) }})
+        } else if (type === 'del') {
+          console.log('删除代理商数据')
+          this.$confirm('是否删除该代理商信息', {
+            callback: action => {
+              if (action === 'confirm') {
+                console.log('确认删除数据')
+              }
             }
-          }
-        })
-        console.log('删除代理商数据')
+          })
+        }
       } else if (this.angentInfo.length > 1) {
         this.$message({ message: '只能编辑一条代理商信息', type: 'error' })
       } else {

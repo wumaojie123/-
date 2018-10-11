@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { telCheck } from '@/utils/rules'
+import { telCheck, passwordCheck } from '@/utils/rules'
 export default {
   data() {
     return {
@@ -68,7 +68,7 @@ export default {
         account: [{ required: true, message: '请输入代理商名称', trigger: 'blur' }],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 16, message: '请输入6-16位的数字或字母', trigger: 'blur' }
+          { validator: passwordCheck, trigger: 'blur' }
         ],
         acc: [{ required: true, message: '请输入手机号码', trigger: 'blur' }]
       }
