@@ -1,7 +1,6 @@
 <template>
   <div class="dashboard-editor-container">
-    <h3>欢迎来到乐摇摇代理商管理后台</h3>
-    <footer>©2018 Copyright 深圳乐摇摇信息科技有限公司 备案号：粤ICP备16014453号-1</footer>
+    <h3 class="title">乐摇摇代理商管理后台, 欢迎您!</h3>
   </div>
 </template>
 
@@ -27,11 +26,19 @@ export default {
 .dashboard-editor-container {
   padding: 32px;
   width: 100%;
-  height: 100% !important;
-  background-color: rgb(240, 242, 245);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  height: 100%;
+  min-height: 600px;
+  /*background-color: rgb(240, 242, 245);*/
+  //display: flex;
+  //flex-direction: column;
+  //justify-content: space-between;
+  .title{
+    text-align: center;
+    font-weight: bolder;
+    font-size: 32px;
+    color: #A089D5;
+    margin: 0 auto;
+  }
   .chart-wrapper {
     background: #fff;
     padding: 16px 16px 0;
