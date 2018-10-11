@@ -18,17 +18,17 @@ const userCenter = {
       meta: { title: '基本资料', noCache: true }
     },
     {
-      path: 'infoEdit',
-      component: () => import('@/views/charts/line'),
+      path: 'editPassword',
+      component: () => import('@/views/modifyPassword/ModifyPassword'),
       name: 'editPassword',
       meta: { title: '修改密码', noCache: true }
-    },
-    {
-      path: 'myPack',
-      component: () => import('@/views/charts/mixChart'),
-      name: 'MixChart',
-      meta: { title: '我的钱包', noCache: true }
     }
+    // { // 暂时不做
+    //   path: 'myPack',
+    //   component: () => import('@/views/charts/mixChart'),
+    //   name: 'MixChart',
+    //   meta: { title: '我的钱包', noCache: true }
+    // }
   ]
 }
 

@@ -29,3 +29,10 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+  .dashboard-container{
+    width: 100%;
+    min-height: 600px;
+    height: 100%;
+  }
+</style>
