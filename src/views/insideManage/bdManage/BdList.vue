@@ -1,18 +1,18 @@
 <template>
   <div class="bd-container">
     <div class="filter-container">
-      <el-input :placeholder="`合同编号`" v-model="listQuery.title" style="width: 250px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-input :placeholder="`代理商名称`" v-model="listQuery.title" style="width: 250px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-input :placeholder="`商家手机`" v-model="listQuery.title" style="width: 250px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <br>
-      <br>
-      <el-input :placeholder="`商家名称`" v-model="listQuery.title" style="width: 250px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-select v-model="listQuery.importance" :placeholder="`BD同事`" clearable style="width: 250px;margin-right: 20px;" class="filter-item">
-        <el-option v-for="item in BDList" :key="item" :label="item" :value="item"/>
-      </el-select>
-      <el-select v-model="listQuery.type" :placeholder="`账号状态`" clearable class="filter-item" style="width: 200px;margin-right: 20px;">
-        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" style="text-align: left"/>
-      </el-select>
+      <div class="item">
+        <span class="label">&nbsp;&nbsp;BD姓名&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <el-select v-model="listQuery.importance" :placeholder="`请选择`" clearable style="width: 250px;margin-right: 20px;vertical-align: baseline;" class="filter-item">
+          <el-option v-for="item in BDList" :key="item" :label="item" :value="item"/>
+        </el-select>
+      </div>
+      <div class="item">
+        <span class="label">账号状态</span>
+        <el-select v-model="listQuery.type" :placeholder="`请选择`" clearable class="filter-item" style="width: 200px;margin-right: 20px;vertical-align: baseline;">
+          <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" style="text-align: left"/>
+        </el-select>
+      </div>
       <br>
       <br>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ `查找` }}</el-button>
@@ -295,6 +295,17 @@ export default {
   .radio{
     .el-radio__input{
       // border: 1px solid #000;
+    }
+  }
+  .item{
+    display: inline-block;
+    .el-input{
+      margin-bottom: 0;
+    }
+    .label{
+      margin-right: 10px;
+      vertical-align: middle;
+      font-weight: 700;
     }
   }
   th.gutter{
