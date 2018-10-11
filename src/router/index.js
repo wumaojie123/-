@@ -75,7 +75,8 @@ export const constantRouterMap = [
         meta: { title: '首页', icon: 'dashboard', noCache: true }
       }
     ]
-  }
+  },
+  { path: '*', redirect: '/404', hidden: true }
 ]
 
 export default new Router({
@@ -121,7 +122,7 @@ export const asyncRouterMap = [
   businessChartsRouter,
   deviceManageRouter,
   agentManageRouter,
-  userCenterRouter,
+  userCenterRouter
   // {
   //   path: '/example',
   //   component: Layout,
@@ -167,5 +168,4 @@ export const asyncRouterMap = [
   //   ]
   // },
 
-  { path: '*', redirect: '/404', hidden: true }
 ]

@@ -46,6 +46,7 @@
       :key="tableKey"
       :data="list"
       border
+      stripe
       fit
       height="550"
       highlight-current-row
@@ -340,6 +341,9 @@ export default {
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
   /* + 是兄弟选择器,获取选中后的label元素*/
+  .agent-list-container{
+    padding-right: 30px;
+  }
   .filter-container{
     .item{
       display: inline-block;

@@ -13,6 +13,6 @@ export default {
   .agent-manage{
     width: 100%;
     height: 100%;
-    padding: 10px 30px 30px 50px;
+    padding: 20px 30px 30px 50px;
   }
 </style>

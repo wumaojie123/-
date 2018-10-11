@@ -30,7 +30,7 @@
       height="550"
       highlight-current-row
       style="width: 100%;">
-      <el-table-column :label="`操作`" fixed align="center" width="65">
+      <el-table-column :label="`操作`" align="center" width="65">
         <template slot-scope="scope">
           <el-radio :label="scope.row.id" v-model="checked" class="radio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
         </template>
@@ -292,6 +292,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+  .bd-container{
+    padding-right: 30px;
+  }
   .radio{
     .el-radio__input{
       // border: 1px solid #000;
@@ -307,8 +310,5 @@ export default {
       vertical-align: middle;
       font-weight: 700;
     }
-  }
-  th.gutter{
-    display: none !important;
   }
 </style>
