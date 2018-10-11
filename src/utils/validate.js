@@ -71,3 +71,12 @@ export function validateMoney(value) {
   )
 }
 
+/*
+* 验证两者相等
+* */
+
+export function equal(p1, p2) {
+  debugger
+  return p1 === p2
+}
+
