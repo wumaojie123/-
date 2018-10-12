@@ -53,14 +53,14 @@ export default {
       queryParams: { startTime: '', endTime: '' },
       list: [{ name: 't', info: 'guanlian', total: 5, inline: 1 }, { name: 't2', info: 'guanlian3', total: 18064082092, inline: 9 }],
       colums: [
-        { key: 'name', label: '代理商名称', width: 180 },
-        { key: 'info', label: '代理商账号', width: 180 },
+        { key: 'name', label: '代理商名称' },
+        { key: 'info', label: '账号' },
         { key: 'total', label: '下一级代理数量', width: 150 },
-        { key: 'total', label: '联系人', width: 100 },
-        { key: 'total', label: '手机号码', width: 110 },
-        { key: 'total', label: '关联商家信息', width: 180 },
-        { key: 'total', label: '广告状态', width: 100 },
-        { key: 'inline', label: '创建日期', width: 100 }
+        { key: 'total', label: '联系人', width: 120 },
+        { key: 'total', label: '手机号码', width: 120 },
+        // { key: 'total', label: '关联商家信息', width: 180 },
+        { key: 'total', label: '广告状态', width: 120 },
+        { key: 'inline', label: '创建日期', width: 120 }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
       angentInfo: []

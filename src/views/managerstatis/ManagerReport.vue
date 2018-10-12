@@ -20,7 +20,7 @@
       <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" border style="width: 100%;margin-bottom: 20px;">
+    <el-table :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
     <el-pagination
@@ -55,7 +55,7 @@ export default {
       list: [],
       colums: [
         { key: 'name', label: '代理商名称', width: 180 },
-        { key: 'info', label: '关联商家信息', width: 180 },
+        { key: 'info', label: '账号', width: 180 },
         { key: 'total', label: '设备总数', width: 120, sortable: true },
         { key: 'inline', label: '在线设备数量', width: 140, sortable: true },
         { key: 'total', label: '订单数量', width: 120, sortable: true },
