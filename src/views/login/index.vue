@@ -42,9 +42,9 @@
         </span>
       </el-form-item>
       <!-- 验证码 -->
-      <el-form-item prop="vadateCode">
+      <el-form-item prop="verifyCode">
         <el-input
-          v-model="loginForm.vadateCode"
+          v-model="loginForm.verifyCode"
           :placeholder="`验证码`"
           name="code"
           type="text"
@@ -53,7 +53,7 @@
       <el-form-item class="identifybox-wrap">
         <div class="identifybox">
           <div @click="refreshCode">
-            <s-identify :identify-code="identifyCode"/>
+            <img :src="validateCodeUrl" alt="" style="width: 150px;height:40px;">
           </div>
           <el-button type="text" class="textbtn" @click="refreshCode">看不清，换一张</el-button>
         </div>
@@ -65,55 +65,60 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+// import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import SIdentify from './SIdentify.vue'
+import MD5 from 'js-md5'
 
 export default {
   name: 'Login',
   components: { LangSelect, SocialSign, 's-identify': SIdentify },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名!~'))
-      } else {
+      const pattern = /^1[345789]\d{9}$/
+      if (pattern.test(value)) {
         callback()
+      } else if ((value.trim() === '')) {
+        callback(new Error('请输入手机号'))
+      } else {
+        callback(new Error('请输入正确的手机号'))
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('请输入正确的验证码!~'))
-      } else {
+      const pattern = /^[0-9a-zA-Z_]{5,15}$/
+      if (value.trim() === '') {
+        callback(new Error('请输入密码'))
+      } else if (pattern.test(value)) {
         callback()
+      } else {
+        debugger
+        callback(new Error('请输入6-16位数字、字母或下划线，不能以数字开头'))
       }
     }
     const validateCode = (rule, value, callback) => {
-      if (value === '') {
+      if (value.trim() === '') {
         callback(new Error('请输入验证码'))
-      } else if (value !== this.identifyCode) {
-        console.log('validateVerifycode:', value)
-        callback(new Error('验证码不正确!'))
       } else {
         callback()
       }
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '1111111'
+        username: '',
+        password: '',
+        verifyCode: ''
       },
+      validateCodeUrl: (process.env.ENV_CONFIG === 'dev' ? '/agent' : '.') + '/rest/verifycode?' + new Date().getTime(),
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        vadateCode: [{ required: true, trigger: 'blur', validator: validateCode }]
+        verifyCode: [{ required: true, trigger: 'blur', validator: validateCode }]
       },
       passwordType: 'password',
       loading: false,
       showDialog: false,
-      redirect: undefined,
-      identifyCodes: '1234567890',
-      identifyCode: ''
+      redirect: undefined
     }
   },
   watch: {
@@ -128,12 +133,31 @@ export default {
     // window.addEventListener('hashchange', this.afterQRScan)
   },
   mounted() {
-    this.refreshCode()
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
   methods: {
+    throttle(fn, duration = 500) {
+      if (fn === undefined) {
+        console.error(`Vue.util.throttle函数参数缺失`)
+        return
+      }
+      let timer = null; let firstTime = true
+      return function(...args) {
+        if (firstTime) {
+          firstTime = false
+          return fn.apply(this, args)
+        } else {
+          if (timer) return
+          timer = setTimeout(() => {
+            timer = null
+            clearTimeout(timer)
+            return fn.apply(this, args)
+          }, duration)
+        }
+      }
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -145,7 +169,11 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+          this.$store.dispatch('LoginByUsername', {
+            username: this.loginForm.username,
+            password: MD5(this.loginForm.password),
+            verifyCode: this.loginForm.verifyCode
+          }).then(() => {
             this.loading = false
             this.$router.push({ path: this.redirect || '/' })
           }).catch(() => {
@@ -159,17 +187,7 @@ export default {
     },
     // 切换验证码
     refreshCode() {
-      this.identifyCode = ''
-      this.makeCode(this.identifyCodes, 4)
-    },
-    makeCode(o, l) {
-      for (let i = 0; i < l; i++) {
-        this.identifyCode += this.identifyCodes[this.randomNum(0, this.identifyCodes.length)]
-      }
-    },
-    // 生成随机数
-    randomNum(min, max) {
-      return Math.floor(Math.random() * (max - min) + min)
+      this.validateCodeUrl = (process.env.ENV_CONFIG === 'dev' ? '/agent' : '.') + '/rest/verifycode?' + new Date().getTime()
     }
   }
 }
