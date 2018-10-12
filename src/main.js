@@ -29,7 +29,7 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
-Vue.config.productionTip = true // 打开调试面板
+Vue.config.productionTip = process.ENV_CONFIG === 'dev' // 打开调试面板
 
 new Vue({
   el: '#app',

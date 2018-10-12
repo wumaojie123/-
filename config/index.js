@@ -9,7 +9,20 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/agent': {
+        target: 'https://dag.leyaoyao.com',
+        changeOrigin: true,
+        secure: false,
+        // pathRewrite: {
+        //   '^/devApi': 'https://dag.leyaoyao.com/agent'
+        // },
+        rewrite: function(req) {
+          console.log(req.url)
+          req.url = req.url.replace(/^\/agent/, '')
+        }
+      }
+    },
 
     // Various Dev Server settings
 
