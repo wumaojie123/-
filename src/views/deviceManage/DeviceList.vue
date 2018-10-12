@@ -241,7 +241,6 @@ export default {
         type: undefined,
         sort: '+id'
       },
-      BDList: ['默哀', '啊哈哈', '哈哈哈'],
       calendarTypeOptions,
       checked: false,
       checkedRow: null,
