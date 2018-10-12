@@ -15,7 +15,7 @@ const deviceManage = {
   children: [
     {
       path: 'deviceList',
-      component: () => import('@/views/charts/keyboard'),
+      component: () => import('@/views/deviceManage/DeviceList.vue'),
       name: 'deviceList',
       meta: { title: '设备列表', noCache: true }
     }
