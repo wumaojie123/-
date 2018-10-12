@@ -27,13 +27,18 @@
       <el-form-item label="代理商账号" prop="account">
         <el-input v-model="accountInfo.account" placeholder="请输入代理商账号" class="input-300" maxlength="11" clearable />
       </el-form-item>
-      <el-form-item label="代理商密码" prop="password">
+      <!-- <el-form-item label="代理商密码" prop="password">
         <el-input v-model="accountInfo.password" type="password" placeholder="请输入代理商密码" class="input-300" maxlength="16" clearable />
         <span class="input-anno">请输入6-16位的数字或字母</span>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="关联商家账号" prop="acc">
         <el-input v-model="accountInfo.acc" placeholder="请输入关联商家账号" class="input-300" maxlength="32" clearable />
         <span class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>
+      </el-form-item>
+      <el-form-item label="手机验证码" prop="acc">
+        <el-input v-model="accountInfo.acc" placeholder="请输入验证码" style="width: 150px;margin-right: 32px;" maxlength="4" clearable />
+        <el-button type="primary" @click="handleAccountInfo">获取验证码</el-button>
+        <span class="input-anno">请及时让商家告知手机验证码</span>
       </el-form-item>
       <p/>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
