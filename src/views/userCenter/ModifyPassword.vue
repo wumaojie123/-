@@ -2,7 +2,7 @@
   <el-main>
     <el-form ref="form" :model="form" :rules="rules" label-width="90px" class="modify" >
       <el-form-item label="旧密码" prop="oldPassWord">
-        <el-input v-model="form.oldPassWord" autofocus type="password" placeholder="原始密码"/>
+        <el-input v-model="form.oldPassWord" type="password" placeholder="原始密码"/>
       </el-form-item>
       <el-form-item label="新密码" prop="newPassWord">
         <el-input v-model="form.newPassWord" type="password" placeholder="新密码"/>

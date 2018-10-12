@@ -76,7 +76,7 @@ export function validateMoney(value) {
 * */
 
 export function equal(p1, p2) {
-  debugger
+  // debugger
   return p1 === p2
 }
 
