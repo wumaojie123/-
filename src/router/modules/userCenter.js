@@ -13,13 +13,13 @@ const userCenter = {
   children: [
     {
       path: 'userInfo',
-      component: () => import('@/views/baseInfo/baseInfo'),
+      component: () => import('@/views/userCenter/baseInfo'),
       name: 'userInfo',
       meta: { title: '基本资料', noCache: true }
     },
     {
       path: 'editPassword',
-      component: () => import('@/views/modifyPassword/ModifyPassword'),
+      component: () => import('@/views/userCenter/ModifyPassword'),
       name: 'editPassword',
       meta: { title: '修改密码', noCache: true }
     }

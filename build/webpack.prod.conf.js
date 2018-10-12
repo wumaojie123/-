@@ -128,6 +128,11 @@ const webpackConfig = merge(baseWebpackConfig, {
     minimizer: [
       new UglifyJsPlugin({
         uglifyOptions: {
+          compress: {
+            warnings: false, // 去除警告
+            drop_debugger: true, // 去除debugger
+            drop_console: true // 去除console.log
+          },
           mangle: {
             safari10: true
           }

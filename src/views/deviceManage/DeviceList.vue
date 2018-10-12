@@ -4,12 +4,12 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="设备编号" prop="deviceIdentifier">
-            <el-input v-model="form.deviceIdentifier" autofocus type="password" placeholder="请输入编号"/>
+            <el-input v-model="form.deviceIdentifier" placeholder="请输入编号"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item label="备注名称" prop="deviceName">
-            <el-input v-model="form.deviceName" autofocus type="password" placeholder="请输入备注名称"/>
+            <el-input v-model="form.deviceName" placeholder="请输入备注名称"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -184,30 +184,10 @@ const calendarTypeOptions = [
   { key: 0, display_name: '冻结' },
   { key: 1, display_name: '激活' }
 ]
-
-// arr to obj ,such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
-
 export default {
   name: 'DeviceList',
   directives: {
     waves
-  },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    }
   },
   data() {
     return {
@@ -241,7 +221,6 @@ export default {
         type: undefined,
         sort: '+id'
       },
-      BDList: ['默哀', '啊哈哈', '哈哈哈'],
       calendarTypeOptions,
       checked: false,
       checkedRow: null,
@@ -265,7 +244,7 @@ export default {
   created() {
     this.getList()
     const clientHeight = document.body.clientHeight || document.documentElement.clientHeight
-    this.minHeightTable = clientHeight - 382
+    this.minHeightTable = clientHeight - 393
   },
   methods: {
     getTemplateRow(index, row) {
