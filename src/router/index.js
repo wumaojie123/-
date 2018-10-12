@@ -4,13 +4,13 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 /* Layout */
-import Layout from '@/views/layout/Layout'
+const Layout = (resolve) => require(['@/views/layout/Layout'], resolve)
 
 /* Router Modules */
 import businessChartsRouter from './modules/businessCharts'
 import agentManageRouter from './modules/agentManage'
 import deviceManageRouter from './modules/deviceManage'
-import userCenterRouter from './modules/userCenter'
+// import userCenterRouter from './modules/userCenter'
 import insideManageRouter from './modules/insideManage'
 
 /** note: Submenu only appear when children.length>=1
@@ -76,6 +76,10 @@ export const constantRouterMap = [
       }
     ]
   },
+  insideManageRouter,
+  businessChartsRouter,
+  deviceManageRouter,
+  agentManageRouter,
   { path: '*', redirect: '/404', hidden: true }
 ]
 
@@ -118,11 +122,7 @@ export const asyncRouterMap = [
   //   ]
   // },
   /** When your routing deviceManage is too long, you can split it into small modules**/
-  insideManageRouter,
-  businessChartsRouter,
-  deviceManageRouter,
-  agentManageRouter,
-  userCenterRouter
+  // userCenterRouter
   // {
   //   path: '/example',
   //   component: Layout,
