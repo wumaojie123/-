@@ -1,6 +1,6 @@
 // 对应 用户中心 菜单
 
-const userCenter = {
+export const userCenter = [{
   path: '/userCenter',
   component: '/layout/Layout',
   parent: null,
@@ -14,18 +14,16 @@ const userCenter = {
       parent: 'userCenter',
       name: 'baseInfo',
       title: '基本资料',
-      component: '/userCenter/baseInfo',
+      component: 'userCenter/baseInfo',
       noCache: true
     },
     {
       parent: 'userCenter',
       path: 'ModifyPassword',
       name: 'ModifyPassword',
-      component: '/userCenter/ModifyPassword',
+      component: 'userCenter/ModifyPassword',
       title: '修改密码',
       noCache: true
     }
   ]
-}
-
-export default [userCenter]
+}]

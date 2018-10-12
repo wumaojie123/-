@@ -1,6 +1,9 @@
 // const lazyLoading = (name) => {
 //   return (resolve) => require([`@/views/${name}`], resolve)
 // }
+const _import = require('../utils/_import_dev')
+import Layout from '@/views/layout/Layout'
+// const lazyLoading = file => require('@/views' + file + '.vue').default
 // const lazyLoading = (name) => `@/views/${name}`
 export const routerFormat = (routes) => {
   if (!Array.isArray(routes)) {
@@ -14,7 +17,6 @@ export const routerFormat = (routes) => {
       redirect = 'noredirect',
       name,
       title,
-      component,
       icon
     } = route
     let children = route.children
@@ -22,15 +24,18 @@ export const routerFormat = (routes) => {
     if (children && Array.isArray(children)) {
       children = routerFormat(children)
     }
+    const component = parent ? _import(route.component) : Layout
     const rerouter = {
       path,
       parent,
       redirect,
       name,
       children,
-      component(resolve) {
-        require([`@/views/${component}.vue`], resolve)
-      },
+      component: component,
+      // component(resolve) {
+      //   console.log(`@/views/${component}.vue`)
+      //   require([`@/views/${component}.vue`], resolve)
+      // },
       meta: {
         title,
         icon

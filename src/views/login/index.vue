@@ -69,9 +69,7 @@ import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import SocialSign from './socialsignin'
 import SIdentify from './SIdentify.vue'
-import { routerFormat } from '../../utils/routerFormat'
-import userCenter from '../../mock/router'
-console.log(routerFormat(userCenter))
+
 export default {
   name: 'Login',
   components: { LangSelect, SocialSign, 's-identify': SIdentify },
@@ -144,25 +142,19 @@ export default {
       }
     },
     handleLogin() {
-      this.loading = true
       this.$refs.loginForm.validate(valid => {
-        setTimeout(() => {
-          if (valid) {
-            this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
-              this.loading = false
-              const routers = routerFormat(userCenter)
-              this.$router.addRoutes(routers)
-              console.log(this.$router)
-              this.routers = routers
-              this.$router.push({ path: this.redirect || '/' })
-            }).catch(() => {
-              this.loading = false
-            })
-          } else {
-            console.log('error submit!!')
-            return false
-          }
-        }, 1500)
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+            this.loading = false
+            this.$router.push({ path: this.redirect || '/' })
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
     },
     // 切换验证码

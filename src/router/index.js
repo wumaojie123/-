@@ -5,7 +5,9 @@ Vue.use(Router)
 
 /* Layout */
 const Layout = (resolve) => require(['@/views/layout/Layout'], resolve)
-
+const baseInfo = (resolve) => require(['@/views/userCenter/baseInfo'], resolve)
+const ModifyPassword = (resolve) => require(['@/views/userCenter/ModifyPassword'], resolve)
+console.log(baseInfo, ModifyPassword)
 /* Router Modules */
 import businessChartsRouter from './modules/businessCharts'
 import agentManageRouter from './modules/agentManage'
