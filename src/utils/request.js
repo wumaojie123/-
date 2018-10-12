@@ -29,7 +29,6 @@ service.interceptors.request.use(
 
 // response interceptor
 service.interceptors.response.use(
-  response => response,
   /**
    * 下面的注释为通过在response里，自定义code来标示请求状态
    * 当code返回如下情况则说明权限有问题，登出并返回到登录页
@@ -37,8 +36,8 @@ service.interceptors.response.use(
    * 以下代码均为样例，请结合自生需求加以修改，若不需要，则可删除
    */
   response => {
-    debugger
     const res = response.data
+    console.log(res, res.result !== 0, 'res.result !== 0')
     if (res.result !== 0) {
       Message({
         message: res.description,
@@ -65,11 +64,11 @@ service.interceptors.response.use(
       }
       return Promise.reject('error')
     } else {
-      debugger
       return response.data
     }
   },
   error => {
+    debugger
     console.log('err' + error) // for debug
     Message({
       message: error.description,

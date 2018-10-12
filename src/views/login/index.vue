@@ -42,7 +42,7 @@
         </span>
       </el-form-item>
       <!-- 验证码 -->
-      <el-form-item prop="vadateCode">
+      <el-form-item prop="verifyCode">
         <el-input
           v-model="loginForm.verifyCode"
           :placeholder="`验证码`"
@@ -76,21 +76,28 @@ export default {
   components: { LangSelect, SocialSign, 's-identify': SIdentify },
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!(value)) {
-        callback(new Error('请输入正确账号!~'))
-      } else {
+      const pattern = /^1[345789]\d{9}$/
+      if (pattern.test(value)) {
         callback()
+      } else if ((value.trim() === '')) {
+        callback(new Error('请输入手机号'))
+      } else {
+        callback(new Error('请输入正确的手机号'))
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('请输入正确的验证码!~'))
-      } else {
+      const pattern = /^[0-9a-zA-Z_]{5,15}$/
+      if (value.trim() === '') {
+        callback(new Error('请输入密码'))
+      } else if (pattern.test(value)) {
         callback()
+      } else {
+        debugger
+        callback(new Error('请输入6-16位数字、字母或下划线，不能以数字开头'))
       }
     }
     const validateCode = (rule, value, callback) => {
-      if (value === '') {
+      if (value.trim() === '') {
         callback(new Error('请输入验证码'))
       } else {
         callback()
