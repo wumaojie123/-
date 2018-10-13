@@ -21,6 +21,7 @@ router.beforeEach((to, from, next) => {
         next({ path: '/' })
         NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
       } else {
+        debugger
         getRouter = routerFormat(JSON.parse(getSession('addRoute')))
         console.log(getRouter)
         store.dispatch('GenerateRoutes', getRouter).then(() => { // 根据roles权限生成可访问的路由表

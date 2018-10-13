@@ -41,12 +41,18 @@
 </template>
 
 <script>
+import { getAuthInfo } from '../../api/getAuthInfo'
 export default {
   name: 'BaseInfo',
   data() {
     return {
       msg: '以下信息用户暂时不能主动修改，如需调整，请联系业务客服。'
     }
+  },
+  mounted() {
+    getAuthInfo().then(res => {
+      console.log(res)
+    })
   }
 }
 </script>
