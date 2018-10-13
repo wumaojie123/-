@@ -3,109 +3,149 @@
     <div class="filter-container">
       <div class="item">
         <span class="label">合同编号 </span>
-        <el-input :placeholder="`请输入合同编号`" v-model="listQuery.contractId" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-input :placeholder="`请输入合同编号`" v-model="listQuery.title" style="width: 250px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       </div>
       <div class="item">
         <span class="label">代理商名称</span>
-        <el-input :placeholder="`请输入代理商名称`" v-model="listQuery.agentUserName" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-input :placeholder="`请输入代理商名称`" v-model="listQuery.title" style="width: 250px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       </div>
-      <br>
-      <br>
       <div class="item">
         <span class="label">商家手机</span>
-        <el-input :placeholder="`请输入商家手机`" v-model="listQuery.phone" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-input :placeholder="`请输入商家手机`" v-model="listQuery.title" style="width: 250px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       </div>
+      <br>
+      <br>
+      <div class="item">
+        <span class="label">商家名称</span>
+        <el-input :placeholder="`请输入商家名称`" v-model="listQuery.title" style="width: 250px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+      </div>
+
       <div class="item">
         <span class="label">&nbsp;&nbsp;BD同事&nbsp;&nbsp;&nbsp;&nbsp; </span>
-        <el-select v-model="listQuery.bdId" :placeholder="`请选择BD同事`" clearable style="width: 300px;margin-right: 20px;vertical-align: baseline;" class="filter-item">
-          <el-option v-for="item in bdList" :key="item.adUserId" :label="item.username" :value="item.adUserId" />
+        <el-select v-model="listQuery.importance" :placeholder="`请选择BD同事`" clearable style="width: 250px;margin-right: 20px;vertical-align: baseline;" class="filter-item">
+          <el-option v-for="item in BDList" :key="item" :label="item" :value="item"/>
         </el-select>
       </div>
+      <div class="item">
+        <span class="label">账号状态</span>
+        <el-select v-model="listQuery.type" :placeholder="`请选择账号状态`" clearable class="filter-item" style="width: 200px;margin-right: 20px;vertical-align: baseline;">
+          <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" style="text-align: left"/>
+        </el-select>
+      </div>
+
       <br>
       <br>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ `查找` }}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleEdit('edit')">{{ `编辑` }}</el-button>
-      <!--<el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete" @click="handleEdit('delete')">{{ `删除` }}</el-button>-->
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete" @click="handleEdit('delete')">{{ `删除` }}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="handleEdit('showSubAgentList')">{{ `查看下级代理` }}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleEdit('add')">{{ `新增代理商` }}</el-button>
     </div>
-    <el-table v-loading="listLoading" :key="tableKey" :data="list" border stripe fit height="550" highlight-current-row style="width: 100%;">
+    <el-table
+      v-loading="listLoading"
+      :key="tableKey"
+      :data="list"
+      border
+      stripe
+      fit
+      height="550"
+      highlight-current-row
+      style="width: 100%;">
       <el-table-column :label="`操作`" fixed align="center" width="65">
         <template slot-scope="scope">
-          <el-radio :label="scope.row.agentUserId" v-model="checked" class="radio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
+          <el-radio :label="scope.row.id" v-model="checked" class="radio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
         </template>
       </el-table-column>
       <el-table-column :label="`合同编号`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.adOrgId || '' }}</span>
+          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`代理商名称`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.agentUserName|| '' }}</span>
+          <span>{{ `广州三疯实业广州三疯实业广州三疯实业广州三疯实业` }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`账号`" width="150px" align="center">
+      <el-table-column :label="`关联商家`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.userName || '' }}</span>
+          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`经营项目`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp || '未知' }}</span>
+          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`自营设备数量`" width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.ownEquipmentCount || 0 }}</span>
+          <span>{{ `1000` }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`下级代理数量`" width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.subordinateCount|| 0 }}</span>
+          <span>{{ 12 }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`代理设备数量`" width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.equipmentCount|| 0 }}</span>
+          <span>{{ 12 }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`BD同事`" width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.bdName||'' }}</span>
+          <span>{{ `胡俊` }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="`账号状态`" width="80px" align="center">
+        <template slot-scope="scope">
+          <span>{{ `激活` }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`创建日期`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.createDate }}</span>
+          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
     </el-table>
     <div class="pagination-container">
-      <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[25]" :page-size="listQuery.limit" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+      <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
     </div>
   </div>
 </template>
 
 <script>
-import insideManage from '@/api/insideManage'
+import { fetchList, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // 水波纹指令
-import {
-  parseTime
-} from '@/utils'
-  // const calendarTypeOptions = [
-  //   { key: 0, display_name: '冻结' },
-  //   { key: 1, display_name: '激活' }
-  // ]
-  // arr to obj ,such as { CN : "China", US : "USA" }
-  // const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  //   acc[cur.key] = cur.display_name
-  //   return acc
-  // }, {})
+import { parseTime } from '@/utils'
+
+const calendarTypeOptions = [
+  { key: 0, display_name: '冻结' },
+  { key: 1, display_name: '激活' }
+]
+
+// arr to obj ,such as { CN : "China", US : "USA" }
+const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
+  acc[cur.key] = cur.display_name
+  return acc
+}, {})
+
 export default {
   name: 'AgentsList',
   directives: {
     waves
+  },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        published: 'success',
+        draft: 'info',
+        deleted: 'danger'
+      }
+      return statusMap[status]
+    },
+    typeFilter(type) {
+      return calendarTypeKeyValue[type]
+    }
   },
   data() {
     return {
@@ -114,12 +154,15 @@ export default {
       total: null,
       listLoading: true,
       listQuery: {
-        contractId: '', // 合同号
-        agentUserName: '', // 代理商名称
-        phone: '', // 手机号
-        bdId: '' // BD同事id
+        page: 1,
+        limit: 20,
+        importance: undefined,
+        title: undefined,
+        type: undefined,
+        sort: '+id'
       },
-      bdList: null,
+      BDList: ['默哀', '啊哈哈', '哈哈哈'],
+      calendarTypeOptions,
       checked: false,
       checkedRow: null,
       temp: {
@@ -132,28 +175,14 @@ export default {
         status: 'published'
       },
       rules: {
-        type: [{
-          required: true,
-          message: 'type is required',
-          trigger: 'change'
-        }],
-        timestamp: [{
-          type: 'date',
-          required: true,
-          message: 'timestamp is required',
-          trigger: 'change'
-        }],
-        title: [{
-          required: true,
-          message: 'title is required',
-          trigger: 'blur'
-        }]
+        type: [{ required: true, message: 'type is required', trigger: 'change' }],
+        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
+        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false
     }
   },
-  async created() {
-    await this.getBDList()
+  created() {
     this.getList()
   },
   methods: {
@@ -162,16 +191,9 @@ export default {
       // this.checked = true
       this.checkedRow = row
     },
-    getBDList() {
-      insideManage.getBDList().then(res => {
-        this.bdList = res.data
-      }, () => {
-        this.bdList = []
-      })
-    },
     getList() {
       this.listLoading = true
-      insideManage.getAgentList(this.listQuery).then(response => {
+      fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         // Just to simulate the time of the request
@@ -180,15 +202,6 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
-      }, err => {
-        this.list = []
-        this.total = null
-        this.checkedRow = null
-        this.checked = false
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
-        console.log(err, 'err')
       })
     },
     handleFilter() {
@@ -221,6 +234,24 @@ export default {
         type: ''
       }
     },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.author = 'vue-element-admin'
+          createArticle(this.temp).then(() => {
+            this.list.unshift(this.temp)
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)
@@ -228,6 +259,30 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateArticle(tempData).then(() => {
+            for (const v of this.list) {
+              if (v.id === this.temp.id) {
+                const index = this.list.indexOf(v)
+                this.list.splice(index, 1, this.temp)
+                break
+              }
+            }
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
       })
     },
     handleEdit(type) {
@@ -245,37 +300,24 @@ export default {
         }
       }
       if (type === 'add') { // 新增代理商
-        this.$router.push({
-          path: '/insideManage/agentRoleManage/createAgent',
-          query: {
-            plan: 'private'
-          }
-        })
+        // this.$route.
+        this.$router.push({ path: '/insideManage/agentRoleManage/createAgent', query: { plan: 'private' }})
       } else {
         if (!checkIsNull()) {
           return false
         }
-        const agentUserId = this.checkedRow.agentUserId
         if (type === 'edit') { // 编辑代理商
-          this.$router.push({
-            path: '/insideManage/agentRoleManage/agentEdit' + '/' + agentUserId,
-            query: {
-              id: agentUserId
-            }
-          })
+          this.$router.push({ path: '/insideManage/agentRoleManage/agentEdit' + '/' + this.checkedRow.id, query: { id: this.checkedRow.id }})
         } else if (type === 'showSubAgentList') {
-          this.$router.push({
-            path: '/insideManage/agentRoleManage/subAgent' + '/' + agentUserId,
-            query: {
-              id: agentUserId
-            }
-          })
+          this.$router.push({ path: '/insideManage/agentRoleManage/subAgent' + '/' + this.checkedRow.id, query: { id: this.checkedRow.id }})
         } else if (type === 'delete') {
+          // todo 删除本条数据
           this.getList()
         }
       }
     },
     handleDelete(row) {
+      // todo 删除
       this.$notify({
         title: '成功',
         message: '删除成功',
@@ -297,24 +339,23 @@ export default {
   }
 }
 </script>
-
 <style rel="stylesheet/scss" lang="scss" scoped>
   /* + 是兄弟选择器,获取选中后的label元素*/
-  .agent-list-container {
+  .agent-list-container{
     padding-right: 30px;
   }
-  .filter-container {
-    .item {
+  .filter-container{
+    .item{
       display: inline-block;
-      margin: 5px 10px;
-      .el-input {
+      .el-input{
         margin-bottom: 0;
       }
-      .label {
+      .label{
         margin-right: 10px;
         vertical-align: middle;
         font-weight: 700;
       }
     }
   }
+
 </style>

@@ -2,40 +2,24 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/agentManage/queryAgents',
+    url: '/transaction/list',
     method: 'get',
     params: query
   })
 }
 
-export function getCode(query) {
+export function add(query) {
   return request({
-    url: '/agentManage/sendCode',
-    method: 'get',
-    params: query
-  })
-}
-
-export function update(data) {
-  return request({
-    url: '/agentManage/addOrUpdateAgent',
+    url: '/transaction/list',
     method: 'post',
-    data
+    query
   })
 }
 
-export function getAngent(query) {
+export function update(query) {
   return request({
-    url: '/agentManage/getAgent',
-    method: 'get',
-    params: query
-  })
-}
-
-export function getMerchant(query) {
-  return request({
-    url: '/agentManage/getMerchant',
-    method: 'get',
-    params: query
+    url: '/transaction/list',
+    method: 'post',
+    query
   })
 }

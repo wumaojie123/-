@@ -2,30 +2,34 @@
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
       <el-form-item label="代理商名称" >
-        <el-input v-model="queryParams.agentUserName" placeholder="请输入代理商名称" class="input-300" maxlength="64" clearable />
+        <el-input placeholder="请输入代理商名称" maxlength="64" clearable />
       </el-form-item>
       <el-form-item label="代理商账号">
-        <el-input v-model="queryParams.userName" placeholder="请输入代理商账号,账号为手机号" class="input-300" maxlength="11" clearable />
+        <el-input placeholder="请输入代理商账号" maxlength="11" clearable />
+      </el-form-item>
+      <el-form-item label="商家账号">
+        <el-input placeholder="请输入商家账号" maxlength="32" clearable />
       </el-form-item>
       <p/>
       <el-form-item label="联系人">
-        <el-input v-model="queryParams.linkName" placeholder="请输入联系人" class="input-300" maxlength="32" clearable />
+        <el-input placeholder="请输入联系人" maxlength="32" clearable />
       </el-form-item>
-      <el-form-item label="手机号码">
-        <el-input v-model="queryParams.phone" placeholder="请输入手机号码" class="input-300" maxlength="11" clearable />
+      <el-form-item label="联系手机">
+        <el-input placeholder="请输入手机号码" maxlength="11" clearable />
       </el-form-item>
       <p/>
       <div class="flex-layout">
         <div class="flex-item">
-          <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="queryList">查询</el-button>
           <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
           <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理商</el-button>
+          <el-button type="primary" icon="el-icon-delete" @click="handleAngent('del')">删除代理商</el-button>
         </div>
         <router-link :to="{path: 'add'}"><el-button type="primary" icon="el-icon-plus">新增代理商</el-button></router-link>
       </div>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" @selection-change="handleItem" >
+    <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" @selection-change="handleItem" >
       <el-table-column type="selection" width="55"/>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
@@ -43,51 +47,33 @@
 
 <script>
 import { validateTel } from '@/utils/validate'
-import { fetchList } from '@/api/angentManage'
 export default {
   data() {
     return {
-      queryParams: { agentUserName: '', userName: '', linkName: '', phone: '' },
-      list: [{ name: 'name1', info: 'guanlian', total: 5, inline: 1 }],
+      queryParams: { startTime: '', endTime: '' },
+      list: [{ name: 't', info: 'guanlian', total: 5, inline: 1 }, { name: 't2', info: 'guanlian3', total: 18064082092, inline: 9 }],
       colums: [
-        { key: 'agentUserName', label: '代理商名称' },
-        { key: 'userName', label: '账号' },
-        { key: 'subordinateCount', label: '下一级代理数量', width: 150 },
-        { key: 'linkName', label: '联系人', width: 120 },
-        { key: 'phone', label: '手机号码', width: 120 },
-        // { key: 'total', label: '广告状态', width: 120 },
-        { key: 'createDate', label: '创建日期', width: 120 }
+        { key: 'name', label: '代理商名称' },
+        { key: 'info', label: '账号' },
+        { key: 'total', label: '下一级代理数量', width: 150 },
+        { key: 'total', label: '联系人', width: 120 },
+        { key: 'total', label: '手机号码', width: 120 },
+        // { key: 'total', label: '关联商家信息', width: 180 },
+        { key: 'total', label: '广告状态', width: 120 },
+        { key: 'inline', label: '创建日期', width: 120 }
       ],
-      pageInfo: { total: 0, pageSize: 10, currPage: 1 },
+      pageInfo: { total: 20, pageSize: 10, currPage: 1 },
       angentInfo: []
     }
   },
-  created() {
-    this.queryList()
-  },
   methods: {
     resetQueryParams() {
-      this.queryParams = { agentUserName: '', userName: '', linkName: '', phone: '' }
+      this.queryParams = { startTime: '', endTime: '' }
     },
     queryList(page = 1) {
       this.angentInfo = []
       this.list = []
       this.pageInfo.currPage = page
-      const postData = { pageSize: this.pageInfo.pageSize, pageIndex: this.pageInfo.currPage }
-      for (const key in this.queryParams) {
-        if (this.queryParams[key]) {
-          postData[key] = this.queryParams[key]
-        }
-      }
-      fetchList(postData).then(res => {
-        this.listLoading = false
-        if (res.data) {
-          this.list = res.data.items || []
-          this.pageInfo.total = res.data.total || 0
-        } else {
-          this.pageInfo.total = 0
-        }
-      })
     },
     handleItem(value) {
       console.log(JSON.stringify(value))
@@ -96,8 +82,9 @@ export default {
     handleAngent(type) {
       if (this.angentInfo.length === 1) {
         if (type === 'edit') {
-          this.$router.push({ path: '/agentManage/angentList/edit', query: { ID: this.angentInfo[0].agentUserId, action: 'edit' }})
+          this.$router.push({ path: '/agentManage/angentList/edit', query: { angentInfo: encodeURIComponent(JSON.stringify(this.angentInfo[0])) }})
         } else if (type === 'del') {
+          console.log('删除代理商数据')
           this.$confirm('是否删除该代理商信息', {
             callback: action => {
               if (action === 'confirm') {
@@ -115,20 +102,18 @@ export default {
     handleSizeChange(pageSize) {
       console.log('sizeChange', pageSize)
       this.pageInfo.pageSize = pageSize
-      this.pageInfo.total = 0
-      this.queryList(1)
+      this.queryList(this.pageInfo.currPage)
     },
     handleCurrentChange(page) {
       console.log('curChange:', page)
       this.queryList(page)
     },
-    filerQueryList() {
-      this.pageInfo.total = 0
-      if ((this.queryParams.phone && !validateTel(this.queryParams.phone)) || (this.queryParams.userName && !validateTel(this.queryParams.userName))) {
-        this.$message({ message: '请正确输入11位手机号码', type: 'error' })
-        return
+    handleQueryParams() {
+      if (this.queryParams.phone && validateTel(this.queryParams.phone)) {
+        this.queryList(this.pageInfo.currPage)
+      } else {
+        this.$message('请输入正确得手机号码')
       }
-      this.queryList(this.pageInfo.currPage)
     }
   }
 }

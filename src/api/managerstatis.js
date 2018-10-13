@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function fetchList(data) {
+export function fetchList(query) {
+  console.log(JSON.stringify(query))
   return request({
-    url: '/rest/reportFroms/query',
-    method: 'post',
-    data
+    url: '/transaction/list',
+    method: 'get',
+    params: query
   })
 }

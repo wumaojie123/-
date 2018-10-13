@@ -4,11 +4,11 @@
       <el-menu-item index="1">基础信息</el-menu-item>
     </el-menu>
     <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfoRules" label-width="120px" label-position="left" style="margin-top: 20px;">
-      <el-form-item label="代理商名称" prop="agentUserName">
-        <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" type="text" class="input-300" maxlength="64" clearable />
+      <el-form-item label="代理商名称" prop="angentName">
+        <el-input v-model="baseInfo.angentName" placeholder="请输入代理商名称" type="text" class="input-300" maxlength="64" clearable />
       </el-form-item>
-      <el-form-item label="联系人姓名" prop="linkName">
-        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="32" clearable />
+      <el-form-item label="联系人姓名" prop="name">
+        <el-input v-model="baseInfo.name" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="32" clearable />
       </el-form-item>
       <el-form-item label="手机号码" prop="phone">
         <el-input v-model="baseInfo.phone" placeholder="请输入手机号" type="tel" class="input-300" maxlength="11" clearable />
@@ -16,103 +16,70 @@
       <el-form-item label="联系地址" prop="address">
         <el-input v-model="baseInfo.address" placeholder="请输入联系地址" type="text" style="width: 600px;" maxlength="256" clearable />
       </el-form-item>
-      <el-button :disabled="baseInfo.linkUserId===''" type="primary" @click="handleBaseInfo">保存</el-button>
+      <p/>
+      <el-button type="primary" @click="handleBaseInfo">保存</el-button>
     </el-form>
     <!-- 账号信息区域 -->
     <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
       <el-menu-item index="1">账号信息</el-menu-item>
     </el-menu>
-    <el-form :model="baseInfo" label-width="120px" label-position="left" style="margin-top: 20px;">
-      <el-form-item label="代理商账号">
-        <el-input v-model="baseInfo.loginPhone" placeholder="请输入代理商账号" class="input-300" maxlength="11" disabled/>
+    <el-form ref="accountInfoRef" :model="accountInfo" :rules="accountInfoRules" style="margin-top: 20px;" label-width="120px" label-position="left">
+      <el-form-item label="代理商账号" prop="account">
+        <el-input v-model="accountInfo.account" placeholder="请输入代理商账号" class="input-300" maxlength="11" clearable />
       </el-form-item>
-      <el-form-item label="关联商家">
-        <el-input v-model="linkName" placeholder="请输入关联商家账号" class="input-300" maxlength="32" disabled/>
+      <!-- <el-form-item label="代理商密码" prop="password">
+        <el-input v-model="accountInfo.password" type="password" placeholder="请输入代理商密码" class="input-300" maxlength="16" clearable />
+        <span class="input-anno">请输入6-16位的数字或字母</span>
+      </el-form-item> -->
+      <el-form-item label="关联商家账号" prop="acc">
+        <el-input v-model="accountInfo.acc" placeholder="请输入关联商家账号" class="input-300" maxlength="32" clearable />
         <span class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>
       </el-form-item>
+      <el-form-item label="手机验证码" prop="acc">
+        <el-input v-model="accountInfo.acc" placeholder="请输入验证码" style="width: 150px;margin-right: 32px;" maxlength="4" clearable />
+        <el-button type="primary" @click="handleAccountInfo">获取验证码</el-button>
+        <span class="input-anno">请及时让商家告知手机验证码</span>
+      </el-form-item>
+      <p/>
+      <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
   </div>
 </template>
 
 <script>
-import { telCheck } from '@/utils/rules'
-import { getAngent, getMerchant, update } from '@/api/angentManage'
+import { telCheck, passwordCheck } from '@/utils/rules'
 export default {
   data() {
     return {
-      linkName: '',
-      baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', loginPhone: '', linkUserId: '', type: 2 },
+      baseInfo: { angentName: '', name: '', phone: '', address: '' },
       baseInfoRules: {
-        agentUserName: [{ required: true, message: '请输入代理商名称', trigger: 'blur' }],
-        linkName: [{ required: true, message: '请输入联系人姓名', trigger: 'blur' }],
+        angentName: [{ required: true, message: '请输入代理商名称', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入联系人姓名', trigger: 'blur' }],
         phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: telCheck, trigger: 'blur' }],
-        address: [{ required: true, message: '请输入联系地址', trigger: 'change' }]
+        address: [{ required: true, message: '请输入联系地址', trigger: 'blur' }]
+      },
+      accountInfo: { account: '', password: '', acc: '' },
+      accountInfoRules: {
+        account: [{ required: true, message: '请输入代理商账号', trigger: 'blur' }],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { validator: passwordCheck, trigger: 'blur' }
+        ],
+        acc: [{ required: true, message: '请输入关联商家账号', trigger: 'blur' }]
       }
-    }
-  },
-  created() {
-    const userID = this.$route.query.ID
-    // 编辑需要先查询代理商信息
-    if (userID) {
-      this.getAngentDetail(userID)
     }
   },
   methods: {
     handleBaseInfo() {
-      if (!this.baseInfo.linkUserId) {
-        this.$message({ message: '请先获取关联商家相关信息', type: 'error' })
-        return
-      }
-      this.$refs['baseInfoRef'].validate((valid) => {
+      this.$refs['baseInfoRef'].validate(valid => {
         if (valid) {
-          console.log('校验成功')
-          this.handleAngentInfo()
+          alert(valid)
         } else {
-          console.log('校验失败s')
           return false
         }
       })
     },
-    // 获取代理商信息
-    getAngentDetail(userID) {
-      getAngent({ agentUserId: userID }).then(res => {
-        console.log(res.data.result === '0', res.result)
-        if (res.result === 0) {
-          const angentDetail = res.data
-          for (const key in this.baseInfo) {
-            if (angentDetail[key]) {
-              this.baseInfo[key] = angentDetail[key] || ''
-            }
-          }
-          // this.baseInfo.loginPhone = '17745458565'
-          this.getMerchant()
-        } else {
-          this.$message({ message: '获取代理商数据失败，请稍后再试', type: 'error' })
-        }
-      })
-    },
-    // 保存或者跟新代理商信息
-    handleAngentInfo() {
-      const postData = this.baseInfo
-      postData.agentUserId = this.$route.query.ID
-      console.log(JSON.stringify(postData))
-      update(postData).then(res => {
-        if (res.result === 0) {
-          this.$message({ message: '修改代理商信息成功', type: 'success' })
-        } else {
-          this.$message({ message: '修改代理商信息失败', type: 'error' })
-        }
-      })
-    },
-    getMerchant() {
-      getMerchant({ phone: this.baseInfo.loginPhone }).then(res => {
-        if (res.result === 0 && res.data) {
-          this.baseInfo.linkUserId = res.data.adUserId
-          this.linkName = res.data.name
-        } else {
-          this.$message({ message: '数据查询失败，请稍后再试', type: 'error' })
-        }
-      })
+    handleAccountInfo() {
     }
   }
 }

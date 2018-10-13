@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import insideManage from '@/api/insideManage'
+import { fetchList, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 export default {
@@ -113,9 +113,9 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.query.id, 'this.$route.query.id')
     // todo 获取id号,并且根据id拉取数据列表
-    this.getList(this.$route.query.id)
+    console.log(this.$route)
+    this.getList()
   },
   methods: {
     getTemplateRow(index, row) {
@@ -123,11 +123,9 @@ export default {
       // this.checked = true
       this.checkedRow = row
     },
-    getList(id) {
+    getList() {
       this.listLoading = true
-      insideManage.getAgentInfo({
-        agentUserId: id
-      }).then(response => {
+      fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         // Just to simulate the time of the request
@@ -136,8 +134,6 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
-      }, () => {
-
       })
     },
     handleFilter() {
@@ -170,6 +166,24 @@ export default {
         type: ''
       }
     },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.author = 'vue-element-admin'
+          createArticle(this.temp).then(() => {
+            this.list.unshift(this.temp)
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)
@@ -177,6 +191,30 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateArticle(tempData).then(() => {
+            for (const v of this.list) {
+              if (v.id === this.temp.id) {
+                const index = this.list.indexOf(v)
+                this.list.splice(index, 1, this.temp)
+                break
+              }
+            }
+            this.dialogFormVisible = false
+            this.$notify({
+              title: '成功',
+              message: '更新成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
       })
     },
     formatJson(filterVal, jsonData) {
