@@ -34,26 +34,45 @@ export const userCenter = [
     menuResourcesList: [
       {
         value: 'angentList',
+        parentId: 'agentManage',
         htmlTemplet: 'angentManage/AngentList',
         redirect: '/agentManage/angentList/list',
         name: '代理商列表',
         menuResourcesList: [
           {
             value: 'list',
+            parentId: 'angentList',
             htmlTemplet: 'angentManage/AngentList',
             name: '代理商列表'
           },
           {
             value: 'edit',
+            parentId: 'angentList',
             htmlTemplet: 'angentManage/EditAngent',
             name: '编辑代理商'
           },
           {
             value: 'add',
+            parentId: 'angentList',
             htmlTemplet: 'angentManage/NewAngent',
             name: '新增代理商'
           }
         ]
+      }
+    ]
+  },
+  {
+    value: '/businessCharts',
+    name: '经营统计',
+    htmlTemplet: 'businessCharts',
+    alwaysShow: true,
+    icon: 'chart',
+    menuResourcesList: [
+      {
+        value: 'businessList',
+        htmlTemplet: 'managerstatis/ManagerReport',
+        parentId: 'businessCharts',
+        name: '经营报表'
       }
     ]
   }
