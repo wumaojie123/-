@@ -11,7 +11,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/agent': {
-        target: 'https://dag.leyaoyao.com',
+        // target: 'https://dag.leyaoyao.com',
+        target: 'http://192.168.20.62:8041',
         changeOrigin: true,
         secure: false,
         // pathRewrite: {

@@ -179,7 +179,8 @@ export default {
             this.loading = false
             console.log(data)
             getMenu().then(res => {
-              saveSession('addRoute', res)
+              // console.log(res)
+              saveSession('addRoute', res.data)
               this.$router.push({ path: this.redirect || '/' })
               console.log(res)
             })
