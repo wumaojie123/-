@@ -13,29 +13,29 @@ const agentManage = {
   },
   children: [
     {
-      path: 'angentList',
-      component: () => import('@/views/angentManage/AngentLayout'),
+      path: 'agentList',
+      component: () => import('@/views/angentManage/AgentLayout'),
       name: 'agentsList',
       redirect: '/agentManage/angentList/list',
       meta: { title: '代理商列表', noCache: true },
       children: [
         {
           path: 'list',
-          component: () => import('@/views/angentManage/AngentList'),
+          component: () => import('@/views/angentManage/AgentList'),
           name: 'agentList',
           meta: { title: '代理商列表', noCache: true }
         },
         {
           path: 'edit',
           hidden: true,
-          component: () => import('@/views/angentManage/EditAngent'),
+          component: () => import('@/views/angentManage/EditAgent'),
           name: 'editAgent',
           meta: { title: '编辑代理商' }
         },
         {
           path: 'add',
           hidden: true,
-          component: () => import('@/views/angentManage/NewAngent'),
+          component: () => import('@/views/angentManage/NewAgent'),
           name: 'addAgent',
           meta: { title: '新增代理商' }
         }
