@@ -3,15 +3,11 @@
     <div class="filter-container">
       <div class="item">
         <span class="label">&nbsp;&nbsp;BD姓名&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <el-select v-model="listQuery.importance" :placeholder="`请选择`" clearable style="width: 250px;margin-right: 20px;vertical-align: baseline;" class="filter-item">
-          <el-option v-for="item in BDList" :key="item" :label="item" :value="item"/>
-        </el-select>
+        <el-input v-model="listQuery.name" placeholder="请输入BD姓名" class="input-300" maxlength="11" />
       </div>
       <div class="item">
-        <span class="label">账号状态</span>
-        <el-select v-model="listQuery.type" :placeholder="`请选择`" clearable class="filter-item" style="width: 200px;margin-right: 20px;vertical-align: baseline;">
-          <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" style="text-align: left"/>
-        </el-select>
+        <span class="label">手机号码</span>
+        <el-input v-model="listQuery.phone" placeholder="请输入手机号码" class="input-300" maxlength="11" />
       </div>
       <br>
       <br>
@@ -32,79 +28,50 @@
       style="width: 100%;">
       <el-table-column :label="`操作`" align="center" width="65">
         <template slot-scope="scope">
-          <el-radio :label="scope.row.id" v-model="checked" class="radio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
+          <el-radio :label="scope.row.adUserId" v-model="checked" class="radio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
         </template>
       </el-table-column>
       <el-table-column :label="`序号`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.$index+1 }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`BD姓名`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ `广州三疯实业广州三疯实业广州三疯实业广州三疯实业` }}</span>
+          <span>{{ scope.row.username||'' }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`手机号码`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ 13177006613 }}</span>
+          <span>{{ scope.row.phone || '' }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`一级代理数量`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="`账号状态`" width="80px" align="center">
-        <template slot-scope="scope">
-          <span>{{ `激活` }}</span>
+          <span>{{ scope.row.agentCounts||0 }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`创建日期`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.createDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
     </el-table>
     <div class="pagination-container">
-      <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
+      <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[25]" :page-size="listQuery.limit" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange"/>
     </div>
   </div>
 </template>
 
 <script>
-import { fetchList, createArticle, updateArticle } from '@/api/article'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
-
-const calendarTypeOptions = [
-  { key: 0, display_name: '冻结' },
-  { key: 1, display_name: '激活' }
-]
-
-// arr to obj ,such as { CN : "China", US : "USA" }
-const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  acc[cur.key] = cur.display_name
-  return acc
-}, {})
+import insideManage from '@/api/insideManage'
 
 export default {
   name: 'BdList',
   directives: {
     waves
-  },
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    },
-    typeFilter(type) {
-      return calendarTypeKeyValue[type]
-    }
   },
   data() {
     return {
@@ -114,14 +81,10 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: '+id'
+        name: '',
+        phone: ''
       },
-      BDList: ['默哀', '啊哈哈', '哈哈哈'],
-      calendarTypeOptions,
+      BDList: [],
       checked: 0,
       checkedRow: null,
       temp: {
@@ -152,8 +115,8 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
+      insideManage.getBDList(this.listQuery).then(response => {
+        this.list = response.data
         this.total = response.data.total
         // Just to simulate the time of the request
         setTimeout(() => {
@@ -191,24 +154,6 @@ export default {
         type: ''
       }
     },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)
@@ -216,30 +161,6 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
       })
     },
     handleEdit(type) {
@@ -264,12 +185,11 @@ export default {
           return false
         }
         if (type === 'edit') { // 编辑代理商
-          this.$router.push({ path: '/insideManage/bdRoleManage/editBD' + '/' + this.checkedRow.id, query: { id: this.checkedRow.id }})
+          this.$router.push({ path: '/insideManage/bdRoleManage/editBD' + '/' + this.checkedRow.adUserId, query: { id: this.checkedRow.adUserId, phone: this.checkedRow.phone }})
         }
       }
     },
     handleDelete(row) {
-      // todo 删除
       this.$notify({
         title: '成功',
         message: '删除成功',
@@ -302,6 +222,7 @@ export default {
   }
   .item{
     display: inline-block;
+    margin: 5px 10px;
     .el-input{
       margin-bottom: 0;
     }

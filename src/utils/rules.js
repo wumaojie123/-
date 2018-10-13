@@ -10,9 +10,10 @@ import { validateTel, equal } from './validate'
  * @param {*} callback
  */
 export const telCheck = (rule, value, callback) => {
-  console.log('telCheck')
   if (value && !validateTel(value)) {
     return callback(new Error('请输入正确的11位手机号码'))
+  } else {
+    callback()
   }
 }
 /*
@@ -31,8 +32,9 @@ export const equals = (rule, value, callback) => {
 }
 
 export const passwordCheck = (rule, value, callback) => {
-  console.log(JSON.stringify(rule))
   if (value && !/^[A-Za-z0-9]{6,16}$/.test(value)) {
     return callback(new Error('请输入6-16位的数字或字母'))
+  } else {
+    callback()
   }
 }
