@@ -56,7 +56,11 @@ import { telCheck, passwordCheck } from '@/utils/rules'
 export default {
   data() {
     return {
-      baseInfo: { angentName: '', name: '', phone: '', address: '' },
+      // 操作类型
+      type: 'new',
+      linkName: '',
+      baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', type: 2, linkUserId: '' },
+      // baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', type: 2 },
       baseInfoRules: {
         angentName: [{ required: true, message: '请输入代理商名称', trigger: 'blur' }],
         name: [{ required: true, message: '请输入联系人姓名', trigger: 'blur' }],
