@@ -67,6 +67,8 @@
 <script>
 // import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
+import { saveSession } from '../../utils/savaSession'
+import { getMenu } from '../../api/getMenu'
 import SocialSign from './socialsignin'
 import SIdentify from './SIdentify.vue'
 import MD5 from 'js-md5'
@@ -173,11 +175,17 @@ export default {
             username: this.loginForm.username,
             password: MD5(this.loginForm.password),
             verifyCode: this.loginForm.verifyCode
-          }).then(() => {
+          }).then((data) => {
             this.loading = false
-            this.$router.push({ path: this.redirect || '/' })
-          }).catch(() => {
+            console.log(data)
+            getMenu().then(res => {
+              saveSession('addRoute', res)
+              this.$router.push({ path: this.redirect || '/' })
+              console.log(res)
+            })
+          }, err => {
             this.loading = false
+            console.log(err)
           })
         } else {
           console.log('error submit!!')
