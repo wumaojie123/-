@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// import { getSession } from '../utils/savaSession'
 
 Vue.use(Router)
 
@@ -85,6 +86,7 @@ export const constantRouterMap = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
+// const addRouters = getSession('addRouters') && JSON.parse(getSession('addRouters'))
 export default new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),

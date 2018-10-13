@@ -1,10 +1,5 @@
-// const lazyLoading = (name) => {
-//   return (resolve) => require([`@/views/${name}`], resolve)
-// }
-const _import = require('../utils/_import_dev')
+const _import = require('../utils/_import_' + process.env.NODE_ENV)
 import Layout from '@/views/layout/Layout'
-// const lazyLoading = file => require('@/views' + file + '.vue').default
-// const lazyLoading = (name) => `@/views/${name}`
 export const routerFormat = (routes) => {
   if (!Array.isArray(routes)) {
     return []
@@ -12,36 +7,23 @@ export const routerFormat = (routes) => {
   const resultRouters = []
   routes.forEach((route) => {
     const {
-      path = '/',
-      parent,
-      redirect = 'noredirect',
+      parentId,
       name,
-      title,
       icon
     } = route
-    let children = route.children
-    // const component = `@/views/${parent}/${name}`
-    if (children && Array.isArray(children)) {
-      children = routerFormat(children)
+    route.meta = {
+      title: name,
+      icon
     }
-    const component = parent ? _import(route.component) : Layout
-    const rerouter = {
-      path,
-      parent,
-      redirect,
-      name,
-      children,
-      component: component,
-      // component(resolve) {
-      //   console.log(`@/views/${component}.vue`)
-      //   require([`@/views/${component}.vue`], resolve)
-      // },
-      meta: {
-        title,
-        icon
-      }
+    route.path = route.value
+    const menuResourcesList = route.menuResourcesList
+    if (menuResourcesList && Array.isArray(menuResourcesList) && menuResourcesList.length !== 0) {
+      route.menuResourcesList = routerFormat(menuResourcesList)
+      route.children = route.menuResourcesList
     }
-    resultRouters.push(rerouter)
+    const component = parentId ? _import(route.htmlTemplet) : Layout
+    route.component = component
+    resultRouters.push(route)
   })
   return resultRouters
 }
