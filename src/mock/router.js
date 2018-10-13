@@ -75,5 +75,97 @@ export const userCenter = [
         name: '经营报表'
       }
     ]
+  },
+  {
+    value: '/deviceManage',
+    htmlTemplet: 'deviceManage',
+    name: '设备管理',
+    alwaysShow: true,
+    icon: 'list',
+    menuResourcesList: [
+      {
+        value: 'deviceList',
+        parentId: 'deviceList',
+        name: '设备列表',
+        htmlTemplet: 'deviceManage/DeviceList'
+      }
+    ]
+  },
+  {
+    value: '/insideManage',
+    name: '内部管理',
+    htmlTemplet: 'insideManage',
+    icon: 'peoples',
+    menuResourcesList: [
+      {
+        value: 'agentRoleManage',
+        parentId: 'insideManage',
+        htmlTemplet: 'insideManage/agentManage/AgentmanageLayout',
+        name: '一级代理商管理',
+        redirect: '/insideManage/agentRoleManage/agentsList',
+        // alwaysShow: true,
+        menuResourcesList: [
+          {
+            value: 'agentsList',
+            parentId: 'agentRoleManage',
+            htmlTemplet: 'insideManage/agentManage/AgentsList',
+            name: '一级代理商列表',
+            hidden: false
+          },
+          {
+            value: 'subAgent/:id(\\d+)',
+            parentId: 'agentRoleManage',
+            htmlTemplet: 'insideManage/agentManage/ShowSubAgent',
+            name: '查看下级代理',
+            hidden: true
+          },
+          {
+            value: 'createAgent',
+            parentId: 'agentRoleManage',
+            htmlTemplet: 'insideManage/agentManage/AddAgent',
+            name: '代理商新增',
+            hidden: true
+          },
+          {
+            value: 'agentEdit/:id(\\d+)',
+            parentId: 'agentRoleManage',
+            htmlTemplet: 'insideManage/agentManage/EditAgent',
+            name: '代理商编辑',
+            hidden: true
+          }
+        ]
+      },
+
+      {
+        value: 'bdRoleManage',
+        htmlTemplet: 'insideManage/bdManage/BdManageLayout',
+        redirect: '/insideManage/bdRoleManage/bdList',
+        name: 'BD人员',
+        parentId: 'bdRoleManage',
+        menuResourcesList: [
+          {
+            value: 'bdList',
+            htmlTemplet: 'insideManage/bdManage/BdList',
+            parentId: 'bdRoleManage',
+            name: 'BD人员列表',
+            hidden: false
+          },
+          {
+            value: 'addBD',
+            htmlTemplet: 'insideManage/bdManage/AddBd',
+            parentId: 'bdRoleManage',
+            name: '新增BD',
+            hidden: true
+          }
+          // {
+          //   value: 'editBD/:id(\\d+)',
+          //   htmlTemplet: 'insideManage/bdManage/editBd',
+          //   parentId: 'bdRoleManage',
+          //   name: '修改BD',
+          //   hidden: true
+          // }
+        ]
+      }
+    ]
   }
 ]

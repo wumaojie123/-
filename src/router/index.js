@@ -1,20 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import { getSession } from '../utils/savaSession'
 
 Vue.use(Router)
 
 /* Layout */
 const Layout = (resolve) => require(['@/views/layout/Layout'], resolve)
-const baseInfo = (resolve) => require(['@/views/userCenter/baseInfo'], resolve)
-const ModifyPassword = (resolve) => require(['@/views/userCenter/ModifyPassword'], resolve)
-console.log(baseInfo, ModifyPassword)
 /* Router Modules */
-import businessChartsRouter from './modules/businessCharts'
-import agentManageRouter from './modules/agentManage'
-import deviceManageRouter from './modules/deviceManage'
+// import businessChartsRouter from './modules/businessCharts'
+// import agentManageRouter from './modules/agentManage'
+// import deviceManageRouter from './modules/deviceManage'
 // import userCenterRouter from './modules/userCenter'
-import insideManageRouter from './modules/insideManage'
+// import insideManageRouter from './modules/insideManage'
 
 /** note: Submenu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -34,6 +30,8 @@ import insideManageRouter from './modules/insideManage'
     noCache: true                if true ,the page will no be cached(default is false)
   }
 **/
+// const routes = JSON.parse(getSession('addRoute'))
+// console.log(routes)
 export const constantRouterMap = [
   {
     path: '/redirect',
@@ -79,10 +77,6 @@ export const constantRouterMap = [
       }
     ]
   },
-  insideManageRouter,
-  businessChartsRouter,
-  deviceManageRouter,
-  agentManageRouter,
   { path: '*', redirect: '/404', hidden: true }
 ]
 
