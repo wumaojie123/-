@@ -20,7 +20,7 @@
       <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
+    <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
     <el-pagination
@@ -40,6 +40,7 @@
 <script>
 import { parseTime } from '@/utils/index'
 import { validateTel } from '@/utils/validate'
+import { fetchList } from '@/api/managerstatis'
 const NOW = Date.now()
 // 最大支持最近60天
 const OPTIONS = {
@@ -52,6 +53,7 @@ export default {
   data() {
     return {
       queryParams: { startTime: '', endTime: '' },
+      listLoading: true,
       list: [],
       colums: [
         { key: 'name', label: '代理商名称', width: 180 },
@@ -89,9 +91,16 @@ export default {
       }
     },
     queryList(page = 1) {
+      this.listLoading = true
       this.list = []
       this.pageInfo.currPage = page
       console.log('查询列表')
+      fetchList(this.queryParams).then(res => {
+        this.list = res.data.list
+      })
+      setTimeout(() => {
+        this.listLoading = false
+      }, 2000)
     },
     handleSizeChange(pageSize) {
       console.log('sizeChange', pageSize)

@@ -1,12 +1,13 @@
 import request from '@/utils/request'
 
-export function loginByUsername(username, password) {
+export function loginByUsername(username, password, verifyCode) {
   const data = {
-    username,
-    password
+    username: username,
+    password: password,
+    verifyCode: verifyCode
   }
   return request({
-    url: '/login/login',
+    url: '/rest/login',
     method: 'post',
     data
   })
@@ -14,7 +15,7 @@ export function loginByUsername(username, password) {
 
 export function logout() {
   return request({
-    url: '/login/logout',
+    url: '/rest/logout',
     method: 'post'
   })
 }

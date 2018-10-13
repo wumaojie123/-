@@ -23,29 +23,29 @@
     <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
       <el-menu-item index="1">账号信息</el-menu-item>
     </el-menu>
-    <el-form ref="accountInfoRef" :model="accountInfo" :rules="accountInfoRules" style="margin-top: 20px;" label-width="120px" label-position="left">
+    <el-form ref="accountInfoRef" :model="accountInfo" :rules="accountInfoRules" style="margin-top: 20px;" label-width="140px" label-position="left">
       <el-form-item label="代理商登录账号" prop="account">
         <el-input v-model="accountInfo.account" placeholder="请输入代理商账号" class="input-300" maxlength="11" clearable />
-        <span class="input-anno">请请输入字母或数字，强烈建议输入与商家账号一致的手机号码，保持账号的一致性</span>
+        <span class="input-anno">请输入手机号码，如果客户此前有注册乐摇摇商家账号，请输入相同的号码</span>
       </el-form-item>
-      <el-form-item label="代理商密码" prop="password">
+      <!-- <el-form-item label="代理商密码" prop="password">
         <el-input v-model="accountInfo.password" type="text" placeholder="请输入代理商密码" class="input-300" maxlength="16" clearable />
         <span class="input-anno">请输入6-16位的数字或字母</span>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="关联商家账号" prop="acc">
         <el-input v-model="accountInfo.acc" placeholder="请输入关联商家账号" class="input-300" maxlength="32" clearable />
         <span class="input-anno">请输入商家账号的手机号码，然后进行绑定验证，确保商家与您的合作关系</span>
       </el-form-item>
-      <el-form-item label="商家手机验证码" prop="acc">
+      <el-form-item label="手机验证码" prop="acc">
         <el-input v-model="accountInfo.acc" placeholder="请输入验证码" style="width: 150px;margin-right: 32px;" maxlength="4" clearable />
         <el-button type="primary" @click="handleAccountInfo">获取验证码</el-button>
         <span class="input-anno">请及时让商家告知手机验证码</span>
       </el-form-item>
-      <el-form-item label="商家真实姓名" prop="acc">
+      <!-- <el-form-item label="商家真实姓名" prop="acc">
         <el-input v-model="accountInfo.acc" type="tel" placeholder="请输入关联商家账号" class="input-300" maxlength="32" clearable />
         <span class="input-anno">该手机号码此前未注册，请录入该商家的真实姓名</span>
-      </el-form-item>
-      <p style="font-size: 12px;color:red;padding-left: 120px;">注意：如果此前未注册的手机号码，点击【保存】后，将会自动完成商家注册，登录账号即是手机号码，初始密码16881688，请提醒商家及时更换密码</p>
+      </el-form-item> -->
+      <p style="font-size: 12px;color:red;padding-left: 120px;font-weight: 700;">注意：代理商后台与商家后台的登录账号都是手机号码。如果此前未注册，初始密码16881688，请提醒用户及时更换密码。如果此前已经注册，密码不会更改</p>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
   </div>
