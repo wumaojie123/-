@@ -19,6 +19,8 @@
 
 <script>
 import { passwordCheck } from '../../utils/rules'
+import { modifyPassword } from '../../api/modifyPassword'
+import MD5 from 'js-md5'
 const checkfn = (rule, value, callback, msg) => {
   if (!value.trim()) {
     callback(new Error(msg))
@@ -70,6 +72,13 @@ export default {
         this.$message.error('密码两次输入不一致')
         return false
       }
+      this.form.newPassWord = MD5(this.form.newPassWord)
+      this.form.oldPassWord = MD5(this.form.oldPassWord)
+      modifyPassword(this.form).then(res => {
+        this.$store.dispatch('LogOut').then(() => {
+          location.reload() // In order to re-instantiate the vue-router object to avoid bugs
+        })
+      })
     }
   }
 }

@@ -15,33 +15,28 @@ const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   if (!getRouter) {
-    if (getSession('addRoute')) { // determine if there has token
-      /* has token*/
+    debugger
+    if (getSession('addRoute')) {
       if (to.path === '/login') {
         next({ path: '/' })
         NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
       } else {
-        debugger
         getRouter = routerFormat(JSON.parse(getSession('addRoute')))
         console.log(getRouter)
+        if (store.getters.loaded) {
+          next()
+          return
+        }
         store.dispatch('GenerateRoutes', getRouter).then(() => { // 根据roles权限生成可访问的路由表
-          console.log(store.getters.addRouters, '-addRouters-')
+          debugger
           router.addRoutes(getRouter) // 动态添加可访问路由表
           next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a   history record
+        }, err => {
+          debugger
+          console.log(err)
         })
       }
     } else {
-      // axios.get('https://www.easy-mock.com/mock/5a5da330d9b48c260cb42ca8/example/antrouter').then(res => {
-      //   getRouter = userCenter // 后台拿到路由
-      //   saveSession('addRoute', userCenter)
-      //   getRouter = routerFormat(userCenter)
-      //   store.dispatch('GenerateRoutes', getRouter).then(() => { // 根据roles权限生成可访问的路由表
-      //     console.log(store.getters.addRouters, '-addRouters-')
-      //     router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-      //     next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a   history record
-      //   })
-      // })
-      /* has no token*/
       if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
         next()
       } else {

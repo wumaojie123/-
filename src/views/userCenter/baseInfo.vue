@@ -5,35 +5,35 @@
       <ul class="ul">
         <li>
           <p class="left">合同编号：</p>
-          <p>GZ-001</p>
+          <p>{{ infoData.contractId }}</p>
         </li>
         <li>
           <p class="left">代理商名称：</p>
-          <p>广州三疯实业</p>
+          <p>{{ infoData.agentUserName }}</p>
         </li>
         <li>
           <p class="left">联系人姓名：</p>
-          <p>张三丰</p>
+          <p>{{ infoData.linkName }}</p>
         </li>
         <li>
           <p class="left">手机号码：</p>
-          <p>13800138000</p>
+          <p>{{ infoData.phone }}</p>
         </li>
         <li>
           <p class="left">联系地址： </p>
-          <p>广东省广州市番禺区大学城青蓝街28号</p>
+          <p>{{ infoData.address }}</p>
         </li>
         <li>
           <p class="left">关联商家： </p>
-          <p>13800138000（张三丰）</p>
+          <p>{{ infoData.loginPhone }}</p>
         </li>
         <li>
           <p class="left">业务客服：</p>
-          <p>莫晓（15682232418）</p>
+          <p>{{ infoData.bdName }}</p>
         </li>
         <li>
           <p class="left">经营项目：</p>
-          <p>按摩椅、洗衣机</p>
+          <p>{{ infoData.agentBusinessId && infoData.agentBusinessId.name }}</p>
         </li>
       </ul>
     </div>
@@ -46,12 +46,13 @@ export default {
   name: 'BaseInfo',
   data() {
     return {
+      infoData: {},
       msg: '以下信息用户暂时不能主动修改，如需调整，请联系业务客服。'
     }
   },
   mounted() {
     getAuthInfo().then(res => {
-      console.log(res)
+      this.infoData = res.data || {}
     })
   }
 }

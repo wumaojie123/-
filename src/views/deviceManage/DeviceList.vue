@@ -3,33 +3,32 @@
     <el-form ref="form" :model="form" :rules="rules" label-width="90px" class="deviceForm">
       <el-row>
         <el-col :span="8">
-          <el-form-item label="设备编号" prop="deviceIdentifier">
-            <el-input v-model="form.deviceIdentifier" placeholder="请输入编号"/>
+          <el-form-item label="设备编号" prop="equipmentId">
+            <el-input v-model="form.equipmentId" placeholder="请输入编号"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="备注名称" prop="deviceName">
-            <el-input v-model="form.deviceName" placeholder="请输入备注名称"/>
+          <el-form-item label="机台号" prop="groupNumber">
+            <el-input v-model="form.groupNumber" placeholder="请输入机台号"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="设备类型" prop="deviceType">
-            <el-select v-model="form.deviceType" placeholder="请选择">
-              <el-option
-                v-for="item in businessInfoList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"/>
-            </el-select>
+          <el-form-item label="场地名称" prop="groupName">
+            <el-input v-model="form.groupName" placeholder="请输入场地名称"/>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="商家信息" prop="businessInfo">
-            <el-select v-model="form.businessInfo" placeholder="请选择">
+          <el-form-item label="代理商名称" prop="agentUserName">
+            <el-input v-model="form.agentUserName" placeholder="请输入代理商名称"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="设备类型" prop="equipmentTypeName">
+            <el-select v-model="form.equipmentTypeName" placeholder="请选择">
               <el-option
-                v-for="item in businessInfoList"
+                v-for="item in equipmentTypeName"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"/>
@@ -37,56 +36,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="关联代理" prop="relationAgent">
-            <el-select v-model="form.relationAgent" placeholder="请选择">
+          <el-form-item label="在线状态" prop="isOnline">
+            <el-select v-model="form.isOnline" placeholder="请选择">
               <el-option
-                v-for="item in businessInfoList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="在线状态" prop="onlineStatus">
-            <el-select v-model="form.onlineStatus" placeholder="请选择">
-              <el-option
-                v-for="item in businessInfoList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="广告状态" prop="advertisementStatus">
-            <el-select v-model="form.advertisementStatus" placeholder="请选择">
-              <el-option
-                v-for="item in businessInfoList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="固件版本" prop="deviceVersion">
-            <el-select v-model="form.deviceVersion" placeholder="请选择">
-              <el-option
-                v-for="item in businessInfoList"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"/>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item label="运营商" prop="operator">
-            <el-select v-model="form.operator" placeholder="请选择">
-              <el-option
-                v-for="item in businessInfoList"
+                v-for="item in isOnline"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"/>
@@ -96,10 +49,9 @@
       </el-row>
     </el-form>
     <div class="filter-container">
-      <el-button v-waves type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-      <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-delete" @click="handleEdit('delete')">清空查询</el-button>
-      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="handleEdit('qrcode')">查看二维码</el-button>
-      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleEdit('transfer')">设备转移</el-button>
+      <el-button v-waves type="primary" icon="el-icon-search" @click="handleBtn('find')">查询</el-button>
+      <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-delete" @click="handleBtn('clear')">清空查询</el-button>
+      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="handleCreateQRCode()">查看二维码</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -114,49 +66,49 @@
       <el-table-column
         type="selection"
         width="55"/>
-      <el-table-column label="设备编号" align="center">
+      <el-table-column label="设备编号" align="center" prop="equipmentId">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.equipmentId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备备注名称" align="center">
+      <el-table-column label="设备机台号" align="center">
         <template slot-scope="scope">
-          <span>{{ `广州三疯实业广州三疯实业广州三疯实业广州三疯实业` }}</span>
+          <span>{{ scope.row.groupNumber }}</span>
         </template>
       </el-table-column>
       <el-table-column label="设备类型" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.equipmentTypeName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="代理商名称" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.agentUserName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="账号" align="center">
         <template slot-scope="scope">
-          <span>{{ `1000` }}</span>
+          <span>{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
       <el-table-column label="区域" align="center">
         <template slot-scope="scope">
-          <span>{{ 12 }}</span>
+          <span>{{ scope.row.districtName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="在线状态" align="center">
         <template slot-scope="scope">
-          <span>{{ 12 }}</span>
+          <span>{{ scope.row.online ? '在线' : '离线' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="固件版本" align="center">
         <template slot-scope="scope">
-          <span>{{ `胡俊` }}</span>
+          <span>{{ scope.row.firmwareVersion }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="运营商" align="center">
+      <el-table-column label="场地名称" align="center">
         <template slot-scope="scope">
-          <span>{{ `激活` }}</span>
+          <span>{{ scope.row.groupName }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -172,14 +124,23 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"/>
     </div>
+    <div v-show="showQR" class="mask-box" @click.stop="showQR = !showQR" >
+      <div class="wrapper" @click.stop="" >
+        <div class="close" @click.stop="showQR = !showQR">X</div>
+        <h2>请用微信或支付宝扫描二维码</h2>
+        <canvas id="canvas"/>
+        <p>6061509002863744</p>
+        <p>13号机（万达2楼）</p>
+        <p>按摩椅</p>
+      </div>
+    </div>
   </el-main>
 </template>
 
 <script>
-import { fetchList, createArticle, updateArticle } from '@/api/article'
+import { getDeviceList } from '@/api/getDeviceList'
 import waves from '@/directive/waves' // 水波纹指令
-import { parseTime } from '@/utils'
-
+import QRCode from 'qrcode'
 const calendarTypeOptions = [
   { key: 0, display_name: '冻结' },
   { key: 1, display_name: '激活' }
@@ -192,26 +153,51 @@ export default {
   data() {
     return {
       tableKey: 0,
+      showQR: false,
       list: null,
       minHeightTable: 550,
       total: null,
       listLoading: true,
-      businessInfoList: [
+      isOnline: [
         {
-          label: '选择1',
-          value: 1
+          label: '在线',
+          value: true
         },
         {
-          label: '选择2',
-          value: 2
-        }, {
-          label: '选择3',
-          value: 3
+          label: '离线',
+          value: false
+        }
+      ],
+      equipmentTypeName: [
+        {
+          label: '按摩椅',
+          value: '按摩椅'
+        },
+        {
+          label: '洗衣机',
+          value: '洗衣机'
+        },
+        {
+          label: '娃娃机',
+          value: '娃娃机'
+        },
+        {
+          label: '兑币机',
+          value: '兑币机'
+        },
+        {
+          label: '充电桩',
+          value: '充电桩'
         }
       ],
       form: {
-        deviceIdentifier: '',
-        deviceName: ''
+        equipmentId: '',
+        deviceName: '',
+        groupNumber: '',
+        groupName: '',
+        agentUserName: '',
+        equipmentTypeName: '',
+        isOnline: ''
       },
       listQuery: {
         page: 1,
@@ -247,6 +233,17 @@ export default {
     this.minHeightTable = clientHeight - 393
   },
   methods: {
+    createQRCode() {
+      const canvas = document.getElementById('canvas')
+      QRCode.toCanvas(canvas, 'https://www.baidu.com/', {
+        width: 200,
+        height: 200
+      })
+    },
+    handleCreateQRCode() {
+      this.showQR = !this.showQR
+      this.createQRCode()
+    },
     getTemplateRow(index, row) {
       // 获取选中数据
       // this.checked = true
@@ -254,20 +251,17 @@ export default {
     },
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      this.form.pageSize = this.listQuery.limit
+      this.form.pageIndex = this.listQuery.page
+      getDeviceList(this.form).then(response => {
         this.list = response.data.items
         this.total = response.data.total
-        // Just to simulate the time of the request
         this.checkedRow = null
         this.checked = false
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
       })
-    },
-    handleFilter() {
-      this.listQuery.page = 1
-      this.getList()
     },
     handleSizeChange(val) {
       this.listQuery.limit = val
@@ -277,131 +271,58 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
-      row.status = status
-    },
-    resetTemp() {
-      this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
+    handleBtn(type) {
+      if (type === 'find') { // 新增代理商
+        this.getList()
+      } else if (type === 'clear') {
+        this.$refs.form.resetFields()
       }
-    },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
-    handleEdit(type) {
-      const checkIsNull = () => {
-        if (!this.checkedRow) {
-          this.$notify({
-            title: '提示',
-            message: '操作失败,请选中某一条数据进行操作',
-            type: 'error',
-            duration: 2000
-          })
-          return false
-        } else {
-          return true
-        }
-      }
-      if (type === 'add') { // 新增代理商
-        // this.$route.
-        this.$router.push({ path: '/insideManage/agentRoleManage/createAgent', query: { plan: 'private' }})
-      } else {
-        if (!checkIsNull()) {
-          return false
-        }
-        if (type === 'edit') { // 编辑代理商
-          this.$router.push({ path: '/insideManage/agentRoleManage/agentEdit' + '/' + this.checkedRow.id, query: { id: this.checkedRow.id }})
-        } else if (type === 'showSubAgentList') {
-          this.$router.push({ path: '/insideManage/agentRoleManage/subAgent' + '/' + this.checkedRow.id, query: { id: this.checkedRow.id }})
-        } else if (type === 'delete') {
-          // todo 删除本条数据
-          this.getList()
-        }
-      }
-    },
-    handleDelete(row) {
-      // todo 删除
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
-      })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
     }
   }
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
   /* + 是兄弟选择器,获取选中后的label元素*/
+  .mask-box{
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 8888;
+    background-color: rgba(0,0,0,.5);
+    .wrapper{
+      position: absolute;
+      min-width: 300px;
+      left: 50%;
+      top: 50%;
+      background-color: #fff;
+      padding: 20px;
+      transform: translate(-50%,-50%);
+      .close{
+        font-size: 16px;
+        position: absolute;
+        top: 14px;
+        cursor: pointer;
+        right: 20px;
+      }
+      h2{
+        font-size: 16px;
+        color: #666;
+        padding-bottom: 20px;
+      }
+      canvas{
+        display: block;
+        margin: 0 auto;
+      }
+      p{
+        padding-top: 10px;
+        font-size: 14px;
+        color: #666;
+        text-align: center;
+      }
+    }
+  }
   .agent-list-container{
     padding-right: 30px;
   }

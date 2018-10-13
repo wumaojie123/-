@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import store from '../store'
+import { routerFormat } from '../utils/routerFormat'
+import { getSession } from '../utils/savaSession'
 Vue.use(Router)
 
 /* Layout */
@@ -30,9 +32,9 @@ const Layout = (resolve) => require(['@/views/layout/Layout'], resolve)
     noCache: true                if true ,the page will no be cached(default is false)
   }
 **/
-// const routes = JSON.parse(getSession('addRoute'))
+const addRoute = getSession('addRoute') && JSON.parse(getSession('addRoute'))
 // console.log(routes)
-export const constantRouterMap = [
+export let constantRouterMap = [
   {
     path: '/redirect',
     component: Layout,
@@ -65,7 +67,7 @@ export const constantRouterMap = [
     hidden: true
   },
   {
-    path: '/',
+    path: '',
     component: Layout,
     redirect: 'dashboard',
     children: [
@@ -81,6 +83,11 @@ export const constantRouterMap = [
 ]
 
 // const addRouters = getSession('addRouters') && JSON.parse(getSession('addRouters'))
+if (addRoute) {
+  constantRouterMap = constantRouterMap.concat(routerFormat(addRoute))
+  store.dispatch('setLoadedFlag', true)
+  console.log(store)
+}
 export default new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
