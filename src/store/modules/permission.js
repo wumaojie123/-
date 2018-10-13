@@ -14,8 +14,9 @@ const permission = {
   actions: {
     GenerateRoutes({ commit }, routes) {
       return new Promise(resolve => {
-        const accessedRouters = routes || []
-        commit('SET_ROUTERS', accessedRouters)
+        console.log(routes)
+        // const accessedRouters = routes
+        commit('SET_ROUTERS', routes)
         resolve()
       })
     }

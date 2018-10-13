@@ -18,8 +18,8 @@ export const routerFormat = (routes) => {
     route.path = route.value
     const menuResourcesList = route.menuResourcesList
     if (menuResourcesList && Array.isArray(menuResourcesList) && menuResourcesList.length !== 0) {
-      route.menuResourcesList = routerFormat(menuResourcesList)
-      route.children = route.menuResourcesList
+      route.children = routerFormat(menuResourcesList)
+      // route.children = route.menuResourcesList
     }
     const component = parentId ? _import(route.htmlTemplet) : Layout
     route.component = component
