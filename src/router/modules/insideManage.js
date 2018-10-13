@@ -70,14 +70,14 @@ const insideManage = {
           name: 'addBD',
           meta: { title: '新增BD' },
           hidden: true
-        },
-        {
-          path: 'editBD/:id(\\d+)',
-          component: () => import('@/views/insideManage/bdManage/editBd'),
-          name: 'editBD',
-          meta: { title: '修改BD' },
-          hidden: true
         }
+        // {
+        //   path: 'editBD/:id(\\d+)',
+        //   component: () => import('@/views/insideManage/bdManage/editBd'),
+        //   name: 'editBD',
+        //   meta: { title: '修改BD' },
+        //   hidden: true
+        // }
       ]
     }
   ]
