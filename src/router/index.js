@@ -4,14 +4,13 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 /* Layout */
-import Layout from '@/views/layout/Layout'
-
+const Layout = (resolve) => require(['@/views/layout/Layout'], resolve)
 /* Router Modules */
-import businessChartsRouter from './modules/businessCharts'
-import agentManageRouter from './modules/agentManage'
-import deviceManageRouter from './modules/deviceManage'
-import userCenterRouter from './modules/userCenter'
-import insideManageRouter from './modules/insideManage'
+// import businessChartsRouter from './modules/businessCharts'
+// import agentManageRouter from './modules/agentManage'
+// import deviceManageRouter from './modules/deviceManage'
+// import userCenterRouter from './modules/userCenter'
+// import insideManageRouter from './modules/insideManage'
 
 /** note: Submenu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -31,6 +30,8 @@ import insideManageRouter from './modules/insideManage'
     noCache: true                if true ,the page will no be cached(default is false)
   }
 **/
+// const routes = JSON.parse(getSession('addRoute'))
+// console.log(routes)
 export const constantRouterMap = [
   {
     path: '/redirect',
@@ -64,7 +65,7 @@ export const constantRouterMap = [
     hidden: true
   },
   {
-    path: '',
+    path: '/',
     component: Layout,
     redirect: 'dashboard',
     children: [
@@ -79,6 +80,7 @@ export const constantRouterMap = [
   { path: '*', redirect: '/404', hidden: true }
 ]
 
+// const addRouters = getSession('addRouters') && JSON.parse(getSession('addRouters'))
 export default new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
@@ -118,11 +120,7 @@ export const asyncRouterMap = [
   //   ]
   // },
   /** When your routing deviceManage is too long, you can split it into small modules**/
-  insideManageRouter,
-  businessChartsRouter,
-  deviceManageRouter,
-  agentManageRouter,
-  userCenterRouter
+  // userCenterRouter
   // {
   //   path: '/example',
   //   component: Layout,
