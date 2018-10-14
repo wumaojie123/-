@@ -330,9 +330,7 @@ export default {
       insideManage.updateAgentInfo(submitData).then(
         res => {
           if (res) {
-            this.$router.push({
-              path: '/insideManage/agentRoleManage/agentsList'
-            })
+            this.$router.push({ path: 'insideManage/agentRoleList' })
           }
         },
         () => {}

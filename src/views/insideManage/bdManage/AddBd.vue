@@ -44,7 +44,7 @@ export default {
     },
     creatBd(data) {
       insideManage.addBD(data).then(res => {
-        this.$router.push({ path: '/insideManage/bdRoleManage/bdList' })
+        this.$router.push({ path: 'insideManage/bdRoleManage' })
       }, err => {
         console.log(err)
       })

@@ -82,7 +82,7 @@ export let constantRouterMap = [
   {
     path: '/insideManage',
     component: Layout,
-    redirect: 'noredirect',
+    redirect: '/insideManage/bdRoleManage',
     name: 'insideManage',
     hidden: true,
     meta: {

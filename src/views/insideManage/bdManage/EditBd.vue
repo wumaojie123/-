@@ -57,7 +57,7 @@ export default {
     },
     editBD(data) {
       insideManage.updateAgentInfo(data).then(res => {
-        this.$router.push({ name: 'bdList' })
+        this.$router.push({ path: 'insideManage/bdRoleManage' })
       }, err => {
         console.log(err, 'updateAgentInfo')
       })
