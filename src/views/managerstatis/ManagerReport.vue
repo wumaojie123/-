@@ -1,32 +1,34 @@
 <template>
   <div class="content-area">
-    <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
-      <el-form-item label="代理商名称" >
-        <el-input v-model="queryParams.agentUserName" placeholder="请输入代理商名称" class="input-300" maxlength="64" clearable />
-      </el-form-item>
-      <el-form-item label="代理商账号">
-        <el-input v-model="queryParams.userName" placeholder="请输入代理商账号,账号为手机号" class="input-300" maxlength="11" clearable />
+    <el-form :inline="true" style="margin-bottom: 20px;" label-width="100px" label-position="right">
+      <el-form-item label="统计日期">
+        <el-date-picker
+          v-model="dateRange"
+          :clearable="false"
+          :picker-options="options"
+          type="daterange"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd" />
+      <!-- <el-date-picker v-model="queryParams.startDate" :picker-options="options"  value-format="yyyy-MM-dd" type="date" placeholder="选择日期" /> -
+        <el-date-picker v-model="queryParams.endDate" :picker-options="options" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" /> -->
       </el-form-item>
       <p/>
-      <el-form-item label="联系人">
-        <el-input v-model="queryParams.linkName" placeholder="请输入联系人" class="input-300" maxlength="32" clearable />
+      <el-form-item label="代理商名称">
+        <el-input v-model="queryParams.agentUserName" type="text" placeholder="请输入代理商名称"/>
       </el-form-item>
-      <el-form-item label="手机号码">
-        <el-input v-model="queryParams.phone" placeholder="请输入手机号码" class="input-300" maxlength="11" clearable />
+      <el-form-item label="商家名称">
+        <el-input v-model="queryParams.associateSellerName" type="text" placeholder="请输入商家名称"/>
+      </el-form-item>
+      <el-form-item label="商家手机号码">
+        <el-input v-model="queryParams.associateSellerPhone" type="tel" placeholder="请输入商家手机号码"/>
       </el-form-item>
       <p/>
-      <div class="flex-layout">
-        <div class="flex-item">
-          <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
-          <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
-          <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理商</el-button>
-        </div>
-        <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理商</el-button></router-link>
-      </div>
+      <el-button type="primary" icon="el-icon-search" @click="handleQueryParams">查询</el-button>
+      <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" @selection-change="handleItem" >
-      <el-table-column type="selection" width="55"/>
+    <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
     <el-pagination
@@ -37,98 +39,95 @@
       background
       layout="total, prev, pager, next, sizes, jumper"
       @size-change="handleSizeChange"
+      @prev-click="handleCurrentChange"
+      @next-click="handleCurrentChange"
       @current-change="handleCurrentChange"/>
   </div>
 </template>
 
 <script>
+import { parseTime } from '@/utils/index'
 import { validateTel } from '@/utils/validate'
-import { fetchList } from '@/api/angentManage'
+import { fetchList } from '@/api/managerstatis'
+const NOW = Date.now()
+// 最大支持最近60天
+const OPTIONS = {
+  disabledDate: (time) => {
+    console.log(time)
+    const timeItem = time.getTime()
+    return timeItem < NOW - 24 * 60 * 60 * 60 * 1000 || timeItem > NOW
+  }
+}
 export default {
   data() {
     return {
-      queryParams: { agentUserName: '', userName: '', linkName: '', phone: '' },
-      list: [{ name: 'name1', info: 'guanlian', total: 5, inline: 1 }],
+      queryParams: { agentUserName: '', associateSellerPhone: '', associateSellerName: '' },
+      dateRange: [],
+      listLoading: true,
+      list: [],
       colums: [
         { key: 'agentUserName', label: '代理商名称' },
-        { key: 'userName', label: '账号', width: 160 },
-        { key: 'subordinateCount', label: '下一级代理数量', width: 160 },
-        { key: 'linkName', label: '联系人', width: 160 },
-        { key: 'phone', label: '手机号码', width: 160 },
-        // { key: 'total', label: '广告状态', width: 120 },
-        { key: 'createDate', label: '创建日期', width: 160 }
+        { key: 'associateSellerPhone', label: '账号', width: 110 },
+        { key: 'equipmentTotalCount', label: '设备总数', width: 110, sortable: true },
+        { key: 'equipmentOnlineCount', label: '在线设备数量', width: 130, sortable: true },
+        { key: 'orderCount', label: '订单数量', width: 110, sortable: true },
+        { key: 'totalIncome', label: '收入总额', width: 110, sortable: true },
+        { key: 'onlineIncome', label: '在线收入', width: 110, sortable: true },
+        { key: 'cashIncome', label: '现金收入', width: 110, sortable: true },
+        { key: 'adIncome', label: '广告收入', width: 110, sortable: true }
       ],
-      pageInfo: { total: 0, pageSize: 10, currPage: 1 },
-      angentInfo: []
+      pageInfo: { total: 20, pageSize: 10, currPage: 1 },
+      options: OPTIONS
     }
   },
-  created() {
+  beforeMount() {
+    console.log('mount')
+    // 统计日期默认为登录日期的昨天
+    this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+    this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.queryList()
   },
   methods: {
     resetQueryParams() {
-      this.queryParams = { agentUserName: '', userName: '', linkName: '', phone: '' }
+      this.queryParams = { agentUserName: '', associateSellerPhone: '', associateSellerName: '' }
+      this.dateRange = []
+      this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+      this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+    },
+    handleQueryParams() {
+      if ((this.queryParams.associateSellerPhone && validateTel(this.queryParams.associateSellerPhone)) || !this.queryParams.associateSellerPhone) {
+        this.queryList(this.pageInfo.currPage)
+      } else {
+        this.$message({ message: '请正确输入11位手机号码', type: 'error' })
+      }
     },
     queryList(page = 1) {
-      this.angentInfo = []
+      this.listLoading = true
       this.list = []
       this.pageInfo.currPage = page
-      const postData = { pageSize: this.pageInfo.pageSize, pageIndex: this.pageInfo.currPage }
-      for (const key in this.queryParams) {
-        if (this.queryParams[key]) {
-          postData[key] = this.queryParams[key]
-        }
-      }
+      const postData = this.queryParams
+      postData.pageIndex = this.pageInfo.currPage
+      postData.pageSize = this.pageInfo.pageSize
+      postData.startDate = this.dateRange[0]
+      postData.endDate = this.dateRange[1]
       fetchList(postData).then(res => {
         this.listLoading = false
         if (res.data) {
-          this.list = res.data.items || []
+          this.list = res.data && res.data.items || []
           this.pageInfo.total = res.data.total || 0
         } else {
           this.pageInfo.total = 0
         }
       })
     },
-    handleItem(value) {
-      // console.log(JSON.stringify(value))
-      this.angentInfo = value
-    },
-    handleAngent(type) {
-      if (this.angentInfo.length === 1) {
-        if (type === 'edit') {
-          this.$router.push({ path: '/edit', query: { ID: this.angentInfo[0].agentUserId, action: 'edit' }})
-        } else if (type === 'del') {
-          this.$confirm('是否删除该代理商信息', {
-            callback: action => {
-              if (action === 'confirm') {
-                console.log('确认删除数据')
-              }
-            }
-          })
-        }
-      } else if (this.angentInfo.length > 1) {
-        this.$message({ message: '只能编辑一条代理商信息', type: 'error' })
-      } else {
-        this.$message({ message: '请选中一条代理商信息！！', type: 'error' })
-      }
-    },
     handleSizeChange(pageSize) {
-      // console.log('sizeChange', pageSize)
+      console.log('sizeChange', pageSize)
       this.pageInfo.pageSize = pageSize
-      this.pageInfo.total = 0
-      this.queryList(1)
+      this.queryList(this.pageInfo.currPage)
     },
     handleCurrentChange(page) {
-      // console.log('curChange:', page)
+      console.log('curChange:', page)
       this.queryList(page)
-    },
-    filerQueryList() {
-      this.pageInfo.total = 0
-      if ((this.queryParams.phone && !validateTel(this.queryParams.phone)) || (this.queryParams.userName && !validateTel(this.queryParams.userName))) {
-        this.$message({ message: '请正确输入11位手机号码', type: 'error' })
-        return
-      }
-      this.queryList(this.pageInfo.currPage)
     }
   }
 }
