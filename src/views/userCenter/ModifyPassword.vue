@@ -78,7 +78,6 @@ export default {
       modifyPassword(this.form).then(res => {
         this.$store.dispatch('LogOut').then(() => {
           clearSession('addRoute')
-          this.$router.push({ path: '/' })
           location.reload() // In order to re-instantiate the vue-router object to avoid bugs
         })
       })

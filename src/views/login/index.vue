@@ -67,7 +67,9 @@
 <script>
 // import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
-import { saveSession } from '../../utils/savaSession'
+import router from '../../router/index'
+import { routerFormat } from '@/utils/routerFormat'
+import { saveSession, getSession } from '../../utils/savaSession'
 import { getMenu } from '../../api/getMenu'
 import SocialSign from './socialsignin'
 import SIdentify from './SIdentify.vue'
@@ -179,9 +181,10 @@ export default {
             console.log(data)
             getMenu().then(res => {
               // console.log(res)
+              debugger
               saveSession('addRoute', res.data)
+              router.addRoutes(routerFormat(JSON.parse(getSession('addRoute'))))
               this.$router.push({ path: this.redirect || '/' })
-              console.log(res)
             })
           }, err => {
             this.loading = false
