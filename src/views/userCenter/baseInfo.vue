@@ -33,7 +33,7 @@
         </li>
         <li>
           <p class="left">经营项目：</p>
-          <p>{{ infoData.agentBusinessId && infoData.agentBusinessId.name }}</p>
+          <p>{{ infoData.bunissesNames }}</p>
         </li>
       </ul>
     </div>

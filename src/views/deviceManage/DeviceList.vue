@@ -51,7 +51,7 @@
     <div class="filter-container">
       <el-button v-waves type="primary" icon="el-icon-search" @click="handleBtn('find')">查询</el-button>
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-delete" @click="handleBtn('clear')">清空查询</el-button>
-      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="handleCreateQRCode()">查看二维码</el-button>
+      <!--<el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="handleCreateQRCode()">查看二维码</el-button>-->
     </div>
     <el-table
       v-loading="listLoading"
@@ -75,7 +75,7 @@
       </el-table-column>
       <el-table-column label="设备机台号" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.groupNumber }}</span>
+          <span>{{ scope.row.groupNumber || '' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="设备类型" align="center">
@@ -234,6 +234,9 @@ export default {
     this.minHeightTable = clientHeight - 393
   },
   methods: {
+    handleChange() {
+      console.log(999)
+    },
     createQRCode() {
       const canvas = document.getElementById('canvas')
       let url
