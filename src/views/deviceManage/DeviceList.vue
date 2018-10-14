@@ -259,7 +259,7 @@ export default {
       getDeviceList(this.form).then(response => {
         this.list = response.data.items
         this.total = response.data.total
-        this.checkedRow = null
+        this.checkedRow = {}
         this.checked = false
         setTimeout(() => {
           this.listLoading = false

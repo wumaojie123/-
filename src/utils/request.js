@@ -2,6 +2,7 @@ import axios from 'axios'
 // import { Message } from 'element-ui'
 import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
+import router from '../router/index'
 import { clearSession } from '../utils/savaSession'
 // import { getToken } from '@/utils/auth'
 // create an axios instance
@@ -59,6 +60,7 @@ service.interceptors.response.use(
         ).then(() => {
           clearSession('addRoute')
           store.dispatch('FedLogOut').then(() => {
+            router.push({ path: '/' })
             location.reload() // 为了重新实例化vue-router对象 避免bug
           })
         })

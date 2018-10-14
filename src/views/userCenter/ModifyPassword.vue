@@ -20,6 +20,7 @@
 <script>
 import { passwordCheck } from '../../utils/rules'
 import { modifyPassword } from '../../api/modifyPassword'
+import { clearSession } from '../../utils/savaSession'
 import MD5 from 'js-md5'
 const checkfn = (rule, value, callback, msg) => {
   if (!value.trim()) {
@@ -76,6 +77,8 @@ export default {
       this.form.oldPassWord = MD5(this.form.oldPassWord)
       modifyPassword(this.form).then(res => {
         this.$store.dispatch('LogOut').then(() => {
+          clearSession('addRoute')
+          this.$router.push({ path: '/' })
           location.reload() // In order to re-instantiate the vue-router object to avoid bugs
         })
       })

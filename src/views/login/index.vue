@@ -94,7 +94,6 @@ export default {
       } else if (pattern.test(value)) {
         callback()
       } else {
-        debugger
         callback(new Error('请输入6-16位数字、字母或下划线，不能以数字开头'))
       }
     }

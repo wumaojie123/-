@@ -26,10 +26,8 @@ import { getSession } from './utils/savaSession'
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 let getRouter
 const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
-
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
-  next()
   if (!getRouter) {
     if (getSession('addRoute')) {
       if (to.path === '/login') {
