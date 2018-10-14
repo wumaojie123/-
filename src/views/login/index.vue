@@ -198,7 +198,7 @@ export default {
     },
     // 切换验证码
     refreshCode() {
-      this.validateCodeUrl = (process.env.ENV_CONFIG === 'dev' ? '/agent' : '.') + '/rest/verifycode?' + new Date().getTime()
+      this.validateCodeUrl = '/agent/rest/verifycode?' + new Date().getTime()
     }
   }
 }
