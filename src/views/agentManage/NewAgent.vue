@@ -84,7 +84,10 @@ export default {
       update(postData).then(res => {
         if (res.result === 0) {
           // console.log('保存代理商信息成功')
-          this.$message({ message: '保存代理商信息成功', type: 'success' })
+          this.$message({ message: '新增代理商信息成功', type: 'success' })
+          this.$router.go(-1)
+        } else {
+          this.$message({ message: '新增代理商信息失败', type: 'error' })
         }
       })
     },

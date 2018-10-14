@@ -99,6 +99,7 @@ export default {
       update(postData).then(res => {
         if (res.result === 0) {
           this.$message({ message: '修改代理商信息成功', type: 'success' })
+          this.$router.go(-1)
         } else {
           this.$message({ message: '修改代理商信息失败', type: 'error' })
         }
