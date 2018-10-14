@@ -161,6 +161,11 @@ export default {
       minHeightTable: 550,
       total: null,
       listLoading: true,
+      basicConfig: {
+        machineUrl: 'https://m.leyaoyao.com/customer/message/t/',
+        gashaponUrl: 'https://m.leyaoyao.com/customer/message/g/',
+        childUrl: 'https://m.leyaoyao.com/customer/message/c/'
+      },
       isOnline: [
         {
           label: '全部',
@@ -231,15 +236,28 @@ export default {
   methods: {
     createQRCode() {
       const canvas = document.getElementById('canvas')
-      const txt = '' + this.checkedRow.equipmentId
-      const txtL = txt.length
-      const addTxt = (16 - txtL) <= 0 ? '' : '0'.repeat(16 - txtL)
-      QRCode.toCanvas(canvas, addTxt + txt, {
+      let url
+      console.log(this.checkedRow.equipmentTypeName)
+      if (this.checkedRow.equipmentTypeName === '儿童类') {
+        url = this.basicConfig.childUrl
+      } else if (this.checkedRow.equipmentTypeName === '扭蛋机') {
+        url = this.basicConfig.gashaponUrl
+      } else {
+        url = this.basicConfig.machineUrl
+      }
+      QRCode.toCanvas(canvas, url + this.checkedRow.equipmentId, {
         width: 200,
         height: 200
       })
     },
     handleCreateQRCode() {
+      if (!this.checkedRow || !this.checkedRow.equipmentId) {
+        this.$message({
+          message: '请选择要生成二维码的设备！',
+          type: 'warning'
+        })
+        return
+      }
       this.showQR = !this.showQR
       this.createQRCode()
     },
