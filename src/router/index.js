@@ -149,7 +149,7 @@ export let constantRouterMap = [
         path: '/add',
         component: () => import('@/views/agentManage/EditAgent'),
         name: 'editAgent',
-        meta: { title: '编辑代理商' },
+        meta: { title: '新增代理商' },
         hidden: true
       },
       {
@@ -157,7 +157,7 @@ export let constantRouterMap = [
         hidden: true,
         component: () => import('@/views/agentManage/NewAgent'),
         name: 'addAgent',
-        meta: { title: '新增代理商' }
+        meta: { title: '编辑代理商' }
       }
     ]
   },
