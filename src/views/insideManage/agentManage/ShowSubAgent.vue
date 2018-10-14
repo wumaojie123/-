@@ -1,5 +1,5 @@
 <template>
-  <div class="agent-list-container">
+  <div class="agent-list-container bd-manage">
     <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
       <el-menu-item index="1">下级代理商</el-menu-item>
     </el-menu>
@@ -14,27 +14,27 @@
       style="width: 100%;">
       <el-table-column :label="`序号`" align="center" width="65px">
         <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
+          <span>{{ scope.row.agentUserId }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`代理商名称`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.agentUserName }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`商家信息`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ `广州三疯实业广州三疯实业广州三疯实业广州三疯实业` }}</span>
+          <span>{{ scope.row.agentUserName }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`联系人`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.linkName }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`联系手机`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`商家设备数量`" width="150px" align="center">
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { fetchList, createArticle, updateArticle } from '@/api/article'
+import insideManage from '@/api/insideManage'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 export default {
@@ -113,9 +113,7 @@ export default {
     }
   },
   created() {
-    // todo 获取id号,并且根据id拉取数据列表
-    console.log(this.$route)
-    this.getList()
+    this.getList(this.$route.query.id)
   },
   methods: {
     getTemplateRow(index, row) {
@@ -123,10 +121,12 @@ export default {
       // this.checked = true
       this.checkedRow = row
     },
-    getList() {
+    getList(id) {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
-        this.list = response.data.items
+      insideManage.getAgentList({
+        agentUserId: id
+      }).then(response => {
+        this.list = response.data.item
         this.total = response.data.total
         // Just to simulate the time of the request
         this.checkedRow = null
@@ -134,6 +134,8 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
+      }, () => {
+
       })
     },
     handleFilter() {
@@ -166,24 +168,6 @@ export default {
         type: ''
       }
     },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
-    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       this.temp.timestamp = new Date(this.temp.timestamp)
@@ -191,30 +175,6 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
-      })
-    },
-    updateData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
       })
     },
     formatJson(filterVal, jsonData) {

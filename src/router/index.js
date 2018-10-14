@@ -79,6 +79,54 @@ export let constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/insideManage',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'insideManage',
+    meta: {
+      title: '内部管理',
+      icon: 'peoples'
+    },
+    children: [
+      {
+        path: '/editBD',
+        component: () => import('@/views/insideManage/bdManage/editBd'),
+        name: 'editBD',
+        meta: { title: '修改BD' },
+        hidden: true
+      },
+      {
+        path: '/addBD',
+        component: () => import('@/views/insideManage/bdManage/AddBd'),
+        name: 'addBD',
+        meta: { title: '新增BD' },
+        hidden: true
+      },
+      {
+        path: '/subAgent',
+        component: () => import('@/views/insideManage/agentManage/ShowSubAgent'),
+        name: 'subAgent',
+        meta: { title: '查看下级代理' },
+        hidden: true
+      },
+      {
+        path: '/createOneAgent',
+        component: () => import('@/views/insideManage/agentManage/AddAgent'),
+        name: 'createOneAgent',
+        meta: { title: '代理商新增' },
+        hidden: true
+      },
+      {
+        path: '/oneAgentEdit',
+        component: () => import('@/views/insideManage/agentManage/EditAgent'),
+        name: 'oneAgentEdit',
+        meta: { title: '代理商编辑' },
+        hidden: true
+      }
+    ]
+  },
+
   { path: '*', redirect: '/404', hidden: true }
 ]
 

@@ -1,23 +1,12 @@
 <template>
-  <div class="content-area">
+  <div class="content-area bd-manage">
     <!-- 账号信息区域 -->
-    <el-form ref="BDInfoRef" :model="BDInfo" :rules="BDInfoRules" style="margin-top: 20px;" label-width="120px" label-position="left">
-      <el-form-item label="BD姓名" prop="account">
-        <el-input v-model="BDInfo.account" placeholder="请输入代理商账号" class="input-300" maxlength="11" />
+    <el-form ref="InsideManageEditBdRef" :model="BDInfo" :rules="BDInfoRules" style="margin-top: 20px;" label-width="120px" label-position="left">
+      <el-form-item label="BD姓名" prop="name">
+        <el-input v-model="BDInfo.name" placeholder="请输入BD姓名" class="input-300" maxlength="11" />
       </el-form-item>
-      <el-form-item label="手机号码" prop="acc">
-        <el-input v-model="BDInfo.acc" placeholder="请输入手机号码" class="input-300" maxlength="11" />
-        <span class="input-anno">请输入11位的手机号码</span>
-      </el-form-item>
-      <el-form-item label="登录密码" prop="password">
-        <el-input v-model="BDInfo.password" type="password" placeholder="请输入代理商密码" class="input-300" maxlength="16" />
-        <span class="input-anno">请输入6-16位的数字或字母作为密码</span>
-      </el-form-item>
-      <el-form-item label="账号状态" prop="status">
-        <el-select v-model="BDInfo.status" placeholder="请选择账号状态">
-          <el-option label="激活" value="1"/>
-          <el-option label="冻结" value="0"/>
-        </el-select>
+      <el-form-item label="手机号码" >
+        <div>{{ BDInfo.phone }}<span class="input-anno">如需更改账号或密码，请联系系统管理员</span></div>
       </el-form-item>
       <br>
       <el-button type="primary" @click="submit">保存</el-button>
@@ -26,30 +15,51 @@
 </template>
 
 <script>
-import { telCheck } from '@/utils/rules'
+import insideManage from '@/api/insideManage'
 export default {
+  name: 'BdeditView',
   data() {
     return {
-      BDInfo: { account: '', password: '', acc: '', status: '激活' },
+      BDInfo: { name: '', phone: '1111111', agentUserId: '' },
       BDInfoRules: {
-        account: [{ required: true, message: '请输入代理商名称', trigger: 'blur' }],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, max: 16, message: '请输入6-16位的数字或字母', trigger: 'blur' }
-        ],
-        acc: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: telCheck, trigger: 'blur' }],
-        status: [{ required: true, message: '请选择活动区域', trigger: 'change' }]
+        name: [{ required: true, message: '请输入BD姓名', trigger: 'blur' }]
       }
+    }
+  },
+  created() {
+    if (this.$route.query.id) {
+      this.getBdInfo(this.$route.query.id, this.$route.query.phone)
     }
   },
   methods: {
     submit() {
-      this.$refs['BDInfoRef'].validate(valid => {
+      this.$refs['InsideManageEditBdRef'].validate(valid => {
         if (valid) {
-          alert(valid)
+          this.editBD({
+            type: 0,
+            agentUserId: this.BDInfo.agentUserId,
+            phone: this.BDInfo.phone,
+            agentUserName: this.BDInfo.name
+          })
         } else {
           return false
         }
+      })
+    },
+    getBdInfo(id, phone) {
+      insideManage.getAgentInfo(id).then(res => {
+        this.BDInfo.name = res.data.agentUserName || ''
+        this.BDInfo.phone = res.data.phone || '未录入手机号'
+        this.BDInfo.agentUserId = res.data.agentUserId || ''
+      }, err => {
+        console.log(err)
+      })
+    },
+    editBD(data) {
+      insideManage.updateAgentInfo(data).then(res => {
+        this.$router.push({ name: 'bdList' })
+      }, err => {
+        console.log(err, 'updateAgentInfo')
       })
     }
   }
