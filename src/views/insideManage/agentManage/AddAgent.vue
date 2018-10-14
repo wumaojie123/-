@@ -37,8 +37,7 @@
         </el-select>
         <span class="input-anno">选择一位BD同事作为跟进负责人</span>
       </el-form-item>
-      <el-form-item v-if="allBusinProjects&&allBusinProjects.length>0" ref="projectsRef" label="经营项目" prop="project">
-        <span style="position: absolute;left: 0;color: red;">*</span>
+      <el-form-item v-if="allBusinProjects&&allBusinProjects.length>0" ref="projectsRef" class="project-form" label="经营项目" prop="project">
         <template v-for="(box,index) in allBusinProjects">
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
@@ -188,7 +187,7 @@ export default {
       }
       insideManage.getShanghuInfo(phone).then(res => {
         if (res && res.data) {
-          this.restaurants = `${res.data.phone || ''} (用户昵称${res.data.name || null})`
+          this.restaurants = `${res.data.phone || ''} (用户昵称:${res.data.name || null})`
           this.linkUserId = res.data.adUserId
         } else {
           this.linkUserId = ''
@@ -291,9 +290,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .input-300 {
     width: 350px;
+  }
+  .project-form{
+    position: relative;
+  }
+  .project-form label.el-form-item__label{
+    padding: 0 12px 0 0;
+    box-sizing: border-box;
+    &::before{
+      content: '*';
+      color: red;
+      margin-right: 4px;
+      position: absolute;
+      font-weight: 700;
+      transform: translate3d(50%,50%,0);
+      /*top: 0;*/
+    }
   }
 
   .input-anno {
