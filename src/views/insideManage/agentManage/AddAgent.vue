@@ -52,7 +52,7 @@
       </el-menu>
       <br>
       <br>
-      <el-form-item label="代理商账号" prop="loginPhone">
+      <el-form-item label="代理商账号" prop="phone">
         <el-input
           v-model="baseInfo.loginPhone"
           placeholder="请输入手机号"
@@ -185,7 +185,7 @@ export default {
       }
       insideManage.getShanghuInfo(phone).then(res => {
         if (res && res.data) {
-          this.restaurants = `${res.data.name || null}</br>!`
+          this.restaurants = `${res.data.name || null}</br>`
           this.linkUserId = res.data.adUserId
         } else {
           this.restaurants = `该手机号码未注册!`
