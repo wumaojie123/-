@@ -52,7 +52,7 @@
       </el-menu>
       <br>
       <br>
-      <el-form-item label="代理商账号" prop="phone">
+      <el-form-item label="代理商账号" prop="loginPhone">
         <el-input
           v-model="baseInfo.loginPhone"
           placeholder="请输入手机号"
@@ -63,7 +63,7 @@
         <span class="input-anno">请输入手机号码，如果客户此前有注册乐摇摇商家账号，请输入相同的号码。</span>
       </el-form-item>
       <el-form-item label="关联商家">
-        <div style="">{{ restaurants || '未找到此账号!' }}</div>
+        <div style="" v-html="restaurants"/>
       </el-form-item>
       <br>
       <p style="margin: 10px;padding-bottom:10px;color: red;">{{ `注意：代理商后台与商家后台的登录账号都是手机号码。如果此前未注册，初始密码16881688，请提醒用户及时更换密码。如果此前已经注册，密码不会更改` }}</p>
@@ -96,15 +96,15 @@ export default {
         contractId: [{ required: true, message: '请输入合同号', trigger: 'blur' }],
         agentUserName: [{ required: true, message: '请输入代理商名称', trigger: 'blur' }],
         linkName: [{ required: true, message: '请输入联系人姓名', trigger: 'blur' }],
-        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: telCheck, trigger: 'blur' }],
+        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: telCheck, trigger: 'input' }],
         address: [{ required: true, message: '请输入联系地址', trigger: 'blur' }],
         BD: [{ required: true, message: '请输入一位BD同事', trigger: 'change' }],
         // project: { type: 'array', required: true, message: '请输入至少一个经营项目', trigger: 'change' },
         // project: [{ required: true, type: 'array', message: '请输入至少一个经营项目', trigger: 'change' }],
-        loginPhone: [{ required: true, message: '请输入登录账号', trigger: 'blur' }, {
-          validator: telCheck,
-          trigger: 'blur'
-        }],
+        loginPhone: [
+          { required: true, message: '请输入正确的账号', trigger: 'blur' },
+          { validator: telCheck, trigger: 'input' }
+        ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 16, message: '请输入6-16位的数字或字母', trigger: 'blur' }
@@ -178,7 +178,6 @@ export default {
       // 调用 callback 返回建议列表的数据
       const phone = this.baseInfo.loginPhone
       if (!phone || phone === '') {
-        this.restaurants = '输入不能为空!'
         return false
       }
       if (phone.length < 11) {
@@ -186,9 +185,10 @@ export default {
       }
       insideManage.getShanghuInfo(phone).then(res => {
         if (res && res.data) {
-          this.restaurants = `${res.data.name || null}`
+          this.restaurants = `${res.data.name || null}</br>!`
           this.linkUserId = res.data.adUserId
         } else {
+          this.restaurants = `该手机号码未注册!`
           this.linkUserId = ''
         }
       }, () => {
@@ -196,7 +196,7 @@ export default {
         if (this.baseInfo.account === '') {
           this.restaurants = ''
         } else {
-          this.restaurants = '不存在此账号,可注册!'
+          this.restaurants = ''
         }
       })
     },
