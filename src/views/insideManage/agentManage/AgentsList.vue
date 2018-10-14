@@ -13,7 +13,7 @@
       <br>
       <div class="item">
         <span class="label">&nbsp;&nbsp;&nbsp;&nbsp;账号&nbsp;&nbsp;&nbsp;</span>
-        <el-input :placeholder="`请输入账号`" v-model="listQuery.phone" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-input :placeholder="`请输入账号`" v-model="listQuery.userName" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
       </div>
       <div class="item">
         <span class="label">&nbsp;&nbsp;BD同事&nbsp;&nbsp;&nbsp; </span>
@@ -116,7 +116,7 @@ export default {
       listQuery: {
         contractId: '', // 合同号
         agentUserName: '', // 代理商名称
-        phone: '', // 手机号
+        userName: '', // 账号
         bdId: '' // BD同事id
       },
       bdList: null,
