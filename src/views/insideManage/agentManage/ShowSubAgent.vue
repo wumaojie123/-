@@ -14,7 +14,7 @@
       style="width: 100%;">
       <el-table-column :label="`序号`" align="center" width="65px">
         <template slot-scope="scope">
-          <span>{{ scope.row.agentUserId }}</span>
+          <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`代理商名称`" width="150px" align="center">
@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column :label="`商家信息`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.agentUserName }}</span>
+          <span>{{ scope.row.userName }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`联系人`" width="150px" align="center">
@@ -39,17 +39,17 @@
       </el-table-column>
       <el-table-column :label="`商家设备数量`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ `1000` }}</span>
+          <span>{{ scope.row.ownEquipmentCount || 0 }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`再下级代理商数量`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ 121212 }}</span>
+          <span>{{ scope.row.subordinateCount || 0 }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`创建日期`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.createDate || '' }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -126,7 +126,7 @@ export default {
       insideManage.getAgentList({
         agentUserId: id
       }).then(response => {
-        this.list = response.data.item
+        this.list = response.data.items
         this.total = response.data.total
         // Just to simulate the time of the request
         this.checkedRow = null
