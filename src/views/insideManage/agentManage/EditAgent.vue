@@ -245,15 +245,10 @@ export default {
     accountOnBlur() {
       // 调用 callback 返回建议列表的数据
       const phone = this.baseInfo.loginPhone
-      if (!phone || phone === '') {
-        this.restaurants = '输入不能为空!'
-        return false
-      }
-      insideManage.getShanghuInfo(this.baseInfo.account).then(
+      insideManage.getShanghuInfo(phone).then(
         res => {
           if (res && res.data) {
-            this.restaurants = `${res.data.phone || ''} (${res.data.name ||
-              null})`
+            this.restaurants = `${res.data.name || null})`
           } else {
             if (this.baseInfo.account === '') {
               this.restaurants = ''
@@ -299,6 +294,7 @@ export default {
               acc: data.phone
             }
             this.agentProject = data.agentBusiness
+            this.accountOnBlur()
             const tempArr = []
             this.allBusinProjects &&
               this.allBusinProjects.length > 0 &&
@@ -336,7 +332,7 @@ export default {
         res => {
           if (res) {
             this.$message({
-              message: '新增成功,稍后跳转!',
+              message: '修改成功!',
               type: 'success'
             })
             setTimeout(() => {

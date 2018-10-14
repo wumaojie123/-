@@ -20,7 +20,7 @@ export default {
   name: 'BdeditView',
   data() {
     return {
-      BDInfo: { name: '', phone: '1111111', agentUserId: '' },
+      BDInfo: { name: '', phone: '', agentUserId: '' },
       BDInfoRules: {
         name: [{ required: true, message: '请输入BD姓名', trigger: 'blur' }]
       }
@@ -58,7 +58,7 @@ export default {
     editBD(data) {
       insideManage.updateAgentInfo(data).then(res => {
         this.$message({
-          message: '修改成功,稍后跳转!',
+          message: '修改成功!',
           type: 'success'
         })
         setTimeout(() => {

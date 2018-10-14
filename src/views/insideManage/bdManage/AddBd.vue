@@ -45,7 +45,7 @@ export default {
     creatBd(data) {
       insideManage.addBD(data).then(res => {
         this.$message({
-          message: '新增成功,稍后跳转!',
+          message: '新增成功!',
           type: 'success'
         })
         setTimeout(() => {

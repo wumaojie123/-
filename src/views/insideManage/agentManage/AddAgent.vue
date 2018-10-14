@@ -186,15 +186,10 @@ export default {
       }
       insideManage.getShanghuInfo(phone).then(res => {
         if (res && res.data) {
-          this.restaurants = `${res.data.phone || ''} (用户昵称:${res.data.name || null})`
+          this.restaurants = `${res.data.name || null}`
           this.linkUserId = res.data.adUserId
         } else {
           this.linkUserId = ''
-          if (phone === '') {
-            this.restaurants = ''
-          } else {
-            this.restaurants = '不存在此账号,可注册!'
-          }
         }
       }, () => {
         this.linkUserId = ''
@@ -230,7 +225,7 @@ export default {
       insideManage.updateAgentInfo(submitData).then(res => {
         if (res) {
           this.$message({
-            message: '新增成功,稍后跳转!',
+            message: '新增成功!',
             type: 'success'
           })
           setTimeout(() => {
