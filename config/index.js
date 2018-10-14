@@ -11,8 +11,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/agent': {
-        target: 'https://dag.leyaoyao.com',
-        // target: 'http://192.168.20.62:8041',
+        // target: 'https://dag.leyaoyao.com',
+        target: 'http://192.168.20.62:8041',
         // target: 'http:// jpeb74.natappfree.cc',
         changeOrigin: true, //开启代理
         // pathRewrite: {'^/agent': '/agent'}  //这里重写路径/run就代理到对应地址
@@ -98,7 +98,7 @@ module.exports = {
     // View the bundle analyzer report after build finishes:
     // `npm run build:prod --report`
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report || false,
+    bundleAnalyzerReport: process.env.npm_config_report || true,
 
     // `npm run build:prod --generate_report`
     generateAnalyzerReport: process.env.npm_config_generate_report || false

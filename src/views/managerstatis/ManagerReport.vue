@@ -67,9 +67,9 @@ export default {
       list: [],
       colums: [
         { key: 'agentUserName', label: '代理商名称', width: 180 },
-        { key: 'info', label: '账号', width: 180 },
+        { key: 'associateSellerPhone', label: '账号', width: 180 },
         { key: 'equipmentTotalCount', label: '设备总数', width: 120, sortable: true },
-        { key: 'inequipmentOnlineCountline', label: '在线设备数量', width: 140, sortable: true },
+        { key: 'equipmentOnlineCount', label: '在线设备数量', width: 140, sortable: true },
         { key: 'orderCount', label: '订单数量', width: 120, sortable: true },
         { key: 'totalIncome', label: '收入总额', width: 120, sortable: true },
         { key: 'onlineIncome', label: '在线收入', width: 120, sortable: true },
