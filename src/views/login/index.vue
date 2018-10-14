@@ -111,7 +111,7 @@ export default {
         password: '',
         verifyCode: ''
       },
-      validateCodeUrl: (process.env.ENV_CONFIG === 'dev' ? '/agent' : '.') + '/rest/verifycode?' + new Date().getTime(),
+      validateCodeUrl: 'agent/rest/verifycode?' + new Date().getTime(),
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
