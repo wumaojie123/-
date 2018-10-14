@@ -66,7 +66,7 @@
         <div style="">{{ restaurants || '未找到此账号!' }}</div>
       </el-form-item>
       <br>
-      <p v-if="tips" style="margin: 10px;padding-bottom:10px;color: red;">{{ tips }}</p>
+      <p style="margin: 10px;padding-bottom:10px;color: red;">{{ `注意：代理商后台与商家后台的登录账号都是手机号码。如果此前未注册，初始密码16881688，请提醒用户及时更换密码。如果此前已经注册，密码不会更改` }}</p>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
   </div>
@@ -115,7 +115,6 @@ export default {
       checkBoxList: null,
       linkUserId: null,
       agentProject: [],
-      tips: '',
       showProjectTips: false, // 经营项目提示
       allBusinProjects: [] // 所有的经营项目
     }
@@ -230,13 +229,11 @@ export default {
     updataAgentInfo(submitData) {
       insideManage.updateAgentInfo(submitData).then(res => {
         if (res) {
-          this.tips = '注意：代理商后台与商家后台的登录账号都是手机号码。如果此前未注册，初始密码16881688，请提醒用户及时更换密码。如果此前已经注册，密码不会更改'
           this.$message({
             message: '新增成功,稍后跳转!',
             type: 'success'
           })
           setTimeout(() => {
-            this.tips = ''
             this.$router.push({ path: 'insideManage/agentRoleList' })
           }, 2000)
         }
