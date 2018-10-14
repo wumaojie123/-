@@ -12,11 +12,11 @@
       <br>
       <br>
       <div class="item">
-        <span class="label">账号</span>
-        <el-input :placeholder="`请输入账号`" v-model="listQuery.phone" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <span class="label">&nbsp;&nbsp;&nbsp;&nbsp;账号&nbsp;&nbsp;&nbsp;</span>
+        <el-input :placeholder="`请输入账号`" v-model="listQuery.userName" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
       </div>
       <div class="item">
-        <span class="label">&nbsp;&nbsp;BD同事&nbsp;&nbsp;&nbsp;&nbsp; </span>
+        <span class="label">&nbsp;&nbsp;BD同事&nbsp;&nbsp;&nbsp; </span>
         <el-select v-model="listQuery.bdId" :placeholder="`请选择BD同事`" clearable style="width: 300px;margin-right: 20px;vertical-align: baseline;" class="filter-item">
           <el-option v-for="item in bdList" :key="item.adUserId" :label="item.username" :value="item.adUserId" />
         </el-select>
@@ -45,17 +45,17 @@
           <span>{{ scope.row.agentUserName|| '' }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`账号`" width="150px" align="center">
+      <el-table-column :label="`账号`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.userName || '' }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`经营项目`" width="150px" align="center">
+      <el-table-column :label="`经营项目`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.bunissesNames || '未知' }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`自营设备数量`" width="80px" align="center">
+      <el-table-column :label="`自营设备数量`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.ownEquipmentCount || 0 }}</span>
         </template>
@@ -116,7 +116,7 @@ export default {
       listQuery: {
         contractId: '', // 合同号
         agentUserName: '', // 代理商名称
-        phone: '', // 手机号
+        userName: '', // 账号
         bdId: '' // BD同事id
       },
       bdList: null,

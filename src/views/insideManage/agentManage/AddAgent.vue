@@ -37,8 +37,7 @@
         </el-select>
         <span class="input-anno">选择一位BD同事作为跟进负责人</span>
       </el-form-item>
-      <el-form-item v-if="allBusinProjects&&allBusinProjects.length>0" ref="projectsRef" label="经营项目" prop="project">
-        <span style="position: absolute;left: 0;color: red;">*</span>
+      <el-form-item v-if="allBusinProjects&&allBusinProjects.length>0" ref="projectsRef" class="project-form" label="经营项目" prop="project">
         <template v-for="(box,index) in allBusinProjects">
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
@@ -67,7 +66,7 @@
         <div style="">{{ restaurants || '未找到此账号!' }}</div>
       </el-form-item>
       <br>
-      <p v-if="tips" style="margin: 10px;padding-bottom:10px;color: red;">{{ tips }}</p>
+      <p style="margin: 10px;padding-bottom:10px;color: red;">{{ `注意：代理商后台与商家后台的登录账号都是手机号码。如果此前未注册，初始密码16881688，请提醒用户及时更换密码。如果此前已经注册，密码不会更改` }}</p>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
   </div>
@@ -116,7 +115,6 @@ export default {
       checkBoxList: null,
       linkUserId: null,
       agentProject: [],
-      tips: '',
       showProjectTips: false, // 经营项目提示
       allBusinProjects: [] // 所有的经营项目
     }
@@ -188,7 +186,7 @@ export default {
       }
       insideManage.getShanghuInfo(phone).then(res => {
         if (res && res.data) {
-          this.restaurants = `${res.data.phone || ''} (用户昵称${res.data.name || null})`
+          this.restaurants = `${res.data.phone || ''} (用户昵称:${res.data.name || null})`
           this.linkUserId = res.data.adUserId
         } else {
           this.linkUserId = ''
@@ -231,13 +229,11 @@ export default {
     updataAgentInfo(submitData) {
       insideManage.updateAgentInfo(submitData).then(res => {
         if (res) {
-          this.tips = '注意：代理商后台与商家后台的登录账号都是手机号码。如果此前未注册，初始密码16881688，请提醒用户及时更换密码。如果此前已经注册，密码不会更改'
           this.$message({
             message: '新增成功,稍后跳转!',
             type: 'success'
           })
           setTimeout(() => {
-            this.tips = ''
             this.$router.push({ path: 'insideManage/agentRoleList' })
           }, 2000)
         }
@@ -291,9 +287,25 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .input-300 {
     width: 350px;
+  }
+  .project-form{
+    position: relative;
+  }
+  .project-form label.el-form-item__label{
+    padding: 0 12px 0 0;
+    box-sizing: border-box;
+    &::before{
+      content: '*';
+      color: red;
+      margin-right: 4px;
+      position: absolute;
+      font-weight: 700;
+      transform: translate3d(50%,50%,0);
+      /*top: 0;*/
+    }
   }
 
   .input-anno {

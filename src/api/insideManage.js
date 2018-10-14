@@ -54,7 +54,7 @@ export default class insideManageAPI {
     return request({
       url: '/agentManage/getUserByRole',
       method: 'get',
-      param: param
+      params: param
     })
   }
   // 获取商户信息

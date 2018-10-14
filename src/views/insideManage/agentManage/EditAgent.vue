@@ -41,10 +41,10 @@
       <el-form-item label="代理商登录账号" prop="account">
         <el-input
           v-model="baseInfo.loginPhone"
-          placeholder="请输入手机号"
+          :placeholder="baseInfo.loginPhone"
+          :disabled="true"
           type="number"
           class="input-300"
-          maxlength="11"
           @blur="accountOnBlur"/>
         <span class="input-anno">请输入手机号码，如果客户此前有注册乐摇摇商家账号，请输入相同的号码。</span>
       </el-form-item>
