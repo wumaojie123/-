@@ -90,7 +90,7 @@ export default {
       })
     },
     handleItem(value) {
-      console.log(JSON.stringify(value))
+      // console.log(JSON.stringify(value))
       this.angentInfo = value
     },
     handleAngent(type) {
@@ -113,13 +113,13 @@ export default {
       }
     },
     handleSizeChange(pageSize) {
-      console.log('sizeChange', pageSize)
+      // console.log('sizeChange', pageSize)
       this.pageInfo.pageSize = pageSize
       this.pageInfo.total = 0
       this.queryList(1)
     },
     handleCurrentChange(page) {
-      console.log('curChange:', page)
+      // console.log('curChange:', page)
       this.queryList(page)
     },
     filerQueryList() {

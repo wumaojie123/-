@@ -68,7 +68,7 @@ export default {
           console.log('校验成功')
           this.handleAngentInfo()
         } else {
-          console.log('校验失败s')
+          // console.log('校验失败s')
           return false
         }
       })
@@ -95,7 +95,7 @@ export default {
     handleAngentInfo() {
       const postData = this.baseInfo
       postData.agentUserId = this.$route.query.ID
-      console.log(JSON.stringify(postData))
+      // console.log(JSON.stringify(postData))
       update(postData).then(res => {
         if (res.result === 0) {
           this.$message({ message: '修改代理商信息成功', type: 'success' })

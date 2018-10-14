@@ -107,7 +107,6 @@ export default {
           this.linkName = ''
           this.baseInfo.linkUserId = ''
         }
-        console.log('没有查询到')
       })
     },
     getCode() {
