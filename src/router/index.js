@@ -82,7 +82,7 @@ export let constantRouterMap = [
   {
     path: '/insideManage',
     component: Layout,
-    redirect: 'noredirect',
+    redirect: '/insideManage/bdRoleManage',
     name: 'insideManage',
     hidden: true,
     meta: {
@@ -147,7 +147,7 @@ export let constantRouterMap = [
       },
       {
         path: '/add',
-        component: () => import('@/views/agentManage/EditAgent'),
+        component: () => import('@/views/agentManage/NewAgent'),
         name: 'editAgent',
         meta: { title: '新增代理商' },
         hidden: true
@@ -155,7 +155,7 @@ export let constantRouterMap = [
       {
         path: '/edit',
         hidden: true,
-        component: () => import('@/views/agentManage/NewAgent'),
+        component: () => import('@/views/agentManage/EditAgent'),
         name: 'addAgent',
         meta: { title: '编辑代理商' }
       }

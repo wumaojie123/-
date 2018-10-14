@@ -217,7 +217,7 @@ export default {
     updataAgentInfo(submitData) {
       insideManage.updateAgentInfo(submitData).then(res => {
         if (res) {
-          this.$router.push({ name: 'oneAgentsList' })
+          this.$router.push({ path: 'insideManage/agentRoleList' })
         }
       }, () => {
         return false
