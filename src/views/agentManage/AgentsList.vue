@@ -51,12 +51,12 @@ export default {
       list: [{ name: 'name1', info: 'guanlian', total: 5, inline: 1 }],
       colums: [
         { key: 'agentUserName', label: '代理商名称' },
-        { key: 'userName', label: '账号' },
-        { key: 'subordinateCount', label: '下一级代理数量', width: 150 },
-        { key: 'linkName', label: '联系人', width: 120 },
-        { key: 'phone', label: '手机号码', width: 120 },
+        { key: 'userName', label: '账号', width: 160 },
+        { key: 'subordinateCount', label: '下一级代理数量', width: 160 },
+        { key: 'linkName', label: '联系人', width: 160 },
+        { key: 'phone', label: '手机号码', width: 160 },
         // { key: 'total', label: '广告状态', width: 120 },
-        { key: 'createDate', label: '创建日期', width: 120 }
+        { key: 'createDate', label: '创建日期', width: 160 }
       ],
       pageInfo: { total: 0, pageSize: 10, currPage: 1 },
       angentInfo: []
