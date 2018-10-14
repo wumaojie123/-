@@ -44,7 +44,13 @@ export default {
     },
     creatBd(data) {
       insideManage.addBD(data).then(res => {
-        this.$router.push({ path: 'insideManage/bdRoleManage' })
+        this.$message({
+          message: '新增成功,稍后跳转!',
+          type: 'success'
+        })
+        setTimeout(() => {
+          this.$router.push({ path: 'insideManage/bdRoleManage' })
+        }, 1500)
       }, err => {
         console.log(err)
       })

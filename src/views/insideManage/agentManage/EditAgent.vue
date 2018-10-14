@@ -244,6 +244,11 @@ export default {
     },
     accountOnBlur() {
       // 调用 callback 返回建议列表的数据
+      const phone = this.baseInfo.loginPhone
+      if (!phone || phone === '') {
+        this.restaurants = '输入不能为空!'
+        return false
+      }
       insideManage.getShanghuInfo(this.baseInfo.account).then(
         res => {
           if (res && res.data) {
@@ -330,7 +335,14 @@ export default {
       insideManage.updateAgentInfo(submitData).then(
         res => {
           if (res) {
-            this.$router.push({ path: 'insideManage/agentRoleList' })
+            this.$message({
+              message: '新增成功,稍后跳转!',
+              type: 'success'
+            })
+            setTimeout(() => {
+              this.tips = ''
+              this.$router.push({ path: 'insideManage/agentRoleList' })
+            }, 500)
           }
         },
         () => {}
@@ -348,6 +360,13 @@ export default {
                 tempCheckBoxArr.push(item.id)
               }
             })
+          }
+          if (tempCheckBoxArr.length === 0) {
+            this.$message({
+              message: '请至少选择一项经营项目!',
+              type: 'error'
+            })
+            return false
           }
           console.log(info, '-表单的信息-')
           const submitData = {

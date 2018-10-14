@@ -38,11 +38,14 @@
         <span class="input-anno">选择一位BD同事作为跟进负责人</span>
       </el-form-item>
       <el-form-item v-if="allBusinProjects&&allBusinProjects.length>0" ref="projectsRef" label="经营项目" prop="project">
+        <span style="position: absolute;left: 0;color: red;">*</span>
         <template v-for="(box,index) in allBusinProjects">
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
+        <br>
+        <!-- el-form-item__error -->
+        <span class="input-anno " style="position: absolute;left: 0;bottom: -100%;transition: all 0.2s linear;">请选择至少一个经营项目.</span>
       </el-form-item>
-
       <br>
       <!-- 账号信息区域 -->
       <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
@@ -50,7 +53,7 @@
       </el-menu>
       <br>
       <br>
-      <el-form-item label="代理商登录账号" prop="phone">
+      <el-form-item label="代理商账号" prop="phone">
         <el-input
           v-model="baseInfo.loginPhone"
           placeholder="请输入手机号"
@@ -64,6 +67,7 @@
         <div style="">{{ restaurants || '未找到此账号!' }}</div>
       </el-form-item>
       <br>
+      <p v-if="tips" style="margin: 10px;padding-bottom:10px;color: red;">{{ tips }}</p>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
   </div>
@@ -97,7 +101,7 @@ export default {
         address: [{ required: true, message: '请输入联系地址', trigger: 'blur' }],
         BD: [{ required: true, message: '请输入一位BD同事', trigger: 'change' }],
         // project: { type: 'array', required: true, message: '请输入至少一个经营项目', trigger: 'change' },
-        project: [{ required: false, type: 'array', message: '请输入至少一个经营项目', trigger: 'change' }],
+        // project: [{ required: true, type: 'array', message: '请输入至少一个经营项目', trigger: 'change' }],
         loginPhone: [{ required: true, message: '请输入登录账号', trigger: 'blur' }, {
           validator: telCheck,
           trigger: 'blur'
@@ -112,6 +116,8 @@ export default {
       checkBoxList: null,
       linkUserId: null,
       agentProject: [],
+      tips: '',
+      showProjectTips: false, // 经营项目提示
       allBusinProjects: [] // 所有的经营项目
     }
   },
@@ -126,6 +132,8 @@ export default {
       return temArr
     }
   },
+  watch: {
+  },
   async created() {
     await this.getBDList()
     await this.getBusinProjects()
@@ -133,7 +141,6 @@ export default {
   methods: {
     checkChange() {
       this.$nextTick(function() {
-        this.$refs['baseInfoRef'].clearValidate(['preject'])
       })
     },
     getBDList() {
@@ -172,9 +179,16 @@ export default {
     accountOnBlur() {
       // 调用 callback 返回建议列表的数据
       const phone = this.baseInfo.loginPhone
+      if (!phone || phone === '') {
+        this.restaurants = '输入不能为空!'
+        return false
+      }
+      if (phone.length < 11) {
+        return false
+      }
       insideManage.getShanghuInfo(phone).then(res => {
         if (res && res.data) {
-          this.restaurants = `${res.data.phone || ''} (${res.data.name || null})`
+          this.restaurants = `${res.data.phone || ''} (用户昵称${res.data.name || null})`
           this.linkUserId = res.data.adUserId
         } else {
           this.linkUserId = ''
@@ -217,21 +231,32 @@ export default {
     updataAgentInfo(submitData) {
       insideManage.updateAgentInfo(submitData).then(res => {
         if (res) {
-          this.$router.push({ path: 'insideManage/agentRoleList' })
+          this.tips = '注意：代理商后台与商家后台的登录账号都是手机号码。如果此前未注册，初始密码16881688，请提醒用户及时更换密码。如果此前已经注册，密码不会更改'
+          this.$message({
+            message: '新增成功,稍后跳转!',
+            type: 'success'
+          })
+          setTimeout(() => {
+            this.tips = ''
+            this.$router.push({ path: 'insideManage/agentRoleList' })
+          }, 2000)
         }
       }, () => {
         return false
       })
     },
     handleAccountInfo() {
-      // todo 处理数据
+      if (this.projects.length === 0) {
+        this.$message({
+          message: '请至少选择一项经营项目!',
+          type: 'error'
+        })
+        return false
+      }
       this.$refs['baseInfoRef'].validate(valid => {
         console.log(valid, 'valid')
         if (valid) {
-          console.log(valid, 'alert(valid)')
           const info = this.baseInfo
-          console.log(this.checkBoxList, '--checkBoxList--')
-          // info.projects =
           const tempCheckBoxArr = []
           if (this.checkBoxList && this.checkBoxList.length > 1) {
             this.checkBoxList.map(item => {
@@ -240,6 +265,7 @@ export default {
               }
             })
           }
+
           console.log(info, '-表单的信息-')
           const submitData = {
             type: 1, // 0:BD用户 1:一级代理商  2:子级代理商

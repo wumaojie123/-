@@ -12,8 +12,8 @@
       <br>
       <br>
       <div class="item">
-        <span class="label">商家手机</span>
-        <el-input :placeholder="`请输入商家手机`" v-model="listQuery.phone" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <span class="label">账号</span>
+        <el-input :placeholder="`请输入账号`" v-model="listQuery.phone" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
       </div>
       <div class="item">
         <span class="label">&nbsp;&nbsp;BD同事&nbsp;&nbsp;&nbsp;&nbsp; </span>
@@ -37,7 +37,7 @@
       </el-table-column>
       <el-table-column :label="`合同编号`" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.adOrgId || '' }}</span>
+          <span>{{ scope.row.contractId || '' }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`代理商名称`" width="150px" align="center">
