@@ -22,7 +22,7 @@
       </el-form-item>
       <el-form-item label="BD同事" prop="BD">
         <el-select v-model="baseInfo.BD" :placeholder="`选择一位BD同事`" clearable class="input-300">
-          <el-option v-for="item in bdList" :key="item.id" :label="item.name" :value="item.id" style="text-align: left" />
+          <el-option v-for="item in bdList" :key="item.id" :label="item.username" :value="item.adUserId" style="text-align: left" />
         </el-select>
         <span class="input-anno">选择一位BD同事作为跟进负责人</span>
       </el-form-item>
@@ -203,7 +203,7 @@ export default {
       })
     },
     getBDList() {
-      insideManage.getBDList(
+      insideManage.getBDList().then(
         res => {
           if (res && res.data) {
             this.bdList = res.data

@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["n/Hm"],{"n/Hm":function(n,e,t){"use strict";t.r(e);var u={name:"AngentLayout"},o=t("ZrdR"),i=Object(o.a)(u,function(){var n=this.$createElement,e=this._self._c||n;return e("div",[e("router-view")],1)},[],!1,null,null,null);i.options.__file="AgentLayout.vue";e.default=i.exports}}]);
