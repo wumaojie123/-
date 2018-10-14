@@ -63,9 +63,9 @@
       fit
       highlight-current-row
       style="width: 100%;margin-top: 20px;">
-      <template slot-scope="scope">
-        <el-radio :label="scope.row.id" v-model="checked" class="radio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
-      </template>
+      <el-table-column
+        type="radio"
+        width="55"/>
       <el-table-column label="设备编号" align="center" prop="equipmentId">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentId }}</span>
@@ -246,9 +246,8 @@ export default {
     },
     getTemplateRow(index, row) {
       // 获取选中数据
-      this.checked = true
+      // this.checked = true
       this.checkedRow = row
-      console.log(row)
     },
     getList() {
       this.listLoading = true
