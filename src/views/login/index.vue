@@ -181,7 +181,7 @@ export default {
             console.log(data)
             getMenu().then(res => {
               // console.log(res)
-              debugger
+              // debugger
               saveSession('addRoute', res.data)
               router.addRoutes(routerFormat(JSON.parse(getSession('addRoute'))))
               this.$router.push({ path: this.redirect || '/' })

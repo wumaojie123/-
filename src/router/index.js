@@ -58,8 +58,17 @@ export let constantRouterMap = [
   },
   {
     path: '/404',
-    component: () => import('@/views/errorPage/404'),
-    hidden: true
+    // component: () => import('@/views/errorPage/404'), // 由于出现诡异的404页面跳转，先暂时将其路由映射到首页
+    component: Layout, // 由于出现诡异的404页面跳转，先暂时将其路由映射到首页
+    hidden: true,
+    children: [
+      {
+        path: '/',
+        component: () => import('@/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: '首页', icon: 'dashboard', noCache: true }
+      }
+    ]
   },
   {
     path: '/401',

@@ -231,7 +231,10 @@ export default {
   methods: {
     createQRCode() {
       const canvas = document.getElementById('canvas')
-      QRCode.toCanvas(canvas, 'https://www.baidu.com/', {
+      const txt = '' + this.checkedRow.equipmentId
+      const txtL = txt.length
+      const addTxt = (16 - txtL) <= 0 ? '' : '0'.repeat(16 - txtL)
+      QRCode.toCanvas(canvas, addTxt + txt, {
         width: 200,
         height: 200
       })
