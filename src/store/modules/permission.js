@@ -18,7 +18,6 @@ const permission = {
   },
   actions: {
     GenerateRoutes({ commit }, routes) {
-      debugger
       return new Promise(resolve => {
         commit('SET_ROUTERS', routes)
         resolve()
