@@ -52,7 +52,7 @@ export default {
       // 操作类型
       type: 'new',
       linkName: '',
-      baseInfo: { agentUserName: '12', linkName: 'erwre', phone: '18064082091', address: 'sdf', code: '', loginPhone: '18064082092', type: 2, linkUserId: '' },
+      baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', type: 2, linkUserId: '' },
       // baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', type: 2 },
       baseInfoRules: {
         agentUserName: [{ required: true, message: '请输入代理商名称', trigger: 'blur' }],
