@@ -84,6 +84,7 @@ export let constantRouterMap = [
     component: Layout,
     redirect: 'noredirect',
     name: 'insideManage',
+    hidden: true,
     meta: {
       title: '内部管理',
       icon: 'peoples'
