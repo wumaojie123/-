@@ -21,7 +21,7 @@
           <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
           <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理商</el-button>
         </div>
-        <router-link :to="{path: 'add'}"><el-button type="primary" icon="el-icon-plus">新增代理商</el-button></router-link>
+        <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理商</el-button></router-link>
       </div>
     </el-form>
     <!-- 列表 -->
@@ -96,7 +96,7 @@ export default {
     handleAngent(type) {
       if (this.angentInfo.length === 1) {
         if (type === 'edit') {
-          this.$router.push({ path: '/agentManage/angentList/edit', query: { ID: this.angentInfo[0].agentUserId, action: 'edit' }})
+          this.$router.push({ path: '/edit', query: { ID: this.angentInfo[0].agentUserId, action: 'edit' }})
         } else if (type === 'del') {
           this.$confirm('是否删除该代理商信息', {
             callback: action => {

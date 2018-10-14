@@ -127,6 +127,40 @@ export let constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/agentManage',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'agentManage',
+    hidden: true,
+    meta: {
+      title: '代理商管理',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: '/list',
+        component: () => import('@/views/agentManage/AgentsList'),
+        name: 'agentList',
+        meta: { title: '代理商列表' },
+        hidden: true
+      },
+      {
+        path: '/edit',
+        component: () => import('@/views/agentManage/EditAgent'),
+        name: 'editAgent',
+        meta: { title: '编辑代理商' },
+        hidden: true
+      },
+      {
+        path: '/add',
+        hidden: true,
+        component: () => import('@/views/agentManage/NewAgent'),
+        name: 'addAgent',
+        meta: { title: '新增代理商' }
+      }
+    ]
+  },
 
   { path: '*', redirect: '/404', hidden: true }
 ]
