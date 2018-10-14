@@ -63,9 +63,11 @@
       fit
       highlight-current-row
       style="width: 100%;margin-top: 20px;">
-      <el-table-column
-        type="radio"
-        width="55"/>
+      <el-table-column label="" align="center" width="65">
+        <template slot-scope="scope">
+          <el-radio :label="scope.row.equipmentId" v-model="checked" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
+        </template>
+      </el-table-column>
       <el-table-column label="设备编号" align="center" prop="equipmentId">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentId }}</span>
@@ -129,9 +131,9 @@
         <div class="close" @click.stop="showQR = !showQR">X</div>
         <h2>请用微信或支付宝扫描二维码</h2>
         <canvas id="canvas"/>
-        <p>6061509002863744</p>
-        <p>13号机（万达2楼）</p>
-        <p>按摩椅</p>
+        <p>{{ checkedRow.equipmentId }}</p>
+        <p>{{ checkedRow.groupNumber ? checkedRow.groupNumber + '号机' : '' }}{{ checkedRow.groupName ? '(' + checkedRow.groupName + ')': '' }}</p>
+        <p>{{ checkedRow.equipmentTypeName }}</p>
       </div>
     </div>
   </el-main>
@@ -209,7 +211,7 @@ export default {
       },
       calendarTypeOptions,
       checked: false,
-      checkedRow: null,
+      checkedRow: {},
       temp: {
         id: undefined,
         importance: 1,
@@ -247,6 +249,7 @@ export default {
     getTemplateRow(index, row) {
       // 获取选中数据
       // this.checked = true
+      console.log(row)
       this.checkedRow = row
     },
     getList() {
