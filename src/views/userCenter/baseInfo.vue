@@ -1,6 +1,6 @@
 <template>
   <el-main class="base-info">
-    <el-alert :title="msg" type="warning" class="info" />
+    <el-alert :title="msg" :closable="false" type="warning" class="info" />
     <div class="list-box">
       <ul class="ul">
         <li>

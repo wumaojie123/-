@@ -19,7 +19,8 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+          <!--<img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
+          <svg-icon icon-class="avatar"/>
           <i class="el-icon-caret-bottom"/>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -125,7 +126,7 @@ export default {
         cursor: pointer;
         margin-top: 5px;
         position: relative;
-        .user-avatar {
+        .user-avatar, .svg-icon {
           width: 40px;
           height: 40px;
           border-radius: 10px;

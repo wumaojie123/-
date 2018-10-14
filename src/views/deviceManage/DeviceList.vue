@@ -141,6 +141,7 @@
 
 <script>
 import { getDeviceList } from '@/api/getDeviceList'
+import { getDeviceType } from '@/api/getEquiedType'
 import waves from '@/directive/waves' // 水波纹指令
 import QRCode from 'qrcode'
 const calendarTypeOptions = [
@@ -162,36 +163,19 @@ export default {
       listLoading: true,
       isOnline: [
         {
+          label: '全部',
+          value: 0
+        },
+        {
           label: '在线',
-          value: true
+          value: 1
         },
         {
           label: '离线',
-          value: false
+          value: 2
         }
       ],
-      equipmentTypeName: [
-        {
-          label: '按摩椅',
-          value: '按摩椅'
-        },
-        {
-          label: '洗衣机',
-          value: '洗衣机'
-        },
-        {
-          label: '娃娃机',
-          value: '娃娃机'
-        },
-        {
-          label: '兑币机',
-          value: '兑币机'
-        },
-        {
-          label: '充电桩',
-          value: '充电桩'
-        }
-      ],
+      equipmentTypeName: [],
       form: {
         equipmentId: '',
         deviceName: '',
@@ -231,6 +215,16 @@ export default {
   },
   created() {
     this.getList()
+    getDeviceType().then(res => {
+      const types = res.data
+      if (types && types.length !== 0) {
+        types.forEach(item => {
+          item.label = item.equipmenttypename
+          item.value = item.equipmenttypename
+        })
+      }
+      this.equipmentTypeName = types
+    })
     const clientHeight = document.body.clientHeight || document.documentElement.clientHeight
     this.minHeightTable = clientHeight - 393
   },
