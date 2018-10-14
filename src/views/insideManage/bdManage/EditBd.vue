@@ -57,7 +57,13 @@ export default {
     },
     editBD(data) {
       insideManage.updateAgentInfo(data).then(res => {
-        this.$router.push({ path: 'insideManage/bdRoleManage' })
+        this.$message({
+          message: '修改成功,稍后跳转!',
+          type: 'success'
+        })
+        setTimeout(() => {
+          this.$router.push({ path: 'insideManage/bdRoleManage' })
+        }, 500)
       }, err => {
         console.log(err, 'updateAgentInfo')
       })
