@@ -100,7 +100,7 @@ export let constantRouterMap = [
     children: [
       {
         path: '/editBD',
-        component: () => import('@/views/insideManage/bdManage/editBd'),
+        component: () => import('@/views/insideManage/bdManage/EditBd'),
         name: 'editBD',
         meta: { title: '修改BD' },
         hidden: true
