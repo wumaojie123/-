@@ -34,12 +34,12 @@ export default {
 </script>
 <style scoped lang="scss">
   .left-nav-title{
-    height: 44px;
+    height: 50px;
     margin: 0;
     font-size: 16px;
     font-weight:700;
     text-align: center;
-    line-height: 44px;
+    line-height: 50px;
     background-color:rgba(0, 0, 0, 1);
    // border-bottom: 0.5px solid white;
     color: #C2C2C2;
@@ -55,4 +55,5 @@ export default {
       left: 0;
     }
   }
+
 </style>
