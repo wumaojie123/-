@@ -25,13 +25,16 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
-            <el-dropdown-item>
+            <el-dropdown-item >
               {{ '首页' }}
             </el-dropdown-item>
           </router-link>
-          <!--<router-link to="/userCenter/userInfo">-->
+          <el-dropdown-item divided >
+            {{ username }}
+          </el-dropdown-item>
+          <!--<router-link to="/userCenter/ModifyPassword">-->
           <!--<el-dropdown-item>-->
-          <!--{{ '个人中心' }}-->
+          <!--{{ '修改密码' }}-->
           <!--</el-dropdown-item>-->
           <!--</router-link>-->
           <el-dropdown-item divided>
@@ -52,6 +55,7 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
+import { getLocalStorage } from '@/utils/savaSession'
 
 export default {
   components: {
@@ -62,6 +66,11 @@ export default {
     SizeSelect,
     LangSelect,
     ThemePicker
+  },
+  data() {
+    return {
+      username: this.name || getLocalStorage('username') || '1222'
+    }
   },
   computed: {
     ...mapGetters(['sidebar', 'name', 'avatar', 'device'])

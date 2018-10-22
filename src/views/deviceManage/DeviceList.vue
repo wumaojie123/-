@@ -1,6 +1,6 @@
 <template>
   <el-main class="agent-list-container">
-    <el-form ref="form" :model="form" :rules="rules" label-width="90px" class="deviceForm">
+    <el-form ref="form" :model="form" label-width="90px" class="deviceForm">
       <el-row>
         <el-col :span="8">
           <el-form-item label="设备编号" prop="equipmentId">
@@ -210,11 +210,6 @@ export default {
         type: '',
         status: 'published'
       },
-      rules: {
-        type: [{ required: true, message: 'type is required', trigger: 'change' }],
-        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
-        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
-      },
       downloadLoading: false
     }
   },
@@ -231,7 +226,8 @@ export default {
       this.equipmentTypeName = types
     })
     const clientHeight = document.body.clientHeight || document.documentElement.clientHeight
-    this.minHeightTable = clientHeight - 393
+    this.minHeightTable = clientHeight - 334
+    console.log(this.minHeightTable, clientHeight)
   },
   methods: {
     handleChange() {

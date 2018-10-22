@@ -169,7 +169,39 @@ export let constantRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/deviceManage',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'deviceManage',
+    alwaysShow: true,
+    meta: {
+      title: '设备管理',
+      icon: 'list'
+    },
+    children: [
+      {
+        path: 'deviceList',
+        component: () => import('@/views/deviceManage/DeviceList.vue'),
+        name: 'deviceList',
+        meta: { title: '设备列表', noCache: true }
+      },
+      {
+        path: 'transfer',
+        name: 'transfer',
+        meta: {
+          title: '转移设备'
+        },
+        component: () => import('@/views/deviceManage/deviceTransfer.vue')
+      },
+      {
+        path: 'deviceImport',
+        component: () => import('@/views/deviceManage/deviceImport.vue'),
+        name: 'deviceImport',
+        meta: { title: '批量导入设备', noCache: true }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

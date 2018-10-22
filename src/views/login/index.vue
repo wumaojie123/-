@@ -65,11 +65,10 @@
 </template>
 
 <script>
-// import { isvalidUsername } from '@/utils/validate'
 import LangSelect from '@/components/LangSelect'
 import router from '../../router/index'
 import { routerFormat } from '@/utils/routerFormat'
-import { saveSession, getSession } from '../../utils/savaSession'
+import { saveSession, getSession, saveLocalStorage } from '../../utils/savaSession'
 import { getMenu } from '../../api/getMenu'
 import SocialSign from './socialsignin'
 import SIdentify from './SIdentify.vue'
@@ -178,10 +177,8 @@ export default {
             verifyCode: this.loginForm.verifyCode
           }).then((data) => {
             this.loading = false
-            console.log(data)
+            saveLocalStorage('username', this.loginForm.username)
             getMenu().then(res => {
-              // console.log(res)
-              // debugger
               saveSession('addRoute', res.data)
               router.addRoutes(routerFormat(JSON.parse(getSession('addRoute'))))
               this.$router.push({ path: this.redirect || '/' })
