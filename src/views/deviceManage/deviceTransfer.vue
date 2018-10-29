@@ -4,8 +4,8 @@
     <el-form ref="form" :model="form" label-width="90px" class="deviceForm" style="padding: 16px 0;">
       <el-row>
         <el-col :span="6">
-          <el-form-item label="设备类型" prop="equipmentTypes">
-            <el-select v-model="form.equipmentTypes" placeholder="请选择">
+          <el-form-item label="设备类型" prop="equipmentTypeValue">
+            <el-select v-model="form.equipmentTypeValue" placeholder="请选择">
               <el-option
                 v-for="item in equipmentTypesArr"
                 :key="item.value"
@@ -14,7 +14,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+        <!--<el-col :span="6">
           <el-form-item label="在线状态" prop="isOnline">
             <el-select v-model="form.isOnline" placeholder="请选择">
               <el-option
@@ -24,12 +24,13 @@
                 :value="item.value"/>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col>-->
       </el-row>
       <el-row>
         <el-col :span="12">
           <el-form-item label="设备编号">
-            <el-input v-model="form.equipmentIds" type="textarea"/>
+            <el-input v-model="form.values" type="textarea"/>
+            <p style="color: #666;font-size: 14px;">最多支持查询100个设备，每个设备编号请用逗号【；】隔开</p>
           </el-form-item>
         </el-col>
       </el-row>
@@ -46,13 +47,14 @@
       border
       stripe
       fit
-      highlight-current-row>
+      highlight-current-row
+      @selection-change="handleSelectionChange">
       <el-table-column
         type="selection"
         width="55"/>
-      <el-table-column label="设备编号" align="center" prop="equipmentId">
+      <el-table-column label="设备编号" align="center" prop="equipmentValue">
         <template slot-scope="scope">
-          <span>{{ scope.row.equipmentId }}</span>
+          <span>{{ scope.row.equipmentValue }}</span>
         </template>
       </el-table-column>
       <el-table-column label="设备类型" align="center">
@@ -60,7 +62,7 @@
           <span>{{ scope.row.equipmentTypeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="区域" align="center">
+      <!--<el-table-column label="区域" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.districtName }}</span>
         </template>
@@ -69,10 +71,10 @@
         <template slot-scope="scope">
           <span>{{ scope.row.online ? '在线' : '离线' }}</span>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column label="固件版本" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.firmwareVersion }}</span>
+          <span>{{ scope.row.versionno }}</span>
         </template>
       </el-table-column>
       <!--
@@ -108,33 +110,63 @@
       layout="total, sizes, prev, pager, next, jumper"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"/>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      title="批量转移设备"
+      width="450px">
+      <el-dialog
+        :visible.sync="innerVisible"
+        width="360px"
+        title="提示"
+        append-to-body>
+        <span style="font-size: 16px;color: #ef6969">请选择商家</span>
+      </el-dialog>
+      <el-autocomplete
+        :fetch-suggestions="querySearch"
+        v-model="selectAgent"
+        class="width270"
+        popper-class="my-autocomplete"
+        placeholder="请输入内容"
+        @select="handleSelect">
+        <template slot-scope="{ item }">
+          <div class="name">{{ item.value }}</div>
+        </template>
+      </el-autocomplete>
+      <p v-show="infoChecked" style="padding-top: 12px;font-size: 14px;color:red;">未查询到相应的商家，请重新输入！</p>
+      <p style="padding-top: 12px;font-size: 14px;color:#666;">请选择目标商家，支持输入名称或手机号码查询。</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmTranfer">确定转移</el-button>
+      </span>
+    </el-dialog>
   </el-main>
 </template>
 
 <script>
+import { getDeviceTypeBd } from '../../api/getEquiedType'
+import { agentEquipmentList } from '../../api/getDeviceList'
+import { queryAgents } from '../../api/getAgentUserId'
+import { transfer } from '../../api/transferDevice'
 export default {
   name: 'DeviceTransfer',
   data() {
     return {
-      total: 40,
+      total: 0,
+      agentid: '',
+      selectAgent: '',
+      agentsArr: [],
+      willTranfers: [],
+      innerVisible: false,
+      dialogVisible: false,
       listQuery: {
         page: 1,
         limit: 20
       },
+      infoChecked: false,
       tableKey: 0,
       listLoading: false,
       minHeightTable: 660,
       list: [],
-      equipmentTypesArr: [
-        {
-          value: '娃娃机',
-          label: '娃娃机'
-        },
-        {
-          value: '按摩椅',
-          label: '按摩椅'
-        }
-      ],
+      equipmentTypesArr: [],
       isOnline: [
         {
           label: '全部',
@@ -152,28 +184,145 @@ export default {
       message: '转移设备指的是由BD协助批量导入到代理商的、且未注册绑定的设备编号。通过勾选批量转移，可以将设备转移到某个商家下。被转移的设备被商家解绑后，还会显示到该列表。',
       form: {
         isOnline: '',
-        equipmentTypes: '',
-        equipmentIds: ''
+        equipmentTypeValue: '',
+        values: ''
       }
     }
   },
   created() {
     const clientHeight = document.body.clientHeight || document.documentElement.clientHeight
     this.minHeightTable = clientHeight - 388
+    getDeviceTypeBd()
+      .then((res) => {
+        if (res.result === 0 && res.data && res.data.length !== 0) {
+          res.data.forEach((item) => {
+            this.equipmentTypesArr.push({
+              label: item.name,
+              value: item.code
+            })
+          })
+        }
+      })
+    this.getList()
   },
   methods: {
-    handleCurrentChange() {},
-    handleSizeChange() {},
+    confirmTranfer() {
+      if (!this.selectAgent) {
+        this.innerVisible = true
+        return
+      } else if (!this.agentid) {
+        return
+      }
+      this.dialogVisible = false
+      const loading = this.$loading({
+        lock: true,
+        text: '转移中...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      const arrTrans = []
+      this.willTranfers.forEach(val => {
+        arrTrans.push(val.equipmentValue)
+      })
+      const params = {
+        values: arrTrans,
+        agentUserId: this.agentid
+      }
+      transfer(params)
+        .then(() => {
+          loading.close()
+          this.listQuery.page = 1
+          this.agentid = ''
+          this.selectAgent = ''
+          this.$message({
+            message: '转移成功！',
+            type: 'success'
+          })
+          this.getList()
+        })
+        .catch(() => {
+          loading.close()
+          this.$message.error('设备转移失败！')
+        })
+    },
+    handleSelectionChange(item) {
+      this.willTranfers = item
+      console.log(this.willTranfers)
+    },
+    querySearch(queryString, cb) {
+      queryAgents({ agentQuery: queryString })
+        .then(res => {
+          if (res.result === 0 && res.data && res.data.length !== 0) {
+            const results = []
+            res.data.forEach(item => {
+              results.push({
+                value: `${item.agentusername} (${item.phone})`,
+                agentId: item.agentuserid
+              })
+            })
+            this.agentsArr = results
+            this.infoChecked = false
+            cb(results)
+          } else {
+            this.infoChecked = true
+            cb([])
+          }
+          console.log(res)
+        })
+      // console.log(queryString)
+      // console.log(cb)
+    },
+    handleSelect(item) {
+      console.log(item)
+      this.agentid = item.agentId
+      console.log(this.agentid)
+    },
+    getList() {
+      this.listLoading = true
+      this.form.pageSize = this.listQuery.limit
+      this.form.pageIndex = this.listQuery.page
+      this.form.values = this.form.values.replace(/\s/g, '')
+      this.form.values = this.form.values.replace(/，/g, ',')
+      agentEquipmentList(this.form).then(response => {
+        this.list = response.data.items
+        this.total = response.data.total
+        this.willTranfers = []
+        this.checked = false
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
+      })
+    },
+    handleSizeChange(val) {
+      this.listQuery.limit = val
+      this.getList()
+    },
+    handleCurrentChange(val) {
+      this.listQuery.page = val
+      this.getList()
+    },
     look() {
-      console.log(99)
+      this.listQuery.page = 1
+      this.getList()
     },
     transfer() {
-      console.log(11)
+      if (this.willTranfers.length === 0) {
+        this.$message({
+          showClose: true,
+          message: '请选择要转移的设备！',
+          type: 'info'
+        })
+        return
+      } else {
+        this.dialogVisible = true
+      }
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+  .width270{
+    width: 270px;
+  }
 </style>

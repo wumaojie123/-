@@ -7,3 +7,11 @@ export function getDeviceList(data) {
     params: data
   })
 }
+
+export function agentEquipmentList(data) {
+  return request({
+    url: '/rest/equipment/agentEquipment/query',
+    method: 'get',
+    params: data
+  })
+}

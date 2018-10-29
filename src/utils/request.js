@@ -37,7 +37,6 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    console.log(res, res.result !== 0, 'res.result !== 0')
     if (res.result !== 0) {
       Message({
         message: res.description,

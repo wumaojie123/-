@@ -6,3 +6,10 @@ export function getDeviceType() {
     method: 'get'
   })
 }
+
+export function getDeviceTypeBd() {
+  return request({
+    url: '/rest/equipment/equipmentType/querySHL',
+    method: 'get'
+  })
+}

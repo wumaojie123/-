@@ -88,6 +88,18 @@ export const userCenter = [
         parentId: 'deviceList',
         name: '设备列表',
         htmlTemplet: 'deviceManage/DeviceList'
+      },
+      {
+        value: 'transfer',
+        parentId: 'deviceList',
+        name: '转移设备',
+        htmlTemplet: 'deviceManage/deviceTransfer'
+      },
+      {
+        value: 'deviceImport',
+        parentId: 'deviceList',
+        name: '批量导入设备',
+        htmlTemplet: 'deviceManage/deviceImport'
       }
     ]
   },
