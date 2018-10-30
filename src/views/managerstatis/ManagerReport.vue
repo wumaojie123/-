@@ -66,15 +66,15 @@ export default {
       listLoading: true,
       list: [],
       colums: [
-        { key: 'agentUserName', label: '代理商名称' },
-        { key: 'associateSellerPhone', label: '账号', width: 110 },
-        { key: 'equipmentTotalCount', label: '设备总数', width: 110, sortable: true },
-        { key: 'equipmentOnlineCount', label: '在线设备数量', width: 130, sortable: true },
-        { key: 'orderCount', label: '订单数量', width: 110, sortable: true },
-        { key: 'totalIncome', label: '收入总额', width: 110, sortable: true },
-        { key: 'onlineIncome', label: '在线收入', width: 110, sortable: true },
-        { key: 'cashIncome', label: '现金收入', width: 110, sortable: true },
-        { key: 'adIncome', label: '广告收入', width: 110, sortable: true }
+        { key: 'agentUserName', label: '代理商名称', width: 250 },
+        { key: 'associateSellerPhone', label: '账号' },
+        { key: 'equipmentTotalCount', label: '设备总数', sortable: true },
+        { key: 'equipmentOnlineCount', label: '在线设备数量', sortable: true },
+        { key: 'orderCount', label: '订单数量', sortable: true },
+        { key: 'totalIncome', label: '收入总额', sortable: true },
+        { key: 'onlineIncome', label: '在线收入', sortable: true },
+        { key: 'cashIncome', label: '现金收入', sortable: true },
+        { key: 'adIncome', label: '广告收入', sortable: true }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
       options: OPTIONS
