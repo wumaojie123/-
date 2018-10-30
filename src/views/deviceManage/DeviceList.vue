@@ -78,6 +78,11 @@
           <span>{{ scope.row.groupNumber || '' }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="场地名称" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.groupName }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="设备类型" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentTypeName }}</span>
@@ -106,11 +111,6 @@
       <el-table-column label="固件版本" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.firmwareVersion }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="场地名称" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.groupName }}</span>
         </template>
       </el-table-column>
     </el-table>

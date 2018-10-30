@@ -48,6 +48,7 @@
           :placeholder="`验证码`"
           name="code"
           type="text"
+          @keyup.enter.native="handleLogin"
         />
       </el-form-item>
       <el-form-item class="identifybox-wrap">

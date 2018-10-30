@@ -30,7 +30,7 @@
         <el-col :span="12">
           <el-form-item label="设备编号">
             <el-input v-model="form.values" type="textarea"/>
-            <p style="color: #666;font-size: 14px;">最多支持查询100个设备，每个设备编号请用逗号【；】隔开</p>
+            <p style="color: #666;font-size: 14px;">最多支持查询100个设备，每个设备编号请用逗号【，】隔开</p>
           </el-form-item>
         </el-col>
       </el-row>
@@ -41,6 +41,7 @@
     </el-form>
     <el-table
       v-loading="listLoading"
+      ref="multipleTable"
       :key="tableKey"
       :data="list"
       :height="minHeightTable"
@@ -112,6 +113,7 @@
       @current-change="handleCurrentChange"/>
     <el-dialog
       :visible.sync="dialogVisible"
+      :before-close="beforeClose"
       title="批量转移设备"
       width="450px">
       <el-dialog
@@ -206,11 +208,15 @@ export default {
     this.getList()
   },
   methods: {
+    beforeClose(done) {
+      this.$refs.multipleTable.clearSelection()
+      done()
+    },
     confirmTranfer() {
       if (!this.selectAgent) {
         this.innerVisible = true
         return
-      } else if (!this.agentid) {
+      } else if (!this.agentid || this.infoChecked) {
         return
       }
       this.dialogVisible = false
@@ -250,6 +256,10 @@ export default {
       console.log(this.willTranfers)
     },
     querySearch(queryString, cb) {
+      const quer = /^(.+)\((.+)\)$/.exec(queryString)
+      if (quer) {
+        queryString = quer[1] && quer[1].trim()
+      }
       queryAgents({ agentQuery: queryString })
         .then(res => {
           if (res.result === 0 && res.data && res.data.length !== 0) {
@@ -288,9 +298,7 @@ export default {
         this.total = response.data.total
         this.willTranfers = []
         this.checked = false
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        this.listLoading = false
       })
     },
     handleSizeChange(val) {

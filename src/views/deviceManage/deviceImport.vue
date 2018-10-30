@@ -18,13 +18,18 @@
       <el-row>
         <el-col >
           <el-form-item label="代理商" prop="agent">
-            <el-select v-model="form.agent" placeholder="请选择">
-              <el-option
-                v-for="item in agentUsers"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"/>
-            </el-select>
+            <el-autocomplete
+              :fetch-suggestions="querySearch"
+              v-model="agentnick"
+              class="width200"
+              popper-class="my-autocomplete"
+              placeholder="请输入内容"
+              @select="handleSelect">
+              <template slot-scope="{ item }">
+                <div class="name">{{ item.value }}</div>
+              </template>
+            </el-autocomplete>
+            <p v-show="infoChecked" style="font-size: 14px;color:red;">未查询到相应的商家，请重新输入！</p>
           </el-form-item>
         </el-col>
       </el-row>
@@ -33,11 +38,14 @@
         :on-success="handleSuccess"
         :on-error="handleError"
         :file-list="fileList"
+        :on-change="onChange"
+        :on-remove="removeFile"
         :auto-upload="false"
         :data="uploadPar"
         :disabled="disabled"
         :on-exceed="handleExceed"
         :limit="1"
+        accept=".txt"
         class="upload-demo"
         action="/agent/rest/file/batch/import"
       >
@@ -64,6 +72,9 @@ export default {
   data() {
     return {
       fileList: [],
+      file: null,
+      agentnick: '',
+      infoChecked: false,
       form: {
         equipmentTypes: '',
         agent: ''
@@ -100,23 +111,52 @@ export default {
           })
         }
       })
-    queryAgents({ queryLevel: 1 })
-      .then(res => {
-        if (res.result === 0 && res.data && res.data.length !== 0) {
-          res.data.forEach(item => {
-            this.agentUsers.push({
-              value: item.agentuserid,
-              label: `${item.agentusername} (${item.phone})`
-            })
-          })
-        } else {
-          this.disabled = true
-        }
-      })
   },
   methods: {
     submitUpload() {
+      if (!this.file) {
+        this.$message.error('请选择上传文件！')
+        return
+      }
       this.$refs.upload.submit()
+    },
+    removeFile() {
+      this.file = null
+    },
+    onChange(file) {
+      this.file = file
+    },
+    handleSelect(item) {
+      console.log(item)
+      this.form.agent = item.agentId
+      console.log(this.form)
+    },
+    querySearch(queryString, cb) {
+      const quer = /^(.+)\((.+)\)$/.exec(queryString)
+      if (quer) {
+        queryString = quer[1] && quer[1].trim()
+      }
+      queryAgents({ agentQuery: queryString })
+        .then(res => {
+          if (res.result === 0 && res.data && res.data.length !== 0) {
+            const results = []
+            res.data.forEach(item => {
+              results.push({
+                value: `${item.agentusername} (${item.phone})`,
+                agentId: item.agentuserid
+              })
+            })
+            this.agentUsers = results
+            this.infoChecked = false
+            cb(results)
+          } else {
+            this.infoChecked = true
+            cb([])
+          }
+          console.log(res)
+        })
+      // console.log(queryString)
+      // console.log(cb)
     },
     handleSuccess(par) {
       if (par.result === 0) {
@@ -136,3 +176,16 @@ export default {
   }
 }
 </script>
+<style lang="scss" >
+  .width200{
+    width: 200px;
+  }
+  .upload-demo{
+    position: relative;
+  ul{
+    position: absolute;
+    left: 101px;
+    top: -5px;
+  }
+  }
+</style>

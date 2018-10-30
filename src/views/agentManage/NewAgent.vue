@@ -25,7 +25,7 @@
         <span class="input-anno">请输入手机号码，如果客户此前有注册乐摇摇商家账号，请输入相同的号码</span>
       </el-form-item>
       <el-form-item label=" 关联商家">
-        <el-input v-model="linkName" class="input-300" maxlength="32" clearable readonly="true"/>
+        <el-input v-model="linkName" :readonly="true" class="input-300 borderNone" maxlength="32" clearable/>
         <span v-if="type==='edit'" class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>
       </el-form-item>
       <el-form-item label="手机验证码" prop="code">
@@ -128,3 +128,12 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .borderNone{
+    input{
+      border: none;
+      width: 450px;
+      background-color: #fff;
+    }
+  }
+</style>
