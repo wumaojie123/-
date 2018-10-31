@@ -25,7 +25,8 @@
         <span class="input-anno">请输入手机号码，如果客户此前有注册乐摇摇商家账号，请输入相同的号码</span>
       </el-form-item>
       <el-form-item label=" 关联商家">
-        <el-input v-model="linkName" :readonly="true" class="input-300 borderNone" maxlength="32" clearable/>
+        <el-input v-show="!description" v-model="linkName" :readonly="true" class="input-300 borderNone" maxlength="32" clearable/>
+        <span v-show="description" style="font-size: 14px;color: red;">{{ description }}</span>
         <span v-if="type==='edit'" class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>
       </el-form-item>
       <el-form-item label="手机验证码" prop="code">
@@ -51,6 +52,7 @@ export default {
     return {
       // 操作类型
       type: 'new',
+      description: null,
       linkName: '',
       baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', type: 2, linkUserId: '' },
       // baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', type: 2 },
@@ -106,6 +108,9 @@ export default {
         if (res.result === 0 && res.data && res.data.adUserId) {
           this.baseInfo.linkUserId = res.data.adUserId
           this.linkName = `${res.data.name}`
+          this.description = null
+        } else if (res.result === 0 && !res.data) {
+          this.description = res.description
         } else if (res.result === -1) {
           this.linkName = ''
           this.baseInfo.linkUserId = ''
@@ -132,7 +137,6 @@ export default {
   .borderNone{
     input{
       border: none;
-      width: 450px;
       background-color: #fff;
     }
   }

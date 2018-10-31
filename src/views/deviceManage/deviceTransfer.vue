@@ -210,6 +210,8 @@ export default {
   methods: {
     beforeClose(done) {
       this.$refs.multipleTable.clearSelection()
+      this.selectAgent = ''
+      this.agentid = ''
       done()
     },
     confirmTranfer() {

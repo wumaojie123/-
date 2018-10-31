@@ -166,7 +166,10 @@ export default {
         const failText = par.data.fail.length === 0 ? '' : `失败${par.data.fail.length}条;
         失败的设备编号：${par.data.fail.join(',')}`
         this.$alert(`${par.description} ${failText}`, '导入结果', {
-          confirmButtonText: '确定'
+          confirmButtonText: '确定',
+          callback: () => {
+            this.$refs.upload.clearFiles()
+          }
         })
       }
     },
