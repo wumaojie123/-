@@ -51,7 +51,7 @@
       >
         <el-row slot="trigger">
           <el-col>
-            <el-button :disabled="disabled" size="small" type="primary" >选取文件</el-button>
+            <el-button :disabled="disabled" size="small" type="primary" >选择txt文件</el-button>
           </el-col>
           <el-col>
             <ul class="el-upload-list el-upload-list--text" />
@@ -179,6 +179,9 @@ export default {
 <style lang="scss" >
   .width200{
     width: 200px;
+  }
+  .el-message-box__message{
+    word-break: break-word;
   }
   .upload-demo{
     position: relative;

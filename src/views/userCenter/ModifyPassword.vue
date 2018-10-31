@@ -51,7 +51,11 @@ export default {
         newPassWord: {
           required: true, // 是否必填
           validator: (rule, value, callback) => {
-            checkfn(rule, value, callback, '新密码为空')
+            if (this.form.newPassWord === this.form.oldPassWord) {
+              callback(new Error('新旧密码不能相同'))
+            } else {
+              checkfn(rule, value, callback, '新密码为空')
+            }
           },
           trigger: 'blur' // 何事件触发
         },
@@ -71,7 +75,10 @@ export default {
   },
   methods: {
     submit() {
-      if (this.form.newPassWord !== this.form.confirmPassWord) {
+      if (this.form.oldPassWord === this.form.newPassWord) {
+        this.$message.error('新旧密码不能相同')
+        return false
+      } else if (this.form.newPassWord !== this.form.confirmPassWord) {
         this.$message.error('密码两次输入不一致')
         return false
       }
