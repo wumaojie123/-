@@ -117,6 +117,9 @@ export default {
       if (!this.file) {
         this.$message.error('请选择上传文件！')
         return
+      } else if (!this.form.agent || this.infoChecked) {
+        this.$message.error('请选择代理商！')
+        return
       }
       this.$refs.upload.submit()
     },
@@ -127,7 +130,6 @@ export default {
       this.file = file
     },
     handleSelect(item) {
-      console.log(item)
       this.form.agent = item.agentId
       console.log(this.form)
     },
@@ -155,6 +157,7 @@ export default {
           }
           console.log(res)
         })
+      this.form.agent = ''
       // console.log(queryString)
       // console.log(cb)
     },
