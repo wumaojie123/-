@@ -75,20 +75,19 @@ export default {
   },
   methods: {
     submit() {
-      if (this.form.oldPassWord === this.form.newPassWord) {
-        this.$message.error('新旧密码不能相同')
-        return false
-      } else if (this.form.newPassWord !== this.form.confirmPassWord) {
-        this.$message.error('密码两次输入不一致')
-        return false
-      }
-      this.form.newPassWord = MD5(this.form.newPassWord)
-      this.form.oldPassWord = MD5(this.form.oldPassWord)
-      modifyPassword(this.form).then(res => {
-        this.$store.dispatch('LogOut').then(() => {
-          clearSession('addRoute')
-          location.reload() // In order to re-instantiate the vue-router object to avoid bugs
-        })
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.form.newPassWord = MD5(this.form.newPassWord)
+          this.form.oldPassWord = MD5(this.form.oldPassWord)
+          modifyPassword(this.form).then(res => {
+            this.$store.dispatch('LogOut').then(() => {
+              clearSession('addRoute')
+              location.reload() // In order to re-instantiate the vue-router object to avoid bugs
+            })
+          })
+        } else {
+          return false
+        }
       })
     }
   }
