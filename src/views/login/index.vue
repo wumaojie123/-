@@ -72,12 +72,11 @@ import { routerFormat } from '@/utils/routerFormat'
 import { saveSession, getSession, saveLocalStorage } from '../../utils/savaSession'
 import { getMenu } from '../../api/getMenu'
 import SocialSign from './socialsignin'
-import SIdentify from './SIdentify.vue'
 import MD5 from 'js-md5'
 
 export default {
   name: 'Login',
-  components: { LangSelect, SocialSign, 's-identify': SIdentify },
+  components: { LangSelect, SocialSign },
   data() {
     const validateUsername = (rule, value, callback) => {
       const pattern = /^1[345789]\d{9}$/
@@ -121,7 +120,8 @@ export default {
       passwordType: 'password',
       loading: false,
       showDialog: false,
-      redirect: undefined
+      redirect: undefined,
+      timerId: null
     }
   },
   watch: {
@@ -136,31 +136,14 @@ export default {
     // window.addEventListener('hashchange', this.afterQRScan)
   },
   mounted() {
+    this.timerId = setInterval(() => {
+      this.refreshCode()
+    }, 60 * 1000)
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
   methods: {
-    throttle(fn, duration = 500) {
-      if (fn === undefined) {
-        console.error(`Vue.util.throttle函数参数缺失`)
-        return
-      }
-      let timer = null; let firstTime = true
-      return function(...args) {
-        if (firstTime) {
-          firstTime = false
-          return fn.apply(this, args)
-        } else {
-          if (timer) return
-          timer = setTimeout(() => {
-            timer = null
-            clearTimeout(timer)
-            return fn.apply(this, args)
-          }, duration)
-        }
-      }
-    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -169,6 +152,7 @@ export default {
       }
     },
     handleLogin() {
+      const self = this
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -178,6 +162,7 @@ export default {
             verifyCode: this.loginForm.verifyCode
           }).then((data) => {
             this.loading = false
+            clearInterval(self.timerId)
             saveLocalStorage('username', this.loginForm.username)
             getMenu().then(res => {
               saveSession('addRoute', res.data)
