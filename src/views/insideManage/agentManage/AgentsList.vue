@@ -29,18 +29,18 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="handleEdit('showSubAgentList')">{{ `查看下级代理` }}</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleEdit('add')">{{ `新增代理商` }}</el-button>
     </div>
-    <el-table v-loading="listLoading" :key="tableKey" :data="list" border stripe fit height="550" highlight-current-row style="width: 100%;">
-      <el-table-column :label="`操作`" fixed align="center" width="65">
+    <el-table v-loading="listLoading" :key="tableKey" :data="list" border stripe fit highlight-current-row style="width: 100%;">
+      <el-table-column :label="`操作`" fixed align="center" width="55">
         <template slot-scope="scope">
           <el-radio :label="scope.row.agentUserId" v-model="checked" class="radio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
         </template>
       </el-table-column>
-      <el-table-column :label="`合同编号`" width="150px" align="center">
+      <el-table-column :label="`合同编号`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.contractId || '' }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`代理商名称`" width="150px" align="center">
+      <el-table-column :label="`代理商名称`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.agentUserName|| '' }}</span>
         </template>
@@ -60,22 +60,22 @@
           <span>{{ scope.row.ownEquipmentCount || 0 }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`下级代理数量`" width="80px" align="center">
+      <el-table-column :label="`下级代理数量`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.subordinateCount|| 0 }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`代理设备数量`" width="80px" align="center">
+      <el-table-column :label="`代理设备数量`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentCount|| 0 }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`BD同事`" width="80px" align="center">
+      <el-table-column :label="`BD同事`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.bdName||'' }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`创建日期`" width="150px" align="center">
+      <el-table-column :label="`创建日期`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.createDate }}</span>
         </template>

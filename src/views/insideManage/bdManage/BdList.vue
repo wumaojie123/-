@@ -23,7 +23,6 @@
       :data="list"
       border
       fit
-      height="550"
       highlight-current-row
       style="width: 100%;">
       <el-table-column :label="`操作`" align="center" width="65">
@@ -31,27 +30,27 @@
           <el-radio :label="scope.row.adUserId" v-model="checked" class="radio" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
         </template>
       </el-table-column>
-      <el-table-column :label="`序号`" width="150px" align="center">
+      <el-table-column :label="`序号`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.$index+1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`BD姓名`" width="150px" align="center">
+      <el-table-column :label="`BD姓名`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.username||'' }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`手机号码`" width="150px" align="center">
+      <el-table-column :label="`手机号码`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.phone || '' }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`一级代理数量`" width="150px" align="center">
+      <el-table-column :label="`一级代理数量`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.agentCounts||0 }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`创建日期`" width="150px" align="center">
+      <el-table-column :label="`创建日期`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.createDate | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>

@@ -9,7 +9,6 @@
       :data="list"
       border
       fit
-      height="550"
       highlight-current-row
       style="width: 100%;">
       <el-table-column :label="`序号`" align="center" width="65px">
@@ -17,37 +16,37 @@
           <span>{{ scope.$index + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`代理商名称`" width="150px" align="center">
+      <el-table-column :label="`代理商名称`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.agentUserName }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`商家信息`" width="150px" align="center">
+      <el-table-column :label="`商家信息`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.userName }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`联系人`" width="150px" align="center">
+      <el-table-column :label="`联系人`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.linkName }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`联系手机`" width="150px" align="center">
+      <el-table-column :label="`联系手机`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`商家设备数量`" width="150px" align="center">
+      <el-table-column :label="`商家设备数量`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.ownEquipmentCount || 0 }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`再下级代理商数量`" width="150px" align="center">
+      <el-table-column :label="`再下级代理商数量`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.subordinateCount || 0 }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`创建日期`" width="150px" align="center">
+      <el-table-column :label="`创建日期`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.createDate || '' }}</span>
         </template>
