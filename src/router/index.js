@@ -169,39 +169,40 @@ export let constantRouterMap = [
       }
     ]
   },
-  // {
-  //   path: '/deviceManage',
-  //   component: Layout,
-  //   redirect: 'noredirect',
-  //   name: 'deviceManage',
-  //   alwaysShow: true,
-  //   meta: {
-  //     title: '设备管理',
-  //     icon: 'list'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'deviceList',
-  //       component: () => import('@/views/deviceManage/DeviceList.vue'),
-  //       name: 'deviceList',
-  //       meta: { title: '设备列表', noCache: true }
-  //     },
-  //     {
-  //       path: 'transfer',
-  //       name: 'transfer',
-  //       meta: {
-  //         title: '转移设备'
-  //       },
-  //       component: () => import('@/views/deviceManage/deviceTransfer.vue')
-  //     },
-  //     {
-  //       path: 'deviceImport',
-  //       component: () => import('@/views/deviceManage/deviceImport.vue'),
-  //       name: 'deviceImport',
-  //       meta: { title: '批量导入设备', noCache: true }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/businessManage',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'businessManage',
+    hidden: false,
+    meta: {
+      title: '商家管理',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: '/businesslist',
+        component: () => import('@/views/businessManage/BusinessList'),
+        name: 'BusinessList',
+        meta: { title: '商家列表' },
+        hidden: false
+      },
+      {
+        path: '/addbusiness',
+        component: () => import('@/views/businessManage/AddBusiness'),
+        name: 'AddBusiness',
+        meta: { title: '新增商家' },
+        hidden: false
+      },
+      {
+        path: '/editbusiness',
+        hidden: false,
+        component: () => import('@/views/businessManage/EditBusiness'),
+        name: 'EditBusiness',
+        meta: { title: '编辑商家' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

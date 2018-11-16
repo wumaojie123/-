@@ -28,7 +28,7 @@
       </el-form-item>
       <el-form-item label="关联商家">
         <el-input v-model="linkName" placeholder="请输入关联商家账号" class="input-300" maxlength="32" disabled style="width: 500px;"/>
-        <span class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>
+        <!--<span class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>-->
       </el-form-item>
     </el-form>
   </div>
