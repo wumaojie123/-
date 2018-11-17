@@ -144,3 +144,8 @@ npm run lint -- --fix
 [MIT](https://github.com/PanJiaChen/vue-element-admin/blob/master/LICENSE)
 
 Copyright (c) 2017-present PanJiaChen
+
+测试账号：
+15899974724 123456
+13600000010  密码16881688
+18207589381

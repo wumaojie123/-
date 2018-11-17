@@ -20,8 +20,8 @@
           <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
           <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
           <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理商</el-button>
+          <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理商</el-button></router-link>
         </div>
-        <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理商</el-button></router-link>
       </div>
     </el-form>
     <!-- 列表 -->

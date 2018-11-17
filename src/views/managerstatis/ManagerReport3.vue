@@ -9,7 +9,9 @@
           type="daterange"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          value-format="yyyy-MM-dd"/>
+          value-format="yyyy-MM-dd" />
+      <!-- <el-date-picker v-model="queryParams.startDate" :picker-options="options"  value-format="yyyy-MM-dd" type="date" placeholder="选择日期" /> -
+        <el-date-picker v-model="queryParams.endDate" :picker-options="options" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" /> -->
       </el-form-item>
       <p/>
       <el-form-item label="代理商名称">
@@ -25,43 +27,21 @@
       <el-button type="primary" icon="el-icon-search" @click="handleQueryParams">查询</el-button>
       <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
     </el-form>
-    <!-- tab 切换商家和代理 -->
-    <el-tabs v-model="active" type="card" @tab-click = "handlerTabClick">
-      <el-tab-pane label="商家" name="first">
-        <!-- 列表 -->
-        <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
-          <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
-        </el-table>
-        <el-pagination
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageInfo.pageSize"
-          :total="pageInfo.total"
-          :current-page="pageInfo.currPage"
-          background
-          layout="total, prev, pager, next, sizes, jumper"
-          @size-change="handleSizeChange"
-          @prev-click="handleCurrentChange"
-          @next-click="handleCurrentChange"
-          @current-change="handleCurrentChange"/>
-      </el-tab-pane>
-      <el-tab-pane label="代理" name="second">
-        <!-- 列表 -->
-        <el-table v-loading="listLoading" :data="agentList" :height="450" border style="width: 100%;margin-bottom: 20px;">
-          <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
-        </el-table>
-        <el-pagination
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="pageInfo.pageSize"
-          :total="pageInfo.total"
-          :current-page="pageInfo.currPage"
-          background
-          layout="total, prev, pager, next, sizes, jumper"
-          @size-change="handleSizeChange"
-          @prev-click="handleCurrentChange"
-          @next-click="handleCurrentChange"
-          @current-change="handleCurrentChange"/>
-      </el-tab-pane>
-    </el-tabs>
+    <!-- 列表 -->
+    <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
+      <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+    </el-table>
+    <el-pagination
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="pageInfo.pageSize"
+      :total="pageInfo.total"
+      :current-page="pageInfo.currPage"
+      background
+      layout="total, prev, pager, next, sizes, jumper"
+      @size-change="handleSizeChange"
+      @prev-click="handleCurrentChange"
+      @next-click="handleCurrentChange"
+      @current-change="handleCurrentChange"/>
   </div>
 </template>
 
@@ -85,7 +65,6 @@ export default {
       dateRange: [],
       listLoading: true,
       list: [],
-      agentList: [],
       colums: [
         { key: 'associateSellerPhone', label: '账号' },
         { key: 'agentUserName', label: '代理/商家名称', width: 250 },
@@ -98,8 +77,7 @@ export default {
         { key: 'equipmentOnlineCount', label: '在线设备数量', sortable: true }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
-      options: OPTIONS,
-      active: 'first'
+      options: OPTIONS
     }
   },
   beforeMount() {
@@ -109,14 +87,6 @@ export default {
     this.queryList()
   },
   methods: {
-    // tab切换
-    handlerTabClick() {
-      this.list = []
-      this.agentList = []
-      this.pageInfo = { total: 20, pageSize: 10, currPage: 1 }
-      this.resetQueryParams()
-      this.queryList()
-    },
     resetQueryParams() {
       this.queryParams = { agentUserName: '', associateSellerPhone: '', associateSellerName: '' }
       this.dateRange = []
@@ -132,11 +102,7 @@ export default {
     },
     queryList(page = 1) {
       this.listLoading = true
-      if (this.active === 'first') {
-        this.list = []
-      } else if (this.active === 'second') {
-        this.agentList = []
-      }
+      this.list = []
       this.pageInfo.currPage = page
       const postData = this.queryParams
       postData.pageIndex = this.pageInfo.currPage
@@ -146,12 +112,7 @@ export default {
       fetchList(postData).then(res => {
         this.listLoading = false
         if (res.data) {
-          const list = res.data && res.data.items || []
-          if (this.active === 'first') {
-            this.list = list
-          } else if (this.active === 'second') {
-            this.agentList = list
-          }
+          this.list = res.data && res.data.items || []
           this.pageInfo.total = res.data.total || 0
         } else {
           this.pageInfo.total = 0
