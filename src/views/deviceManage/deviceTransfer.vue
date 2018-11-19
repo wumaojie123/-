@@ -1,6 +1,13 @@
 <template>
   <el-main>
-    <el-alert :title="message" :closable="false" type="warning" class="info" />
+    <el-row :gutter="20" style="align-items: center;">
+      <el-col :span="20">
+        <el-alert :title="message" :closable="false" type="warning" class="info" />
+      </el-col>
+      <el-col :span="4">
+        <div class="often-question" ><p @click="oftenquestionFn"><i class="el-icon-question"/> 常见问题 >></p></div>
+      </el-col>
+    </el-row>
     <el-form ref="form" :model="form" label-width="90px" class="deviceForm" style="padding: 16px 0;">
       <el-row>
         <el-col :span="6">
@@ -27,16 +34,41 @@
         </el-col>-->
       </el-row>
       <el-row>
-        <el-col :span="12">
-          <el-form-item label="设备编号">
-            <el-input v-model="form.values" type="textarea"/>
-            <p style="color: #666;font-size: 14px;">最多支持查询100个设备，每个设备编号请用逗号【，】隔开</p>
+        <el-col :span="6">
+          <el-form-item label="连号查询" prop="equipmentId">
+            <el-row>
+              <el-col :span="11" >
+                <el-input-number
+                  :controls="false"
+                  :min="1"
+                  v-model="form.startEquipmentId"
+                  style="width: 100%;"
+                  label="设备编号"/>
+              </el-col>
+              <el-col :span="2">
+                <div style="text-align: center;">-</div>
+              </el-col>
+              <el-col :span="11" >
+                <el-input-number
+                  :controls="false"
+                  :min="1"
+                  v-model="form.endEquipmentId"
+                  style="width: 100%;"
+                  label="设备编号"/>
+              </el-col>
+            </el-row>
           </el-form-item>
+          <!--<el-form-item label="设备编号">-->
+          <!--<el-input v-model="form.values" type="textarea"/>-->
+          <!--<p style="color: #666;font-size: 14px;">最多支持查询100个设备，每个设备编号请用逗号【，】隔开</p>-->
+          <!--</el-form-item>-->
         </el-col>
       </el-row>
       <el-row>
-        <el-button type="primary" @click="look">查看</el-button>
-        <el-button type="primary" @click="transfer">勾选批量转移</el-button>
+        <el-button type="primary" @click="look">查询</el-button>
+        <el-button type="primary" @click="transfer">批量转移设备</el-button>
+        <el-button type="primary" @click="importQrcode('pay')">导出支付二维码</el-button>
+        <el-button style="margin-left: 10px;" type="primary" @click="importQrcode('register')">导出注册二维码</el-button>
       </el-row>
     </el-form>
     <el-table
@@ -140,6 +172,36 @@
         <el-button type="primary" @click="confirmTranfer">确定转移</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      :visible.sync="questionDialogVisible"
+      class="question-main-dialog"
+      width="30%"
+      title="设备转移常见问题">
+      <div class="main question-main">
+        <div class="item">
+          <h2>1. 什么是“待转移设备”？</h2>
+          <p class="info">“待转移设备”指由设备提供方，按设备编号批量导入的、且未注册绑定到商家账号的设备。如果购买了设备，而“待转移设备”列表为空，请及时联系你的设备提供方。</p>
+        </div>
+        <div class="item">
+          <h2>2. 如何转移设备？</h2>
+          <p class="info"> 勾选设备后，点击“批量转移设备”按钮，可将设备批量转移到某个商家（或某个代理）账号下。</p>
+        </div>
+        <div class="item">
+          <h2>3. 代理将设备批量转移给商家后，商家如何批量注册？</h2>
+          <p class="info">
+            （1）代理将设备批量转移给商家后，需告知商家登录PC端管理后台（网址：https://fac.leyaoyao.com/#/login ），
+            用商家账号、密码登录进去以后，点击“设备管理>未注册设备”，即可看到代理转移给商家的设备。
+            勾选未注册的设备，并点击“批量注册”，然后选择要投放的场地，即可批量注册成功。</p>
+          <p class="info">
+            （2）批量注册成功后，商家再登录手机端管理后台，即可在相应场地查看到设备。商家无需再一个个扫码注册。
+          </p>
+        </div>
+        <div class="item">
+          <h2>4. 如果已转移的设备被商家解绑了，那设备会去往哪里？</h2>
+          <p class="info">如果已转移的设备被商家解绑了，则解绑的设备将会重新返回到代理的“待转移设备”列表中。</p>
+        </div>
+      </div>
+    </el-dialog>
   </el-main>
 </template>
 
@@ -153,6 +215,7 @@ export default {
   data() {
     return {
       total: 0,
+      questionDialogVisible: false,
       agentid: '',
       selectAgent: '',
       agentsArr: [],
@@ -183,11 +246,12 @@ export default {
           value: 2
         }
       ],
-      message: '转移设备指的是由BD协助批量导入到代理商的、且未注册绑定的设备编号。通过勾选批量转移，可以将设备转移到某个商家下。被转移的设备被商家解绑后，还会显示到该列表。',
+      message: '将设备批量转移给商家后，需告知商家登录PC端管理后台及时批量注册设备（商家PC端管理后台网址：https://fac.leyaoyao.com/#/login  ）。',
       form: {
         isOnline: '',
         equipmentTypeValue: '',
-        values: ''
+        startEquipmentId: 0,
+        endEquipmentId: 0
       }
     }
   },
@@ -208,6 +272,17 @@ export default {
     this.getList()
   },
   methods: {
+    // 常见问题
+    oftenquestionFn() {
+      this.questionDialogVisible = true
+    },
+    // 导出二维码
+    importQrcode(type) {
+      console.log(type)
+      this.$alert('仅支持导出同一种设备类型的二维码，请重新勾选。', '温馨提示', {
+        confirmButtonText: '知道了'
+      })
+    },
     beforeClose(done) {
       this.$refs.multipleTable.clearSelection()
       this.selectAgent = ''
@@ -293,8 +368,8 @@ export default {
       this.listLoading = true
       this.form.pageSize = this.listQuery.limit
       this.form.pageIndex = this.listQuery.page
-      this.form.values = this.form.values.replace(/\s/g, '')
-      this.form.values = this.form.values.replace(/，/g, ',')
+      // this.form.values = this.form.values.replace(/\s/g, '')
+      // this.form.values = this.form.values.replace(/，/g, ',')
       agentEquipmentList(this.form).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -312,6 +387,17 @@ export default {
       this.getList()
     },
     look() {
+      if (this.form.startEquipmentId > this.form.endEquipmentId) {
+        this.$alert('设备编号请按从小到大的顺序输入。', '温馨提示', {
+          confirmButtonText: '知道了'
+        })
+        return
+      } else if (this.form.startEquipmentId + 100 < this.form.endEquipmentId) {
+        this.$alert('支持连号查询，一次最多可查询100个。', '温馨提示', {
+          confirmButtonText: '知道了'
+        })
+        return
+      }
       this.listQuery.page = 1
       this.getList()
     },
@@ -334,5 +420,27 @@ export default {
 <style scoped lang="scss">
   .width270{
     width: 270px;
+  }
+  .often-question{
+    color: #1296DB;
+    align-items: center;
+    font-size: 15px;
+    line-height: 150%;
+  }
+  .question-main{
+    .item{
+      margin-bottom: 10px;
+      h2{
+        font-size: 18px;
+        color: #333;
+        padding: 8px 0;
+      }
+      .info{
+        font-size: 15px;
+        color: #666;
+        line-height: 150%;
+        text-indent: 30px;
+      }
+    }
   }
 </style>
