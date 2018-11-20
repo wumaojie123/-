@@ -4,21 +4,9 @@
       <el-form-item label="商家账号" >
         <el-input v-model="queryParams.userName" placeholder="请输入商家账号" class="input-300" maxlength="11" clearable />
       </el-form-item>
-      <!-- <el-form-item label="商家账号">
-        <el-input v-model="queryParams.userName" placeholder="请输入商家账号,账号为手机号" class="input-300" maxlength="11" clearable />
-      </el-form-item>
-      <p/>
-      <el-form-item label="联系人名称">
-        <el-input v-model="queryParams.linkName" placeholder="请输入联系人名称" class="input-300" maxlength="32" clearable />
-      </el-form-item>
-      <el-form-item label="手机号码">
-        <el-input v-model="queryParams.phone" placeholder="请输入手机号码" class="input-300" maxlength="11" clearable />
-      </el-form-item> -->
-      <p/>
+      <el-button type="primary" icon="el-icon-search" @click="filterQueryList">查询</el-button>
       <div class="flex-layout">
         <div class="flex-item">
-          <el-button type="primary" icon="el-icon-search" @click="filterQueryList">查询</el-button>
-          <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
           <!-- <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button> -->
           <!-- <router-link :to="{path: '/addbusiness'}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link> -->
         </div>

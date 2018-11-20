@@ -11,19 +11,17 @@
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd"/>
       </el-form-item>
-      <p/>
-      <el-form-item v-if="active === 'agent'" label="代理商名称">
+      <!-- <el-form-item v-if="active === 'agent'" label="代理商名称">
         <el-input v-model="queryParams.agentUserName" type="text" placeholder="请输入代理商名称"/>
       </el-form-item>
       <el-form-item v-if="active === 'merchant'" label="商家名称">
         <el-input v-model="queryParams.associateSellerName" type="text" placeholder="请输入商家名称"/>
+      </el-form-item> -->
+      <el-form-item label="商家账号">
+        <el-input v-model="queryParams.associateSellerPhone" type="tel" placeholder="请输入商家账号" clearable/>
       </el-form-item>
-      <el-form-item label="商家手机号码">
-        <el-input v-model="queryParams.associateSellerPhone" type="tel" placeholder="请输入商家手机号码"/>
-      </el-form-item>
-      <p/>
       <el-button type="primary" icon="el-icon-search" @click="handleQueryParams">查询</el-button>
-      <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
+      <!-- <el-button type="primary" @click="resetQueryParams">清空查询</el-button> -->
     </el-form>
     <!-- tab 切换商家和代理 -->
     <el-tabs v-model="active" type="card" @tab-click = "handlerTabClick">
@@ -127,7 +125,7 @@ export default {
       if ((this.queryParams.associateSellerPhone && validateTel(this.queryParams.associateSellerPhone)) || !this.queryParams.associateSellerPhone) {
         this.queryList(this.pageInfo.currPage)
       } else {
-        this.$message({ message: '请正确输入11位手机号码', type: 'error' })
+        this.$message({ message: '请输入正确的商家账号，为11位手机号码', type: 'error' })
       }
     },
     queryList(page = 1) {
@@ -148,9 +146,11 @@ export default {
         this.listLoading = false
         if (res.data) {
           const list = res.data && res.data.items || []
-          if (this.active === 'agent') {
+          console.log(list)
+          if (this.active === 'merchant') {
             this.list = list
-          } else if (this.active === 'merchant') {
+            console.log(this.list.length)
+          } else if (this.active === 'agent') {
             this.agentList = list
           }
           this.pageInfo.total = res.data.total || 0
