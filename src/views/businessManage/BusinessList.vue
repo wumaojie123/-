@@ -25,7 +25,7 @@
       </div>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" @selection-change="handleItem" >
+    <el-table v-loading="listLoading" :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" @selection-change="handleItem" >
       <el-table-column type="selection" width="55"/>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
@@ -47,6 +47,7 @@ export default {
   data() {
     return {
       queryParams: { userName: '' },
+      listLoading: true,
       // queryParams: { agentUserName: '', userName: '', linkName: '', phone: '' },
       list: [],
       colums: [
