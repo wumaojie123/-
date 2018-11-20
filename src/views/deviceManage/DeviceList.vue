@@ -325,7 +325,7 @@ export default {
       // 设备id
       const equipmentIds = []
       this.checkedRow.forEach((v) => {
-        equipmentIds.push(v.equipmentValue)
+        equipmentIds.push(v.equipmentId)
       })
       if (type === 'pay') {
         this.downLoadFileName = '支付二维码下载'
