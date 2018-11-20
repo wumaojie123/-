@@ -12,10 +12,10 @@
           value-format="yyyy-MM-dd"/>
       </el-form-item>
       <p/>
-      <el-form-item label="代理商名称">
+      <el-form-item v-if="active === 'agent'" label="代理商名称">
         <el-input v-model="queryParams.agentUserName" type="text" placeholder="请输入代理商名称"/>
       </el-form-item>
-      <el-form-item label="商家名称">
+      <el-form-item v-if="active === 'merchant'" label="商家名称">
         <el-input v-model="queryParams.associateSellerName" type="text" placeholder="请输入商家名称"/>
       </el-form-item>
       <el-form-item label="商家手机号码">
@@ -27,7 +27,7 @@
     </el-form>
     <!-- tab 切换商家和代理 -->
     <el-tabs v-model="active" type="card" @tab-click = "handlerTabClick">
-      <el-tab-pane label="商家" name="first">
+      <el-tab-pane label="商家" name="merchant">
         <!-- 列表 -->
         <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
           <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
@@ -44,7 +44,7 @@
           @next-click="handleCurrentChange"
           @current-change="handleCurrentChange"/>
       </el-tab-pane>
-      <el-tab-pane label="代理" name="second">
+      <el-tab-pane label="代理" name="agent">
         <!-- 列表 -->
         <el-table v-loading="listLoading" :data="agentList" :height="450" border style="width: 100%;margin-bottom: 20px;">
           <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
@@ -99,7 +99,7 @@ export default {
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
       options: OPTIONS,
-      active: 'first'
+      active: 'merchant'
     }
   },
   beforeMount() {
@@ -132,24 +132,25 @@ export default {
     },
     queryList(page = 1) {
       this.listLoading = true
-      if (this.active === 'first') {
-        this.list = []
-      } else if (this.active === 'second') {
-        this.agentList = []
-      }
       this.pageInfo.currPage = page
       const postData = this.queryParams
       postData.pageIndex = this.pageInfo.currPage
       postData.pageSize = this.pageInfo.pageSize
       postData.startDate = this.dateRange[0]
       postData.endDate = this.dateRange[1]
+      postData.roleStr = this.active
+      if (this.active === 'agent') {
+        this.list = []
+      } else if (this.active === 'merchant') {
+        this.agentList = []
+      }
       fetchList(postData).then(res => {
         this.listLoading = false
         if (res.data) {
           const list = res.data && res.data.items || []
-          if (this.active === 'first') {
+          if (this.active === 'agent') {
             this.list = list
-          } else if (this.active === 'second') {
+          } else if (this.active === 'merchant') {
             this.agentList = list
           }
           this.pageInfo.total = res.data.total || 0

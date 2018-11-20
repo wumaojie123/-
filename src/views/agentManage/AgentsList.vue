@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       queryParams: { agentUserName: '', userName: '', linkName: '', phone: '' },
-      list: [{ name: 'name1', info: 'guanlian', total: 5, inline: 1 }],
+      list: [],
       colums: [
         { key: 'agentUserName', label: '代理商名称' },
         { key: 'userName', label: '账号' },
