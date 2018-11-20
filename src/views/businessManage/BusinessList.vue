@@ -1,10 +1,10 @@
 <template>
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
-      <el-form-item label="代理商名称" >
-        <el-input v-model="queryParams.agentUserName" placeholder="请输入商家名称" class="input-300" maxlength="64" clearable />
+      <el-form-item label="商家名称" >
+        <el-input v-model="queryParams.userName" placeholder="请输入商家名称" class="input-300" maxlength="64" clearable />
       </el-form-item>
-      <el-form-item label="商家账号">
+      <!-- <el-form-item label="商家账号">
         <el-input v-model="queryParams.userName" placeholder="请输入商家账号,账号为手机号" class="input-300" maxlength="11" clearable />
       </el-form-item>
       <p/>
@@ -13,14 +13,14 @@
       </el-form-item>
       <el-form-item label="手机号码">
         <el-input v-model="queryParams.phone" placeholder="请输入手机号码" class="input-300" maxlength="11" clearable />
-      </el-form-item>
+      </el-form-item> -->
       <p/>
       <div class="flex-layout">
         <div class="flex-item">
-          <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
+          <el-button type="primary" icon="el-icon-search" @click="filterQueryList">查询</el-button>
           <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
-          <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button>
-          <router-link :to="{path: '/addbusiness'}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link>
+          <!-- <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button> -->
+          <!-- <router-link :to="{path: '/addbusiness'}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link> -->
         </div>
       </div>
     </el-form>
@@ -42,13 +42,13 @@
 </template>
 
 <script>
-import { validateTel } from '@/utils/validate'
-import { fetchList } from '@/api/angentManage'
+import { fetchList } from '@/api/businessManage'
 export default {
   data() {
     return {
-      queryParams: { agentUserName: '', userName: '', linkName: '', phone: '' },
-      list: [{ name: 'name1', info: 'guanlian', total: 5, inline: 1 }],
+      queryParams: { userName: '' },
+      // queryParams: { agentUserName: '', userName: '', linkName: '', phone: '' },
+      list: [],
       colums: [
         { key: 'agentUserName', label: '商家名称' },
         { key: 'userName', label: '账号' },
@@ -65,18 +65,14 @@ export default {
   },
   methods: {
     resetQueryParams() {
-      this.queryParams = { agentUserName: '', userName: '', linkName: '', phone: '' }
+      this.queryParams = { userName: '' }
     },
     queryList(page = 1) {
       this.angentInfo = []
       this.list = []
       this.pageInfo.currPage = page
       const postData = { pageSize: this.pageInfo.pageSize, pageIndex: this.pageInfo.currPage }
-      for (const key in this.queryParams) {
-        if (this.queryParams[key]) {
-          postData[key] = this.queryParams[key]
-        }
-      }
+      postData.userName = this.queryParams.userName
       fetchList(postData).then(res => {
         this.listLoading = false
         if (res.data) {
@@ -95,7 +91,7 @@ export default {
         if (type === 'edit') {
           this.$router.push({ path: '/editbusiness', query: { ID: this.angentInfo[0].agentUserId, action: 'edit' }})
         } else if (type === 'del') {
-          this.$confirm('是否删除该代理商信息', {
+          this.$confirm('是否删除该商家信息', {
             callback: action => {
               if (action === 'confirm') {
                 console.log('确认删除数据')
@@ -117,12 +113,8 @@ export default {
     handleCurrentChange(page) {
       this.queryList(page)
     },
-    filerQueryList() {
+    filterQueryList() {
       this.pageInfo.total = 0
-      if ((this.queryParams.phone && !validateTel(this.queryParams.phone)) || (this.queryParams.userName && !validateTel(this.queryParams.userName))) {
-        this.$message({ message: '请正确输入11位手机号码', type: 'error' })
-        return
-      }
       this.queryList(this.pageInfo.currPage)
     }
   }

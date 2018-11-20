@@ -186,21 +186,21 @@ export let constantRouterMap = [
         name: 'BusinessList',
         meta: { title: '商家列表' },
         hidden: false
-      },
-      {
-        path: '/addbusiness',
-        component: () => import('@/views/businessManage/AddBusiness'),
-        name: 'AddBusiness',
-        meta: { title: '新增商家' },
-        hidden: false
-      },
-      {
-        path: '/editbusiness',
-        hidden: false,
-        component: () => import('@/views/businessManage/EditBusiness'),
-        name: 'EditBusiness',
-        meta: { title: '编辑商家' }
       }
+      // {
+      //   path: '/addbusiness',
+      //   component: () => import('@/views/businessManage/AddBusiness'),
+      //   name: 'AddBusiness',
+      //   meta: { title: '新增商家' },
+      //   hidden: false
+      // },
+      // {
+      //   path: '/editbusiness',
+      //   hidden: false,
+      //   component: () => import('@/views/businessManage/EditBusiness'),
+      //   name: 'EditBusiness',
+      //   meta: { title: '编辑商家' }
+      // }
     ]
   },
   { path: '*', redirect: '/404', hidden: true }
