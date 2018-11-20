@@ -50,7 +50,7 @@ export default {
       // queryParams: { agentUserName: '', userName: '', linkName: '', phone: '' },
       list: [],
       colums: [
-        { key: 'agentUserName', label: '商家名称' },
+        { key: 'merchantName', label: '商家名称' },
         { key: 'userName', label: '账号' },
         { key: 'linkName', label: '联系人' },
         { key: 'phone', label: '手机号码' },
