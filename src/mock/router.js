@@ -69,7 +69,7 @@ export const userCenter = [
     icon: 'chart',
     menuResourcesList: [
       {
-        value: 'businessList',
+        value: 'businessStatistics',
         htmlTemplet: 'managerstatis/ManagerReport',
         parentId: 'businessCharts',
         name: '经营报表'
@@ -100,6 +100,32 @@ export const userCenter = [
         parentId: 'deviceList',
         name: '批量导入设备',
         htmlTemplet: 'deviceManage/deviceImport'
+      }
+    ]
+  },
+  {
+    value: '/businessManage',
+    name: '商家管理',
+    htmlTemplet: 'businessManage',
+    icon: 'component',
+    menuResourcesList: [
+      {
+        htmlTemplet: 'businessManage/BusinessList',
+        value: 'businessList',
+        name: '商家列表',
+        parentId: 'businessManage'
+      },
+      {
+        htmlTemplet: 'businessManage/AddBusiness',
+        value: 'addBusiness',
+        name: '新增商家',
+        parentId: 'businessManage'
+      },
+      {
+        htmlTemplet: 'businessManage/EditBusiness',
+        name: '编辑商家',
+        value: 'editBusiness',
+        parentId: 'businessManage'
       }
     ]
   },

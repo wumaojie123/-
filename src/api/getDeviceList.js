@@ -15,3 +15,11 @@ export function agentEquipmentList(data) {
     params: data
   })
 }
+// 设备禁用和解禁
+export function equipmentStatus(data) {
+  return request({
+    url: '/equipment/batch/status',
+    method: 'post',
+    data
+  })
+}
