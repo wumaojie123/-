@@ -46,7 +46,7 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="代理/商家名称" prop="agentUserName">
-            <el-input v-model="form.agentUserName" placeholder="请输入代理/商家名称名称"/>
+            <el-input v-model="form.agentUserName" placeholder="请输入代理/商家名称"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
