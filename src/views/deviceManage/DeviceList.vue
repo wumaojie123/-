@@ -3,34 +3,32 @@
     <el-form ref="form" :model="form" label-width="106px" class="deviceForm">
       <el-row>
         <el-col :span="8">
-          <el-form-item label="设备编号" prop="equipmentId">
+          <el-form-item label="设备编号" >
             <el-row>
               <el-col :span="11" >
-                <el-input-number
-                  :controls="false"
-                  :min="1"
-                  v-model="form.startEquipmentId"
-                  style="width: 100%;"
-                  label="设备编号"/>
+                <div class="el-input-number el-input-number--medium is-without-controls" style="width: 100%;">
+                  <div class="el-input el-input--medium">
+                    <input v-model="form.equipmentIdStart" class="el-input__inner" type="number" placeholder="设备编号">
+                  </div>
+                </div>
               </el-col>
               <el-col :span="2">
                 <div style="text-align: center;">-</div>
               </el-col>
               <el-col :span="11" >
-                <el-input-number
-                  :controls="false"
-                  :min="1"
-                  v-model="form.endEquipmentId"
-                  style="width: 100%;"
-                  label="设备编号"/>
+                <div class="el-input-number el-input-number--medium is-without-controls" style="width: 100%;">
+                  <div class="el-input el-input--medium">
+                    <input v-model="form.equipmentIdEnd" class="el-input__inner" type="number" placeholder="设备编号">
+                  </div>
+                </div>
               </el-col>
             </el-row>
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="设备状态" prop="groupNumber">
+          <el-form-item label="设备状态" prop="status">
             <!--<el-input v-model="form.groupNumber" placeholder="请输入机台号"/>-->
-            <el-select v-model="form.groupNumber" placeholder="请选择">
+            <el-select v-model="form.status" placeholder="请选择">
               <el-option
                 v-for="item in disableOptions"
                 :key="item.value"
@@ -93,12 +91,16 @@
       stripe
       fit
       highlight-current-row
-      style="width: 100%;margin-top: 20px;">
-      <el-table-column label="" align="center" width="65">
-        <template slot-scope="scope">
-          <el-radio :label="scope.row.equipmentId" v-model="checked" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>
-        </template>
-      </el-table-column>
+      style="width: 100%;margin-top: 20px;"
+      @selection-change="getTemplateRow">
+      <el-table-column
+        type="selection"
+        width="65"/>
+      <!--<el-table-column label="" align="center" width="65">-->
+      <!--<template slot-scope="scope">-->
+      <!--<el-radio :label="scope.row.equipmentId" v-model="checked" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>-->
+      <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="设备编号" align="center" prop="equipmentId">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentId }}</span>
@@ -106,7 +108,7 @@
       </el-table-column>
       <el-table-column label="禁用状态" align="center">
         <template slot-scope="scope">
-          <span>{{ `未禁用` }}</span>
+          <span>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
       <el-table-column label="设备机台号" align="center">
@@ -129,11 +131,11 @@
           <span>{{ scope.row.agentUserName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="类别" align="center">
-        <template slot-scope="scope">
-          <span>{{ `代理商` }}</span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column label="类别" align="center">-->
+      <!--<template slot-scope="scope">-->
+      <!--<span>{{ `代理商` }}</span>-->
+      <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="账号" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.phone }}</span>
@@ -146,7 +148,7 @@
       </el-table-column>
       <el-table-column label="注册状态" align="center">
         <template slot-scope="scope">
-          <span>{{ `已注册` }}</span>
+          <span>{{ scope.row.isRegister }}</span>
         </template>
       </el-table-column>
       <el-table-column label="在线状态" align="center">
@@ -177,17 +179,19 @@
         <div class="close" @click.stop="showQR = !showQR">X</div>
         <h2>请用微信或支付宝扫描二维码</h2>
         <canvas id="canvas"/>
-        <p>{{ checkedRow.equipmentId }}</p>
-        <p>{{ checkedRow.groupNumber ? checkedRow.groupNumber + '号机' : '' }}{{ checkedRow.groupName ? '(' + checkedRow.groupName + ')': '' }}</p>
-        <p>{{ checkedRow.equipmentTypeName }}</p>
+        <p>{{ checkedRowAlone.equipmentId }}</p>
+        <p>{{ checkedRowAlone.groupNumber ? checkedRowAlone.groupNumber + '号机' : '' }}{{ checkedRowAlone.groupName ? '(' + checkedRowAlone.groupName + ')': '' }}</p>
+        <p>{{ checkedRowAlone.equipmentTypeName }}</p>
       </div>
     </div>
+    <a id="downLoad" ref="downloadZip" :href="loadUrl" :download="downLoadFileName" style="display: none;"/>
   </el-main>
 </template>
 
 <script>
-import { getDeviceList } from '@/api/getDeviceList'
+import { getDeviceList, equipmentStatus } from '@/api/getDeviceList'
 import { getDeviceType } from '@/api/getEquiedType'
+import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
 import waves from '@/directive/waves' // 水波纹指令
 import QRCode from 'qrcode'
 const calendarTypeOptions = [
@@ -202,6 +206,8 @@ export default {
   data() {
     return {
       tableKey: 0,
+      loadUrl: '',
+      downLoadFileName: '二维码下载',
       showQR: false,
       list: null,
       minHeightTable: 550,
@@ -209,7 +215,7 @@ export default {
       listLoading: true,
       disableOptions: [
         {
-          value: '',
+          value: 0,
           label: '全部'
         },
         {
@@ -217,7 +223,7 @@ export default {
           label: '正常'
         },
         {
-          value: 0,
+          value: 2,
           label: '已禁用'
         }
       ],
@@ -242,10 +248,10 @@ export default {
       ],
       equipmentTypeName: [],
       form: {
-        startEquipmentId: 0,
-        endEquipmentId: 1,
+        equipmentIdStart: null,
+        equipmentIdEnd: null,
         deviceName: '',
-        groupNumber: '',
+        status: '',
         groupName: '',
         agentUserName: '',
         equipmentTypeName: '',
@@ -261,7 +267,8 @@ export default {
       },
       calendarTypeOptions,
       checked: false,
-      checkedRow: {},
+      checkedRowAlone: {},
+      checkedRow: [],
       temp: {
         id: undefined,
         importance: 1,
@@ -293,14 +300,53 @@ export default {
   methods: {
     // 导出二维码
     importQrcode(type) {
-      console.log(type)
-      this.$alert('仅支持导出同一种设备类型的二维码，请重新勾选。', '温馨提示', {
-        confirmButtonText: '知道了'
+      let diff = false
+      if (this.checkedRow.length <= 0) {
+        this.$message({
+          message: '请选择需要操作的设备！',
+          type: 'warning'
+        })
+        return
+      } else {
+        this.checkedRow.reduce((prev, next) => {
+          console.log(prev.equipmentTypeName, next.equipmentTypeName)
+          if (!diff && (prev.equipmentTypeName !== next.equipmentTypeName)) {
+            diff = true
+          }
+          return next
+        })
+      }
+      if (diff) {
+        this.$alert('仅支持导出同一种设备类型的二维码，请重新勾选。', '温馨提示', {
+          confirmButtonText: '知道了'
+        })
+        return
+      }
+      // 设备id
+      const equipmentIds = []
+      this.checkedRow.forEach((v) => {
+        equipmentIds.push(v.equipmentId)
+      })
+      if (type === 'pay') {
+        this.downLoadFileName = '支付二维码下载'
+        this.loadUrl = exportPayOrCode({ valueStr: equipmentIds })
+      } else if (type === 'register') {
+        this.downLoadFileName = '注册二维码下载'
+        this.loadUrl = exportRegisterOrCode({ valueStr: equipmentIds.join(',') })
+      }
+      this.$nextTick(() => {
+        this.$refs.downloadZip.click()
       })
     },
     // 解除禁用
     disabledEquipment(type) {
-      console.log(type)
+      if (this.checkedRow.length <= 0) {
+        this.$message({
+          message: '请选择需要操作的设备！',
+          type: 'warning'
+        })
+        return
+      }
       if (type === 'disable') {
         this.$confirm('禁用设备后，用户将无法付款启动该设备。你可以通过“解除禁用”来恢复使用。\n 确定要禁用设备吗？', '温馨提示', {
           distinguishCancelAndClose: true,
@@ -308,50 +354,84 @@ export default {
           cancelButtonText: '取消'
         })
           .then(() => {
-            this.$message({
-              type: 'info',
-              message: '保存修改'
-            })
-          })
-          .catch(action => {
-            this.$message({
-              type: 'info',
-              message: action === 'cancel'
-                ? '放弃保存并离开页面'
-                : '停留在当前页面'
-            })
+            this.equipmentDisable('disabled')
           })
       } else if (type === 'enable') {
         this.$confirm('确定要解除禁用吗？', '温馨提示', {
           confirmButtonText: '确定',
-          // center: true,
           cancelButtonText: '取消'
         })
+          .then(() => {
+            this.equipmentDisable('1Normal')
+          })
       }
+    },
+    // 设备禁用和解禁
+    equipmentDisable(type) {
+      const loading = this.$loading({
+        lock: true,
+        text: 'loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      const disEquimentIds = []
+      this.checkedRow.forEach(item => {
+        disEquimentIds.push(item.equipmentId)
+      })
+      equipmentStatus({
+        status: type,
+        values: disEquimentIds
+      })
+        .then((res) => {
+          loading.close()
+          if (res.result === 0) {
+            const failText = res.data.fail.length === 0 ? '' : `失败${res.data.fail.length}条;
+        失败的设备编号：${res.data.fail.join(',')}`
+            this.$alert(`${res.description} ${failText}`, '操作结果', {
+              confirmButtonText: '确定',
+              callback: () => {
+                this.getList()
+              }
+            })
+          }
+          // loading.close()
+        })
+        .catch((err) => {
+          console.log(err)
+          loading.close()
+        })
     },
     handleChange() {
       console.log(999)
     },
     createQRCode() {
       const canvas = document.getElementById('canvas')
+      const checkedRow = this.checkedRow[0]
+      this.checkedRowAlone = checkedRow
       let url
-      console.log(this.checkedRow.equipmentTypeName)
-      if (this.checkedRow.equipmentTypeName === '儿童类') {
+      console.log(checkedRow.equipmentTypeName)
+      if (checkedRow.equipmentTypeName === '儿童类') {
         url = this.basicConfig.childUrl
-      } else if (this.checkedRow.equipmentTypeName === '扭蛋机') {
+      } else if (checkedRow.equipmentTypeName === '扭蛋机') {
         url = this.basicConfig.gashaponUrl
       } else {
         url = this.basicConfig.machineUrl
       }
-      QRCode.toCanvas(canvas, url + this.checkedRow.equipmentId, {
+      QRCode.toCanvas(canvas, url + checkedRow.equipmentId, {
         width: 200,
         height: 200
       })
     },
     handleCreateQRCode() {
-      if (!this.checkedRow || !this.checkedRow.equipmentId) {
+      if (!this.checkedRow) {
         this.$message({
           message: '请选择要生成二维码的设备！',
+          type: 'warning'
+        })
+        return
+      } else if (this.checkedRow.length > 1) {
+        this.$message({
+          message: '一次只能查看一个设备的二维码！',
           type: 'warning'
         })
         return
@@ -359,9 +439,9 @@ export default {
       this.showQR = !this.showQR
       this.createQRCode()
     },
-    getTemplateRow(index, row) {
+    getTemplateRow(row) {
       // 获取选中数据
-      // this.checked = true
+      this.checked = true
       console.log(row)
       this.checkedRow = row
     },
@@ -372,7 +452,7 @@ export default {
       getDeviceList(this.form).then(response => {
         this.list = response.data.items
         this.total = response.data.total
-        this.checkedRow = {}
+        this.checkedRow = []
         this.checked = false
         setTimeout(() => {
           this.listLoading = false
@@ -389,12 +469,17 @@ export default {
     },
     handleBtn(type) {
       if (type === 'find') { // 新增代理商
-        if (this.form.startEquipmentId > this.form.endEquipmentId) {
+        if (parseInt(this.form.equipmentIdStart) < 0) {
+          this.$alert('设备编号不能小于0。', '温馨提示', {
+            confirmButtonText: '知道了'
+          })
+          return
+        } else if (parseInt(this.form.equipmentIdStart) > parseInt(this.form.equipmentIdEnd)) {
           this.$alert('设备编号请按从小到大的顺序输入。', '温馨提示', {
             confirmButtonText: '知道了'
           })
           return
-        } else if (this.form.startEquipmentId + 100 < this.form.endEquipmentId) {
+        } else if (parseInt(this.form.equipmentIdStart) + 100 < parseInt(this.form.equipmentIdEnd)) {
           this.$alert('支持连号查询，一次最多可查询100个。', '温馨提示', {
             confirmButtonText: '知道了'
           })
@@ -402,20 +487,19 @@ export default {
         }
         this.getList()
       } else if (type === 'clear') {
+        this.form.equipmentIdStart = null
+        this.form.equipmentIdEnd = null
         this.$refs.form.resetFields()
       }
     }
   }
 }
 </script>
-<style rel="stylesheet/scss" lang="scss" scoped>
-  /* + 是兄弟选择器,获取选中后的label元素*/
-  input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{
-    -webkit-appearance: none !important;
-  }
-  /* chrome */
-  input[type="number"]{
-    -moz-appearance:textfield!important;/* firefox */
+<style rel="stylesheet/scss" lang="scss" >
+  .el-message-box /deep/ .el-message-box__message{
+    word-wrap: break-word;
+    word-break:break-all;
+    word-break: break-word;
   }
   .mask-box{
     position: fixed;

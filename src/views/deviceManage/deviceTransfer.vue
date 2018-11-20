@@ -34,27 +34,25 @@
         </el-col>-->
       </el-row>
       <el-row>
-        <el-col :span="6">
+        <el-col :span="11">
           <el-form-item label="连号查询" prop="equipmentId">
             <el-row>
               <el-col :span="11" >
-                <el-input-number
-                  :controls="false"
-                  :min="1"
-                  v-model="form.startEquipmentId"
-                  style="width: 100%;"
-                  label="设备编号"/>
+                <div class="el-input-number el-input-number--medium is-without-controls" style="width: 100%;">
+                  <div class="el-input el-input--medium">
+                    <input v-model="form.equipmentIdStart" class="el-input__inner" type="number" placeholder="设备编号">
+                  </div>
+                </div>
               </el-col>
               <el-col :span="2">
                 <div style="text-align: center;">-</div>
               </el-col>
               <el-col :span="11" >
-                <el-input-number
-                  :controls="false"
-                  :min="1"
-                  v-model="form.endEquipmentId"
-                  style="width: 100%;"
-                  label="设备编号"/>
+                <div class="el-input-number el-input-number--medium is-without-controls" style="width: 100%;">
+                  <div class="el-input el-input--medium">
+                    <input v-model="form.equipmentIdEnd" class="el-input__inner" type="number" placeholder="设备编号">
+                  </div>
+                </div>
               </el-col>
             </el-row>
           </el-form-item>
@@ -95,42 +93,11 @@
           <span>{{ scope.row.equipmentTypeName }}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column label="区域" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.districtName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="在线状态" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.online ? '在线' : '离线' }}</span>
-        </template>
-      </el-table-column>-->
       <el-table-column label="固件版本" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.versionno }}</span>
         </template>
       </el-table-column>
-      <!--
-      <el-table-column label="设备机台号" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.groupNumber || '' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="代理商名称" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.agentUserName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="账号" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.phone }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="场地名称" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.groupName }}</span>
-        </template>
-      </el-table-column>-->
     </el-table>
     <el-pagination
       v-show="total>0"
@@ -202,6 +169,7 @@
         </div>
       </div>
     </el-dialog>
+    <a id="downLoad" ref="downloadZip" :href="loadUrl" :download="downLoadFileName" style="display: none;"/>
   </el-main>
 </template>
 
@@ -210,12 +178,15 @@ import { getDeviceTypeBd } from '../../api/getEquiedType'
 import { agentEquipmentList } from '../../api/getDeviceList'
 import { queryAgents } from '../../api/getAgentUserId'
 import { transfer } from '../../api/transferDevice'
+import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
 export default {
   name: 'DeviceTransfer',
   data() {
     return {
       total: 0,
+      downLoadFileName: '下载',
       questionDialogVisible: false,
+      loadUrl: '',
       agentid: '',
       selectAgent: '',
       agentsArr: [],
@@ -250,8 +221,8 @@ export default {
       form: {
         isOnline: '',
         equipmentTypeValue: '',
-        startEquipmentId: 0,
-        endEquipmentId: 0
+        equipmentIdStart: null,
+        equipmentIdEnd: null
       }
     }
   },
@@ -278,9 +249,42 @@ export default {
     },
     // 导出二维码
     importQrcode(type) {
-      console.log(type)
-      this.$alert('仅支持导出同一种设备类型的二维码，请重新勾选。', '温馨提示', {
-        confirmButtonText: '知道了'
+      let diff = false
+      if (this.willTranfers.length <= 0) {
+        this.$message({
+          message: '请选择需要操作的设备！',
+          type: 'warning'
+        })
+        return
+      } else {
+        this.willTranfers.reduce((prev, next) => {
+          console.log(prev.equipmentTypeName, next.equipmentTypeName)
+          if (!diff && (prev.equipmentTypeName !== next.equipmentTypeName)) {
+            diff = true
+          }
+          return next
+        })
+      }
+      if (diff) {
+        this.$alert('仅支持导出同一种设备类型的二维码，请重新勾选。', '温馨提示', {
+          confirmButtonText: '知道了'
+        })
+        return
+      }
+      // 设备id
+      const equipmentIds = []
+      this.willTranfers.forEach((v) => {
+        equipmentIds.push(v.equipmentValue)
+      })
+      if (type === 'pay') {
+        this.downLoadFileName = '支付二维码下载'
+        this.loadUrl = exportPayOrCode({ valueStr: equipmentIds })
+      } else if (type === 'register') {
+        this.downLoadFileName = '注册二维码下载'
+        this.loadUrl = exportRegisterOrCode({ valueStr: equipmentIds.join(',') })
+      }
+      this.$nextTick(() => {
+        this.$refs.downloadZip.click()
       })
     },
     beforeClose(done) {
@@ -330,7 +334,6 @@ export default {
     },
     handleSelectionChange(item) {
       this.willTranfers = item
-      console.log(this.willTranfers)
     },
     querySearch(queryString, cb) {
       const quer = /^(.+)\((.+)\)$/.exec(queryString)
@@ -387,12 +390,17 @@ export default {
       this.getList()
     },
     look() {
-      if (this.form.startEquipmentId > this.form.endEquipmentId) {
+      if (parseInt(this.form.equipmentIdStart) < 0) {
+        this.$alert('设备编号不能小于0。', '温馨提示', {
+          confirmButtonText: '知道了'
+        })
+        return
+      } else if (parseInt(this.form.equipmentIdStart) > parseInt(this.form.equipmentIdEnd)) {
         this.$alert('设备编号请按从小到大的顺序输入。', '温馨提示', {
           confirmButtonText: '知道了'
         })
         return
-      } else if (this.form.startEquipmentId + 100 < this.form.endEquipmentId) {
+      } else if (parseInt(this.form.equipmentIdStart) + 100 < parseInt(this.form.equipmentIdEnd)) {
         this.$alert('支持连号查询，一次最多可查询100个。', '温馨提示', {
           confirmButtonText: '知道了'
         })

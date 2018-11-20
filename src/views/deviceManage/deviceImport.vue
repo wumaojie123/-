@@ -51,14 +51,14 @@
       >
         <el-row slot="trigger">
           <el-col>
-            <el-button :disabled="disabled" size="small" type="primary" >选择txt文件</el-button>
+            <el-button :disabled="disabled || throttle" size="small" type="primary" >选择txt文件</el-button>
           </el-col>
           <el-col>
             <ul class="el-upload-list el-upload-list--text" />
           </el-col>
         </el-row>
         <div style="padding: 8px;"/>
-        <el-button :disabled="disabled" size="small" type="success" @click="submitUpload">确定上传</el-button>
+        <el-button :disabled="disabled || throttle" size="small" type="success" @click="submitUpload">确定上传</el-button>
       </el-upload>
     </el-form>
   </el-main>
@@ -75,6 +75,7 @@ export default {
       file: null,
       agentnick: '',
       infoChecked: false,
+      throttle: false,
       form: {
         equipmentTypes: '',
         agent: ''
@@ -114,6 +115,10 @@ export default {
   },
   methods: {
     submitUpload() {
+      if (this.throttle) {
+        return
+      }
+      this.throttle = true
       if (!this.file) {
         this.$message.error('请选择上传文件！')
         return
@@ -168,6 +173,7 @@ export default {
         this.$alert(`${par.description} ${failText}`, '导入结果', {
           confirmButtonText: '确定',
           callback: () => {
+            this.throttle = false
             this.$refs.upload.clearFiles()
           }
         })
@@ -177,6 +183,7 @@ export default {
       this.$message.warning(`当前限制选择 1 个文件，一次只能上传一个文件`)
     },
     handleError() {
+      this.throttle = false
       this.$message.error('导入失败！')
     }
   }
@@ -187,6 +194,8 @@ export default {
     width: 200px;
   }
   .el-message-box__message{
+    word-wrap: break-word;
+    word-break:break-all;
     word-break: break-word;
   }
   .upload-demo{
