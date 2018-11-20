@@ -1,8 +1,8 @@
 <template>
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
-      <el-form-item label="商家名称" >
-        <el-input v-model="queryParams.userName" placeholder="请输入商家名称" class="input-300" maxlength="64" clearable />
+      <el-form-item label="商家账号" >
+        <el-input v-model="queryParams.userName" placeholder="请输入商家账号" class="input-300" maxlength="11" clearable />
       </el-form-item>
       <!-- <el-form-item label="商家账号">
         <el-input v-model="queryParams.userName" placeholder="请输入商家账号,账号为手机号" class="input-300" maxlength="11" clearable />
