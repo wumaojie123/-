@@ -454,9 +454,7 @@ export default {
         this.total = response.data.total
         this.checkedRow = []
         this.checked = false
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        this.listLoading = false
       })
     },
     handleSizeChange(val) {
