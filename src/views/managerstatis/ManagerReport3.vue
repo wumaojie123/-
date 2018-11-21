@@ -10,7 +10,7 @@
           start-placeholder="开始日期"
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd" />
-      <!-- <el-date-picker v-model="queryParams.startDate" :picker-options="options"  value-format="yyyy-MM-dd" type="date" placeholder="选择日期" /> -
+      <!-- <el-date-picker v-model="queryParams.startDate" :picker-options="options" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" /> -
         <el-date-picker v-model="queryParams.endDate" :picker-options="options" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" /> -->
       </el-form-item>
       <p/>
