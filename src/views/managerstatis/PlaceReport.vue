@@ -9,23 +9,12 @@
           type="daterange"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
-          value-format="yyyy-MM-dd" />
-      <!-- <el-date-picker v-model="queryParams.startDate" :picker-options="options" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" /> -
-        <el-date-picker v-model="queryParams.endDate" :picker-options="options" value-format="yyyy-MM-dd" type="date" placeholder="选择日期" /> -->
+          value-format="yyyy-MM-dd"/>
       </el-form-item>
-      <p/>
-      <el-form-item label="代理商名称">
-        <el-input v-model="queryParams.agentUserName" type="text" placeholder="请输入代理商名称"/>
+      <el-form-item label="场地名称">
+        <el-input v-model="queryParams.equipmentId" placeholder="请输入场地名称" clearable/>
       </el-form-item>
-      <el-form-item label="商家名称">
-        <el-input v-model="queryParams.associateSellerName" type="text" placeholder="请输入商家名称"/>
-      </el-form-item>
-      <el-form-item label="商家手机号码">
-        <el-input v-model="queryParams.associateSellerPhone" type="tel" placeholder="请输入商家手机号码"/>
-      </el-form-item>
-      <p/>
-      <el-button type="primary" icon="el-icon-search" @click="handleQueryParams">查询</el-button>
-      <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="queryList">查询</el-button>
     </el-form>
     <!-- 列表 -->
     <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
@@ -47,37 +36,26 @@
 
 <script>
 import { parseTime } from '@/utils/index'
-import { validateTel } from '@/utils/validate'
-import { fetchList } from '@/api/managerstatis'
-const NOW = Date.now()
-// 最大支持最近60天
-const OPTIONS = {
-  disabledDate: (time) => {
-    console.log(time)
-    const timeItem = time.getTime()
-    return timeItem < NOW - 24 * 60 * 60 * 60 * 1000 || timeItem > NOW
-  }
-}
+import { fetchPlaceList } from '@/api/managerstatis'
+import { options } from './utils'
 export default {
   data() {
     return {
-      queryParams: { agentUserName: '', associateSellerPhone: '', associateSellerName: '' },
+      queryParams: { equipmentId: '' },
       dateRange: [],
       listLoading: true,
       list: [],
       colums: [
-        { key: 'associateSellerPhone', label: '账号' },
-        { key: 'agentUserName', label: '代理/商家名称', width: 250 },
+        { key: 'associateSellerPhone', label: '设备编号' },
         { key: 'orderCount', label: '订单数量', sortable: true },
-        { key: 'totalIncome', label: '收入总额', sortable: true },
-        { key: 'onlineIncome', label: '在线收入', sortable: true },
-        { key: 'cashIncome', label: '现金收入', sortable: true },
-        { key: 'adIncome', label: '广告收入', sortable: true },
-        { key: 'equipmentTotalCount', label: '设备总数', sortable: true },
-        { key: 'equipmentOnlineCount', label: '在线设备数量', sortable: true }
+        { key: 'totalIncome', label: '收入总额(元)', sortable: true },
+        { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
+        { key: 'cashIncome', label: '现金收入(元)', sortable: true },
+        { key: 'adIncome', label: '广告收入(元)', sortable: true },
+        { key: 'equipmentOnlineCount', label: '在线设备状态', sortable: true }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
-      options: OPTIONS
+      options: options
     }
   },
   beforeMount() {
@@ -88,28 +66,20 @@ export default {
   },
   methods: {
     resetQueryParams() {
-      this.queryParams = { agentUserName: '', associateSellerPhone: '', associateSellerName: '' }
+      this.queryParams = { equipmentId: '' }
       this.dateRange = []
       this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
       this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     },
-    handleQueryParams() {
-      if ((this.queryParams.associateSellerPhone && validateTel(this.queryParams.associateSellerPhone)) || !this.queryParams.associateSellerPhone) {
-        this.queryList(this.pageInfo.currPage)
-      } else {
-        this.$message({ message: '请正确输入11位手机号码', type: 'error' })
-      }
-    },
     queryList(page = 1) {
       this.listLoading = true
-      this.list = []
       this.pageInfo.currPage = page
       const postData = this.queryParams
       postData.pageIndex = this.pageInfo.currPage
       postData.pageSize = this.pageInfo.pageSize
       postData.startDate = this.dateRange[0]
       postData.endDate = this.dateRange[1]
-      fetchList(postData).then(res => {
+      fetchPlaceList(postData).then(res => {
         this.listLoading = false
         if (res.data) {
           this.list = res.data && res.data.items || []

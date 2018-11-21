@@ -11,12 +11,6 @@
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd"/>
       </el-form-item>
-      <!-- <el-form-item v-if="active === 'agent'" label="代理商名称">
-        <el-input v-model="queryParams.agentUserName" type="text" placeholder="请输入代理商名称"/>
-      </el-form-item>
-      <el-form-item v-if="active === 'merchant'" label="商家名称">
-        <el-input v-model="queryParams.associateSellerName" type="text" placeholder="请输入商家名称"/>
-      </el-form-item> -->
       <el-form-item label="商家账号">
         <el-input v-model="queryParams.associateSellerPhone" type="tel" placeholder="请输入商家账号" clearable/>
       </el-form-item>
@@ -28,6 +22,11 @@
       <el-tab-pane label="商家" name="merchant">
         <!-- 列表 -->
         <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
+          <el-table-column prop="associateSellerPhone" label="账号" align="center">
+            <template slot-scope="scope">
+              <router-link :to="{path: '/add'}" style="color: blue;text-decoration: underline;">{{ scope.row.associateSellerPhone }}</router-link>
+            </template>
+          </el-table-column>
           <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
         </el-table>
         <el-pagination
@@ -45,7 +44,7 @@
       <el-tab-pane label="代理" name="agent">
         <!-- 列表 -->
         <el-table v-loading="listLoading" :data="agentList" :height="450" border style="width: 100%;margin-bottom: 20px;">
-          <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+          <el-table-column v-for="(item, index) in colums2" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
         </el-table>
         <el-pagination
           :page-sizes="[10, 20, 30, 40]"
@@ -85,6 +84,17 @@ export default {
       list: [],
       agentList: [],
       colums: [
+        // { key: 'associateSellerPhone', label: '账号' },
+        { key: 'agentUserName', label: '代理/商家名称', width: 250 },
+        { key: 'orderCount', label: '订单数量', sortable: true },
+        { key: 'totalIncome', label: '收入总额(元)', sortable: true },
+        { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
+        { key: 'cashIncome', label: '现金收入(元)', sortable: true },
+        { key: 'adIncome', label: '广告收入(元)', sortable: true },
+        { key: 'equipmentTotalCount', label: '设备总数', sortable: true },
+        { key: 'equipmentOnlineCount', label: '在线设备数量', sortable: true }
+      ],
+      colums2: [
         { key: 'associateSellerPhone', label: '账号' },
         { key: 'agentUserName', label: '代理/商家名称', width: 250 },
         { key: 'orderCount', label: '订单数量', sortable: true },
