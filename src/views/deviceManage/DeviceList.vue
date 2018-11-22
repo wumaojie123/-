@@ -76,7 +76,9 @@
     <div class="filter-container">
       <el-button v-waves type="primary" icon="el-icon-search" @click="handleBtn('find')">查询</el-button>
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-delete" @click="handleBtn('clear')">清空查询</el-button>
-      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="handleCreateQRCode()">查看二维码</el-button>
+      <el-tooltip class="item" effect="dark" content="预览支付二维码" placement="top-start">
+        <el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="handleCreateQRCode">查看二维码</el-button>
+      </el-tooltip>
       <el-button v-waves type="primary" icon="el-icon-download" @click="importQrcode('pay')">导出支付二维码</el-button>
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-download" @click="importQrcode('register')">导出注册二维码</el-button>
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-goods" @click="disabledEquipment('disable')">禁用设备</el-button>
@@ -428,7 +430,7 @@ export default {
       })
     },
     handleCreateQRCode() {
-      if (!this.checkedRow) {
+      if (!this.checkedRow.length) {
         this.$message({
           message: '请选择要生成二维码的设备！',
           type: 'warning'

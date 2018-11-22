@@ -122,19 +122,34 @@
         append-to-body>
         <span style="font-size: 16px;color: #ef6969">请选择商家</span>
       </el-dialog>
-      <el-autocomplete
-        :fetch-suggestions="querySearch"
-        v-model="selectAgent"
-        class="width270"
-        popper-class="my-autocomplete"
-        placeholder="请输入内容"
-        @select="handleSelect">
-        <template slot-scope="{ item }">
-          <div class="name">{{ item.value }}</div>
-        </template>
-      </el-autocomplete>
+      <el-row>
+        <el-col :span="6">
+          <p style="font-size: 16px;line-height: 150%;padding: 6px 0;">已选择设备：</p>
+        </el-col>
+        <el-col :span="18">
+          <p style="font-size: 16px;line-height: 150%;padding: 6px 0;">{{ willTranfers.length }} 个</p>
+        </el-col>
+      </el-row>
+      <el-row style="margin-top: 16px;align-items: center;">
+        <el-col :span="6">
+          <p style="font-size: 16px;line-height: 150%;padding: 6px 0;">转移给商家：</p>
+        </el-col>
+        <el-col :span="18">
+          <el-autocomplete
+            :fetch-suggestions="querySearch"
+            v-model="selectAgent"
+            class="width270"
+            popper-class="my-autocomplete"
+            placeholder="请输入商家名或手机号"
+            @select="handleSelect">
+            <template slot-scope="{ item }">
+              <div class="name">{{ item.value }}</div>
+            </template>
+          </el-autocomplete>
+        </el-col>
+      </el-row>
       <p v-show="infoChecked" style="padding-top: 12px;font-size: 14px;color:red;">未查询到相应的商家，请重新输入！</p>
-      <p style="padding-top: 12px;font-size: 14px;color:#666;">请选择目标商家，支持输入名称或手机号码查询。</p>
+      <!--<p style="padding-top: 12px;font-size: 14px;color:#666;">请选择目标商家，支持输入名称或手机号码查询。</p>-->
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmTranfer">确定转移</el-button>
       </span>
@@ -417,9 +432,9 @@ export default {
     transfer() {
       if (this.willTranfers.length === 0) {
         this.$message({
-          showClose: true,
+          showClose: false,
           message: '请选择要转移的设备！',
-          type: 'info'
+          type: 'warning'
         })
         return
       } else {
