@@ -18,18 +18,19 @@
     </el-form>
     <!-- 商家信息 -->
     <div class="lyy-table-header">
-      <span style="margin: 0 20px;">商家名称：952339393</span>|
-      <span style="margin: 0 20px;">商家账号：18064082092</span>
+      <span style="margin: 0 20px;">商家名称：{{ query.agentUserName }}</span>|
+      <span style="margin: 0 20px;">商家账号：{{ query.associateSellerPhone }}</span>
     </div>
     <!-- 列表 -->
     <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
       <el-table-column prop="associateSellerPhone" label="账号" align="center">
         <template slot-scope="scope">
-          <router-link :to="{path: '/equipmentReport'}" style="color: blue;text-decoration: underline;">{{ scope.row.associateSellerPhone }}</router-link>
+          <router-link :to="{path: '/equipmentReport'}" class="lyy-a-link">{{ scope.row.associateSellerPhone }}</router-link>
         </template>
       </el-table-column>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
+    <!-- 分页 -->
     <el-pagination
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pageInfo.pageSize"
@@ -48,6 +49,7 @@
 import { parseTime } from '@/utils/index'
 import { fetchPlaceList } from '@/api/managerstatis'
 import { options } from './utils'
+
 export default {
   data() {
     return {
@@ -66,10 +68,14 @@ export default {
         { key: 'equipmentOnlineCount', label: '在线设备数量', sortable: true }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
-      options: options
+      options: options,
+      query: { associateSellerPhone: '', agentUserName: '' }
     }
   },
   beforeMount() {
+    // 获取参数
+    this.query.associateSellerPhone = this.$route.query.associateSellerPhone
+    this.query.agentUserName = this.$route.query.agentUserName
     // 统计日期默认为登录日期的昨天
     this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
@@ -115,5 +121,9 @@ export default {
 .lyy-table-header{
   font-size: 16px;
   padding-bottom: 10px;
+}
+.lyy-a-link{
+  color: blue;
+  text-decoration: underline;
 }
 </style>

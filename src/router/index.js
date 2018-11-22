@@ -169,6 +169,54 @@ export let constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/businessManage',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'businessManage',
+    hidden: false,
+    meta: {
+      title: '商家管理',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: '/businesslist',
+        component: () => import('@/views/businessManage/BusinessList'),
+        name: 'BusinessList',
+        meta: { title: '商家列表' },
+        hidden: false
+      },
+      {
+        path: '/addbusiness',
+        component: () => import('@/views/businessManage/AddBusiness'),
+        name: 'AddBusiness',
+        meta: { title: '新增商家' },
+        hidden: false
+      },
+      {
+        path: '/editbusiness/:info',
+        hidden: false,
+        component: () => import('@/views/businessManage/EditBusiness'),
+        name: 'editbusiness',
+        meta: { title: '编辑商家' }
+      },
+      {
+        path: '/equipmentReport',
+        component: () => import('@/views/managerstatis/EquipmentReport'),
+        name: 'equipmentReport',
+        meta: { title: '设备报表' },
+        hidden: false
+      },
+      {
+        path: '/placeReport',
+        hidden: false,
+        component: () => import('@/views/managerstatis/PlaceReport'),
+        name: 'placeReport',
+        meta: { title: '场地报表' }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 
