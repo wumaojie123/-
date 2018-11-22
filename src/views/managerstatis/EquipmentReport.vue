@@ -11,11 +11,16 @@
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd"/>
       </el-form-item>
-      <el-form-item label="设备编号">
+      <el-form-item>
         <el-input v-model="queryParams.equipmentId" type="tel" placeholder="请输入设备编号" clearable/>
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="queryList">查询</el-button>
     </el-form>
+    <!-- 商家信息 -->
+    <div class="lyy-table-header">
+      <span style="margin: 0 20px;">商家名称：952339393</span>|
+      <span style="margin: 0 20px;">商家账号：18064082092</span>
+    </div>
     <!-- 列表 -->
     <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>

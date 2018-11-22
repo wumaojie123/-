@@ -11,13 +11,23 @@
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd"/>
       </el-form-item>
-      <el-form-item label="场地名称">
+      <el-form-item>
         <el-input v-model="queryParams.equipmentId" placeholder="请输入场地名称" clearable/>
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="queryList">查询</el-button>
     </el-form>
+    <!-- 商家信息 -->
+    <div class="lyy-table-header">
+      <span style="margin: 0 20px;">商家名称：952339393</span>|
+      <span style="margin: 0 20px;">商家账号：18064082092</span>
+    </div>
     <!-- 列表 -->
     <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
+      <el-table-column prop="associateSellerPhone" label="账号" align="center">
+        <template slot-scope="scope">
+          <router-link :to="{path: '/equipmentReport'}" style="color: blue;text-decoration: underline;">{{ scope.row.associateSellerPhone }}</router-link>
+        </template>
+      </el-table-column>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
     <el-pagination
@@ -52,7 +62,8 @@ export default {
         { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
         { key: 'cashIncome', label: '现金收入(元)', sortable: true },
         { key: 'adIncome', label: '广告收入(元)', sortable: true },
-        { key: 'equipmentOnlineCount', label: '在线设备状态', sortable: true }
+        { key: 'equipmentOnlineCount', label: '设备总数', sortable: true },
+        { key: 'equipmentOnlineCount', label: '在线设备数量', sortable: true }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
       options: options
@@ -99,3 +110,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.lyy-table-header{
+  font-size: 16px;
+  padding-bottom: 10px;
+}
+</style>

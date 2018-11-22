@@ -24,7 +24,7 @@
         <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
           <el-table-column prop="associateSellerPhone" label="账号" align="center">
             <template slot-scope="scope">
-              <router-link :to="{path: '/add'}" style="color: blue;text-decoration: underline;">{{ scope.row.associateSellerPhone }}</router-link>
+              <router-link :to="{path: '/placeReport'}" style="color: blue;text-decoration: underline;">{{ scope.row.associateSellerPhone }}</router-link>
             </template>
           </el-table-column>
           <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
@@ -84,7 +84,6 @@ export default {
       list: [],
       agentList: [],
       colums: [
-        // { key: 'associateSellerPhone', label: '账号' },
         { key: 'agentUserName', label: '代理/商家名称', width: 250 },
         { key: 'orderCount', label: '订单数量', sortable: true },
         { key: 'totalIncome', label: '收入总额(元)', sortable: true },
