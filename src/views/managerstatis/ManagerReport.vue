@@ -20,7 +20,6 @@
     <!-- tab 切换商家和代理 -->
     <el-tabs v-model="active" type="card" @tab-click = "handlerTabClick">
       <el-tab-pane label="商家" name="merchant">
-        <span slot="label">账号</span>
         <!-- 列表 -->
         <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
           <el-table-column prop="associateSellerPhone" label="账号" align="center">
