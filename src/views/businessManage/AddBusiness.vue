@@ -17,17 +17,15 @@
         <el-input v-model="baseInfo.merchantName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="11" clearable />
       </el-form-item>
       <el-form-item label="联系人姓名">
-        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" style="width: 600px;" maxlength="256" clearable />
+        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="256" clearable />
       </el-form-item>
       <el-form-item label="">
         <el-button type="primary" @click="handleBaseInfo">创建/绑定</el-button>
       </el-form-item>
-      <p style="font-size: 16px;padding-left: 120px">
-        如果该账号之前已注册，将会直接关联绑定，原账号密码不变；
-      </p>
-      <p style="font-size: 16px;padding-left: 120px">
-        如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码。
-      </p>
+      <div style="font-size: 14px;padding-left: 120px; color: #b1a8a8;">
+        <p>如果该账号之前已注册，将会直接关联绑定，原账号密码不变；</p>
+        <p>如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码</p>
+      </div>
     </el-form>
   </div>
 </template>
@@ -40,7 +38,7 @@ export default {
     return {
       baseInfo: { userName: '', linkName: '', merchantName: '', code: '' },
       baseInfoRules: {
-        userName: [{ required: true, message: '请输入商家名称', trigger: 'blur' }],
+        userName: [{ required: true, message: '请输入商家账号', trigger: 'blur' }],
         code: [{ required: true, message: '请输入4位手机验证码', trigger: 'blur' }]
       }
     }

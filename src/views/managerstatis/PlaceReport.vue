@@ -22,7 +22,7 @@
       <span style="margin: 0 20px;">商家账号：18064082092</span>
     </div>
     <!-- 列表 -->
-    <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
+    <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
       <el-table-column prop="associateSellerPhone" label="账号" align="center">
         <template slot-scope="scope">
           <router-link :to="{path: '/equipmentReport'}" style="color: blue;text-decoration: underline;">{{ scope.row.associateSellerPhone }}</router-link>

@@ -21,7 +21,7 @@
     <el-tabs v-model="active" type="card" @tab-click = "handlerTabClick">
       <el-tab-pane label="商家" name="merchant">
         <!-- 列表 -->
-        <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
+        <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
           <el-table-column prop="associateSellerPhone" label="账号" align="center">
             <template slot-scope="scope">
               <router-link :to="{path: '/placeReport'}" style="color: blue;text-decoration: underline;">{{ scope.row.associateSellerPhone }}</router-link>
@@ -43,7 +43,7 @@
       </el-tab-pane>
       <el-tab-pane label="代理" name="agent">
         <!-- 列表 -->
-        <el-table v-loading="listLoading" :data="agentList" :height="450" border style="width: 100%;margin-bottom: 20px;">
+        <el-table v-loading="listLoading" :data="agentList" show-summary border style="width: 100%;margin-bottom: 20px;">
           <el-table-column v-for="(item, index) in colums2" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
         </el-table>
         <el-pagination
