@@ -52,7 +52,7 @@ export default {
       colums: [
         { key: 'agentUserName', label: '代理商名称' },
         { key: 'userName', label: '账号' },
-        { key: 'subordinateCount', label: '下一级代理数量' },
+        { key: 'subordinateCount', label: '下一级商家数量' },
         { key: 'linkName', label: '联系人' },
         { key: 'phone', label: '手机号码' },
         // { key: 'total', label: '广告状态', width: 120 },

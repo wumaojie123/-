@@ -178,12 +178,14 @@ import { getDeviceTypeBd } from '../../api/getEquiedType'
 import { agentEquipmentList } from '../../api/getDeviceList'
 import { queryAgents } from '../../api/getAgentUserId'
 import { transfer } from '../../api/transferDevice'
+import { Throttle } from '../../utils/throttle'
 import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
 export default {
   name: 'DeviceTransfer',
   data() {
     return {
       total: 0,
+      throttle: null,
       downLoadFileName: '下载',
       questionDialogVisible: false,
       loadUrl: '',
@@ -229,6 +231,7 @@ export default {
   created() {
     const clientHeight = document.body.clientHeight || document.documentElement.clientHeight
     this.minHeightTable = clientHeight - 388
+    this.throttle = Throttle()
     getDeviceTypeBd()
       .then((res) => {
         if (res.result === 0 && res.data && res.data.length !== 0) {
@@ -283,9 +286,11 @@ export default {
         this.downLoadFileName = '注册二维码下载'
         this.loadUrl = exportRegisterOrCode({ valueStr: equipmentIds.join(',') })
       }
-      this.$nextTick(() => {
-        this.$refs.downloadZip.click()
-      })
+      this.throttle(() => {
+        this.$nextTick(() => {
+          this.$refs.downloadZip.click()
+        })
+      }, 2500)
     },
     beforeClose(done) {
       this.$refs.multipleTable.clearSelection()
@@ -434,6 +439,7 @@ export default {
     align-items: center;
     font-size: 15px;
     line-height: 150%;
+    cursor: pointer;
   }
   .question-main{
     .item{
