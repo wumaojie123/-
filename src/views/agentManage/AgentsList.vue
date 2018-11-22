@@ -1,26 +1,25 @@
 <template>
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
-      <el-form-item label="代理商名称" >
+      <!-- <el-form-item label="代理商名称" >
         <el-input v-model="queryParams.agentUserName" placeholder="请输入代理商名称" class="input-300" maxlength="64" clearable />
+      </el-form-item> -->
+      <el-form-item>
+        <el-input v-model="queryParams.userName" placeholder="请输入代理账号" class="input-300" maxlength="11" clearable />
       </el-form-item>
-      <el-form-item label="代理商账号">
-        <el-input v-model="queryParams.userName" placeholder="请输入代理商账号,账号为手机号" class="input-300" maxlength="11" clearable />
-      </el-form-item>
-      <p/>
-      <el-form-item label="联系人">
+      <!-- <el-form-item label="联系人">
         <el-input v-model="queryParams.linkName" placeholder="请输入联系人" class="input-300" maxlength="32" clearable />
       </el-form-item>
       <el-form-item label="手机号码">
         <el-input v-model="queryParams.phone" placeholder="请输入手机号码" class="input-300" maxlength="11" clearable />
-      </el-form-item>
+      </el-form-item> -->
+      <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
       <p/>
       <div class="flex-layout">
         <div class="flex-item">
-          <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
-          <el-button type="primary" @click="resetQueryParams">清空查询</el-button>
-          <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理商</el-button>
-          <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理商</el-button></router-link>
+          <!-- <el-button type="primary" @click="resetQueryParams">清空查询</el-button> -->
+          <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理</el-button>
+          <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理</el-button></router-link>
         </div>
       </div>
     </el-form>
@@ -90,7 +89,6 @@ export default {
       })
     },
     handleItem(value) {
-      // console.log(JSON.stringify(value))
       this.angentInfo = value
     },
     handleAngent(type) {
@@ -113,13 +111,11 @@ export default {
       }
     },
     handleSizeChange(pageSize) {
-      // console.log('sizeChange', pageSize)
       this.pageInfo.pageSize = pageSize
       this.pageInfo.total = 0
       this.queryList(1)
     },
     handleCurrentChange(page) {
-      // console.log('curChange:', page)
       this.queryList(page)
     },
     filerQueryList() {

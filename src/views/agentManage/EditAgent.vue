@@ -1,36 +1,31 @@
 <template>
   <div class="content-area">
-    <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
-      <el-menu-item index="1">基础信息</el-menu-item>
-    </el-menu>
-    <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfoRules" label-width="120px" label-position="left" style="margin-top: 20px;">
-      <el-form-item label="代理商名称" prop="agentUserName">
+    <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfoRules" label-width="120px" label-position="right" style="margin-top: 20px;">
+      <el-form-item label="代理账号">
+        <el-input v-model="baseInfo.loginPhone" placeholder="请输入代理商账号" class="input-300" maxlength="11" disabled />
+      </el-form-item>
+      <el-form-item label="代理商名称">
         <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" type="text" class="input-300" maxlength="64" clearable />
       </el-form-item>
-      <el-form-item label="联系人姓名" prop="linkName">
+      <el-form-item label="联系人姓名">
         <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="32" clearable />
       </el-form-item>
-      <el-form-item label="手机号码" prop="phone">
+      <el-form-item label="联系电话">
         <el-input v-model="baseInfo.phone" placeholder="请输入手机号" type="tel" class="input-300" maxlength="11" clearable />
       </el-form-item>
-      <el-form-item label="联系地址" prop="address">
+      <el-form-item label="联系地址">
         <el-input v-model="baseInfo.address" placeholder="请输入联系地址" type="text" style="width: 600px;" maxlength="256" clearable />
       </el-form-item>
-      <el-button :disabled="baseInfo.linkUserId===''" type="primary" @click="handleBaseInfo">保存</el-button>
-    </el-form>
-    <!-- 账号信息区域 -->
-    <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
-      <el-menu-item index="1">账号信息</el-menu-item>
-    </el-menu>
-    <el-form :model="baseInfo" label-width="120px" label-position="left" style="margin-top: 20px;">
-      <el-form-item label="代理商账号">
-        <el-input v-model="baseInfo.loginPhone" placeholder="请输入代理商账号" class="input-300" maxlength="11" disabled style="width: 500px;"/>
+      <el-form-item>
+        <el-button :disabled="baseInfo.linkUserId===''" type="primary" @click="handleBaseInfo">保存</el-button>
       </el-form-item>
+    </el-form>
+    <!-- <el-form :model="baseInfo" label-width="120px" label-position="left" style="margin-top: 20px;">
       <el-form-item label="关联商家">
         <el-input v-model="linkName" placeholder="请输入关联商家账号" class="input-300" maxlength="32" disabled style="width: 500px;"/>
-        <!--<span class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>-->
+        <span class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>
       </el-form-item>
-    </el-form>
+    </el-form> -->
   </div>
 </template>
 

@@ -12,7 +12,7 @@
           value-format="yyyy-MM-dd"/>
       </el-form-item>
       <el-form-item label="商家账号">
-        <el-input v-model="queryParams.associateSellerPhone" type="tel" placeholder="请输入商家账号" clearable/>
+        <el-input v-model="queryParams.associateSellerPhone" placeholder="请输入商家账号" clearable/>
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="handleQueryParams">查询</el-button>
       <!-- <el-button type="primary" @click="resetQueryParams">清空查询</el-button> -->
@@ -21,7 +21,12 @@
     <el-tabs v-model="active" type="card" @tab-click = "handlerTabClick">
       <el-tab-pane label="商家" name="merchant">
         <!-- 列表 -->
-        <el-table v-loading="listLoading" :data="list" :height="450" border style="width: 100%;margin-bottom: 20px;">
+        <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
+          <el-table-column prop="associateSellerPhone" label="账号" align="center">
+            <template slot-scope="scope">
+              <router-link :to="{path: '/placeReport', query: {agentUserName: scope.row.agentUserName, associateSellerPhone: scope.row.associateSellerPhone}}" class="lyy-a-link">{{ scope.row.associateSellerPhone }}</router-link>
+            </template>
+          </el-table-column>
           <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
         </el-table>
         <el-pagination
@@ -38,8 +43,8 @@
       </el-tab-pane>
       <el-tab-pane label="代理" name="agent">
         <!-- 列表 -->
-        <el-table v-loading="listLoading" :data="agentList" :height="450" border style="width: 100%;margin-bottom: 20px;">
-          <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+        <el-table v-loading="listLoading" :data="agentList" show-summary border style="width: 100%;margin-bottom: 20px;">
+          <el-table-column v-for="(item, index) in colums2" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
         </el-table>
         <el-pagination
           :page-sizes="[10, 20, 30, 40]"
@@ -59,7 +64,7 @@
 
 <script>
 import { parseTime } from '@/utils/index'
-import { validateTel } from '@/utils/validate'
+// import { validateTel } from '@/utils/validate'
 import { fetchList } from '@/api/managerstatis'
 const NOW = Date.now()
 // 最大支持最近60天
@@ -79,6 +84,16 @@ export default {
       list: [],
       agentList: [],
       colums: [
+        { key: 'agentUserName', label: '代理/商家名称', width: 250 },
+        { key: 'orderCount', label: '订单数量', sortable: true },
+        { key: 'totalIncome', label: '收入总额(元)', sortable: true },
+        { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
+        { key: 'cashIncome', label: '现金收入(元)', sortable: true },
+        { key: 'adIncome', label: '广告收入(元)', sortable: true },
+        { key: 'equipmentTotalCount', label: '设备总数', sortable: true },
+        { key: 'equipmentOnlineCount', label: '在线设备数量', sortable: true }
+      ],
+      colums2: [
         { key: 'associateSellerPhone', label: '账号' },
         { key: 'agentUserName', label: '代理/商家名称', width: 250 },
         { key: 'orderCount', label: '订单数量', sortable: true },
@@ -116,11 +131,11 @@ export default {
       this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     },
     handleQueryParams() {
-      if ((this.queryParams.associateSellerPhone && validateTel(this.queryParams.associateSellerPhone)) || !this.queryParams.associateSellerPhone) {
-        this.queryList(this.pageInfo.currPage)
-      } else {
-        this.$message({ message: '请输入正确的商家账号，为11位手机号码', type: 'error' })
-      }
+      this.queryList(this.pageInfo.currPage)
+      // if ((this.queryParams.associateSellerPhone && validateTel(this.queryParams.associateSellerPhone)) || !this.queryParams.associateSellerPhone) {
+      // } else {
+      //   this.$message({ message: '请输入正确的商家账号，为11位手机号码', type: 'error' })
+      // }
     },
     queryList(page = 1) {
       this.listLoading = true
@@ -140,10 +155,8 @@ export default {
         this.listLoading = false
         if (res.data) {
           const list = res.data && res.data.items || []
-          console.log(list)
           if (this.active === 'merchant') {
             this.list = list
-            console.log(this.list.length)
           } else if (this.active === 'agent') {
             this.agentList = list
           }
@@ -163,3 +176,19 @@ export default {
   }
 }
 </script>
+
+<style>
+.el-tabs__item.is-active {
+    color: #fff;
+    background: #409eff;
+}
+.lyy-a-link{
+  color: blue;
+  text-decoration: underline;
+}
+.lyy-a-link:hover{
+  color: blue;
+  text-decoration: underline;
+}
+</style>
+

@@ -7,8 +7,8 @@
       <el-button type="primary" icon="el-icon-search" @click="filterQueryList">查询</el-button>
       <div class="flex-layout">
         <div class="flex-item">
-          <!-- <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button> -->
-          <!-- <router-link :to="{path: '/addbusiness'}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link> -->
+          <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button>
+          <router-link :to="{path: '/addbusiness'}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link>
         </div>
       </div>
     </el-form>
@@ -78,7 +78,7 @@ export default {
     handleAngent(type) {
       if (this.angentInfo.length === 1) {
         if (type === 'edit') {
-          this.$router.push({ path: '/editbusiness', query: { ID: this.angentInfo[0].agentUserId, action: 'edit' }})
+          this.$router.push({ name: 'editbusiness', params: { info: encodeURIComponent(JSON.stringify(this.angentInfo[0])) }})
         } else if (type === 'del') {
           this.$confirm('是否删除该商家信息', {
             callback: action => {
