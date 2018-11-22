@@ -18,8 +18,9 @@
     </el-form>
     <!-- 商家信息 -->
     <div class="lyy-table-header">
-      <span style="margin: 0 20px;">商家名称：952339393</span>|
-      <span style="margin: 0 20px;">商家账号：18064082092</span>
+      <span style="margin: 0 20px;">商家名称：{{ query.agentUserName }}</span>|
+      <span style="margin: 0 20px;">商家账号：{{ query.associateSellerPhone }}</span>|
+      <span style="margin: 0 20px;">场地：18064082092</span>
     </div>
     <!-- 列表 -->
     <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
@@ -60,22 +61,20 @@ export default {
         { key: 'equipmentOnlineCount', label: '在线设备状态', sortable: true }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
-      options: options
+      options: options,
+      query: { associateSellerPhone: '', agentUserName: '' }
     }
   },
   beforeMount() {
+    // 获取参数
+    this.query.associateSellerPhone = this.$route.query.associateSellerPhone
+    this.query.agentUserName = this.$route.query.agentUserName
     // 统计日期默认为登录日期的昨天
     this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.queryList()
   },
   methods: {
-    resetQueryParams() {
-      this.queryParams = { equipmentId: '' }
-      this.dateRange = []
-      this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
-      this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
-    },
     queryList(page = 1) {
       this.listLoading = true
       this.pageInfo.currPage = page

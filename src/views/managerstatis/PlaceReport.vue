@@ -25,7 +25,7 @@
     <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
       <el-table-column prop="associateSellerPhone" label="账号" align="center">
         <template slot-scope="scope">
-          <router-link :to="{path: '/equipmentReport'}" class="lyy-a-link">{{ scope.row.associateSellerPhone }}</router-link>
+          <router-link :to="{path: '/equipmentReport', query: {agentUserName: query.agentUserName, associateSellerPhone: query.associateSellerPhone}}" class="lyy-a-link">{{ scope.row.associateSellerPhone }}</router-link>
         </template>
       </el-table-column>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
@@ -82,12 +82,6 @@ export default {
     this.queryList()
   },
   methods: {
-    resetQueryParams() {
-      this.queryParams = { equipmentId: '' }
-      this.dateRange = []
-      this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
-      this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
-    },
     queryList(page = 1) {
       this.listLoading = true
       this.pageInfo.currPage = page
