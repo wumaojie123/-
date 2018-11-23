@@ -52,22 +52,22 @@
       </el-menu>
       <br>
       <br>
-      <el-form-item label="代理商账号" prop="phone">
+      <el-form-item label="代理账号" prop="phone">
         <el-input
           v-model="baseInfo.loginPhone"
           placeholder="请输入手机号"
           type="number"
           class="input-300"
-          maxlength="11"
-          @blur="accountOnBlur"/>
-        <span class="input-anno">请输入手机号码，如果客户此前有注册乐摇摇商家账号，请输入相同的号码。</span>
+          maxlength="11"/>
+        <!--<span class="input-anno">请输入手机号码，如果客户此前有注册乐摇摇商家账号，请输入相同的号码。</span>-->
+        <span class="input-anno">代理账号设置后，不可修改。</span>
       </el-form-item>
-      <el-form-item label="关联商家">
-        <div style="" v-html="restaurants"/>
-      </el-form-item>
+      <!--<el-form-item label="关联商家">-->
+      <!--<div style="" v-html="restaurants"/>-->
+      <!--</el-form-item>-->
       <br>
-      <p style="margin: 10px;padding-bottom:10px;color: red;">{{ `注意：代理商后台与商家后台的登录账号都是手机号码。如果此前未注册，初始密码16881688，请提醒用户及时更换密码。如果此前已经注册，密码不会更改` }}</p>
-      <el-button type="primary" @click="handleAccountInfo">保存</el-button>
+      <p style="margin: 10px;padding-bottom:10px;color: red;">{{ `注意：如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码。` }}</p>
+      <el-button type="primary" @click="handleAccountInfo">创建</el-button>
     </el-form>
   </div>
 </template>
@@ -245,7 +245,6 @@ export default {
         return false
       }
       this.$refs['baseInfoRef'].validate(valid => {
-        console.log(valid, 'valid')
         if (valid) {
           const info = this.baseInfo
           const tempCheckBoxArr = []
@@ -256,8 +255,6 @@ export default {
               }
             })
           }
-
-          console.log(info, '-表单的信息-')
           const submitData = {
             type: 1, // 0:BD用户 1:一级代理商  2:子级代理商
             code: '', // 短信验证码
