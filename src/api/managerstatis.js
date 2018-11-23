@@ -10,16 +10,16 @@ export function fetchList(data) {
 
 export function fetchPlaceList(data) {
   return request({
-    url: '/rest/reportFroms/query',
-    method: 'post',
-    data
+    url: '/rest/benefit/group',
+    method: 'get',
+    params: data
   })
 }
 
 export function equipmentList(data) {
   return request({
-    url: '/rest/reportFroms/query',
-    method: 'post',
-    data
+    url: '/rest/benefit/equipment',
+    method: 'get',
+    params: data
   })
 }
