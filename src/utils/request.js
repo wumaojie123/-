@@ -38,11 +38,6 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     if (res.result !== 0) {
-      Message({
-        message: res.description,
-        type: 'error',
-        duration: 5 * 1000
-      })
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
       if (res.result === 401 || res.result === 402 || res.result === 403) {
         // 请自行在引入 MessageBox
@@ -60,6 +55,12 @@ service.interceptors.response.use(
           store.dispatch('FedLogOut').then(() => {
             location.reload() // 为了重新实例化vue-router对象 避免bug
           })
+        })
+      } else {
+        Message({
+          message: res.description,
+          type: 'error',
+          duration: 5 * 1000
         })
       }
       return Promise.reject('error')

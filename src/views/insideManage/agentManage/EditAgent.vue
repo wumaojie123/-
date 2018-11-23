@@ -38,7 +38,7 @@
       </el-menu>
       <br>
       <br>
-      <el-form-item label="代理商登录账号" prop="account">
+      <el-form-item label="代理账号" prop="account">
         <el-input
           v-model="baseInfo.loginPhone"
           :placeholder="baseInfo.loginPhone"
@@ -46,11 +46,11 @@
           type="number"
           class="input-300"
           @blur="accountOnBlur"/>
-        <span class="input-anno">请输入手机号码，如果客户此前有注册乐摇摇商家账号，请输入相同的号码。</span>
+        <span class="input-anno">账号暂不支持修改。</span>
       </el-form-item>
-      <el-form-item label="关联商家">
-        <div style="">{{ restaurants || '未找到此账号!' }}</div>
-      </el-form-item>
+      <!--<el-form-item label="关联商家">-->
+      <!--<div style="">{{ restaurants || '未找到此账号!' }}</div>-->
+      <!--</el-form-item>-->
       <br>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
