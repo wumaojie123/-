@@ -12,7 +12,7 @@
           value-format="yyyy-MM-dd"/>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="query.equipmentId" placeholder="请输入设备编号" clearable/>
+        <el-input v-model="query.equipmentValue" placeholder="请输入设备编号" clearable/>
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="queryList">查询</el-button>
     </el-form>
@@ -61,7 +61,7 @@ export default {
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
       options: options,
-      query: { groupId: '', userName: '', equipmentId: '' },
+      query: { groupId: '', userName: '', equipmentValue: '' },
       groupName: ''
     }
   },
@@ -105,3 +105,13 @@ export default {
   }
 }
 </script>
+<style>
+.lyy-table-header{
+  font-size: 16px;
+  padding-bottom: 10px;
+}
+.lyy-a-link{
+  color: blue;
+  text-decoration: underline;
+}
+</style>

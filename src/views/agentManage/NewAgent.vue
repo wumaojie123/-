@@ -7,7 +7,6 @@
       </el-form-item>
       <el-form-item label="账号状态">
         <el-input v-show="!description" v-model="linkName" placeholder="系统自动识别" class="input-300" maxlength="32" disabled/>
-        <!-- <span v-show="description" style="font-size: 14px;color: red;">{{ description }}</span> -->
         <span v-if="type==='edit'" class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>
       </el-form-item>
       <el-form-item label="短信验证码" prop="code">
@@ -21,7 +20,7 @@
       <el-form-item label="联系人姓名">
         <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="32" clearable />
       </el-form-item>
-      <el-form-item label="联系电话">
+      <el-form-item label="联系电话" prop="phone">
         <el-input v-model="baseInfo.phone" placeholder="请输入手机号" type="tel" class="input-300" maxlength="11" clearable />
       </el-form-item>
       <el-form-item label="联系地址">
@@ -45,17 +44,10 @@ import { validateTel } from '@/utils/validate'
 export default {
   data() {
     return {
-      // 操作类型
-      type: 'new',
-      description: null,
       linkName: '',
-      baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', type: 2, linkUserId: '' },
-      // baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', type: 2 },
+      baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', linkUserId: '' },
       baseInfoRules: {
-        agentUserName: [{ required: true, message: '请输入代理商名称', trigger: 'blur' }],
-        linkName: [{ required: true, message: '请输入联系人姓名', trigger: 'blur' }],
-        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }, { validator: telCheck, trigger: 'blur' }],
-        address: [{ required: true, message: '请输入联系地址', trigger: 'blur' }],
+        phone: [{ validator: telCheck, trigger: 'blur' }],
         loginPhone: [{ required: true, message: '请输入代理商账号', trigger: 'blur' }],
         code: [{ required: true, message: '请输入4位手机验证码', trigger: 'blur' }]
       }
@@ -123,11 +115,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-  .borderNone{
-    input{
-      border: none;
-      background-color: #fff;
-    }
-  }
-</style>
