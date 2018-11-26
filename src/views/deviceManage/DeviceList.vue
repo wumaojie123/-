@@ -103,6 +103,11 @@
       <!--<el-radio :label="scope.row.equipmentId" v-model="checked" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>-->
       <!--</template>-->
       <!--</el-table-column>-->
+      <el-table-column label="角色" align="center" prop="role">
+        <template slot-scope="scope">
+          <span>{{ scope.row.role }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="设备编号" align="center" prop="equipmentId">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentId }}</span>
