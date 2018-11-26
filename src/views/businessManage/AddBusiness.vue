@@ -59,7 +59,7 @@ export default {
       const postData = this.baseInfo
       add(postData).then(res => {
         if (res.result === 0) {
-          this.$message({ message: '新增商家信息成功', type: 'success' })
+          this.$message({ message: res.data, type: 'success' })
           setTimeout(() => {
             this.$router.go(-1)
           }, 2000)
@@ -73,21 +73,20 @@ export default {
       this.baseInfo.linkUserId = ''
     },
     handelBlur() {
-      this.baseInfo.linkUserId = ''
+      // this.baseInfo.linkUserId = ''
       if (!validateTel(this.baseInfo.loginPhone)) {
         return
       }
       getMerchant({ phone: this.baseInfo.loginPhone }).then(res => {
-        console.log(res.result)
         if (res.result === 0 && res.data && res.data.adUserId) {
-          this.baseInfo.linkUserId = res.data.adUserId
+          // this.baseInfo.linkUserId = res.data.adUserId
           this.state = '已注册'
         } else if (res.result === 0 && !res.data) {
-          this.description = res.description
+          // this.description = res.description
           this.state = '未注册'
         } else if (res.result === -1) {
           this.state = ''
-          this.baseInfo.linkUserId = ''
+          // this.baseInfo.linkUserId = ''
         }
       })
     },
