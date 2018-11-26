@@ -191,7 +191,7 @@
 <script>
 import { getDeviceTypeBd } from '../../api/getEquiedType'
 import { agentEquipmentList } from '../../api/getDeviceList'
-import { queryAgents } from '../../api/getAgentUserId'
+import { childMerchants } from '../../api/businessManage'
 import { transfer } from '../../api/transferDevice'
 import { Throttle } from '../../utils/throttle'
 import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
@@ -333,7 +333,7 @@ export default {
       })
       const params = {
         values: arrTrans,
-        agentUserId: this.agentid
+        adorgid: this.agentid
       }
       transfer(params)
         .then(() => {
@@ -360,14 +360,14 @@ export default {
       if (quer) {
         queryString = quer[1] && quer[1].trim()
       }
-      queryAgents({ agentQuery: queryString })
+      childMerchants({ agentQuery: queryString })
         .then(res => {
           if (res.result === 0 && res.data && res.data.length !== 0) {
             const results = []
             res.data.forEach(item => {
               results.push({
-                value: `${item.agentusername} (${item.phone})`,
-                agentId: item.agentuserid
+                value: `${item.merchantname} (${item.username})`,
+                agentId: item.adorgid
               })
             })
             this.agentsArr = results

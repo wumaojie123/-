@@ -8,6 +8,13 @@ export function fetchList(data) {
   })
 }
 
+export function childMerchants(query) {
+  return request({
+    url: '/merchant/childMerchants/query',
+    method: 'get',
+    params: query
+  })
+}
 export function getCode(query) {
   return request({
     url: '/agentManage/sendCode',
