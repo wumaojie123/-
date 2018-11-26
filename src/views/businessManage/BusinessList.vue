@@ -1,14 +1,14 @@
 <template>
   <div class="content-area">
-    <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
-      <el-form-item label="商家账号" >
+    <el-form :inline="true" style="margin-bottom: 20px;" label-position="right">
+      <el-form-item>
         <el-input v-model="queryParams.userName" placeholder="请输入商家账号" class="input-300" maxlength="11" clearable />
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="filterQueryList">查询</el-button>
       <div class="flex-layout">
         <div class="flex-item">
           <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button>
-          <router-link :to="{path: '/addbusiness'}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link>
+          <router-link :to="{path: '/addbusiness', query: {info: angentInfo[0]}}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link>
         </div>
       </div>
     </el-form>
@@ -36,7 +36,6 @@ export default {
     return {
       queryParams: { userName: '' },
       listLoading: true,
-      // queryParams: { agentUserName: '', userName: '', linkName: '', phone: '' },
       list: [],
       colums: [
         { key: 'merchantName', label: '商家名称' },

@@ -25,7 +25,15 @@ export function getCode(query) {
 
 export function update(data) {
   return request({
-    url: '/agentManage/addOrUpdateAgent',
+    url: '/agentManage/updateMerchant',
+    method: 'post',
+    data
+  })
+}
+
+export function add(data) {
+  return request({
+    url: '/agentManage/addMerchant',
     method: 'post',
     data
   })

@@ -12,15 +12,15 @@
           value-format="yyyy-MM-dd"/>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="queryParams.equipmentId" type="tel" placeholder="请输入设备编号" clearable/>
+        <el-input v-model="query.equipmentValue" placeholder="请输入设备编号" clearable/>
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="queryList">查询</el-button>
     </el-form>
     <!-- 商家信息 -->
     <div class="lyy-table-header">
-      <span style="margin: 0 20px;">商家名称：{{ query.agentUserName }}</span>|
-      <span style="margin: 0 20px;">商家账号：{{ query.associateSellerPhone }}</span>|
-      <span style="margin: 0 20px;">场地：18064082092</span>
+      <span style="margin: 0 20px;">商家名称：{{ $route.query.name }}</span>|
+      <span style="margin: 0 20px;">商家账号：{{ query.userName }}</span>|
+      <span style="margin: 0 20px;">场地：{{ groupName }}</span>
     </div>
     <!-- 列表 -->
     <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
@@ -47,28 +47,30 @@ import { options } from './utils'
 export default {
   data() {
     return {
-      queryParams: { equipmentId: '' },
       dateRange: [],
       listLoading: true,
       list: [],
       colums: [
-        { key: 'associateSellerPhone', label: '设备编号' },
+        { key: 'eValue', label: '设备编号' },
         { key: 'orderCount', label: '订单数量', sortable: true },
         { key: 'totalIncome', label: '收入总额(元)', sortable: true },
         { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
         { key: 'cashIncome', label: '现金收入(元)', sortable: true },
         { key: 'adIncome', label: '广告收入(元)', sortable: true },
-        { key: 'equipmentOnlineCount', label: '在线设备状态', sortable: true }
+        { key: 'status', label: '在线设备状态' }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
       options: options,
-      query: { associateSellerPhone: '', agentUserName: '' }
+      query: { groupId: '', userName: '', equipmentValue: '' },
+      groupName: ''
     }
   },
   beforeMount() {
-    // 获取参数
+    // 获取参数 商家账号 产地ID, 场地名称，商家名称
+    this.query.userName = this.$route.query.userName
+    this.query.groupId = this.$route.query.groupId
     this.query.associateSellerPhone = this.$route.query.associateSellerPhone
-    this.query.agentUserName = this.$route.query.agentUserName
+    this.groupName = this.$route.query.groupName
     // 统计日期默认为登录日期的昨天
     this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
@@ -78,7 +80,7 @@ export default {
     queryList(page = 1) {
       this.listLoading = true
       this.pageInfo.currPage = page
-      const postData = this.queryParams
+      const postData = this.query
       postData.pageIndex = this.pageInfo.currPage
       postData.pageSize = this.pageInfo.pageSize
       postData.startDate = this.dateRange[0]
@@ -103,3 +105,13 @@ export default {
   }
 }
 </script>
+<style>
+.lyy-table-header{
+  font-size: 16px;
+  padding-bottom: 10px;
+}
+.lyy-a-link{
+  color: blue;
+  text-decoration: underline;
+}
+</style>

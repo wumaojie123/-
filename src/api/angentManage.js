@@ -18,7 +18,15 @@ export function getCode(query) {
 
 export function update(data) {
   return request({
-    url: '/agentManage/addOrUpdateAgent',
+    url: '/agentManage/updateAgent',
+    method: 'post',
+    data
+  })
+}
+
+export function addAngent(data) {
+  return request({
+    url: '/agentManage/addAgent',
     method: 'post',
     data
   })
