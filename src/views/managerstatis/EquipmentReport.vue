@@ -14,7 +14,7 @@
       <el-form-item>
         <el-input v-model="query.equipmentValue" placeholder="请输入设备编号" clearable/>
       </el-form-item>
-      <el-button type="primary" icon="el-icon-search" @click="queryList">查询</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="queryList(1)">查询</el-button>
     </el-form>
     <!-- 商家信息 -->
     <div class="lyy-table-header">
