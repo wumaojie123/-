@@ -25,7 +25,7 @@
     <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
       <el-table-column prop="associateSellerPhone" label="场地名称" align="center">
         <template slot-scope="scope">
-          <router-link :to="{path: '/equipmentReport', query: {userName: query.userName, groupId: scope.row.groupId, groupName: scope.row.groupName, name: agentUserName}}" class="lyy-a-link">{{ scope.row.groupName }}</router-link>
+          <router-link :to="{path: '/equipmentReport', query: {begin: dateRange[0], end: dateRange[1], userName: query.userName, groupId: scope.row.groupId, groupName: scope.row.groupName, name: agentUserName}}" class="lyy-a-link">{{ scope.row.groupName }}</router-link>
         </template>
       </el-table-column>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { parseTime } from '@/utils/index'
+// import { parseTime } from '@/utils/index'
 import { fetchPlaceList } from '@/api/managerstatis'
 import { options } from './utils'
 
@@ -76,8 +76,10 @@ export default {
     this.query.userName = this.$route.query.associateSellerPhone
     this.agentUserName = this.$route.query.agentUserName
     // 统计日期默认为登录日期的昨天
-    this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
-    this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+    this.dateRange[0] = this.$route.query.begin
+    this.dateRange[1] = this.$route.query.end
+    // this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+    // this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.queryList()
   },
   methods: {

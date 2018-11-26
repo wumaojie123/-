@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { parseTime } from '@/utils/index'
+// import { parseTime } from '@/utils/index'
 import { equipmentList } from '@/api/managerstatis'
 import { options } from './utils'
 export default {
@@ -72,8 +72,8 @@ export default {
     this.query.associateSellerPhone = this.$route.query.associateSellerPhone
     this.groupName = this.$route.query.groupName
     // 统计日期默认为登录日期的昨天
-    this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
-    this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+    this.dateRange[0] = this.$route.query.begin
+    this.dateRange[1] = this.$route.query.end
     this.queryList()
   },
   methods: {

@@ -10,7 +10,7 @@
         <span v-if="type==='edit'" class="input-anno">如需更改，请输入新的手机号码重新进行绑定验证</span>
       </el-form-item> -->
       <el-form-item label="短信验证码" prop="code">
-        <el-input v-model="baseInfo.code" placeholder="请输入短信验证码" style="width: 150px;margin-right: 32px;" maxlength="4" clearable />
+        <el-input v-model="baseInfo.code" placeholder="请输入短信验证码" style="width: 160px;margin-right: 22px;" maxlength="4" clearable />
         <el-button type="primary" @click="getCode">获取验证码</el-button>
         <span class="input-anno">请及时让代理告知短信验证码</span>
       </el-form-item>

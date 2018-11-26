@@ -24,7 +24,7 @@
         <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
           <el-table-column prop="associateSellerPhone" label="账号" align="center">
             <template slot-scope="scope">
-              <router-link :to="{path: '/placeReport', query: {agentUserName: scope.row.agentUserName, associateSellerPhone: scope.row.associateSellerPhone}}" class="lyy-a-link">{{ scope.row.associateSellerPhone }}</router-link>
+              <router-link :to="{path: '/placeReport', query: {agentUserName: scope.row.agentUserName, associateSellerPhone: scope.row.associateSellerPhone, begin: dateRange[0], end: dateRange[1]}}" class="lyy-a-link">{{ scope.row.associateSellerPhone }}</router-link>
             </template>
           </el-table-column>
           <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
