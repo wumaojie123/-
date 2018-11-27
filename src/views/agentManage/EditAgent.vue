@@ -47,10 +47,10 @@ export default {
   },
   methods: {
     handleBaseInfo() {
-      if (!this.baseInfo.linkUserId) {
-        this.$message({ message: '关联商家相关信息获取失败，无法修改', type: 'error' })
-        return
-      }
+      // if (!this.baseInfo.linkUserId) {
+      //   this.$message({ message: '关联商家相关信息获取失败，无法修改', type: 'error' })
+      //   return
+      // }
       this.$refs['baseInfoRef'].validate((valid) => {
         if (valid) {
           this.handleAngentInfo()
