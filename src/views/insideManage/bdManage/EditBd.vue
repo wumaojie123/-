@@ -36,10 +36,10 @@ export default {
       this.$refs['InsideManageEditBdRef'].validate(valid => {
         if (valid) {
           this.editBD({
-            type: 0,
+            // type: 0,
             agentUserId: this.BDInfo.agentUserId,
             phone: this.BDInfo.phone,
-            agentUserName: this.BDInfo.name
+            bdName: this.BDInfo.name
           })
         } else {
           return false

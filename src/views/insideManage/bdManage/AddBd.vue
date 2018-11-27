@@ -33,8 +33,7 @@ export default {
       this.$refs['BDInfoRef'].validate(valid => {
         if (valid) {
           this.creatBd({
-            type: 0,
-            agentUserName: this.BDInfo.name,
+            bdName: this.BDInfo.name,
             loginPhone: this.BDInfo.phone
           })
         } else {

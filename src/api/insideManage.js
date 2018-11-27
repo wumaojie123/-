@@ -76,7 +76,7 @@ export default class insideManageAPI {
   // 更新 BD 数据(最新 2018-11-27)
   static async addBDInfo(data) {
     return request({
-      url: '/agentManage/updateBD',
+      url: '/agentManage/addBD',
       method: 'post',
       data
     })
