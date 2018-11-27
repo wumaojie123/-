@@ -38,7 +38,7 @@
 
 <script>
 import { telCheck } from '@/utils/rules'
-import { getMerchant, getCode, addAngent } from '@/api/angentManage'
+import { getCode, addAngent } from '@/api/angentManage'
 import { validateTel } from '@/utils/validate'
 export default {
   data() {
@@ -78,25 +78,25 @@ export default {
       this.linkName = ''
       this.baseInfo.linkUserId = ''
     },
-    handelBlur() {
-      this.baseInfo.linkUserId = ''
-      if (!validateTel(this.baseInfo.loginPhone)) {
-        this.$message({ message: '请输入正确的代理账号(11手机号)', type: 'error' })
-        return
-      }
-      getMerchant({ phone: this.baseInfo.loginPhone }).then(res => {
-        console.log(res.result)
-        if (res.result === 0 && res.data && res.data.adUserId) {
-          this.baseInfo.linkUserId = res.data.adUserId
-          // this.linkName = `${res.data.name}`
-          this.linkName = '已注册'
-        } else if (res.result === 0 && !res.data) {
-          this.linkName = '未注册'
-        } else if (res.result === -1) {
-          this.linkName = ''
-        }
-      })
-    },
+    // handelBlur() {
+    //   this.baseInfo.linkUserId = ''
+    //   if (!validateTel(this.baseInfo.loginPhone)) {
+    //     this.$message({ message: '请输入正确的代理账号(11手机号)', type: 'error' })
+    //     return
+    //   }
+    //   getMerchant({ phone: this.baseInfo.loginPhone }).then(res => {
+    //     console.log(res.result)
+    //     if (res.result === 0 && res.data && res.data.adUserId) {
+    //       this.baseInfo.linkUserId = res.data.adUserId
+    //       // this.linkName = `${res.data.name}`
+    //       this.linkName = '已注册'
+    //     } else if (res.result === 0 && !res.data) {
+    //       this.linkName = '未注册'
+    //     } else if (res.result === -1) {
+    //       this.linkName = ''
+    //     }
+    //   })
+    // },
     getCode() {
       if (!validateTel(this.baseInfo.loginPhone)) {
         this.$message({ message: '请输入正确的代理账号(11手机号)', type: 'error' })
