@@ -44,8 +44,7 @@
           :placeholder="baseInfo.loginPhone"
           :disabled="true"
           type="number"
-          class="input-300"
-          @blur="accountOnBlur"/>
+          class="input-300"/>
         <span class="input-anno">账号暂不支持修改。</span>
       </el-form-item>
       <!--<el-form-item label="关联商家">-->
@@ -244,27 +243,27 @@ export default {
     },
     accountOnBlur() {
       // 调用 callback 返回建议列表的数据
-      const phone = this.baseInfo.loginPhone
-      insideManage.getShanghuInfo(phone).then(
-        res => {
-          if (res && res.data) {
-            this.restaurants = `${res.data.name || null})`
-          } else {
-            if (this.baseInfo.account === '') {
-              this.restaurants = ''
-            } else {
-              this.restaurants = '不存在此账号!'
-            }
-          }
-        },
-        () => {
-          if (this.baseInfo.account === '') {
-            this.restaurants = ''
-          } else {
-            this.restaurants = '不存在此账号!'
-          }
-        }
-      )
+      // const phone = this.baseInfo.loginPhone
+      // insideManage.getShanghuInfo(phone).then(
+      //   res => {
+      //     if (res && res.data) {
+      //       this.restaurants = `${res.data.name || null})`
+      //     } else {
+      //       if (this.baseInfo.account === '') {
+      //         this.restaurants = ''
+      //       } else {
+      //         this.restaurants = '不存在此账号!'
+      //       }
+      //     }
+      //   },
+      //   () => {
+      //     if (this.baseInfo.account === '') {
+      //       this.restaurants = ''
+      //     } else {
+      //       this.restaurants = '不存在此账号!'
+      //     }
+      //   }
+      // )
     },
     createFilter(queryString) {
       return restaurant => {
@@ -294,7 +293,7 @@ export default {
               acc: data.phone
             }
             this.agentProject = data.agentBusiness
-            this.accountOnBlur()
+            // this.accountOnBlur()
             const tempArr = []
             this.allBusinProjects &&
               this.allBusinProjects.length > 0 &&
