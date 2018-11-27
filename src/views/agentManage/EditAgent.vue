@@ -26,7 +26,7 @@
 
 <script>
 import { telCheck } from '@/utils/rules'
-import { getAngent, getMerchant, update } from '@/api/angentManage'
+import { getAngent, update } from '@/api/angentManage'
 export default {
   data() {
     return {
@@ -69,7 +69,7 @@ export default {
               this.baseInfo[key] = angentDetail[key] || ''
             }
           }
-          this.getMerchant()
+          // this.getMerchant()
         } else {
           this.$message({ message: '获取代理商数据失败，请稍后再试', type: 'error' })
         }
@@ -87,17 +87,17 @@ export default {
           this.$message({ message: '修改代理商信息失败', type: 'error' })
         }
       })
-    },
-    getMerchant() {
-      getMerchant({ phone: this.baseInfo.loginPhone }).then(res => {
-        if (res.result === 0 && res.data) {
-          this.baseInfo.linkUserId = res.data.adUserId
-          this.linkName = res.data.name
-        } else {
-          this.$message({ message: '数据查询失败，请稍后再试', type: 'error' })
-        }
-      })
     }
+    // getMerchant() {
+    //   getMerchant({ phone: this.baseInfo.loginPhone }).then(res => {
+    //     if (res.result === 0 && res.data) {
+    //       this.baseInfo.linkUserId = res.data.adUserId
+    //       this.linkName = res.data.name
+    //     } else {
+    //       this.$message({ message: '数据查询失败，请稍后再试', type: 'error' })
+    //     }
+    //   })
+    // }
   }
 }
 </script>
