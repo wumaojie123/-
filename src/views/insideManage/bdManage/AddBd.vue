@@ -34,7 +34,8 @@ export default {
         if (valid) {
           this.creatBd({
             bdName: this.BDInfo.name,
-            loginPhone: this.BDInfo.phone
+            loginPhone: this.BDInfo.phone,
+            type: 0
           })
         } else {
           return false

@@ -65,6 +65,7 @@ export default {
     // 保存或者跟新代理商信息
     handleAngentInfo() {
       const postData = this.baseInfo
+      postData.type = 2
       addAngent(postData).then(res => {
         if (res.result === 0) {
           this.$message({ message: '新增代理信息成功', type: 'success' })

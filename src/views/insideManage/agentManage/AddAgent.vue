@@ -254,7 +254,7 @@ export default {
             })
           }
           const submitData = {
-            // type: 1, // 0:BD用户 1:一级代理商  2:子级代理商
+            type: 1, // 0:BD用户 1:一级代理商  2:子级代理商
             loginPhone: info.loginPhone, // 登录账号
             code: '', // 短信验证码
             contractId: info.contractId, // 合同号
