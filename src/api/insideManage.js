@@ -25,7 +25,7 @@ export default class insideManageAPI {
       params: { agentUserId }
     })
   }
-  // 添加/修改代理商/BD
+  // 添加/修改代理商/BD(废弃)
   static async updateAgentInfo(data) {
     return request({
       url: '/agentManage/addOrUpdateAgent',
@@ -33,7 +33,23 @@ export default class insideManageAPI {
       data
     })
   }
-  // 新增 BD
+  // 添加/修改代理商/BD(最新 2018-11-27)
+  static async updateAgent(data) {
+    return request({
+      url: '/agentManage/updateAgent',
+      method: 'post',
+      data
+    })
+  }
+  // 添加代理商/BD(最新 2018-11-27)
+  static async addAgentInfo(data) {
+    return request({
+      url: '/agentManage/addAgent',
+      method: 'post',
+      data
+    })
+  }
+  // 新增 BD（废弃）
   static async addBD(data) {
     return request({
       url: '/agentManage/addOrUpdateAgent',
@@ -41,10 +57,26 @@ export default class insideManageAPI {
       data
     })
   }
-  // 更新 BD 数据
+  // 更新 BD 数据（废弃）
   static async updateBDInfo(data) {
     return request({
       url: '/insideManage/addAgent',
+      method: 'post',
+      data
+    })
+  }
+  // 更新 BD 数据(最新 2018-11-27)
+  static async updateBD(data) {
+    return request({
+      url: '/agentManage/updateBD',
+      method: 'post',
+      data
+    })
+  }
+  // 更新 BD 数据(最新 2018-11-27)
+  static async addBDInfo(data) {
+    return request({
+      url: '/agentManage/updateBD',
       method: 'post',
       data
     })

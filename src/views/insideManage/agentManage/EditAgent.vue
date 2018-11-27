@@ -328,7 +328,7 @@ export default {
     },
     // 获取代理商信息
     updataAgentInfo(submitData) {
-      insideManage.updateAgentInfo(submitData).then(
+      insideManage.updateAgent(submitData).then(
         res => {
           if (res) {
             this.$message({
@@ -366,17 +366,17 @@ export default {
           }
           console.log(info, '-表单的信息-')
           const submitData = {
-            type: 1, // 0:BD用户 1:一级代理商  2:子级代理商
-            code: '', // 短信验证码
-            agentUserId: info.agentUserId, // 代理商Id，修改时使用
+            // type: 1, // 0:BD用户 1:一级代理商  2:子级代理商
+            // code: '', // 短信验证码
             contractId: info.num, // 合同号
             agentUserName: info.agentUserName, // 代理商名称
             linkName: info.linkName, // 联系人姓名
             phone: info.phone, // 手机号
             address: info.address, // 联系地址
+            agentUserId: info.agentUserId, // 代理商Id，修改时使用
             bdId: info.BD, // BD同事ID
-            loginPhone: info.password, // 登录账号
-            agentBusinessIds: tempCheckBoxArr // 经营项目
+            agentBusinessIds: tempCheckBoxArr, // 经营项目
+            loginPhone: info.password // 登录账号
           }
           this.updataAgentInfo(submitData)
         } else {

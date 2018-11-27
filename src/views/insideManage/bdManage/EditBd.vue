@@ -56,7 +56,7 @@ export default {
       })
     },
     editBD(data) {
-      insideManage.updateAgentInfo(data).then(res => {
+      insideManage.updateBD(data).then(res => {
         this.$message({
           message: '修改成功!',
           type: 'success'
@@ -65,7 +65,7 @@ export default {
           this.$router.push({ path: 'insideManage/bdRoleManage' })
         }, 500)
       }, err => {
-        console.log(err, 'updateAgentInfo')
+        console.log(err, 'updateBD')
       })
     }
   }

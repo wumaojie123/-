@@ -130,8 +130,6 @@ export default {
       return temArr
     }
   },
-  watch: {
-  },
   async created() {
     await this.getBDList()
     await this.getBusinProjects()
@@ -222,7 +220,7 @@ export default {
 
     // 获取代理商信息
     updataAgentInfo(submitData) {
-      insideManage.updateAgentInfo(submitData).then(res => {
+      insideManage.addAgentInfo(submitData).then(res => {
         if (res) {
           this.$message({
             message: '新增成功!',
@@ -256,18 +254,18 @@ export default {
             })
           }
           const submitData = {
-            type: 1, // 0:BD用户 1:一级代理商  2:子级代理商
+            // type: 1, // 0:BD用户 1:一级代理商  2:子级代理商
+            loginPhone: info.loginPhone, // 登录账号
             code: '', // 短信验证码
-            agentUserId: info.agentUserId, // 代理商Id，修改时使用
             contractId: info.contractId, // 合同号
             agentUserName: info.agentUserName, // 代理商名称
             linkName: info.linkName, // 联系人姓名
             phone: info.phone, // 手机号
             address: info.address, // 联系地址
             bdId: info.BD, // BD同事ID
-            loginPhone: info.loginPhone, // 登录账号
+            linkUserId: this.linkUserId, // 关联商户 id
             agentBusinessIds: this.projects, // 经营项目
-            linkUserId: this.linkUserId // 关联商户 id
+            agentUserId: info.agentUserId // 代理商Id，修改时使用
           }
           this.updataAgentInfo(submitData)
         } else {

@@ -43,7 +43,7 @@ export default {
       })
     },
     creatBd(data) {
-      insideManage.addBD(data).then(res => {
+      insideManage.addBDInfo(data).then(res => {
         this.$message({
           message: '新增成功!',
           type: 'success'
