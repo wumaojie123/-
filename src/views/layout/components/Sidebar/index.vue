@@ -9,6 +9,7 @@
       background-color="#2a3542"
       text-color="#bfcbd9"
       active-text-color="#409EFF"
+      style="height: calc(100% - 50px);"
     >
       <sidebar-item v-for="route in permission_routers" :key="route.name" :item="route" :base-path="route.path"/>
     </el-menu>
