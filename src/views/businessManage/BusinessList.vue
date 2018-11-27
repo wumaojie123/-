@@ -13,8 +13,13 @@
       </div>
     </el-form>
     <!-- 列表 -->
-    <el-table v-loading="listLoading" :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" @selection-change="handleItem" >
-      <el-table-column type="selection" width="55"/>
+    <el-table v-loading="listLoading" :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
+      <!-- <el-table-column type="selection" width="55"/> -->
+      <el-table-column label="操作" width="55" align="center">
+        <template slot-scope="scope">
+          <el-radio :label="scope.$index" v-model="check" @change.native="getTemplateRow(scope.$index)">&nbsp;</el-radio>
+        </template>
+      </el-table-column>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
     <el-pagination
@@ -36,6 +41,7 @@ export default {
     return {
       queryParams: { userName: '' },
       listLoading: true,
+      check: -1,
       list: [],
       colums: [
         { key: 'merchantName', label: '商家名称' },
@@ -73,6 +79,12 @@ export default {
     },
     handleItem(value) {
       this.angentInfo = value
+    },
+    getTemplateRow(value) {
+      this.check = value
+      console.log('getTemplateRow:', value)
+      this.angentInfo = [this.list[value]]
+      // this.angentInfo = value
     },
     handleAngent(type) {
       if (this.angentInfo.length === 1) {

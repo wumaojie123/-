@@ -24,8 +24,13 @@
       </div>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" @selection-change="handleItem" >
-      <el-table-column type="selection" width="55"/>
+    <el-table :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
+      <!-- <el-table-column type="selection" :label="操作" width="55"/> -->
+      <el-table-column label="操作" width="55" align="center">
+        <template slot-scope="scope">
+          <el-radio :label="scope.$index" v-model="check" @change.native="getTemplateRow(scope.$index)">&nbsp;</el-radio>
+        </template>
+      </el-table-column>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
     <el-pagination
@@ -46,6 +51,7 @@ import { fetchList } from '@/api/angentManage'
 export default {
   data() {
     return {
+      check: -1,
       queryParams: { agentUserName: '', userName: '', linkName: '', phone: '' },
       list: [],
       colums: [
@@ -90,6 +96,11 @@ export default {
     },
     handleItem(value) {
       this.angentInfo = value
+    },
+    getTemplateRow(value) {
+      this.check = value
+      console.log('getTemplateRow:', value)
+      this.angentInfo = [this.list[value]]
     },
     handleAngent(type) {
       if (this.angentInfo.length === 1) {
