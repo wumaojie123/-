@@ -11,8 +11,8 @@
           end-placeholder="结束日期"
           value-format="yyyy-MM-dd"/>
       </el-form-item>
-      <el-form-item label="商家账号">
-        <el-input v-model="queryParams.associateSellerPhone" placeholder="请输入商家账号" clearable/>
+      <el-form-item :label="`${roletype}账号`">
+        <el-input v-model="queryParams.associateSellerPhone" :placeholder="`请输入${roletype}账号`" clearable/>
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="handleQueryParams">查询</el-button>
       <!-- <el-button type="primary" @click="resetQueryParams">清空查询</el-button> -->
@@ -79,6 +79,7 @@ const OPTIONS = {
 export default {
   data() {
     return {
+      roletype: '商家',
       queryParams: { agentUserName: '', associateSellerPhone: '', associateSellerName: '' },
       dateRange: [],
       listLoading: true,
@@ -107,7 +108,8 @@ export default {
   },
   methods: {
     // tab切换
-    handlerTabClick() {
+    handlerTabClick(obj) {
+      this.roletype = obj.label
       this.list = []
       this.agentList = []
       this.pageInfo = { total: 20, pageSize: 10, currPage: 1 }

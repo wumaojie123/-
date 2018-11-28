@@ -7,7 +7,7 @@
       <el-button type="primary" icon="el-icon-search" @click="filterQueryList">查询</el-button>
       <div class="flex-layout">
         <div class="flex-item">
-          <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button>
+          <!--<el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button>-->
           <router-link :to="{path: '/addbusiness', query: {info: angentInfo[0]}}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link>
         </div>
       </div>
