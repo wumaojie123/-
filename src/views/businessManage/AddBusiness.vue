@@ -2,7 +2,7 @@
   <div class="content-area">
     <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfoRules" label-width="120px" label-position="right" style="margin-top: 20px;">
       <el-form-item label="商家账号" prop="loginPhone">
-        <el-input v-model="baseInfo.loginPhone" placeholder="请输入商家账号" type="text" class="input-300" maxlength="64" clearable @blur="handelBlur" @change="changLoginPhone" />
+        <el-input v-model="baseInfo.loginPhone" placeholder="请输入商家账号" type="text" class="input-300" maxlength="11" clearable @blur="handelBlur" @change="changLoginPhone" />
         <span class="input-anno">账号设置后，不可修改</span>
       </el-form-item>
       <el-form-item label="账号状态">
@@ -17,7 +17,7 @@
         <el-input v-model="baseInfo.agentUserName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="11" clearable />
       </el-form-item>
       <el-form-item label="联系人姓名">
-        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="256" clearable />
+        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleBaseInfo">创建/绑定</el-button>
