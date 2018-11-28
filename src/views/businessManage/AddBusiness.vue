@@ -14,10 +14,10 @@
         <span class="input-anno">请及时让商家告知手机验证码</span>
       </el-form-item>
       <el-form-item label="商家名称">
-        <el-input v-model="baseInfo.agentUserName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" clearable />
+        <el-input v-model="baseInfo.agentUserName" :disabled="disableFlag" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" clearable />
       </el-form-item>
       <el-form-item label="联系人姓名">
-        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
+        <el-input v-model="baseInfo.linkName" :disabled="disableFlag" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleBaseInfo">创建/绑定</el-button>
@@ -42,7 +42,8 @@ export default {
         loginPhone: [{ required: true, message: '请输入商家账号', trigger: 'blur' }],
         code: [{ required: true, message: '请输入4位手机验证码', trigger: 'blur' }]
       },
-      state: ''
+      state: '',
+      disableFlag: false
     }
   },
   methods: {
@@ -70,10 +71,14 @@ export default {
     },
     changLoginPhone() {
       this.state = ''
-      this.baseInfo.linkUserId = ''
+      this.baseInfo.agentUserName = ''
+      this.baseInfo.linkName = ''
     },
     handelBlur() {
+      this.disableFlag = false
       // this.baseInfo.linkUserId = ''
+      this.baseInfo.agentUserName = ''
+      this.baseInfo.linkName = ''
       if (!validateTel(this.baseInfo.loginPhone)) {
         return
       }
@@ -81,6 +86,9 @@ export default {
         if (res.result === 0 && res.data && res.data.adUserId) {
           // this.baseInfo.linkUserId = res.data.adUserId
           this.state = '已注册'
+          this.baseInfo.agentUserName = res.data.phone
+          this.baseInfo.linkName = res.data.phone2
+          this.disableFlag = true
         } else if (res.result === 0 && !res.data) {
           // this.description = res.description
           this.state = '未注册'
