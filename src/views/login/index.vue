@@ -69,7 +69,7 @@
 import LangSelect from '@/components/LangSelect'
 import router from '../../router/index'
 import { routerFormat } from '@/utils/routerFormat'
-import { saveSession, getSession, saveLocalStorage } from '../../utils/savaSession'
+import { saveSession, getSession } from '../../utils/savaSession'
 import { getMenu } from '../../api/getMenu'
 import SocialSign from './socialsignin'
 import MD5 from 'js-md5'
@@ -163,7 +163,7 @@ export default {
           }).then((data) => {
             this.loading = false
             clearInterval(self.timerId)
-            saveLocalStorage('username', this.loginForm.username)
+            saveSession('username', this.loginForm.username)
             getMenu().then(res => {
               saveSession('addRoute', res.data)
               router.addRoutes(routerFormat(JSON.parse(getSession('addRoute'))))

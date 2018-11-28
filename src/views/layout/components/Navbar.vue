@@ -55,7 +55,7 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
-import { getLocalStorage } from '@/utils/savaSession'
+import { getSession } from '@/utils/savaSession'
 
 export default {
   components: {
@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      username: this.name || getLocalStorage('username') || '1222'
+      username: this.name || getSession('username')
     }
   },
   computed: {
