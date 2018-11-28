@@ -5,8 +5,8 @@
         <el-input v-model="baseInfo.loginPhone" placeholder="请输入代理商账号" class="input-300" maxlength="11" disabled />
         <span class="input-anno">账号不可修改</span>
       </el-form-item>
-      <el-form-item label="代理名称">
-        <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理名称" type="text" class="input-300" maxlength="16" clearable />
+      <el-form-item label="代理商名称">
+        <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" type="text" class="input-300" maxlength="16" clearable />
       </el-form-item>
       <el-form-item label="联系人姓名">
         <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />

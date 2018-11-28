@@ -14,7 +14,7 @@
         <el-button type="primary" @click="getCode">获取验证码</el-button>
         <span class="input-anno">请及时让代理告知短信验证码</span>
       </el-form-item>
-      <el-form-item label="代理名称">
+      <el-form-item label="代理商名称">
         <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" type="text" class="input-300" maxlength="16" clearable />
       </el-form-item>
       <el-form-item label="联系人姓名">
