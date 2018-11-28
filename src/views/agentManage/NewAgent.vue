@@ -15,16 +15,16 @@
         <span class="input-anno">请及时让代理告知短信验证码</span>
       </el-form-item>
       <el-form-item label="代理名称">
-        <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" type="text" class="input-300" maxlength="64" clearable />
+        <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" type="text" class="input-300" maxlength="16" clearable />
       </el-form-item>
       <el-form-item label="联系人姓名">
-        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="32" clearable />
+        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
       </el-form-item>
       <el-form-item label="联系电话" prop="phone">
         <el-input v-model="baseInfo.phone" placeholder="请输入联系电话" type="tel" class="input-300" maxlength="11" clearable />
       </el-form-item>
       <el-form-item label="联系地址">
-        <el-input v-model="baseInfo.address" placeholder="请输入联系地址" type="text" style="width: 600px;" maxlength="256" clearable />
+        <el-input v-model="baseInfo.address" placeholder="请输入联系地址" type="text" style="width: 600px;" maxlength="40" clearable />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleBaseInfo">创建</el-button>

@@ -9,16 +9,16 @@
         <el-input v-model="baseInfo.num" placeholder="请输入合同编号" class="input-300" maxlength="64" />
       </el-form-item>
       <el-form-item label="代理商名称" prop="agentUserName">
-        <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" class="input-300" maxlength="64" />
+        <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" class="input-300" maxlength="16" />
       </el-form-item>
       <el-form-item label="联系人姓名" prop="linkName">
-        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" class="input-300" maxlength="32" />
+        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" class="input-300" maxlength="16" />
       </el-form-item>
       <el-form-item label="手机号码" prop="phone">
         <el-input v-model="baseInfo.phone" placeholder="请输入手机号" type="number" class="input-300" maxlength="11" />
       </el-form-item>
       <el-form-item label="联系地址" prop="address">
-        <el-input v-model="baseInfo.address" placeholder="请输入联系地址" style="width: 600px;" maxlength="256" />
+        <el-input v-model="baseInfo.address" placeholder="请输入联系地址" style="width: 600px;" maxlength="40" />
       </el-form-item>
       <el-form-item label="BD同事" prop="BD">
         <el-select v-model="baseInfo.BD" :placeholder="`选择一位BD同事`" clearable class="input-300">

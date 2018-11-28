@@ -14,7 +14,7 @@
         <span class="input-anno">请及时让商家告知手机验证码</span>
       </el-form-item>
       <el-form-item label="商家名称">
-        <el-input v-model="baseInfo.agentUserName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="11" clearable />
+        <el-input v-model="baseInfo.agentUserName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" clearable />
       </el-form-item>
       <el-form-item label="联系人姓名">
         <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
