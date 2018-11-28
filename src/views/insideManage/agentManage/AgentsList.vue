@@ -15,12 +15,12 @@
         <span class="label">&nbsp;&nbsp;&nbsp;&nbsp;账号&nbsp;&nbsp;&nbsp;</span>
         <el-input :placeholder="`请输入账号`" v-model="listQuery.userName" style="width: 300px;margin-right: 20px;" class="filter-item" @keyup.enter.native="handleFilter" />
       </div>
-      <div class="item">
+      <!-- <div class="item">
         <span class="label">&nbsp;&nbsp;BD同事&nbsp;&nbsp;&nbsp; </span>
         <el-select v-model="listQuery.bdId" :placeholder="`请选择BD同事`" clearable style="width: 300px;margin-right: 20px;vertical-align: baseline;" class="filter-item">
           <el-option v-for="item in bdList" :key="item.adUserId" :label="item.username" :value="item.adUserId" />
         </el-select>
-      </div>
+      </div> -->
       <br>
       <br>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">{{ `查找` }}</el-button>
@@ -153,7 +153,7 @@ export default {
     }
   },
   async created() {
-    await this.getBDList()
+    // await this.getBDList()
     this.getList()
   },
   methods: {
