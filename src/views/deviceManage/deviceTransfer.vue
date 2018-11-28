@@ -150,9 +150,9 @@
       </el-row>
       <p v-show="infoChecked" style="padding-top: 12px;font-size: 14px;color:red;">未查询到相应的商家，请重新输入！</p>
       <!--<p style="padding-top: 12px;font-size: 14px;color:#666;">请选择目标商家，支持输入名称或手机号码查询。</p>-->
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="confirmTranfer">确定转移</el-button>
-      </span>
+      <div slot="footer" style="text-align: center;" class="dialog-footer">
+        <el-button :disabled="!selectAgent" type="primary" @click="confirmTranfer">确定转移设备</el-button>
+      </div>
     </el-dialog>
     <el-dialog
       :visible.sync="questionDialogVisible"
