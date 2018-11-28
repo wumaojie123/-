@@ -60,7 +60,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <!--<el-col :span="8">
           <el-form-item label="在线状态" prop="isOnline">
             <el-select v-model="form.isOnline" placeholder="请选择">
               <el-option
@@ -70,7 +70,7 @@
                 :value="item.value"/>
             </el-select>
           </el-form-item>
-        </el-col>
+        </el-col>-->
       </el-row>
     </el-form>
     <div class="filter-container">
