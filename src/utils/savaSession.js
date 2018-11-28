@@ -2,7 +2,7 @@ export const saveSession = (key, val) => {
   if (typeof val === 'undefined' || val === null) {
     val = ''
   }
-  val = JSON.stringify(val)
+  val = typeof val === 'string' ? val : JSON.stringify(val)
   sessionStorage.setItem(key, val)
 }
 
