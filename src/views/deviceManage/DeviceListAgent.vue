@@ -45,8 +45,8 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-form-item label="代理/商家名称" prop="agentUserName">
-            <el-input v-model="form.agentUserName" placeholder="请输入代理/商家名称"/>
+          <el-form-item label="商家名称" prop="agentUserName">
+            <el-input v-model="form.agentUserName" placeholder="请输入商家名称"/>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -60,17 +60,6 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <!--<el-col :span="8">
-          <el-form-item label="在线状态" prop="isOnline">
-            <el-select v-model="form.isOnline" placeholder="请选择">
-              <el-option
-                v-for="item in isOnline"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"/>
-            </el-select>
-          </el-form-item>
-        </el-col>-->
       </el-row>
     </el-form>
     <div class="filter-container">
@@ -95,7 +84,14 @@
       highlight-current-row
       style="width: 100%;margin-top: 20px;"
       @selection-change="getTemplateRow">
-      <el-table-column type="selection" width="65"/>
+      <el-table-column
+        type="selection"
+        width="65"/>
+      <!--<el-table-column label="" align="center" width="65">-->
+      <!--<template slot-scope="scope">-->
+      <!--<el-radio :label="scope.row.equipmentId" v-model="checked" @change.native="getTemplateRow(scope.$index,scope.row)">&nbsp;</el-radio>-->
+      <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column label="设备编号" align="center" prop="equipmentId">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentId }}</span>
@@ -121,16 +117,16 @@
           <span>{{ scope.row.equipmentTypeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="代理/商家名称" align="center">
+      <el-table-column label="商家名称" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.agentUserName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" align="center" prop="role">
+      <!-- <el-table-column label="角色" align="center" prop="role">
         <template slot-scope="scope">
           <span>{{ scope.row.role }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="账号" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.phone }}</span>
@@ -184,7 +180,7 @@
 </template>
 
 <script>
-import { getFirstDeviceList, equipmentStatus } from '@/api/getDeviceList'
+import { getDeviceList, equipmentStatus } from '@/api/getDeviceList'
 import { getDeviceType } from '@/api/getEquiedType'
 import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
 import { Throttle } from '../../utils/throttle'
@@ -449,7 +445,7 @@ export default {
       this.listLoading = true
       this.form.pageSize = this.listQuery.limit
       this.form.pageIndex = this.listQuery.page
-      getFirstDeviceList(this.form).then(response => {
+      getDeviceList(this.form).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.checkedRow = []

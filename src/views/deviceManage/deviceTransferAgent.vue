@@ -5,7 +5,7 @@
         <el-alert :title="message" :closable="false" type="warning" class="info" />
       </el-col>
       <el-col :span="4">
-        <div class="often-question" ><p @click="oftenquestionFn"><i class="el-icon-question"/> 常见问题 >></p></div>
+        <div class="often-question" ><p @click="questionDialogVisible = true"><i class="el-icon-question"/> 常见问题 >></p></div>
       </el-col>
     </el-row>
     <!-- 查询条件 -->
@@ -35,6 +35,7 @@
       <el-button type="primary" @click="transfer">批量转移设备</el-button>
       <el-button type="primary" @click="importQrcode('pay')">导出支付二维码</el-button>
       <el-button style="margin-left: 10px;" type="primary" @click="importQrcode('register')">导出注册二维码</el-button>
+      <el-button style="margin-left: 10px;" type="primary" @click="rebackEquipment">退换设备</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -77,10 +78,16 @@
       layout="total, sizes, prev, pager, next, jumper"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"/>
-
-    <!-- 对话框 -->
-    <el-dialog :visible.sync="dialogVisible" :before-close="beforeClose" title="批量转移设备" width="450px">
-      <el-dialog :visible.sync="innerVisible" width="360px" title="提示" append-to-body>
+    <el-dialog
+      :visible.sync="dialogVisible"
+      :before-close="beforeClose"
+      title="批量转移设备"
+      width="450px">
+      <el-dialog
+        :visible.sync="innerVisible"
+        width="360px"
+        title="提示"
+        append-to-body>
         <span style="font-size: 16px;color: #ef6969">请选择商家</span>
       </el-dialog>
       <el-row>
@@ -91,17 +98,10 @@
           <p style="font-size: 16px;line-height: 150%;padding: 6px 0;">{{ willTranfers.length }} 个</p>
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="6">
-          <p style="font-size: 16px;line-height: 150%;padding: 6px 0;">转移给目标：</p>
-        </el-col>
-        <el-col :span="18">
-          <el-radio v-model="type" label="1">商家</el-radio>
-          <el-radio v-model="type" label="2">代理</el-radio>
-        </el-col>
-      </el-row>
       <el-row style="margin-top: 16px;align-items: center;">
-        <el-col :span="6"/>
+        <el-col :span="6">
+          <p style="font-size: 16px;line-height: 150%;padding: 6px 0;">转移给商家：</p>
+        </el-col>
         <el-col :span="18">
           <el-autocomplete
             :fetch-suggestions="querySearch"
@@ -117,12 +117,10 @@
         </el-col>
       </el-row>
       <p v-show="infoChecked" style="padding-top: 12px;font-size: 14px;color:red;">未查询到相应的商家，请重新输入！</p>
-      <!--<p style="padding-top: 12px;font-size: 14px;color:#666;">请选择目标商家，支持输入名称或手机号码查询。</p>-->
       <div slot="footer" style="text-align: center;" class="dialog-footer">
         <el-button :disabled="!selectAgent" type="primary" @click="confirmTranfer">确定转移设备</el-button>
       </div>
     </el-dialog>
-    <!-- 常见问题 -->
     <el-dialog
       :visible.sync="questionDialogVisible"
       class="question-main-dialog"
@@ -153,23 +151,21 @@
         </div>
       </div>
     </el-dialog>
-
     <a id="downLoad" ref="downloadZip" :href="loadUrl" :download="downLoadFileName" style="display: none;"/>
   </el-main>
 </template>
 
 <script>
-import { getDeviceTypeBd } from '@/api/getEquiedType'
-import { agentEquipmentList } from '@/api/getDeviceList'
-import { childMerchants } from '@/api/businessManage'
-import { transfer, transferAgent } from '@/api/transferDevice'
-import { Throttle } from '@/utils/throttle'
-import { exportPayOrCode, exportRegisterOrCode } from '@/api/qrcodeCreate'
+import { getDeviceTypeBd } from '../../api/getEquiedType'
+import { agentEquipmentList } from '../../api/getDeviceList'
+import { childMerchants } from '../../api/businessManage'
+import { transfer, rebackEquipment } from '../../api/transferDevice'
+import { Throttle } from '../../utils/throttle'
+import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
 export default {
   name: 'DeviceTransfer',
   data() {
     return {
-      type: '1',
       total: 0,
       throttle: null,
       downLoadFileName: '下载',
@@ -211,15 +207,6 @@ export default {
       }
     }
   },
-  watch: {
-    type(value) {
-      if (value === '1') {
-        console.log('商家')
-      } else if (value === '2') {
-        console.log('代理')
-      }
-    }
-  },
   created() {
     const clientHeight = document.body.clientHeight || document.documentElement.clientHeight
     this.minHeightTable = clientHeight - 388
@@ -238,9 +225,9 @@ export default {
     this.getList()
   },
   methods: {
-    // 常见问题
-    oftenquestionFn() {
-      this.questionDialogVisible = true
+    // 退还设备
+    rebackEquipmentDevidce() {
+      rebackEquipment()
     },
     // 导出二维码
     importQrcode(type) {
@@ -293,26 +280,13 @@ export default {
         return
       }
       this.dialogVisible = false
-      const loading = this.$loading({
-        lock: true,
-        text: '转移中...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
+      const loading = this.$loading({ lock: true, text: '转移中...', spinner: 'el-icon-loading', background: 'rgba(0, 0, 0, 0.7)' })
       const arrTrans = []
       this.willTranfers.forEach(val => {
         arrTrans.push(val.equipmentValue)
       })
-      let params = {}
-      let transferFunc = null
-      if (this.type === '1') {
-        params = { values: arrTrans, adorgid: this.agentid }
-        transferFunc = transfer
-      } else if (this.type === '2') {
-        params = { values: arrTrans, agentUserId: this.agentid }
-        transferFunc = transferAgent
-      }
-      transferFunc(params)
+      const params = { values: arrTrans, adorgid: this.agentid }
+      transfer(params)
         .then(() => {
           loading.close()
           this.listQuery.page = 1
@@ -351,10 +325,7 @@ export default {
             this.infoChecked = true
             cb([])
           }
-          console.log(res)
         })
-      // console.log(queryString)
-      // console.log(cb)
     },
     handleSelect(item) {
       this.agentid = item.agentId
@@ -396,7 +367,6 @@ export default {
       this.getList()
     },
     transfer() {
-      this.type = '1'
       if (this.willTranfers.length === 0) {
         this.$message({ showClose: false, message: '请选择要转移的设备！', type: 'warning' })
       } else {
