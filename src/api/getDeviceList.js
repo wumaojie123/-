@@ -26,6 +26,15 @@ export function getFirstDeviceList(data) {
   })
 }
 
+// 获取二级代理已转移设备
+export function getSecDeviceList(data) {
+  return request({
+    url: '/equipment/secondAgent/getSecondAgentEquipmentList',
+    method: 'post',
+    data
+  })
+}
+
 export function agentEquipmentList(data) {
   return request({
     url: '/rest/equipment/agentEquipment/query',

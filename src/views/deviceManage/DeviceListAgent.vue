@@ -180,7 +180,7 @@
 </template>
 
 <script>
-import { getDeviceList, equipmentStatus } from '@/api/getDeviceList'
+import { getSecDeviceList, equipmentStatus } from '@/api/getDeviceList'
 import { getDeviceType } from '@/api/getEquiedType'
 import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
 import { Throttle } from '../../utils/throttle'
@@ -445,7 +445,7 @@ export default {
       this.listLoading = true
       this.form.pageSize = this.listQuery.limit
       this.form.pageIndex = this.listQuery.page
-      getDeviceList(this.form).then(response => {
+      getSecDeviceList(this.form).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         this.checkedRow = []

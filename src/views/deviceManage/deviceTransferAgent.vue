@@ -35,7 +35,7 @@
       <el-button type="primary" @click="transfer">批量转移设备</el-button>
       <el-button type="primary" @click="importQrcode('pay')">导出支付二维码</el-button>
       <el-button style="margin-left: 10px;" type="primary" @click="importQrcode('register')">导出注册二维码</el-button>
-      <el-button style="margin-left: 10px;" type="primary" @click="rebackEquipment">退换设备</el-button>
+      <el-button style="margin-left: 10px;" type="primary" @click="rebackEquipmentDevidce">退换设备</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -122,13 +122,13 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogVisible2" title="温馨提示" width="50%">
-      <span>已选择设备：300个</span>
-      <span>即将退还给上级代理：15521271697</span>
-      <span>退还设备后，该设备将从你的设备列表消失，确定退还吗？</span>
+    <el-dialog :visible.sync="dialogVisible2" title="温馨提示" width="30%">
+      <p style="font-size: 16px; padding-bottom: 10px;">已选择设备：{{ willTranfers.length }}个</p>
+      <!-- <p>即将退还给上级代理：15521271697</p> -->
+      <p style="font-size: 16px; padding-bottom: 10px;">退还设备后，该设备将从你的设备列表消失，确定退还吗？</p>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible2 = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible2 = false">确 定</el-button>
+        <el-button type="primary" @click="rebackDevice">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -239,14 +239,23 @@ export default {
   methods: {
     // 退还设备
     rebackEquipmentDevidce() {
-      this.dialogVisible = true
       // 设备id
-      const equipmentIds = []
+      if (this.willTranfers.length < 1) {
+        this.$message({ message: '请选择需要操作的设备！', type: 'warning' })
+        return
+      }
+      this.dialogVisible2 = true
+    },
+    rebackDevice() {
+      const values = []
       this.willTranfers.forEach((v) => {
-        equipmentIds.push(v.equipmentValue)
+        values.push(v.equipmentValue)
       })
-      rebackEquipment({ value: equipmentIds }).then(res => {
-        this.dialogVisible = false
+      rebackEquipment({ values }).then(res => {
+        if (res.result === '0') {
+          this.dialogVisible2 = false
+          this.$message({ message: '设备退换成功！', type: 'success' })
+        }
       })
     },
     // 导出二维码
@@ -354,6 +363,7 @@ export default {
       this.listLoading = true
       this.form.pageSize = this.listQuery.limit
       this.form.pageIndex = this.listQuery.page
+      this.form.queryLevel = 2
       // this.form.values = this.form.values.replace(/\s/g, '')
       // this.form.values = this.form.values.replace(/，/g, ',')
       agentEquipmentList(this.form).then(response => {
