@@ -65,6 +65,11 @@
         <template slot-scope="scope">
           <span>{{ scope.row.versionno }}</span>
         </template>
+        <el-table-column label="设备来源" align="center">
+          <template slot-scope="scope">
+            <span>{{ scope.row.agentEquipmentStatus }}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table>
     <el-pagination
