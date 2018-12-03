@@ -121,6 +121,17 @@
         <el-button :disabled="!selectAgent" type="primary" @click="confirmTranfer">确定转移设备</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog :visible.sync="dialogVisible2" title="温馨提示" width="50%">
+      <span>已选择设备：300个</span>
+      <span>即将退还给上级代理：15521271697</span>
+      <span>退还设备后，该设备将从你的设备列表消失，确定退还吗？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible2 = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible2 = false">确 定</el-button>
+      </span>
+    </el-dialog>
+
     <el-dialog
       :visible.sync="questionDialogVisible"
       class="question-main-dialog"
@@ -166,6 +177,7 @@ export default {
   name: 'DeviceTransfer',
   data() {
     return {
+      dialogVisible2: false,
       total: 0,
       throttle: null,
       downLoadFileName: '下载',
@@ -227,7 +239,15 @@ export default {
   methods: {
     // 退还设备
     rebackEquipmentDevidce() {
-      rebackEquipment()
+      this.dialogVisible = true
+      // 设备id
+      const equipmentIds = []
+      this.willTranfers.forEach((v) => {
+        equipmentIds.push(v.equipmentValue)
+      })
+      rebackEquipment({ value: equipmentIds }).then(res => {
+        this.dialogVisible = false
+      })
     },
     // 导出二维码
     importQrcode(type) {

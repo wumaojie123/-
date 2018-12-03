@@ -15,7 +15,7 @@
           <el-option v-for="item in equipmentTypesArr" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="连号查询" prop="equipmentId">
+      <el-form-item label="设备查询" prop="equipmentId">
         <div class="el-input-number el-input-number--medium is-without-controls input-300" style="width:200px;">
           <div class="el-input el-input--medium">
             <input v-model="form.equipmentIdStart" class="el-input__inner" type="number" placeholder="设备编号">
@@ -65,6 +65,11 @@
           <span>{{ scope.row.versionno }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="设备来源" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.agentEquipmentStatus }}</span>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       v-show="total>0"
@@ -91,11 +96,11 @@
           <p style="font-size: 16px;line-height: 150%;padding: 6px 0;">{{ willTranfers.length }} 个</p>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row style="display:flex;align-items:center;">
         <el-col :span="6">
           <p style="font-size: 16px;line-height: 150%;padding: 6px 0;">转移给目标：</p>
         </el-col>
-        <el-col :span="18">
+        <el-col :span="18" >
           <el-radio v-model="type" label="1">商家</el-radio>
           <el-radio v-model="type" label="2">代理</el-radio>
         </el-col>
@@ -117,7 +122,6 @@
         </el-col>
       </el-row>
       <p v-show="infoChecked" style="padding-top: 12px;font-size: 14px;color:red;">未查询到相应的商家，请重新输入！</p>
-      <!--<p style="padding-top: 12px;font-size: 14px;color:#666;">请选择目标商家，支持输入名称或手机号码查询。</p>-->
       <div slot="footer" style="text-align: center;" class="dialog-footer">
         <el-button :disabled="!selectAgent" type="primary" @click="confirmTranfer">确定转移设备</el-button>
       </div>
@@ -162,6 +166,7 @@
 import { getDeviceTypeBd } from '@/api/getEquiedType'
 import { agentEquipmentList } from '@/api/getDeviceList'
 import { childMerchants } from '@/api/businessManage'
+import { queryAgents } from '@/api/getAgentUserId'
 import { transfer, transferAgent } from '@/api/transferDevice'
 import { Throttle } from '@/utils/throttle'
 import { exportPayOrCode, exportRegisterOrCode } from '@/api/qrcodeCreate'
@@ -250,7 +255,6 @@ export default {
         return
       } else {
         this.willTranfers.reduce((prev, next) => {
-          console.log(prev.equipmentTypeName, next.equipmentTypeName)
           if (!diff && (prev.equipmentTypeName !== next.equipmentTypeName)) {
             diff = true
           }
@@ -263,9 +267,7 @@ export default {
       }
       // 设备id
       const equipmentIds = []
-      this.willTranfers.forEach((v) => {
-        equipmentIds.push(v.equipmentValue)
-      })
+      this.willTranfers.forEach((v) => { equipmentIds.push(v.equipmentValue) })
       if (type === 'pay') {
         this.downLoadFileName = '支付二维码下载'
         this.loadUrl = exportPayOrCode({ valueStr: equipmentIds })
@@ -293,16 +295,9 @@ export default {
         return
       }
       this.dialogVisible = false
-      const loading = this.$loading({
-        lock: true,
-        text: '转移中...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
+      const loading = this.$loading({ lock: true, text: '转移中...', spinner: 'el-icon-loading', background: 'rgba(0, 0, 0, 0.7)' })
       const arrTrans = []
-      this.willTranfers.forEach(val => {
-        arrTrans.push(val.equipmentValue)
-      })
+      this.willTranfers.forEach(val => { arrTrans.push(val.equipmentValue) })
       let params = {}
       let transferFunc = null
       if (this.type === '1') {
@@ -312,6 +307,8 @@ export default {
         params = { values: arrTrans, agentUserId: this.agentid }
         transferFunc = transferAgent
       }
+      console.log('转移参数:', JSON.stringify(params))
+      console.log('transferFunc:', transferFunc)
       transferFunc(params)
         .then(() => {
           loading.close()
@@ -330,19 +327,35 @@ export default {
       this.willTranfers = item
     },
     querySearch(queryString, cb) {
+      let func
+      if (this.type === '1') {
+        func = childMerchants
+      } else if (this.type === '2') {
+        func = queryAgents
+      }
+      if (!func) {
+        return
+      }
       const quer = /^(.+)\((.+)\)$/.exec(queryString)
       if (quer) {
         queryString = quer[1] && quer[1].trim()
       }
-      childMerchants({ agentQuery: queryString })
+      func({ agentQuery: queryString })
         .then(res => {
           if (res.result === 0 && res.data && res.data.length !== 0) {
             const results = []
             res.data.forEach(item => {
-              results.push({
-                value: `${item.merchantname} (${item.username})`,
-                agentId: item.adorgid
-              })
+              if (this.type === '1') {
+                results.push({
+                  value: `${item.merchantname} (${item.username})`,
+                  agentId: item.adorgid
+                })
+              } else if (this.type === '2') {
+                results.push({
+                  value: `${item.phone} (${item.agentusername})`,
+                  agentId: item.agentuserid
+                })
+              }
             })
             this.agentsArr = results
             this.infoChecked = false
@@ -353,8 +366,6 @@ export default {
           }
           console.log(res)
         })
-      // console.log(queryString)
-      // console.log(cb)
     },
     handleSelect(item) {
       this.agentid = item.agentId
@@ -362,6 +373,7 @@ export default {
     getList() {
       this.listLoading = true
       this.form.pageSize = this.listQuery.limit
+      this.form.queryLevel = 1
       this.form.pageIndex = this.listQuery.page
       // this.form.values = this.form.values.replace(/\s/g, '')
       // this.form.values = this.form.values.replace(/，/g, ',')

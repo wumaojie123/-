@@ -55,9 +55,19 @@
           <span>{{ scope.row.bunissesNames || '未知' }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`自营设备数量`" align="center">
+      <!-- <el-table-column :label="`自营设备数量`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.ownEquipmentCount || 0 }}</span>
+        </template>
+      </el-table-column> -->
+      <el-table-column :label="`已导入设备总量`" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.equipmentTotalCount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="`昨日在线设备量`" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.equipmentOnlineCount }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`下级代理数量`" align="center">

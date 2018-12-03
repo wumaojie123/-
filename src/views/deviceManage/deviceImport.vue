@@ -61,6 +61,15 @@
         <el-button :disabled="disabled || throttle" size="small" type="success" @click="submitUpload">确定上传</el-button>
       </el-upload>
     </el-form>
+    <!-- 失败对话框 -->
+    <el-dialog :visible.sync="dialogVisible" title="导入结果" width="50%">
+      <span>{{ failtTest }}</span>
+      <p class="fail-reason">失败原因</p>
+      <el-table :data="failList" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
+        <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+      </el-table>
+    </el-dialog>
+
   </el-main>
 </template>
 
@@ -82,7 +91,15 @@ export default {
       },
       equipmentTypesArr: [],
       agentUsers: [],
-      message: '请将设备注册编号放入txt文档，每一行代表一个设备编号，如果编号未被绑定注册或待调拨，导入将成功，反之，则将失败。注意：Excel的数据可以直接复制到txt文档中。'
+      message: '请将设备注册编号放入txt文档，每一行代表一个设备编号，如果编号未被绑定注册或待调拨，导入将成功，反之，则将失败。注意：Excel的数据可以直接复制到txt文档中。',
+      colums: [
+        { key: 'failIndex', label: '序号' },
+        { key: 'value', label: '设备编号' },
+        { key: 'failNote', label: '导入失败原因' }
+      ],
+      failList: [],
+      dialogVisible: false,
+      failtTest: ''
     }
   },
   computed: {
@@ -160,23 +177,22 @@ export default {
             this.infoChecked = true
             cb([])
           }
-          console.log(res)
         })
       this.form.agent = ''
-      // console.log(queryString)
-      // console.log(cb)
     },
     handleSuccess(par) {
       if (par.result === 0) {
-        const failText = par.data.fail.length === 0 ? '' : `失败${par.data.fail.length}条;
-        失败的设备编号：${par.data.fail.join(',')}`
-        this.$alert(`${par.description} ${failText}`, '导入结果', {
-          confirmButtonText: '确定',
-          callback: () => {
-            this.throttle = false
-            this.$refs.upload.clearFiles()
-          }
-        })
+        this.failtTest = par.description
+        this.failList = par.data.fail
+        this.dialogVisible = true
+        this.throttle = false
+        // this.$alert(`${par.description} ${failText}`, '导入结果', {
+        //   confirmButtonText: '确定',
+        //   callback: () => {
+        //     this.throttle = false
+        //     this.$refs.upload.clearFiles()
+        //   }
+        // })
       }
     },
     handleExceed() {
@@ -200,10 +216,14 @@ export default {
   }
   .upload-demo{
     position: relative;
-  ul{
-    position: absolute;
-    left: 101px;
-    top: -5px;
+    ul{
+      position: absolute;
+      left: 101px;
+      top: -5px;
+    }
   }
+  .fail-reason{
+    padding: 20px 0 10px 0;
+    font-size: 18px;
   }
 </style>
