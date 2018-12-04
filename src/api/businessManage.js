@@ -25,15 +25,16 @@ export function getCode(query) {
 
 export function update(data) {
   return request({
-    url: '/agentManage/updateMerchant',
+    url: '/merchant/updateMerchant',
     method: 'post',
     data
   })
 }
 
+// 新增商家
 export function add(data) {
   return request({
-    url: '/agentManage/addMerchant',
+    url: '/merchant/addMerchant',
     method: 'post',
     data
   })
