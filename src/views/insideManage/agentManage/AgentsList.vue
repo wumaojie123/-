@@ -62,7 +62,7 @@
       </el-table-column> -->
       <el-table-column :label="`已导入设备总量`" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.equipmentTotalCount }}</span>
+          <span>{{ scope.row.equipmentCount }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="`昨日在线设备量`" align="center">
@@ -75,11 +75,11 @@
           <span>{{ scope.row.subordinateCount|| 0 }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="`代理设备数量`" align="center">
+      <!-- <el-table-column :label="`代理设备数量`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentCount|| 0 }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column :label="`BD同事`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.bdName||'' }}</span>
