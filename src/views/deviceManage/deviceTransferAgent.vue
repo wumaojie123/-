@@ -257,7 +257,6 @@ export default {
         values.push(v.equipmentValue)
       })
       rebackEquipment({ values }).then(res => {
-        debugger
         if (res.result === 0) {
           this.dialogVisible2 = false
           this.$message({ message: '设备退换成功！', type: 'success' })
