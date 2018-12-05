@@ -45,7 +45,7 @@
         <!-- 列表 -->
         <el-table v-loading="listLoading" :data="agentList" show-summary border style="width: 100%;margin-bottom: 20px;">
           <el-table-column prop="associateSellerPhone" label="账号" align="center"/>
-          <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+          <el-table-column v-for="(item, index) in colums2" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
         </el-table>
         <el-pagination
           :page-sizes="[10, 20, 30, 40]"
@@ -86,7 +86,17 @@ export default {
       list: [],
       agentList: [],
       colums: [
-        { key: 'agentUserName', label: '代理/商家名称', width: 250 },
+        { key: 'agentUserName', label: '商家名称', width: 250 },
+        { key: 'orderCount', label: '订单数量', sortable: true },
+        { key: 'totalIncome', label: '收入总额(元)', sortable: true },
+        { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
+        { key: 'cashIncome', label: '现金收入(元)', sortable: true },
+        { key: 'adIncome', label: '广告收入(元)', sortable: true },
+        { key: 'equipmentTotalCount', label: '当前设备总数', sortable: true },
+        { key: 'equipmentOnlineCount', label: '昨日在线设备数量', sortable: true }
+      ],
+      colums2: [
+        { key: 'agentUserName', label: '代理名称', width: 250 },
         { key: 'orderCount', label: '订单数量', sortable: true },
         { key: 'totalIncome', label: '收入总额(元)', sortable: true },
         { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
