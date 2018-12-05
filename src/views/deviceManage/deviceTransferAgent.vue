@@ -35,7 +35,7 @@
       <el-button type="primary" @click="transfer">批量转移设备</el-button>
       <el-button type="primary" @click="importQrcode('pay')">导出支付二维码</el-button>
       <el-button style="margin-left: 10px;" type="primary" @click="importQrcode('register')">导出注册二维码</el-button>
-      <el-button style="margin-left: 10px;" type="primary" @click="rebackEquipmentDevidce">退换设备</el-button>
+      <el-button style="margin-left: 10px;" type="primary" @click="rebackEquipmentDevidce">退还设备</el-button>
     </div>
     <el-table
       v-loading="listLoading"
