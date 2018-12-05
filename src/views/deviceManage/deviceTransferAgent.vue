@@ -260,6 +260,7 @@ export default {
         if (res.result === 0) {
           this.dialogVisible2 = false
           this.$message({ message: '设备退换成功！', type: 'success' })
+          this.listQuery = { page: 1, limit: 20 }
           this.getList()
         }
       })
