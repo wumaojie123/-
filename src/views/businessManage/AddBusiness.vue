@@ -10,14 +10,16 @@
       </el-form-item>
       <el-form-item label="手机验证码" prop="code">
         <el-input v-model="baseInfo.code" placeholder="请输入验证码" style="width: 150px;margin-right: 32px;" maxlength="4" clearable />
-        <el-button type="primary" @click="getCode">获取验证码</el-button>
+        <el-button :disabled="text !== '获取验证码' || flag" style="width: 112px;" type="primary" @click="getCode">{{ text }}</el-button>
         <span class="input-anno">请及时让商家告知手机验证码</span>
       </el-form-item>
       <el-form-item label="商家名称">
         <el-input v-model="baseInfo.agentUserName" :disabled="disableFlag" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" clearable />
+        <span class="input-anno" style="color:red;">注意：“商家名称”设置后，商家可以在手机B端后台修改。修改路径：我的 > 品牌信息设置 > 商户品牌名称。</span>
       </el-form-item>
       <el-form-item label="联系人姓名">
         <el-input v-model="baseInfo.linkName" :disabled="disableFlag" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
+        <span class="input-anno" style="color:red;">注意：“姓名”设置后，将显示在手机B端后台的账号信息中，且无法修改，请慎重填写！。</span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleBaseInfo">创建/绑定</el-button>
@@ -37,6 +39,10 @@ import { validateTel } from '@/utils/validate'
 export default {
   data() {
     return {
+      text: '获取验证码',
+      time: 120,
+      timer: null,
+      flag: false,
       baseInfo: { loginPhone: '', linkName: '', agentUserName: '', code: '' },
       baseInfoRules: {
         loginPhone: [{ required: true, message: '请输入商家账号', trigger: 'blur' }],
@@ -76,7 +82,6 @@ export default {
     },
     handelBlur() {
       this.disableFlag = false
-      // this.baseInfo.linkUserId = ''
       this.baseInfo.agentUserName = ''
       this.baseInfo.linkName = ''
       if (!validateTel(this.baseInfo.loginPhone)) {
@@ -84,17 +89,14 @@ export default {
       }
       getMerchant({ phone: this.baseInfo.loginPhone }).then(res => {
         if (res.result === 0 && res.data && res.data.adUserId) {
-          // this.baseInfo.linkUserId = res.data.adUserId
           this.state = '已注册'
           this.baseInfo.agentUserName = res.data.phone
           this.baseInfo.linkName = res.data.phone2
           this.disableFlag = true
         } else if (res.result === 0 && !res.data) {
-          // this.description = res.description
           this.state = '未注册'
         } else if (res.result === -1) {
           this.state = ''
-          // this.baseInfo.linkUserId = ''
         }
       })
     },
@@ -103,8 +105,23 @@ export default {
         this.$message({ message: '请输入正确的商家账号(11手机号)', type: 'error' })
         return
       }
+      if (this.flag) {
+        return
+      }
+      this.flag = true
       getCode({ phone: this.baseInfo.loginPhone }).then(res => {
+        setTimeout(() => { this.flag = false }, 1000)
         if (res.result === 0) {
+          this.timer = setInterval(() => {
+            this.time = this.time - 1
+            this.text = `${this.time}s`
+            if (this.time === -1) {
+              clearInterval(this.timer)
+              this.timer = null
+              this.text = '获取验证码'
+              this.time = 120
+            }
+          }, 1000)
           this.$message({ message: '手机短信验证码已经发送成功', type: 'success' })
         } else {
           this.$message({ message: '手机短信验证码已经发送失败', type: 'error' })

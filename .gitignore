@@ -8,6 +8,9 @@ yarn-error.log*
 test/unit/coverage
 test/e2e/reports
 selenium-debug.log
+src/2.js
+src/router2.js
+src/routerlist.js
 
 # Editor directories and files
 .idea

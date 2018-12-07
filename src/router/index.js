@@ -142,7 +142,7 @@ export let constantRouterMap = [
     name: 'agentManage',
     hidden: true,
     meta: {
-      title: '代理商管理',
+      title: '代理管理',
       icon: 'component'
     },
     children: [

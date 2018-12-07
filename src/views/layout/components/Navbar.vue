@@ -5,7 +5,7 @@
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <!--<error-log class="errLog-container right-menu-item"/>-->
-        <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
+        <!-- <el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
           <screenfull class="screenfull right-menu-item"/>
         </el-tooltip>
         <el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
@@ -14,30 +14,30 @@
         <lang-select class="international right-menu-item"/>
         <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
           <theme-picker class="theme-switch right-menu-item"/>
-        </el-tooltip>
+        </el-tooltip> -->
       </template>
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <!--<img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">-->
           <svg-icon icon-class="avatar"/>
           <i class="el-icon-caret-bottom"/>
+          <span style="padding-left: 10px;">{{ username }}</span>
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/">
+          <!-- <router-link to="/">
             <el-dropdown-item >
               {{ '首页' }}
             </el-dropdown-item>
-          </router-link>
-          <el-dropdown-item divided >
+          </router-link> -->
+          <!-- <el-dropdown-item divided >
             {{ username }}
-          </el-dropdown-item>
+          </el-dropdown-item> -->
           <!--<router-link to="/userCenter/ModifyPassword">-->
           <!--<el-dropdown-item>-->
           <!--{{ '修改密码' }}-->
           <!--</el-dropdown-item>-->
           <!--</router-link>-->
-          <el-dropdown-item divided>
+          <el-dropdown-item>
             <span style="display:block;" @click="logout">{{ '退出登录' }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
