@@ -1,31 +1,20 @@
 <template>
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
-      <!-- <el-form-item label="代理商名称" >
-        <el-input v-model="queryParams.agentUserName" placeholder="请输入代理商名称" class="input-300" maxlength="64" clearable />
-      </el-form-item> -->
       <el-form-item>
         <el-input v-model="queryParams.userName" placeholder="请输入代理账号" class="input-300" maxlength="11" clearable />
-      </el-form-item>
-      <!-- <el-form-item label="联系人">
-        <el-input v-model="queryParams.linkName" placeholder="请输入联系人" class="input-300" maxlength="32" clearable />
-      </el-form-item>
-      <el-form-item label="手机号码">
-        <el-input v-model="queryParams.phone" placeholder="请输入手机号码" class="input-300" maxlength="11" clearable />
-      </el-form-item> -->
-      <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
-      <p/>
-      <div class="flex-layout">
-        <div class="flex-item">
-          <!-- <el-button type="primary" @click="resetQueryParams">清空查询</el-button> -->
-          <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理</el-button>
-          <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理</el-button></router-link>
+        <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
+        <p style="padding-bottom:10px"/>
+        <div class="flex-layout">
+          <div class="flex-item">
+            <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理</el-button>
+            <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理</el-button></router-link>
+          </div>
         </div>
-      </div>
+      </el-form-item>
     </el-form>
     <!-- 列表 -->
     <el-table :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
-      <!-- <el-table-column type="selection" :label="操作" width="55"/> -->
       <el-table-column label="操作" width="55" align="center">
         <template slot-scope="scope">
           <el-radio :label="scope.$index" v-model="check" @change.native="getTemplateRow(scope.$index)">&nbsp;</el-radio>
@@ -47,7 +36,7 @@
 
 <script>
 import { validateTel } from '@/utils/validate'
-import { fetchList } from '@/api/angentManage'
+import { getSecList } from '@/api/angentManage'
 export default {
   data() {
     return {
@@ -84,7 +73,7 @@ export default {
           postData[key] = this.queryParams[key]
         }
       }
-      fetchList(postData).then(res => {
+      getSecList(postData).then(res => {
         this.listLoading = false
         if (res.data) {
           this.list = res.data.items || []

@@ -17,31 +17,14 @@
         </el-tooltip> -->
       </template>
 
-      <el-dropdown class="avatar-container right-menu-item" trigger="click">
+      <div class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
           <svg-icon icon-class="avatar"/>
           <i class="el-icon-caret-bottom"/>
           <span style="padding-left: 10px;">{{ username }}</span>
+          <span style="display:inline-block; padding-left: 10px;color:blue;" @click="logout">退出登录</span>
         </div>
-        <el-dropdown-menu slot="dropdown">
-          <!-- <router-link to="/">
-            <el-dropdown-item >
-              {{ '首页' }}
-            </el-dropdown-item>
-          </router-link> -->
-          <!-- <el-dropdown-item divided >
-            {{ username }}
-          </el-dropdown-item> -->
-          <!--<router-link to="/userCenter/ModifyPassword">-->
-          <!--<el-dropdown-item>-->
-          <!--{{ '修改密码' }}-->
-          <!--</el-dropdown-item>-->
-          <!--</router-link>-->
-          <el-dropdown-item>
-            <span style="display:block;" @click="logout">{{ '退出登录' }}</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -91,6 +74,9 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+.el-icon-caret-bottom:before {
+    content: "";
+}
 .navbar {
   height: 50px;
   line-height: 50px;

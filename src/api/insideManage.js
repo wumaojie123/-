@@ -9,6 +9,16 @@ export default class insideManageAPI {
       params: query
     })
   }
+
+  // 查询一级代理列表（BD查）2018-12-10
+  static async getFirstAgentList(query) {
+    return request({
+      url: '/agentManage/firstAgents/queryFirstAgents',
+      method: 'get',
+      params: query
+    })
+  }
+
   // 新增agent
   static async addAgent(data) {
     return request({
