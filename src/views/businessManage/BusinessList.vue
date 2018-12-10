@@ -48,7 +48,9 @@ export default {
         { key: 'userName', label: '账号' },
         { key: 'linkName', label: '联系人' },
         { key: 'phone', label: '手机号码' },
-        { key: 'createDate', label: '创建日期' }
+        { key: 'createDate', label: '创建日期' },
+        { key: 'equipmentCount', label: '已导入设备总量' },
+        { key: 'equipmentOnlineCount', label: '昨日在线设备量' }
       ],
       pageInfo: { total: 0, pageSize: 10, currPage: 1 },
       angentInfo: []

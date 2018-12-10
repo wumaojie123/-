@@ -75,11 +75,6 @@
           <span>{{ scope.row.subordinateCount|| 0 }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column :label="`代理设备数量`" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.equipmentCount|| 0 }}</span>
-        </template>
-      </el-table-column> -->
       <el-table-column :label="`BD同事`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.bdName||'' }}</span>
@@ -100,18 +95,7 @@
 <script>
 import insideManage from '@/api/insideManage'
 import waves from '@/directive/waves' // 水波纹指令
-import {
-  parseTime
-} from '@/utils'
-  // const calendarTypeOptions = [
-  //   { key: 0, display_name: '冻结' },
-  //   { key: 1, display_name: '激活' }
-  // ]
-  // arr to obj ,such as { CN : "China", US : "USA" }
-  // const calendarTypeKeyValue = calendarTypeOptions.reduce((acc, cur) => {
-  //   acc[cur.key] = cur.display_name
-  //   return acc
-  // }, {})
+import { parseTime } from '@/utils'
 export default {
   name: 'AgentsList',
   directives: {
@@ -182,7 +166,7 @@ export default {
     getList() {
       this.listLoading = true
       this.checked = false
-      insideManage.getAgentList(this.listQuery).then(response => {
+      insideManage.getFirstAgentList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
         // Just to simulate the time of the request

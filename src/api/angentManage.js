@@ -47,3 +47,12 @@ export function getMerchant(query) {
     params: query
   })
 }
+
+// 查询二级代理列表（一级代理查）
+export function getSecList(query) {
+  return request({
+    url: '/agentManage/secondAgents/querySecondAgents',
+    method: 'get',
+    params: query
+  })
+}
