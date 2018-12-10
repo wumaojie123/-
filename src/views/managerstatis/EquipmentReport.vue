@@ -67,6 +67,7 @@ export default {
   },
   beforeMount() {
     // 获取参数 商家账号 产地ID, 场地名称，商家名称
+    console.log('before mount')
     this.query.userName = this.$route.query.userName
     this.query.groupId = this.$route.query.groupId
     this.query.associateSellerPhone = this.$route.query.associateSellerPhone

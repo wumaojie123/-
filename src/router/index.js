@@ -181,18 +181,25 @@ export let constantRouterMap = [
     },
     children: [
       {
-        path: '/equipmentReport',
-        component: () => import('@/views/managerstatis/EquipmentReport'),
-        name: 'equipmentReport',
-        meta: { title: '设备报表' },
-        hidden: true
-      },
-      {
         path: '/placeReport',
         hidden: true,
-        component: () => import('@/views/managerstatis/PlaceReport'),
+        component: () => import('@/views/managerstatis/index'),
         name: 'placeReport',
-        meta: { title: '场地报表' }
+        meta: { title: '场地报表' },
+        children: [
+          {
+            path: '/',
+            component: () => import('@/views/managerstatis/PlaceReport'),
+            hidden: true
+          },
+          {
+            path: '/equipmentReport',
+            component: () => import('@/views/managerstatis/EquipmentReport'),
+            name: 'equipmentReport',
+            meta: { title: '设备报表' },
+            hidden: true
+          }
+        ]
       }
     ]
   },
