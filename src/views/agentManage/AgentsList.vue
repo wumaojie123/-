@@ -4,14 +4,15 @@
       <el-form-item>
         <el-input v-model="queryParams.userName" placeholder="请输入代理账号" class="input-300" maxlength="11" clearable />
         <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
-        <p/>
+        <p style="padding-bottom:10px"/>
         <div class="flex-layout">
           <div class="flex-item">
             <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理</el-button>
             <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理</el-button></router-link>
           </div>
         </div>
-    </el-form-item></el-form>
+      </el-form-item>
+    </el-form>
     <!-- 列表 -->
     <el-table :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
       <el-table-column label="操作" width="55" align="center">
