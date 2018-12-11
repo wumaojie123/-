@@ -15,7 +15,6 @@
         <el-input v-model="queryParams.associateSellerPhone" :placeholder="`请输入${roletype}账号`" clearable/>
       </el-form-item>
       <el-button type="primary" icon="el-icon-search" @click="handleQueryParams">查询</el-button>
-      <!-- <el-button type="primary" @click="resetQueryParams">清空查询</el-button> -->
     </el-form>
     <!-- tab 切换商家和代理 -->
     <el-tabs v-model="active" type="card" @tab-click = "handlerTabClick">
@@ -41,7 +40,7 @@
           @next-click="handleCurrentChange"
           @current-change="handleCurrentChange"/>
       </el-tab-pane>
-      <el-tab-pane label="代理" name="agent">
+      <el-tab-pane v-if="type !== 2" label="代理" name="agent">
         <!-- 列表 -->
         <el-table v-loading="listLoading" :data="agentList" show-summary border style="width: 100%;margin-bottom: 20px;">
           <el-table-column prop="associateSellerPhone" label="账号" align="center"/>
@@ -65,8 +64,8 @@
 
 <script>
 import { parseTime } from '@/utils/index'
-// import { validateTel } from '@/utils/validate'
 import { fetchList } from '@/api/managerstatis'
+import { getAngent } from '@/api/angentManage'
 const NOW = Date.now()
 // 最大支持最近60天
 const OPTIONS = {
@@ -107,16 +106,23 @@ export default {
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
       options: OPTIONS,
-      active: 'merchant'
+      active: 'merchant',
+      type: ''
     }
   },
   beforeMount() {
     // 统计日期默认为登录日期的昨天
     this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
     this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
+    this.queryAgentType()
     this.queryList()
   },
   methods: {
+    queryAgentType() {
+      getAngent().then(res => {
+        this.type = res.data.type
+      })
+    },
     // tab切换
     handlerTabClick(obj) {
       this.roletype = obj.label
@@ -134,10 +140,6 @@ export default {
     },
     handleQueryParams() {
       this.queryList(this.pageInfo.currPage)
-      // if ((this.queryParams.associateSellerPhone && validateTel(this.queryParams.associateSellerPhone)) || !this.queryParams.associateSellerPhone) {
-      // } else {
-      //   this.$message({ message: '请输入正确的商家账号，为11位手机号码', type: 'error' })
-      // }
     },
     queryList(page = 1) {
       this.listLoading = true
