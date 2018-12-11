@@ -185,11 +185,12 @@ export let constantRouterMap = [
         hidden: true,
         component: () => import('@/views/managerstatis/index'),
         name: 'placeReport',
-        meta: { title: '场地报表' },
+        meta: { title: '场地报表', hasChildren: true },
         children: [
           {
             path: '/',
             component: () => import('@/views/managerstatis/PlaceReport'),
+            meta: { title: '', defaultPathHide: true, parent: 'placeReport' },
             hidden: true
           },
           {

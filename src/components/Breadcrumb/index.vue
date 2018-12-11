@@ -2,7 +2,7 @@
   <el-breadcrumb class="app-breadcrumb" separator=">">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index) in levelList" v-if="item.meta.title" :key="item.path">
-        <span v-if="item.redirect==='noredirect'||index==levelList.length-1 || item.meta.title !== '首页'" class="no-redirect">{{ item.meta.title }}</span>
+        <span v-if="item.redirect==='noredirect'||index==levelList.length-1 || !item.meta.hasChildren" class="no-redirect">{{ item.meta.title }}</span>
         <router-link v-else :to="item.redirect||item.path" style="color:blue;">{{ item.meta.title }}</router-link>
       </el-breadcrumb-item>
     </transition-group>
@@ -29,23 +29,20 @@ export default {
   methods: {
     generateTitle,
     getBreadcrumb() {
+      console.log(this.$route)
+      if (this.$route.meta.defaultPathHide) {
+        this.$route.matched.forEach(item => {
+          if (this.$route.meta.parent === item.name) {
+            item.path = this.$route.fullPath
+          }
+        })
+      }
       const matched = this.$route.matched.filter(item => item.name)
-      console.log('##route##')
-      console.log(this.$route.name)
-      console.log('###query##')
-      console.log(this.$route.query)
       // const first = matched[0]
       // if (first && first.name.trim().toLocaleLowerCase() !== 'Dashboard'.toLocaleLowerCase()) {
-      //   // matched = [{ path: '/dashboard', meta: { title: '首页' }}].concat(matched)
+      //   matched = [{ path: '/dashboard', meta: { title: '首页' }}].concat(matched)
       // }
-      matched.forEach((item) => {
-        if (item.name === this.$route.name) {
-          item.path = this.$route.fullPath
-          console.log(22)
-        }
-      })
-      console.log('##路由组##')
-      console.log(matched)
+      // console.log(matched)
       this.levelList = matched
     }
   }
