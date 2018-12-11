@@ -61,9 +61,7 @@ export default {
         { key: 'totalIncome', label: '收入总额(元)', sortable: true },
         { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
         { key: 'cashIncome', label: '现金收入(元)', sortable: true },
-        { key: 'adIncome', label: '广告收入(元)', sortable: true },
-        { key: 'equipmentTotalCount', label: '当前设备总数', sortable: true },
-        { key: 'equipmentOnlineCount', label: '昨日在线设备数量', sortable: true }
+        { key: 'adIncome', label: '广告收入(元)', sortable: true }
       ],
       pageInfo: { total: 20, pageSize: 10, currPage: 1 },
       options: options,
