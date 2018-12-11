@@ -60,16 +60,6 @@
           <span>{{ scope.row.ownEquipmentCount || 0 }}</span>
         </template>
       </el-table-column> -->
-      <el-table-column :label="`已导入设备总量`" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.equipmentCount }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="`昨日在线设备量`" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.equipmentOnlineCount }}</span>
-        </template>
-      </el-table-column>
       <el-table-column :label="`下级代理数量`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.subordinateCount|| 0 }}</span>
@@ -83,6 +73,16 @@
       <el-table-column :label="`创建日期`" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.createDate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="`已导入设备总量`" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.equipmentCount }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="`昨日在线设备量`" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.equipmentOnlineCount }}</span>
         </template>
       </el-table-column>
     </el-table>

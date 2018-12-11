@@ -64,8 +64,8 @@
     <!-- 失败对话框 -->
     <el-dialog :visible.sync="dialogVisible" title="导入结果" width="50%">
       <span>{{ failtTest }}</span>
-      <p class="fail-reason">失败原因</p>
-      <el-table :data="failList" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
+      <p v-if="failList.length > 0" class="fail-reason">失败原因</p>
+      <el-table v-if="failList.length > 0" :data="failList" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;">
         <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
       </el-table>
     </el-dialog>

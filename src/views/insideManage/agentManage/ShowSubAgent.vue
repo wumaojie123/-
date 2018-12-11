@@ -59,7 +59,8 @@
 </template>
 
 <script>
-import insideManage from '@/api/insideManage'
+// import insideManage from '@/api/insideManage'
+import { getSecList } from '@/api/angentManage'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 export default {
@@ -122,7 +123,7 @@ export default {
     },
     getList(id) {
       this.listLoading = true
-      insideManage.getAgentList({
+      getSecList({
         agentUserId: id
       }).then(response => {
         this.list = response.data.items
