@@ -41,7 +41,6 @@
 </template>
 
 <script>
-// import { parseTime } from '@/utils/index'
 import { equipmentList } from '@/api/managerstatis'
 import { options } from './utils'
 export default {

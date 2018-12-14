@@ -91,8 +91,6 @@ export default {
         { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
         { key: 'cashIncome', label: '现金收入(元)', sortable: true },
         { key: 'adIncome', label: '广告收入(元)', sortable: true }
-        // { key: 'equipmentTotalCount', label: '当前设备总数', sortable: true },
-        // { key: 'equipmentOnlineCount', label: '昨日在线设备数量', sortable: true }
       ],
       colums2: [
         { key: 'agentUserName', label: '代理名称', width: 250 },

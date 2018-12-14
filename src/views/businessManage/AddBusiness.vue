@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item label="联系人姓名">
         <el-input v-model="baseInfo.linkName" :disabled="disableFlag" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
-        <span class="input-anno" style="color:red;">注意：“姓名”设置后，将显示在手机B端后台的账号信息中，且无法修改，请慎重填写！。</span>
+        <span class="input-anno" style="color:red;">注意：“姓名”设置后，将显示在手机B端后台的账号信息中，且无法修改，请慎重填写！</span>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleBaseInfo">创建/绑定</el-button>
