@@ -25,7 +25,12 @@
             </el-row>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="6">
+          <el-form-item label="场地名称" prop="groupName">
+            <el-input v-model="form.groupName" placeholder="请输入场地名称"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
           <el-form-item label="设备状态" prop="status">
             <!--<el-input v-model="form.groupNumber" placeholder="请输入机台号"/>-->
             <el-select v-model="form.status" placeholder="请选择">
@@ -37,19 +42,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
-          <el-form-item label="场地名称" prop="groupName">
-            <el-input v-model="form.groupName" placeholder="请输入场地名称"/>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <!-- <el-col :span="8">
-          <el-form-item label="代理/商家名称" prop="agentUserName">
-            <el-input v-model="form.agentUserName" placeholder="请输入代理/商家名称"/>
-          </el-form-item>
-        </el-col> -->
-        <el-col :span="8">
+        <el-col :span="5">
           <el-form-item label="设备类型" prop="equipmentTypeName">
             <el-select v-model="form.equipmentTypeName" placeholder="请选择">
               <el-option
@@ -60,6 +53,19 @@
             </el-select>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
+        <!--<el-col :span="8">
+          <el-form-item label="设备类型" prop="equipmentTypeName">
+            <el-select v-model="form.equipmentTypeName" placeholder="请选择">
+              <el-option
+                v-for="item in equipmentTypeName"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"/>
+            </el-select>
+          </el-form-item>
+        </el-col>-->
         <!--<el-col :span="8">
           <el-form-item label="在线状态" prop="isOnline">
             <el-select v-model="form.isOnline" placeholder="请选择">
@@ -83,6 +89,7 @@
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-download" @click="importQrcode('register')">导出注册二维码</el-button>
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-goods" @click="disabledEquipment('disable')">禁用设备</el-button>
       <el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="disabledEquipment('enable')">解除禁用</el-button>
+      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-setting" @click="equipmentSetPara">设置设备参数</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -156,6 +163,11 @@
           <span>{{ scope.row.firmwareVersion }}</span>
         </template>
       </el-table-column>
+      <el-table-column :render-header="renderHeader" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.equipmentParam }}</span>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pagination-container">
       <el-pagination
@@ -180,16 +192,25 @@
       </div>
     </div>
     <a id="downLoad" ref="downloadZip" :href="loadUrl" :download="downLoadFileName" style="display: none;"/>
+    <!---参数设置弹框-->
+    <el-dialog :visible.sync="equipmentParaDialog" width="500px" title="设置设备参数">
+      <set-equipment-paras-form
+        :checkedrow="checkedRow"
+        @cancel="equipmentParaDialog = false"
+        @confirom="confirom"/>
+    </el-dialog>
   </el-main>
 </template>
 
 <script>
-import { getFirstDeviceList, equipmentStatus } from '@/api/getDeviceList'
+import { getFirstDeviceList, equipmentStatus, setEquipmentParam } from '@/api/getDeviceList'
 import { getDeviceType } from '@/api/getEquiedType'
-import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
-import { Throttle } from '../../utils/throttle'
+import SetEquipmentParasForm from '@/components/SetEquipmentParas'
+import { exportPayOrCode, exportRegisterOrCode } from '@/api/qrcodeCreate'
+import { Throttle } from '@/utils/throttle'
 import waves from '@/directive/waves' // 水波纹指令
 import QRCode from 'qrcode'
+
 const calendarTypeOptions = [
   { key: 0, display_name: '冻结' },
   { key: 1, display_name: '激活' }
@@ -199,10 +220,14 @@ export default {
   directives: {
     waves
   },
+  components: {
+    SetEquipmentParasForm
+  },
   data() {
     return {
       tableKey: 0,
       loadUrl: '',
+      equipmentParaDialog: false,
       throttle: null,
       downLoadFileName: '二维码下载',
       showQR: false,
@@ -293,21 +318,46 @@ export default {
     })
     const clientHeight = document.body.clientHeight || document.documentElement.clientHeight
     this.minHeightTable = clientHeight - 334
-    console.log(this.minHeightTable, clientHeight)
   },
   methods: {
-    // 导出二维码
-    importQrcode(type) {
+    renderHeader(h) {
+      return [h('p', {}, ['设备参数']), h('p', {}, ['(脉冲宽度/脉冲间隔/待机电平)'])]
+    },
+    confirom(data) {
+      this.equipmentParaDialog = false
+      const equipmentIds = []
+      this.checkedRow.forEach((v) => {
+        equipmentIds.push(v.equipmentId)
+      })
+      setEquipmentParam({ values: equipmentIds, ...data })
+        .then(res => {
+          if (res.result === 0) {
+            this.getList()
+            this.$message({
+              message: '参数设置成功！',
+              type: 'success'
+            })
+          }
+        })
+    },
+    // 设备参数设置
+    equipmentSetPara() {
+      if (this.diffEquipmentType()) {
+        return
+      }
+      this.equipmentParaDialog = true
+    },
+    // 判断选择设备的类型是否一致
+    diffEquipmentType() {
       let diff = false
       if (this.checkedRow.length <= 0) {
         this.$message({
           message: '请选择需要操作的设备！',
           type: 'warning'
         })
-        return
+        return true
       } else {
         this.checkedRow.reduce((prev, next) => {
-          console.log(prev.equipmentTypeName, next.equipmentTypeName)
           if (!diff && (prev.equipmentTypeName !== next.equipmentTypeName)) {
             diff = true
           }
@@ -318,6 +368,14 @@ export default {
         this.$alert('仅支持导出同一种设备类型的二维码，请重新勾选。', '温馨提示', {
           confirmButtonText: '知道了'
         })
+        return true
+      }
+      return false
+    },
+    // 导出二维码
+    importQrcode(type) {
+      // 如果没有选择设备或者选择了不同的设备就退出
+      if (this.diffEquipmentType()) {
         return
       }
       // 设备id
