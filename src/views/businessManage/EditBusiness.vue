@@ -6,10 +6,21 @@
         <span class="input-anno">账号暂不支持修改</span>
       </el-form-item>
       <el-form-item label="商家名称">
-        <el-input v-model="baseInfo.agentUserName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" clearable />
+        <el-input v-model="baseInfo.agentUserName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" disabled />
+        <span class="input-anno">“商家名称”设置后，商家可以在手机B端后台修改。修改路径：我的 > 品牌信息设置 > 商户品牌名称</span>
       </el-form-item>
       <el-form-item label="联系人姓名">
-        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
+        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" disabled />
+        <span class="input-anno">“姓名”设置后，将显示在手机B端后台的账号信息中，且无法修改。未设置的，请通知商家前往B端后台设置</span>
+      </el-form-item>
+      <el-form-item label="备注信息">
+        <el-input v-model="baseInfo.description" style="width: 500px;" placeholder="请输入10字以内备注信息（备注信息仅供你自己查看，便于记录商家信息）" type="text" class="input-300" maxlength="10" clearable />
+      </el-form-item>
+      <el-form-item label="商家权限">
+        <el-checkbox-group v-model="check">
+          <el-checkbox label="禁用设备/启用设备"/>
+          <span class="input-anno">（取消勾选后，该商家在B端后台则无权限 “禁用设备” 和 “启用设备”，此功能仅对与代理关联的设备生效）</span>
+        </el-checkbox-group>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleAngentInfo">保存</el-button>
@@ -23,7 +34,8 @@ import { update } from '@/api/businessManage'
 export default {
   data() {
     return {
-      baseInfo: { loginPhone: '', linkName: '', agentUserName: '', adOrgId: '' },
+      baseInfo: { loginPhone: '', linkName: '', agentUserName: '', adOrgId: '', merchantAuthority: '', description: '' },
+      check: false,
       baseInfoRules: {
         loginPhone: [{ required: true, message: '请输入商家账号', trigger: 'blur' }]
       }
@@ -35,6 +47,8 @@ export default {
     this.baseInfo.linkName = baseInfo.linkName
     this.baseInfo.agentUserName = baseInfo.merchantName
     this.baseInfo.adOrgId = baseInfo.adOrgId
+    this.baseInfo.description = baseInfo.description
+    this.check = baseInfo.merchantAuthority === 1
   },
   methods: {
     handleBaseInfo() {
@@ -49,6 +63,9 @@ export default {
     // 更新商家信息
     handleAngentInfo() {
       const postData = this.baseInfo
+      console.log(this.check ? 1 : 0)
+      postData.merchantAuthority = this.check ? 1 : 0
+      console.log(JSON.stringify(postData))
       update(postData).then(res => {
         if (res.result === 0) {
           this.$message({ message: '编辑商家信息成功', type: 'success' })

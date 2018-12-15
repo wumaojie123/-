@@ -7,7 +7,7 @@
       <el-button type="primary" icon="el-icon-search" @click="filterQueryList">查询</el-button>
       <div class="flex-layout">
         <div class="flex-item">
-          <!--<el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button>-->
+          <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button>
           <router-link :to="{path: '/addbusiness', query: {info: angentInfo[0]}}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link>
         </div>
       </div>
@@ -50,7 +50,8 @@ export default {
         { key: 'phone', label: '手机号码' },
         { key: 'createDate', label: '创建日期' },
         { key: 'equipmentCount', label: '当前设备总量' },
-        { key: 'equipmentOnlineCount', label: '昨日在线设备量' }
+        { key: 'equipmentOnlineCount', label: '昨日在线设备量' },
+        { key: 'description', label: '备注信息' }
       ],
       pageInfo: { total: 0, pageSize: 10, currPage: 1 },
       angentInfo: []
