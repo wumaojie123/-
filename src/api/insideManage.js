@@ -124,9 +124,7 @@ export default class insideManageAPI {
     return request({
       url: '/agentManage/getUserByRole',
       method: 'get',
-      params: {
-        params
-      }
+      params: params
     })
   }
   // 查询一级代理列表（总控查
@@ -134,9 +132,7 @@ export default class insideManageAPI {
     return request({
       url: '/agentManage/firstAgents/queryFirstAgentsByControl',
       method: 'get',
-      params: {
-        params
-      }
+      params: params
     })
   }
 }
