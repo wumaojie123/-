@@ -35,6 +35,15 @@ export function getSecDeviceList(data) {
   })
 }
 
+// 设置设备参数
+export function setEquipmentParam(data) {
+  return request({
+    url: '/rest/equipment/batch/setEquipmentParam',
+    method: 'post',
+    data
+  })
+}
+
 export function agentEquipmentList(data) {
   return request({
     url: '/rest/equipment/agentEquipment/query',

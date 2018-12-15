@@ -173,7 +173,6 @@ export const userCenter = [
           }
         ]
       },
-
       {
         value: 'bdRoleManage',
         htmlTemplet: 'insideManage/bdManage/BdManageLayout',
