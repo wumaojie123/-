@@ -72,6 +72,7 @@
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-download" @click="importQrcode('register')">导出注册二维码</el-button>
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-goods" @click="disabledEquipment('disable')">禁用设备</el-button>
       <el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="disabledEquipment('enable')">解除禁用</el-button>
+      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-setting" @click="equipmentSetPara">设置设备参数</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -152,6 +153,11 @@
           <span>{{ scope.row.firmwareVersion }}</span>
         </template>
       </el-table-column>
+      <el-table-column :render-header="renderHeader" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.equipmentParam }}</span>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pagination-container">
       <el-pagination
@@ -176,13 +182,21 @@
       </div>
     </div>
     <a id="downLoad" ref="downloadZip" :href="loadUrl" :download="downLoadFileName" style="display: none;"/>
+    <!---参数设置弹框-->
+    <el-dialog :visible.sync="equipmentParaDialog" width="500px" title="设置设备参数">
+      <set-equipment-paras-form
+        :checkedrow="checkedRow"
+        @cancel="equipmentParaDialog = false"
+        @confirom="confirom"/>
+    </el-dialog>
   </el-main>
 </template>
 
 <script>
-import { getSecDeviceList, equipmentStatus } from '@/api/getDeviceList'
+import { getSecDeviceList, equipmentStatus, setEquipmentParam } from '@/api/getDeviceList'
 import { getDeviceType } from '@/api/getEquiedType'
 import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
+import SetEquipmentParasForm from '@/components/SetEquipmentParas'
 import { Throttle } from '../../utils/throttle'
 import waves from '@/directive/waves' // 水波纹指令
 import QRCode from 'qrcode'
@@ -195,10 +209,14 @@ export default {
   directives: {
     waves
   },
+  components: {
+    SetEquipmentParasForm
+  },
   data() {
     return {
       tableKey: 0,
       loadUrl: '',
+      equipmentParaDialog: false,
       throttle: null,
       downLoadFileName: '二维码下载',
       showQR: false,
@@ -292,18 +310,44 @@ export default {
     console.log(this.minHeightTable, clientHeight)
   },
   methods: {
-    // 导出二维码
-    importQrcode(type) {
+    renderHeader(h) {
+      return [h('p', {}, ['设备参数']), h('p', {}, ['(脉冲宽度/脉冲间隔/待机电平)'])]
+    },
+    confirom(data) {
+      this.equipmentParaDialog = false
+      const equipmentIds = []
+      this.checkedRow.forEach((v) => {
+        equipmentIds.push(v.equipmentId)
+      })
+      setEquipmentParam({ values: equipmentIds, ...data })
+        .then(res => {
+          if (res.result === 0) {
+            this.getList()
+            this.$message({
+              message: '参数设置成功！',
+              type: 'success'
+            })
+          }
+        })
+    },
+    // 设备参数设置
+    equipmentSetPara() {
+      if (this.diffEquipmentType()) {
+        return
+      }
+      this.equipmentParaDialog = true
+    },
+    // 判断选择设备的类型是否一致
+    diffEquipmentType() {
       let diff = false
       if (this.checkedRow.length <= 0) {
         this.$message({
           message: '请选择需要操作的设备！',
           type: 'warning'
         })
-        return
+        return true
       } else {
         this.checkedRow.reduce((prev, next) => {
-          console.log(prev.equipmentTypeName, next.equipmentTypeName)
           if (!diff && (prev.equipmentTypeName !== next.equipmentTypeName)) {
             diff = true
           }
@@ -314,6 +358,14 @@ export default {
         this.$alert('仅支持导出同一种设备类型的二维码，请重新勾选。', '温馨提示', {
           confirmButtonText: '知道了'
         })
+        return true
+      }
+      return false
+    },
+    // 导出二维码
+    importQrcode(type) {
+      // 如果没有选择设备或者选择了不同的设备就退出
+      if (this.diffEquipmentType()) {
         return
       }
       // 设备id
