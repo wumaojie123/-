@@ -48,7 +48,7 @@ export default {
         { key: 'agentUserName', label: '代理名称' },
         { key: 'userName', label: '账号' },
         { key: 'bunissesNames', label: '经营项目' },
-        { key: 'equipmentCount', label: '设备类型' },
+        { key: 'equipmentTypeName', label: '设备类型' },
         { key: 'equipmentCount', label: '已导入设备总量' },
         { key: 'equipmentOnlineCount', label: '昨日在线设备量' },
         { key: 'subordinateCount', label: '下级代理数量' },
