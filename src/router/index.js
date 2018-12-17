@@ -81,7 +81,7 @@ export let constantRouterMap = [
     children: [
       {
         path: 'superAgent',
-        component: () => import('@/views/insideManage/bdManage/AgentList'),
+        component: () => import('@/views/agent/AgentList'),
         name: 'Dashboard',
         meta: { title: '一级代理', icon: 'superAgent', noCache: true }
       }

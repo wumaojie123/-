@@ -76,6 +76,22 @@ export const userCenter = [
       }
     ]
   },
+  // 2018-12-17新增
+  {
+    value: '/super',
+    name: '总控',
+    htmlTemplet: 'super',
+    icon: 'chart',
+    alwaysShow: true,
+    menuResourcesList: [
+      {
+        value: 'agent',
+        htmlTemplet: 'agent/AgentList',
+        parentId: 'super',
+        name: '一级代理'
+      }
+    ]
+  },
   {
     value: '/deviceManage',
     htmlTemplet: 'deviceManage',
