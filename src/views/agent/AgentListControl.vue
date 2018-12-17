@@ -2,12 +2,12 @@
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-position="right">
       <el-form-item label="BD人员">
-        <el-select v-model="queryParams.bdName" placeholder="请选择">
+        <el-select v-model="queryParams.bdName" placeholder="请选择" clearable>
           <el-option v-for="item in DBlist" :key="item.value" :label="item.label" :value="item.label"/>
         </el-select>
       </el-form-item>
       <el-form-item label="设备类型">
-        <el-select v-model="queryParams.equipmentTypeValue" placeholder="请选择">
+        <el-select v-model="queryParams.equipmentTypeValue" placeholder="请选择" clearable>
           <el-option v-for="item in equipmentTypesArr" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
