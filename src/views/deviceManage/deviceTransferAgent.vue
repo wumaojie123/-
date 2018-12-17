@@ -36,6 +36,7 @@
       <el-button type="primary" @click="importQrcode('pay')">导出支付二维码</el-button>
       <el-button style="margin-left: 10px;" type="primary" @click="importQrcode('register')">导出注册二维码</el-button>
       <el-button style="margin-left: 10px;" type="primary" @click="rebackEquipmentDevidce">退还设备</el-button>
+      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-setting" @click="equipmentSetPara">设置设备参数</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -69,6 +70,11 @@
       <el-table-column label="设备来源" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.agentEquipmentStatus }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :render-header="renderHeader" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.equipmentParam }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -168,22 +174,34 @@
       </div>
     </el-dialog>
     <a id="downLoad" ref="downloadZip" :href="loadUrl" :download="downLoadFileName" style="display: none;"/>
+    <!---参数设置弹框-->
+    <el-dialog :visible.sync="equipmentParaDialog" width="500px" title="设置设备参数">
+      <set-equipment-paras-form
+        :checkedrow="willTranfers"
+        @cancel="equipmentParaDialog = false"
+        @confirom="confirom"/>
+    </el-dialog>
   </el-main>
 </template>
 
 <script>
 import { getDeviceTypeBd } from '../../api/getEquiedType'
-import { agentEquipmentList } from '../../api/getDeviceList'
+import { agentEquipmentList, setEquipmentParam } from '../../api/getDeviceList'
 import { childMerchants } from '../../api/businessManage'
 import { transfer, rebackEquipment } from '../../api/transferDevice'
 import { Throttle } from '../../utils/throttle'
+import SetEquipmentParasForm from '@/components/SetEquipmentParas'
 import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
 export default {
   name: 'DeviceTransfer',
+  components: {
+    SetEquipmentParasForm
+  },
   data() {
     return {
       dialogVisible2: false,
       total: 0,
+      equipmentParaDialog: false,
       throttle: null,
       downLoadFileName: '下载',
       questionDialogVisible: false,
@@ -242,6 +260,51 @@ export default {
     this.getList()
   },
   methods: {
+    renderHeader(h) {
+      return [h('p', {}, ['设备参数']), h('p', {}, ['(脉冲宽度/脉冲间隔/待机电平)'])]
+    },
+    equipmentSetPara() {
+      if (this.diffEquipmentType()) {
+        return
+      }
+      this.equipmentParaDialog = true
+    },
+    diffEquipmentType() {
+      let diff = false
+      if (this.willTranfers.length <= 0) {
+        this.$message({ message: '请选择需要操作的设备！', type: 'warning' })
+        return true
+      } else {
+        this.willTranfers.reduce((prev, next) => {
+          if (!diff && (prev.equipmentTypeName !== next.equipmentTypeName)) {
+            diff = true
+          }
+          return next
+        })
+      }
+      if (diff) {
+        this.$alert('仅支持导出同一种设备类型的二维码，请重新勾选。', '温馨提示', { confirmButtonText: '知道了' })
+        return true
+      }
+      return false
+    },
+    confirom(data) {
+      this.equipmentParaDialog = false
+      const equipmentIds = []
+      this.willTranfers.forEach((v) => {
+        equipmentIds.push(v.equipmentValue)
+      })
+      setEquipmentParam({ values: equipmentIds, ...data })
+        .then(res => {
+          if (res.result === 0) {
+            this.getList()
+            this.$message({
+              message: '参数设置成功！',
+              type: 'success'
+            })
+          }
+        })
+    },
     // 退还设备
     rebackEquipmentDevidce() {
       // 设备id
@@ -267,21 +330,7 @@ export default {
     },
     // 导出二维码
     importQrcode(type) {
-      let diff = false
-      if (this.willTranfers.length <= 0) {
-        this.$message({ message: '请选择需要操作的设备！', type: 'warning' })
-        return
-      } else {
-        this.willTranfers.reduce((prev, next) => {
-          console.log(prev.equipmentTypeName, next.equipmentTypeName)
-          if (!diff && (prev.equipmentTypeName !== next.equipmentTypeName)) {
-            diff = true
-          }
-          return next
-        })
-      }
-      if (diff) {
-        this.$alert('仅支持导出同一种设备类型的二维码，请重新勾选。', '温馨提示', { confirmButtonText: '知道了' })
+      if (this.diffEquipmentType()) {
         return
       }
       // 设备id

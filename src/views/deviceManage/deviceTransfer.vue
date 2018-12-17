@@ -312,6 +312,9 @@ export default {
     },
     // 导出二维码
     importQrcode(type) {
+      if (this.diffEquipmentType()) {
+        return
+      }
       // 设备id
       const equipmentIds = []
       this.willTranfers.forEach((v) => { equipmentIds.push(v.equipmentValue) })
@@ -354,8 +357,6 @@ export default {
         params = { values: arrTrans, agentUserId: this.agentid }
         transferFunc = transferAgent
       }
-      console.log('转移参数:', JSON.stringify(params))
-      console.log('transferFunc:', transferFunc)
       transferFunc(params)
         .then(() => {
           loading.close()
