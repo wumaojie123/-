@@ -74,6 +74,19 @@ export let constantRouterMap = [
     component: () => import('@/views/errorPage/401'),
     hidden: true
   },
+  // {
+  //   path: '',
+  //   component: Layout,
+  //   redirect: 'superAgent',
+  //   children: [
+  //     {
+  //       path: 'superAgent',
+  //       component: () => import('@/views/agent/AgentList'),
+  //       name: 'Dashboard',
+  //       meta: { title: '一级代理', icon: 'superAgent', noCache: true }
+  //     }
+  //   ]
+  // },
   {
     path: '',
     component: Layout,

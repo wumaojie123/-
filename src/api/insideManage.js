@@ -119,5 +119,20 @@ export default class insideManageAPI {
       }
     })
   }
+  // 获取BD列表
+  static async getUserByRole(params) {
+    return request({
+      url: '/agentManage/getUserByRole',
+      method: 'get',
+      params: params
+    })
+  }
+  // 查询一级代理列表（总控查
+  static async queryFirstAgentsByControl(params) {
+    return request({
+      url: '/agentManage/firstAgents/queryFirstAgentsByControl',
+      method: 'get',
+      params: params
+    })
+  }
 }
-

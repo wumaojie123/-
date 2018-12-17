@@ -21,6 +21,15 @@
         <el-input v-model="baseInfo.linkName" :disabled="disableFlag" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
         <span class="input-anno" style="color:red;">注意：“姓名”设置后，将显示在手机B端后台的账号信息中，且无法修改，请慎重填写！</span>
       </el-form-item>
+      <el-form-item label="备注信息">
+        <el-input v-model="baseInfo.description" style="width: 500px;" placeholder="请输入10字以内备注信息（备注信息仅供你自己查看，便于记录商家信息）" type="text" class="input-300" maxlength="10" clearable />
+      </el-form-item>
+      <el-form-item label="商家权限">
+        <el-checkbox-group v-model="check">
+          <el-checkbox label="禁用设备/启用设备"/>
+          <span class="input-anno">（取消勾选后，该商家在B端后台则无权限 “禁用设备” 和 “启用设备”，此功能仅对与代理关联的设备生效）</span>
+        </el-checkbox-group>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleBaseInfo">创建/绑定</el-button>
       </el-form-item>
@@ -39,17 +48,19 @@ import { validateTel } from '@/utils/validate'
 export default {
   data() {
     return {
+      checkList: [],
       text: '获取验证码',
       time: 120,
       timer: null,
       flag: false,
-      baseInfo: { loginPhone: '', linkName: '', agentUserName: '', code: '' },
+      baseInfo: { loginPhone: '', linkName: '', agentUserName: '', code: '', merchantAuthority: '', description: '' },
       baseInfoRules: {
         loginPhone: [{ required: true, message: '请输入商家账号', trigger: 'blur' }],
         code: [{ required: true, message: '请输入4位手机验证码', trigger: 'blur' }]
       },
       state: '',
-      disableFlag: false
+      disableFlag: false,
+      check: false
     }
   },
   methods: {
@@ -64,6 +75,7 @@ export default {
     },
     handleAngentInfo() {
       const postData = this.baseInfo
+      postData.merchantAuthority = this.check ? 1 : 0
       add(postData).then(res => {
         if (res.result === 0) {
           this.$message({ message: res.data, type: 'success' })
