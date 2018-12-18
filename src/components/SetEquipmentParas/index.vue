@@ -21,7 +21,7 @@
     </el-form-item>
     <p style="color: #999999;font-size: 13px;">温馨提示：此处的参数设置，仅对 “脉冲版” 生效，对“串口版”无效。</p>
     <div style="padding-top: 22px;text-align: right">
-      <el-button @click="cancel">取 消</el-button>
+      <el-button @click="cancel('equipmentParaForm')">取 消</el-button>
       <el-button type="primary" @click="confirmPara('equipmentParaForm')">确 定</el-button>
     </div>
   </el-form>
@@ -83,7 +83,8 @@ export default {
         })
       })
     },
-    cancel() {
+    cancel(formName) {
+      this.$refs[formName].resetFields()
       this.$emit('cancel')
     },
     confirmPara(formName) {

@@ -183,7 +183,7 @@
     </div>
     <a id="downLoad" ref="downloadZip" :href="loadUrl" :download="downLoadFileName" style="display: none;"/>
     <!---参数设置弹框-->
-    <el-dialog :visible.sync="equipmentParaDialog" width="500px" title="设置设备参数">
+    <el-dialog :visible.sync="equipmentParaDialog" :show-close="false" :close-on-click-modal="false" width="500px" title="设置设备参数">
       <set-equipment-paras-form
         :checkedrow="checkedRow"
         @cancel="equipmentParaDialog = false"
