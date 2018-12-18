@@ -90,6 +90,7 @@ export default {
       this.submitChecked(formName)
         .then(res => {
           this.$emit('confirom', this.equipmentParaForm)
+          this.$refs[formName].resetFields()
         })
         .catch(() => {
           console.log('err')
