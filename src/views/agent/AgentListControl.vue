@@ -17,7 +17,7 @@
       <el-button type="primary" icon="el-icon-search" @click="filterQueryList">查询</el-button>
     </el-form>
     <!-- 列表 -->
-    <el-table v-loading="listLoading" :data="list" :height="550" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
+    <el-table v-loading="listLoading" :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
     <el-pagination

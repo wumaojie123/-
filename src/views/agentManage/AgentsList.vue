@@ -14,7 +14,7 @@
       </el-form-item>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" :height="550" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
+    <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
       <el-table-column label="操作" width="55" align="center">
         <template slot-scope="scope">
           <el-radio :label="scope.$index" v-model="check" @change.native="getTemplateRow(scope.$index)">&nbsp;</el-radio>
