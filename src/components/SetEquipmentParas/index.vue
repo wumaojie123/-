@@ -12,14 +12,14 @@
       <div slot="label" style="text-align: left">脉冲间隔</div>
       <el-input v-model="equipmentParaForm.pulseInterval" type="number" placeholder="10~1000"/>
     </el-form-item>
-    <el-form-item prop="voltage">
+    <el-form-item prop="standbyStatus">
       <div slot="label" style="text-align: left">待机电平</div>
-      <el-radio-group v-model="equipmentParaForm.voltage">
+      <el-radio-group v-model="equipmentParaForm.standbyStatus">
         <el-radio :label="0">常开</el-radio>
         <el-radio :label="1">常闭</el-radio>
       </el-radio-group>
     </el-form-item>
-    <p style="color: #999999;font-size: 13px;">温馨提示：脉冲宽度/间隔范围为 10-1000 的整数。</p>
+    <p style="color: #999999;font-size: 13px;">温馨提示：此处的参数设置，仅对 “脉冲版” 生效，对“串口版”无效。</p>
     <div style="padding-top: 22px;text-align: right">
       <el-button @click="cancel">取 消</el-button>
       <el-button type="primary" @click="confirmPara('equipmentParaForm')">确 定</el-button>
@@ -43,7 +43,7 @@ export default {
       equipmentParaForm: {
         pulseWidth: '',
         pulseInterval: '',
-        voltage: 0
+        standbyStatus: 0
       },
       rules: {
         pulseWidth: {
