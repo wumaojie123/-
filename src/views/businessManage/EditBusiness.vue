@@ -1,12 +1,12 @@
 <template>
   <div class="content-area">
     <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfoRules" label-width="120px" label-position="right" style="margin-top: 20px;">
-      <el-form-item label="商家账号" prop="loginPhone">
-        <el-input v-model="baseInfo.loginPhone" placeholder="请输入商家账号" type="text" class="input-300" maxlength="11" disabled />
+      <el-form-item label="商家账号" prop="userName">
+        <el-input v-model="baseInfo.userName" placeholder="请输入商家账号" type="text" class="input-300" maxlength="11" disabled />
         <span class="input-anno">账号暂不支持修改</span>
       </el-form-item>
       <el-form-item label="商家名称">
-        <el-input v-model="baseInfo.agentUserName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" disabled />
+        <el-input v-model="baseInfo.merchantName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" disabled />
         <span class="input-anno">“商家名称”设置后，商家可以在手机B端后台修改。修改路径：我的 > 品牌信息设置 > 商户品牌名称</span>
       </el-form-item>
       <el-form-item label="联系人姓名">
@@ -34,18 +34,18 @@ import { update } from '@/api/businessManage'
 export default {
   data() {
     return {
-      baseInfo: { loginPhone: '', linkName: '', agentUserName: '', adOrgId: '', merchantAuthority: '', description: '' },
+      baseInfo: { userName: '', linkName: '', merchantName: '', adOrgId: '', merchantAuthority: '', description: '' },
       check: false,
       baseInfoRules: {
-        loginPhone: [{ required: true, message: '请输入商家账号', trigger: 'blur' }]
+        userName: [{ required: true, message: '请输入商家账号', trigger: 'blur' }]
       }
     }
   },
   created() {
     const baseInfo = JSON.parse(decodeURIComponent(this.$route.params.info))
-    this.baseInfo.loginPhone = baseInfo.userName
+    this.baseInfo.userName = baseInfo.userName
     this.baseInfo.linkName = baseInfo.linkName
-    this.baseInfo.agentUserName = baseInfo.merchantName
+    this.baseInfo.merchantName = baseInfo.merchantName
     this.baseInfo.adOrgId = baseInfo.adOrgId
     this.baseInfo.description = baseInfo.description
     this.check = baseInfo.merchantAuthority === 1
@@ -65,7 +65,6 @@ export default {
       const postData = this.baseInfo
       console.log(this.check ? 1 : 0)
       postData.merchantAuthority = this.check ? 1 : 0
-      console.log(JSON.stringify(postData))
       update(postData).then(res => {
         if (res.result === 0) {
           this.$message({ message: '编辑商家信息成功', type: 'success' })
