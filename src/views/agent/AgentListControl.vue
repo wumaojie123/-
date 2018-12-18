@@ -17,7 +17,7 @@
       <el-button type="primary" icon="el-icon-search" @click="filterQueryList">查询</el-button>
     </el-form>
     <!-- 列表 -->
-    <el-table v-loading="listLoading" :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
+    <el-table v-loading="listLoading" :data="list" :height="550" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
     <el-pagination
@@ -48,7 +48,7 @@ export default {
         { key: 'agentUserName', label: '代理名称' },
         { key: 'userName', label: '账号' },
         { key: 'bunissesNames', label: '经营项目' },
-        { key: 'equipmentCount', label: '设备类型' },
+        { key: 'equipmentTypeName', label: '设备类型' },
         { key: 'equipmentCount', label: '已导入设备总量' },
         { key: 'equipmentOnlineCount', label: '昨日在线设备量' },
         { key: 'subordinateCount', label: '下级代理数量' },

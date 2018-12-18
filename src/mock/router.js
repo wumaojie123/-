@@ -85,6 +85,7 @@ export const userCenter = [
     alwaysShow: true,
     menuResourcesList: [
       {
+        icon: 'peoples',
         value: 'agent',
         htmlTemplet: 'agent/AgentList',
         parentId: 'super',
