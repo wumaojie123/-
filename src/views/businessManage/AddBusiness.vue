@@ -1,8 +1,8 @@
 <template>
   <div class="content-area">
     <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfoRules" label-width="120px" label-position="right" style="margin-top: 20px;">
-      <el-form-item label="商家账号" prop="loginPhone">
-        <el-input v-model="baseInfo.loginPhone" placeholder="请输入商家账号" type="text" class="input-300" maxlength="11" clearable @blur="handelBlur" @change="changLoginPhone" />
+      <el-form-item label="商家账号" prop="userName">
+        <el-input v-model="baseInfo.userName" placeholder="请输入商家账号" type="text" class="input-300" maxlength="11" clearable @blur="handelBlur" @change="changuserName" />
         <span class="input-anno">账号设置后，不可修改</span>
       </el-form-item>
       <el-form-item label="账号状态">
@@ -14,7 +14,7 @@
         <span class="input-anno">请及时让商家告知手机验证码</span>
       </el-form-item>
       <el-form-item label="商家名称">
-        <el-input v-model="baseInfo.agentUserName" :disabled="disableFlag" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" clearable />
+        <el-input v-model="baseInfo.merchantName" :disabled="disableFlag" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" clearable />
         <span class="input-anno" style="color:red;">注意：“商家名称”设置后，商家可以在手机B端后台修改。修改路径：我的 > 品牌信息设置 > 商户品牌名称。</span>
       </el-form-item>
       <el-form-item label="联系人姓名">
@@ -53,9 +53,9 @@ export default {
       time: 120,
       timer: null,
       flag: false,
-      baseInfo: { loginPhone: '', linkName: '', agentUserName: '', code: '', merchantAuthority: '', description: '' },
+      baseInfo: { userName: '', linkName: '', merchantName: '', code: '', merchantAuthority: '', description: '' },
       baseInfoRules: {
-        loginPhone: [{ required: true, message: '请输入商家账号', trigger: 'blur' }],
+        userName: [{ required: true, message: '请输入商家账号', trigger: 'blur' }],
         code: [{ required: true, message: '请输入4位手机验证码', trigger: 'blur' }]
       },
       state: '',
@@ -89,20 +89,20 @@ export default {
     },
     changLoginPhone() {
       this.state = ''
-      this.baseInfo.agentUserName = ''
+      this.baseInfo.merchantName = ''
       this.baseInfo.linkName = ''
     },
     handelBlur() {
       this.disableFlag = false
-      this.baseInfo.agentUserName = ''
+      this.baseInfo.merchantName = ''
       this.baseInfo.linkName = ''
-      if (!validateTel(this.baseInfo.loginPhone)) {
+      if (!validateTel(this.baseInfo.userName)) {
         return
       }
-      getMerchant({ phone: this.baseInfo.loginPhone }).then(res => {
+      getMerchant({ phone: this.baseInfo.userName }).then(res => {
         if (res.result === 0 && res.data && res.data.adUserId) {
           this.state = '已注册'
-          this.baseInfo.agentUserName = res.data.phone
+          this.baseInfo.merchantName = res.data.phone
           this.baseInfo.linkName = res.data.phone2
           this.disableFlag = true
         } else if (res.result === 0 && !res.data) {
@@ -113,7 +113,7 @@ export default {
       })
     },
     getCode() {
-      if (!validateTel(this.baseInfo.loginPhone)) {
+      if (!validateTel(this.baseInfo.userName)) {
         this.$message({ message: '请输入正确的商家账号(11手机号)', type: 'error' })
         return
       }
@@ -121,7 +121,7 @@ export default {
         return
       }
       this.flag = true
-      getCode({ phone: this.baseInfo.loginPhone }).then(res => {
+      getCode({ phone: this.baseInfo.userName }).then(res => {
         setTimeout(() => { this.flag = false }, 1000)
         if (res.result === 0) {
           this.timer = setInterval(() => {
