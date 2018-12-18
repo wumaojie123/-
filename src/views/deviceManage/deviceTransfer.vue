@@ -42,7 +42,6 @@
       ref="multipleTable"
       :key="tableKey"
       :data="list"
-      :height="minHeightTable"
       border
       stripe
       fit

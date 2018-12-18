@@ -78,7 +78,6 @@
       v-loading="listLoading"
       :key="tableKey"
       :data="list"
-      :height="minHeightTable"
       border
       stripe
       fit
