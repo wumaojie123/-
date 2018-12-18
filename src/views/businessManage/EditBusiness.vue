@@ -14,7 +14,7 @@
         <span class="input-anno">“姓名”设置后，将显示在手机B端后台的账号信息中，且无法修改。未设置的，请通知商家前往B端后台设置</span>
       </el-form-item>
       <el-form-item label="备注信息">
-        <el-input v-model="baseInfo.description" style="width: 500px;" placeholder="请输入10字以内备注信息（备注信息仅供你自己查看，便于记录商家信息）" type="text" class="input-300" maxlength="10" clearable />
+        <el-input v-model="baseInfo.description" style="width: 550px;" placeholder="请输入10字以内备注信息（备注信息仅供你自己查看，便于记录商家信息）" type="text" class="input-300" maxlength="10" clearable />
       </el-form-item>
       <el-form-item label="商家权限">
         <el-checkbox-group v-model="check">
