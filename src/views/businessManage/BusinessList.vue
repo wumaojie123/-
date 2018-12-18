@@ -13,7 +13,7 @@
       </div>
     </el-form>
     <!-- 列表 -->
-    <el-table v-loading="listLoading" :data="list" :height="400" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
+    <el-table v-loading="listLoading" :data="list" :height="600" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
       <!-- <el-table-column type="selection" width="55"/> -->
       <el-table-column label="操作" width="55" align="center">
         <template slot-scope="scope">
