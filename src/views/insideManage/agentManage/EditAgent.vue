@@ -50,7 +50,7 @@
       <el-form-item label="验证设置" prop="codeValidate" class="mb5">
         <el-radio-group v-model="baseInfo.codeValidate">
           <el-radio label="1">需要短信验证码</el-radio>
-          <el-radio label="2">不需要短信验证码</el-radio>
+          <el-radio label="0">不需要短信验证码</el-radio>
         </el-radio-group>
       </el-form-item>
       <div class="hint-info-panel">
@@ -64,8 +64,8 @@
 
       <el-form-item label="数据监控" prop="dataMonitor" class="mb5 mt10">
         <el-radio-group v-model="baseInfo.dataMonitor">
-          <el-radio label="1">手动关联</el-radio>
-          <el-radio label="2">自动关联</el-radio>
+          <el-radio label="0">手动关联</el-radio>
+          <el-radio label="1">自动关联</el-radio>
         </el-radio-group>
       </el-form-item>
       <div class="hint-info-panel">
@@ -325,8 +325,8 @@ export default {
               loginPhone: data.loginPhone,
               password: '',
               acc: data.phone,
-              codeValidate: data.issend,
-              dataMonitor: data.associatedType
+              codeValidate: '' + data.issend,
+              dataMonitor: '' + data.associatedType
             }
             this.agentProject = data.agentBusiness
             // this.accountOnBlur()

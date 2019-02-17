@@ -60,7 +60,7 @@ export function getSecList(query) {
 // 获取一级代理新增代理商 是否显示短信通知
 export function getIsShowSMSNotification() {
   return request({
-    url: '/agentManage/addAgent',
+    url: '/agentManage/getIssend',
     method: 'get'
   })
 }
