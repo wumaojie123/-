@@ -8,7 +8,7 @@
       <el-form-item label="账号状态">
         <el-input v-model="state" placeholder="系统自动识别" type="text" class="input-300" disabled/>
       </el-form-item>
-      <el-form-item label="手机验证码" prop="code">
+      <el-form-item v-if="isShowCodeTag" label="手机验证码" prop="code">
         <el-input v-model="baseInfo.code" placeholder="请输入验证码" style="width: 150px;margin-right: 32px;" maxlength="4" clearable />
         <el-button :disabled="text !== '获取验证码' || flag" style="width: 112px;" type="primary" @click="getCode">{{ text }}</el-button>
         <span class="input-anno">请及时让商家告知手机验证码</span>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { getMerchant, getCode } from '@/api/angentManage'
+import { getMerchant, getCode, getIsShowSMSNotification } from '@/api/angentManage'
 import { add } from '@/api/businessManage'
 import { validateTel } from '@/utils/validate'
 export default {
@@ -53,6 +53,7 @@ export default {
       time: 120,
       timer: null,
       flag: false,
+      isShowCodeTag: false,
       baseInfo: { userName: '', linkName: '', merchantName: '', code: '', merchantAuthority: '', description: '' },
       baseInfoRules: {
         userName: [{ required: true, message: '请输入商家账号', trigger: 'blur' }],
@@ -62,6 +63,9 @@ export default {
       disableFlag: false,
       check: false
     }
+  },
+  async created() {
+    await this.getIsShowSMSNotification()
   },
   methods: {
     handleBaseInfo() {
@@ -137,6 +141,13 @@ export default {
           this.$message({ message: '手机短信验证码已经发送成功', type: 'success' })
         } else {
           this.$message({ message: '手机短信验证码已经发送失败', type: 'error' })
+        }
+      })
+    },
+    getIsShowSMSNotification() {
+      getIsShowSMSNotification().then(res => {
+        if (res.data === 1) {
+          this.isShowCodeTag = true
         }
       })
     }

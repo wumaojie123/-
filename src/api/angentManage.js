@@ -56,3 +56,11 @@ export function getSecList(query) {
     params: query
   })
 }
+
+// 获取一级代理新增代理商 是否显示短信通知
+export function getIsShowSMSNotification() {
+  return request({
+    url: '/agentManage/addAgent',
+    method: 'get'
+  })
+}

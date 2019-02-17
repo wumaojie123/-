@@ -62,9 +62,35 @@
         <!--<span class="input-anno">请输入手机号码，如果客户此前有注册乐摇摇商家账号，请输入相同的号码。</span>-->
         <span class="input-anno">代理账号设置后，不可修改。</span>
       </el-form-item>
-      <!--<el-form-item label="关联商家">-->
-      <!--<div style="" v-html="restaurants"/>-->
-      <!--</el-form-item>-->
+      <el-form-item label="验证设置" prop="codeValidate" class="mb5">
+        <el-radio-group v-model="baseInfo.codeValidate">
+          <el-radio label="1">需要短信验证码</el-radio>
+          <el-radio label="0">不需要短信验证码</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <div class="hint-info-panel">
+        <div class="fl">说明：</div>
+        <div class="ovh">
+          <p>（1）“验证设置” 的短信验证码，是指该一级代理在创建 下级代理、下级商家 的时候，是否需要短信验证码。</p>
+          <p>（2）如果勾选了 “不需要短信验证码”，则该一级代理在创建 下级代理、下级商家 的时候，就不需要输入短信验证码。</p>
+          <p>（3）为保证用户的信息安全，如非特殊情况，请不要轻易勾选 “不需要短信验证码”。</p>
+        </div>
+      </div>
+
+      <el-form-item label="数据监控" prop="dataMonitor" class="mb5 mt10">
+        <el-radio-group v-model="baseInfo.dataMonitor">
+          <el-radio label="0">手动关联</el-radio>
+          <el-radio label="1">自动关联</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <div class="hint-info-panel">
+        <div class="fl">说明：</div>
+        <div class="ovh">
+          <p>（1）若勾选了 “手动关联” ，则BD将设备导入给该一级代理后，该一级代理必须在代理后台创建（或绑定）下级商家 ，才能看到的设备的经营数据。</p>
+          <p>（2）若勾选了“自动关联”，则该一级代理无需在代理后台手动创建（或绑定）下级商家，只要BD将设备导入给该一级代理，系统就会自动关联并显示下级商家和经营数据。</p>
+          <p>（3）为保证用户的信息安全，如非特殊情况，请不要轻易勾选 “自动关联”。</p>
+        </div>
+      </div>
       <br>
       <p style="margin: 10px;padding-bottom:10px;color: red;">{{ `注意：如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码。` }}</p>
       <el-button type="primary" @click="handleAccountInfo">创建</el-button>
@@ -87,6 +113,8 @@ export default {
         phone: '',
         address: '',
         BD: '',
+        codeValidate: '1',
+        dataMonitor: '0',
         projects: [],
         account: '',
         password: '',
@@ -104,6 +132,12 @@ export default {
         loginPhone: [
           { required: true, message: '请输入正确的账号', trigger: 'blur' },
           { validator: telCheck, trigger: 'input' }
+        ],
+        codeValidate: [
+          { required: true }
+        ],
+        dataMonitor: [
+          { required: true }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -265,7 +299,9 @@ export default {
             bdId: info.BD, // BD同事ID
             linkUserId: this.linkUserId, // 关联商户 id
             agentBusinessIds: this.projects, // 经营项目
-            agentUserId: info.agentUserId // 代理商Id，修改时使用
+            agentUserId: info.agentUserId, // 代理商Id，修改时使用
+            associatedType: Number(info.dataMonitor), // 关联类型  0：手动关联 1：自动关联
+            issend: Number(info.codeValidate) // 是否发生验证码  0：不发送 1：发送
           }
           this.updataAgentInfo(submitData)
         } else {
@@ -302,5 +338,25 @@ export default {
     margin-left: 20px;
     font-size: 12px;
     color: #b1a8a8;
+  }
+  .ovh{
+    overflow: hidden;
+  }
+  .fl{
+    float: left;
+  }
+  .mb5{
+    margin-bottom: 5px;
+  }
+  .mt10{
+    margin-top: 10px;
+  }
+  .hint-info-panel{
+    margin-left: 120px;
+    color: #666;
+    text-align: justify;
+    line-height: 20px;
+    font-size: 13px;
+    overflow: hidden;
   }
 </style>

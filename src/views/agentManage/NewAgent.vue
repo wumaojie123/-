@@ -5,7 +5,7 @@
         <el-input v-model="baseInfo.loginPhone" placeholder="请输入代理商账号（手机号码）" class="input-300" maxlength="11" clearable />
         <span class="input-anno">账号设置后，不可修改</span>
       </el-form-item>
-      <el-form-item label="短信验证码" prop="code">
+      <el-form-item v-if="isShowCodeTag" label="短信验证码" prop="code">
         <el-input v-model="baseInfo.code" placeholder="请输入短信验证码" style="width: 160px;margin-right: 22px;" maxlength="4" clearable />
         <el-button :disabled="text !== '获取验证码' || flag" style="width: 112px;" type="primary" @click="getCode">{{ text }}</el-button>
         <span class="input-anno">请及时让代理告知短信验证码</span>
@@ -34,7 +34,7 @@
 
 <script>
 import { telCheck } from '@/utils/rules'
-import { getCode, addAngent } from '@/api/angentManage'
+import { getCode, addAngent, getIsShowSMSNotification } from '@/api/angentManage'
 import { validateTel } from '@/utils/validate'
 export default {
   data() {
@@ -43,6 +43,7 @@ export default {
       time: 120,
       timer: null,
       flag: false,
+      isShowCodeTag: false,
       linkName: '',
       baseInfo: { agentUserName: '', linkName: '', phone: '', address: '', code: '', loginPhone: '', linkUserId: '' },
       baseInfoRules: {
@@ -51,6 +52,9 @@ export default {
         code: [{ required: true, message: '请输入4位手机验证码', trigger: 'blur' }]
       }
     }
+  },
+  async created() {
+    await this.getIsShowSMSNotification()
   },
   methods: {
     handleBaseInfo() {
@@ -104,6 +108,13 @@ export default {
           this.$message({ message: '手机短信验证码已经发送成功', type: 'success' })
         } else {
           this.$message({ message: '手机短信验证码已经发送失败', type: 'error' })
+        }
+      })
+    },
+    getIsShowSMSNotification() {
+      getIsShowSMSNotification().then(res => {
+        if (res.data === 1) {
+          this.isShowCodeTag = true
         }
       })
     }
