@@ -394,7 +394,7 @@ export default {
             res.data.forEach(item => {
               if (this.type === '1') {
                 results.push({
-                  value: `${item.merchantname} (${item.username})`,
+                  value: `${item.merchantname || ''} (${item.username})`,
                   agentId: item.adorgid
                 })
               } else if (this.type === '2') {
