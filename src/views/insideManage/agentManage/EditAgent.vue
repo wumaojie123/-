@@ -225,7 +225,6 @@ export default {
     if (this.$route.query.id) {
       await this.getBDList()
       await this.getBusinProjects()
-      await this.getAgentInfo(this.$route.query.id)
     }
   },
   mounted() {},
@@ -260,6 +259,7 @@ export default {
                 isChecked: false
               }
             })
+
             this.$nextTick(function() {
               this.$refs['baseInfoRef'].resetFields()
             })
@@ -269,9 +269,11 @@ export default {
               this.$refs['baseInfoRef'].resetFields()
             })
           }
+          this.getAgentInfo(this.$route.query.id)
         },
         () => {
           this.checkBoxList = []
+          this.getAgentInfo(this.$route.query.id)
         }
       )
     },
@@ -399,7 +401,6 @@ export default {
             })
             return false
           }
-          console.log(info, '-表单的信息-')
           const submitData = {
             // type: 1, // 0:BD用户 1:一级代理商  2:子级代理商
             // code: '', // 短信验证码
