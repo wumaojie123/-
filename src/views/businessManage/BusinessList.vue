@@ -111,6 +111,7 @@ export default {
       this.listLoading = true
       deleteMerchant(params).then(res => {
         this.listLoading = false
+        this.queryList()
         this.$message({
           type: 'success',
           message: '删除成功!'
