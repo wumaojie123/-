@@ -9,6 +9,7 @@
           <div class="flex-item">
             <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑代理</el-button>
             <router-link :to="{path: '/add'}"><el-button type="primary" icon="el-icon-plus">新增代理</el-button></router-link>
+            <el-button type="primary" @click="onDelBtnClick">删除</el-button>
           </div>
         </div>
       </el-form-item>
@@ -36,7 +37,7 @@
 
 <script>
 import { validateTel } from '@/utils/validate'
-import { getSecList } from '@/api/angentManage'
+import { getSecList, deleteAgent } from '@/api/angentManage'
 export default {
   data() {
     return {
@@ -92,6 +93,39 @@ export default {
       this.check = value
       console.log('getTemplateRow:', value)
       this.angentInfo = [this.list[value]]
+    },
+    // 删除按钮点击
+    onDelBtnClick() {
+      if (this.angentInfo.length < 1) {
+        this.$message({ message: '请至少选中一条代理商信息！！', type: 'error' })
+        return
+      }
+      this.$confirm('删除后，相关信息和数据将会彻底删除，且无法恢复。确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        closeOnClickModal: false
+      }).then(() => {
+        this.deleteAgent()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    deleteAgent() {
+      const params = {
+        ids: [this.angentInfo[0].agentUserId]
+      }
+      this.listLoading = true
+      deleteAgent(params).then(res => {
+        this.listLoading = false
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      })
     },
     handleAngent(type) {
       if (this.angentInfo.length === 1) {

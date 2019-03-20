@@ -60,6 +60,11 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="8">
+          <el-form-item label="商家账号" prop="merchantAccount">
+            <el-input v-model="form.merchantAccount" type="number" placeholder="请输入账号"/>
+          </el-form-item>
+        </el-col>
       </el-row>
     </el-form>
     <div class="filter-container">
@@ -265,7 +270,8 @@ export default {
         groupName: '',
         agentUserName: '',
         equipmentTypeName: '',
-        isOnline: ''
+        isOnline: '',
+        merchantAccount: ''
       },
       listQuery: {
         page: 1,

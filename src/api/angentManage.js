@@ -64,3 +64,13 @@ export function getIsShowSMSNotification() {
     method: 'get'
   })
 }
+
+// 删除代理数据
+export function deleteAgent(data) {
+  return request({
+    url: '/agentManage/deleteAgent',
+    method: 'post',
+    data
+  })
+}
+

@@ -55,3 +55,12 @@ export function getMerchant(query) {
     params: query
   })
 }
+
+// 删除商家数据
+export function deleteMerchant(data) {
+  return request({
+    url: '/merchant/deleteMerchant',
+    method: 'post',
+    data
+  })
+}

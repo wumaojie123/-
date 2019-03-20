@@ -54,29 +54,15 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row>
-        <!--<el-col :span="8">
-          <el-form-item label="设备类型" prop="equipmentTypeName">
-            <el-select v-model="form.equipmentTypeName" placeholder="请选择">
-              <el-option
-                v-for="item in equipmentTypeName"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"/>
-            </el-select>
-          </el-form-item>
-        </el-col>-->
-        <!--<el-col :span="8">
-          <el-form-item label="在线状态" prop="isOnline">
-            <el-select v-model="form.isOnline" placeholder="请选择">
-              <el-option
-                v-for="item in isOnline"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"/>
-            </el-select>
-          </el-form-item>
-        </el-col>-->
+      <el-row style="margin-bottom: 10px;">
+        <el-select v-model="accountType" style="width: 150px;" placeholder="请选择">
+          <el-option
+            v-for="item in accountTypeList"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"/>
+        </el-select>
+        <el-input v-model="accountName" style="margin-left: 10px;width: 200px;" placeholder="请输入账号" type="number" />
       </el-row>
     </el-form>
     <div class="filter-container">
@@ -267,6 +253,16 @@ export default {
           value: 2
         }
       ],
+      accountTypeList: [
+        {
+          label: '商家账号',
+          value: 1
+        },
+        {
+          label: '代理账号',
+          value: 2
+        }
+      ],
       equipmentTypeName: [],
       form: {
         equipmentIdStart: null,
@@ -278,6 +274,8 @@ export default {
         equipmentTypeName: '',
         isOnline: ''
       },
+      accountType: '',
+      accountName: '',
       listQuery: {
         page: 1,
         limit: 20,
@@ -506,6 +504,14 @@ export default {
       this.listLoading = true
       this.form.pageSize = this.listQuery.limit
       this.form.pageIndex = this.listQuery.page
+      delete this.form.agentAccount
+      delete this.form.merchantAccount
+      if (this.accountType === 1) {
+        this.form.merchantAccount = this.accountName
+      }
+      if (this.accountType === 2) {
+        this.form.agentAccount = this.accountName
+      }
       getFirstDeviceList(this.form).then(response => {
         this.list = response.data.items
         this.total = response.data.total
@@ -542,6 +548,8 @@ export default {
         }
         this.getList()
       } else if (type === 'clear') {
+        this.accountName = ''
+        this.accountType = ''
         this.form.equipmentIdStart = null
         this.form.equipmentIdEnd = null
         this.$refs.form.resetFields()

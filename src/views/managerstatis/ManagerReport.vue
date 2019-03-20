@@ -67,12 +67,12 @@ import { parseTime } from '@/utils/index'
 import { fetchList } from '@/api/managerstatis'
 import { getAngent } from '@/api/angentManage'
 const NOW = Date.now()
-// 最大支持最近60天
+// 最大支持最近180天
 const OPTIONS = {
   disabledDate: (time) => {
     console.log(time)
     const timeItem = time.getTime()
-    return timeItem < NOW - 24 * 60 * 60 * 60 * 1000 || timeItem > NOW
+    return timeItem < NOW - 24 * 60 * 60 * 180 * 1000 || timeItem > NOW
   }
 }
 export default {

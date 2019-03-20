@@ -9,6 +9,7 @@
         <div class="flex-item">
           <el-button type="primary" icon="el-icon-edit" @click="handleAngent('edit')">编辑商家</el-button>
           <router-link :to="{path: '/addbusiness', query: {info: angentInfo[0]}}"><el-button type="primary" icon="el-icon-plus">新增商家</el-button></router-link>
+          <el-button type="primary" @click="onDelBtnClick">删除</el-button>
         </div>
       </div>
     </el-form>
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/businessManage'
+import { fetchList, deleteMerchant } from '@/api/businessManage'
 export default {
   data() {
     return {
@@ -82,6 +83,39 @@ export default {
     },
     handleItem(value) {
       this.angentInfo = value
+    },
+    // 删除按钮点击
+    onDelBtnClick() {
+      if (this.angentInfo.length < 1) {
+        this.$message({ message: '请至少选中一条商家信息！！', type: 'error' })
+        return
+      }
+      this.$confirm('删除后，相关信息和数据将会彻底删除，且无法恢复。确定要删除吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        closeOnClickModal: false
+      }).then(() => {
+        this.deleteMerchant()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    deleteMerchant() {
+      const params = {
+        ids: [this.angentInfo[0].adOrgId]
+      }
+      this.listLoading = true
+      deleteMerchant(params).then(res => {
+        this.listLoading = false
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      })
     },
     getTemplateRow(value) {
       this.check = value
