@@ -274,7 +274,7 @@ export default {
         equipmentTypeName: '',
         isOnline: ''
       },
-      accountType: '',
+      accountType: 1,
       accountName: '',
       listQuery: {
         page: 1,
@@ -549,7 +549,7 @@ export default {
         this.getList()
       } else if (type === 'clear') {
         this.accountName = ''
-        this.accountType = ''
+        this.accountType = 1
         this.form.equipmentIdStart = null
         this.form.equipmentIdEnd = null
         this.$refs.form.resetFields()

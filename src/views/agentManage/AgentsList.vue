@@ -97,7 +97,7 @@ export default {
     // 删除按钮点击
     onDelBtnClick() {
       if (this.angentInfo.length < 1) {
-        this.$message({ message: '请至少选中一条代理商信息！！', type: 'error' })
+        this.$message({ message: '请选中一条代理商信息！', type: 'error' })
         return
       }
       this.$confirm('删除后，相关信息和数据将会彻底删除，且无法恢复。确定要删除吗？', '提示', {
@@ -116,7 +116,7 @@ export default {
     },
     deleteAgent() {
       const params = {
-        ids: [this.angentInfo[0].agentUserId]
+        agentUserIds: [this.angentInfo[0].agentUserId]
       }
       this.listLoading = true
       deleteAgent(params).then(res => {
@@ -125,6 +125,8 @@ export default {
           type: 'success',
           message: '删除成功!'
         })
+        this.angentInfo = []
+        this.check = -1
         this.queryList()
       })
     },

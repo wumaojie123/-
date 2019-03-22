@@ -87,7 +87,7 @@ export default {
     // 删除按钮点击
     onDelBtnClick() {
       if (this.angentInfo.length < 1) {
-        this.$message({ message: '请至少选中一条商家信息！！', type: 'error' })
+        this.$message({ message: '请选中一条商家信息！', type: 'error' })
         return
       }
       this.$confirm('删除后，相关信息和数据将会彻底删除，且无法恢复。确定要删除吗？', '提示', {
@@ -106,11 +106,13 @@ export default {
     },
     deleteMerchant() {
       const params = {
-        ids: [this.angentInfo[0].adOrgId]
+        adOrgIds: [this.angentInfo[0].adOrgId]
       }
       this.listLoading = true
       deleteMerchant(params).then(res => {
         this.listLoading = false
+        this.angentInfo = []
+        this.check = -1
         this.queryList()
         this.$message({
           type: 'success',
