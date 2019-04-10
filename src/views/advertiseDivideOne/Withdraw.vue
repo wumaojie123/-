@@ -1,6 +1,6 @@
  <!--suppress ALL -->
 <template>
-  <div class="content-area bd-manage withdraw-panel">
+  <div v-loading="isShowLoadingTag" class="content-area bd-manage withdraw-panel">
     <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
       <el-menu-item index="1">提现</el-menu-item>
     </el-menu>
@@ -78,6 +78,7 @@ export default {
       }
     }
     return {
+      isShowLoadingTag: false,
       isCanClickTag: false,
       showSucTag: false,
       timer: null,
@@ -115,7 +116,9 @@ export default {
         serviceFee: parseFloat(this.baseInfo.serviceFee),
         actualPay: parseFloat(this.baseInfo.actualPay)
       }
+      this.isShowLoadingTag = true
       postWithdrawal(params).then(res => {
+        this.isShowLoadingTag = false
         if (res.result === 0) {
           if (res.data === 3) {
             this.$message({ message: '当日提现不能超过20000', type: 'error' })
