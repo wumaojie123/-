@@ -70,7 +70,7 @@ export default {
         } else if (value < 1.01) {
           callback(new Error('最低提现金额1.01元'))
         } else if (value > this.baseInfo.balance) {
-          callback(new Error('最高提现金额' + this.baseInfo.balance + '元'))
+          callback(new Error('余额不足'))
         } else {
           this.isCanClickTag = true
           callback()

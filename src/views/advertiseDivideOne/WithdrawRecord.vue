@@ -278,6 +278,10 @@ export default {
       if (typeId === 1) {
         this.getWithdrawRecordList()
       } else if (typeId === 2) {
+        if (new Date(this.dateRange2[1]).getTime() - new Date(this.dateRange2[0]).getTime() >= 30 * 24 * 3600 * 1000) {
+          this.$message({ message: '时间跨度不能超过30天', type: 'error' })
+          return
+        }
         this.getEarningsData()
       }
     },
