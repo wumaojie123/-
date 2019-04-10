@@ -3,7 +3,7 @@
     <div class="filter-container">
       <div class="item">
         <span class="label">代理商账号 </span>
-        <el-input :placeholder="`请输入代理商账号`" v-model.number="agent" style="width: 200px;margin-right: 20px;" class="filter-item" />
+        <el-input :placeholder="`请输入代理商账号`" v-model.number="agent" type="number" style="width: 200px;margin-right: 20px;" class="filter-item" />
       </div>
       <div class="item">
         <span class="label">是否广告分成 </span>
@@ -44,7 +44,7 @@
       </el-table-column>
       <el-table-column :label="`广告分成比率`" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.adRate || 0 }}</span>
+          <span>{{ scope.row.adRate * 100 || 0 }}%</span>
         </template>
       </el-table-column>
       <el-table-column :label="`总额`" align="center">
@@ -87,8 +87,7 @@ export default {
       total: 0,
       listLoading: true,
       pageIndex: 1,
-      pageSize: 20,
-      bdList: null,
+      pageSize: 10,
       checked: false,
       checkedRow: null
     }
@@ -113,8 +112,16 @@ export default {
       }
       agentList(params).then(res => {
         if (res.result === 0) {
-          this.list = res.data.data.items
-          this.total = res.data.data.total
+          let list = []
+          let total = 0
+          if (res.data) {
+            if (res.data.items) {
+              list = res.data.items
+            }
+            total = res.data.total
+          }
+          this.list = list
+          this.total = total
           this.checkedRow = null
           this.checked = false
           setTimeout(() => {

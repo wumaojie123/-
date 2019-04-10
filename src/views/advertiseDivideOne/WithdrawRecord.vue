@@ -1,10 +1,10 @@
 <template>
   <div class="withdraw-record-list-container bd-manage">
-    <div style="box-shadow:0px 0px 21px 0px rgba(153,153,153,0.18);border-radius:10px;height: 147px;">
-      <div style="padding-top: 35px;padding-left: 30px;">
+    <div class="header-panel">
+      <div class="wrap-panel">
         <div class="ovh">
           <div class="fl">
-            <div style="margin-bottom: 10px;">统计日期</div>
+            <div class="mb10">统计日期</div>
             <div v-show="curClickBtnIndex === 1">
               <el-date-picker v-model="dateRange" :clearable="false" :picker-options="options" type="datetimerange" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="onDateChange" />
             </div>
@@ -12,27 +12,33 @@
               <el-date-picker v-model="dateRange2" :clearable="false" :picker-options="options2" type="datetimerange" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="onDateChange2" />
             </div>
           </div>
-          <div class="fl" style="margin-left: 78px;">
-            <div style="margin-bottom: 10px;">提现至微信账户</div>
+          <div class="fl info-panel">
+            <div class="mb10">提现至微信账户</div>
             <div class="ovh">
-              <div class="fl" style="color: #999;height: 36px;border: 1px solid #E0E3E9;border-radius: 4px;line-height: 36px;padding-left: 34px;padding-right: 20px;margin-right: 10px;">{{ accountInfo.openid ? accountInfo.withdrawalAccount : '微信账户' }}</div>
-              <el-button v-if="accountInfo.associated == 1 && !accountInfo.openid" class="fl">添加绑定</el-button>
+              <div class="fl account-panel">{{ accountInfo.openid ? accountInfo.withdrawalAccount : '微信账户' }}
+                <svg-icon icon-class="wx" class="wx-icon" />
+              </div>
+              <el-button v-if="accountInfo.associated == 1 && !accountInfo.openid" class="fl" @click="onWidthdrawBtnClick">添加绑定</el-button>
               <el-button v-if="accountInfo.associated !== 1" class="fl" type="info">添加绑定</el-button>
             </div>
-            <div style="color: #FF4040;margin-top: 8px;">*请先添加微信提现账户</div>
+            <div v-if="!accountInfo.openid && accountInfo.associated === 1" class="hint-info">*请先添加微信提现账户</div>
+            <div v-if="accountInfo.associated !== 1" class="hint-info">*非分成用户，无法绑定</div>
           </div>
-          <div class="fl" style="margin-left: 78px;">
-            <div style="margin-bottom: 10px;">账号余额</div>
+          <div class="fl info-panel">
+            <div class="mb10">账号余额</div>
             <div>
-              <span style="font-size: 24px;color: #409EFF;">¥{{ accountInfo.balance || 0 }}</span>
-              <el-button v-if="accountInfo.associated == 1 && accountInfo.balance > 1.01" type="primary" @click="onWidthdrawBtnClick">提现</el-button>
-              <el-button v-else type="info">提现</el-button>
+              <span class="balance">¥{{ accountInfo.balance || 0 }}</span>
+              <template>
+                <el-button v-if="accountInfo.associated == 1 && accountInfo.balance > 1.01" type="primary" @click="onWidthdrawBtnClick">提现</el-button>
+                <el-button v-else type="info">提现</el-button>
+              </template>
+              <span v-if="accountInfo.balance < 1.01" class="hint-info">最低提现金额1.01元</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div style="margin-top: 20px;">
+    <div class="mt20">
       <el-button :type="( curClickBtnIndex === 1 ? 'primary' : 'info' )" @click="onBtnClick(1)">提现记录</el-button>
       <el-button :type="( curClickBtnIndex === 2 ? 'primary' : 'info' )" @click="onBtnClick(2)">收益查询</el-button>
     </div>
@@ -267,15 +273,6 @@ export default {
       this.pageIndex2 = 1
       this.getEarningsData()
     },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-    },
     onBtnClick(typeId) {
       this.curClickBtnIndex = typeId
       if (typeId === 1) {
@@ -313,12 +310,56 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .withdraw-record-list-container {
-
+  .header-panel{
+    box-shadow: 0px 0px 21px 0px rgba(153,153,153,0.18);
+    border-radius: 10px;
+    height: 147px;
+    .wrap-panel{
+      padding-top: 35px;
+      padding-left: 30px;
+    }
+    .info-panel{
+      margin-left: 78px;
+      .hint-info{
+        color: #FF4040;
+        margin-top: 8px;
+      }
+      .balance{
+        font-size: 24px;
+        color: #409EFF;
+        margin-right: 10px;
+      }
+    }
+    .account-panel{
+      color: #999;
+      height: 36px;
+      border: 1px solid #E0E3E9;
+      border-radius: 4px;
+      line-height: 36px;
+      padding-left: 34px;
+      padding-right: 20px;
+      margin-right: 10px;
+      position: relative;
+    }
+  }
+  .wx-icon{
+    position: absolute;
+    left: 0;
+    width: 33px;
+    height: 27px;
+    top: 5px;
+  }
 }
 .ovh{
   overflow: hidden;
 }
 .fl{
   float: left;
+}
+.mb10{
+  margin-bottom: 10px;
+}
+.mt20{
+  margin-top: 20px;
 }
 </style>

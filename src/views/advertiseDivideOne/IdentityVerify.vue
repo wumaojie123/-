@@ -56,9 +56,6 @@ export default {
       }
     }
   },
-  async created() {
-
-  },
   methods: {
     onCancelBtnClick() {
       this.$router.go(-1)
