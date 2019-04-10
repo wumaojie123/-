@@ -244,7 +244,54 @@ export let constantRouterMap = [
       }
     ]
   },
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true },
+  {
+    path: '/advertiseDivide',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'advertiseDivide',
+    hidden: true,
+    meta: {
+      title: '广告分成',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: '/editAdvertiseDivide',
+        hidden: true,
+        component: () => import('@/views/advertiseDivide/EditAdvertiseDivide'),
+        name: 'editAdvertiseDivide',
+        meta: { title: '代理列表' }
+      }
+    ]
+  },
+  {
+    path: '/advertiseDivideOne',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'advertiseDivideOne',
+    hidden: true,
+    meta: {
+      title: '广告分成',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: '/withdraw',
+        hidden: true,
+        component: () => import('@/views/advertiseDivideOne/Withdraw'),
+        name: 'withdraw',
+        meta: { title: '提现记录' }
+      },
+      {
+        path: '/identityVerify',
+        hidden: true,
+        component: () => import('@/views/advertiseDivideOne/IdentityVerify'),
+        name: 'identityVerify',
+        meta: { title: '提现记录' }
+      }
+    ]
+  }
 ]
 
 // const addRouters = getSession('addRouters') && JSON.parse(getSession('addRouters'))

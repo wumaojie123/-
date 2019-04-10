@@ -10,7 +10,7 @@ import { validateTel, equal } from './validate'
  * @param {*} callback
  */
 export const telCheck = (rule, value, callback) => {
-  if (value && !validateTel(value)) {
+  if (!value || (value && !validateTel(value))) {
     return callback(new Error('请输入正确的11位手机号码'))
   } else {
     callback()
