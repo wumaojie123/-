@@ -58,12 +58,20 @@ export default {
         }
       }
     }
+    const checkInteger2 = (rule, value, callback) => {
+      const reg = /^(0|[1-9][0-9]*)$/
+      if (!reg.test(value)) {
+        callback(new Error('请输入整数'))
+      } else {
+        callback()
+      }
+    }
     return {
       baseInfo: {},
       showLoadingTag: false,
       rules: {
         minEquipmentCount: [
-          { validator: checkInteger, trigger: 'blur' }
+          { validator: checkInteger2, trigger: 'blur' }
         ],
         adRate: [
           { validator: checkInteger, trigger: 'blur' }
@@ -74,7 +82,7 @@ export default {
   async created() {
     const baseInfo = JSON.parse(this.$route.query.row)
     baseInfo.total = baseInfo.total || '0.00'
-    baseInfo.isset = baseInfo.isset || '0'
+    baseInfo.isset = baseInfo.isset ? ('' + baseInfo.isset) : '0'
     baseInfo.minEquipmentCount = baseInfo.minEquipmentCount || 0
     baseInfo.balance = baseInfo.balance || '0.00'
     baseInfo.adRate = baseInfo.adRate * 100 || 0
