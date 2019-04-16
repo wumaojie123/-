@@ -6,7 +6,7 @@
           <div class="fl">
             <div class="mb10">统计日期</div>
             <div v-show="curClickBtnIndex === 1">
-              <el-date-picker v-model="dateRange" :clearable="false" :picker-options="options" type="datetimerange" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="onDateChange" />
+              <el-date-picker v-model="dateRange" :clearable="false" :picker-options="options" type="datetimerange" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="onDateChange($event)" />
             </div>
             <div v-show="curClickBtnIndex === 2">
               <el-date-picker v-model="dateRange2" :clearable="false" :picker-options="options2" type="datetimerange" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="onDateChange2" />
@@ -181,6 +181,10 @@ export default {
       })
     },
     getWithdrawRecordList() {
+      if (this.dateRange == null) {
+        this.$message({ message: '请选择时间', type: 'error' })
+        return
+      }
       const params = {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,
@@ -218,6 +222,10 @@ export default {
       })
     },
     getEarningsData() {
+      if (this.dateRange2 == null) {
+        this.$message({ message: '请选择时间', type: 'error' })
+        return
+      }
       const params = {
         pageIndex: this.pageIndex2,
         pageSize: this.pageSize2,
@@ -247,7 +255,10 @@ export default {
         }, 1.5 * 1000)
       })
     },
-    onDateChange() {
+    onDateChange(e) {
+      if (this.dateRange == null) {
+        return
+      }
       this.pageIndex = 1
       this.getWithdrawRecordList()
     },
@@ -256,6 +267,9 @@ export default {
       this.getWithdrawRecordList()
     },
     handleCurrentChange(val) {
+      if (this.dateRange == null) {
+        return
+      }
       this.pageIndex = val
       this.getWithdrawRecordList()
     },
@@ -268,6 +282,9 @@ export default {
       this.getEarningsData()
     },
     onDateChange2() {
+      if (this.dateRange2 == null) {
+        return
+      }
       if (new Date(this.dateRange2[1]).getTime() - new Date(this.dateRange2[0]).getTime() >= 30 * 24 * 3600 * 1000) {
         this.$message({ message: '时间跨度不能超过30天', type: 'error' })
         return
@@ -280,6 +297,10 @@ export default {
       if (typeId === 1) {
         this.getWithdrawRecordList()
       } else if (typeId === 2) {
+        if (this.dateRange2 == null) {
+          this.$message({ message: '请选择时间', type: 'error' })
+          return
+        }
         if (new Date(this.dateRange2[1]).getTime() - new Date(this.dateRange2[0]).getTime() >= 30 * 24 * 3600 * 1000) {
           this.$message({ message: '时间跨度不能超过30天', type: 'error' })
           return
