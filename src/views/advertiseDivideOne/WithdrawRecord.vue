@@ -257,6 +257,8 @@ export default {
     },
     onDateChange(e) {
       if (this.dateRange == null) {
+        this.list = []
+        this.total = 0
         return
       }
       this.pageIndex = 1
@@ -283,6 +285,8 @@ export default {
     },
     onDateChange2() {
       if (this.dateRange2 == null) {
+        this.list2 = []
+        this.total2 = 0
         return
       }
       if (new Date(this.dateRange2[1]).getTime() - new Date(this.dateRange2[0]).getTime() >= 30 * 24 * 3600 * 1000) {
