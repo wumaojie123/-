@@ -261,9 +261,11 @@ export default {
     },
     handleSizeChange2(val) {
       this.pageSize2 = val
+      this.getEarningsData()
     },
     handleCurrentChange2(val) {
       this.pageIndex2 = val
+      this.getEarningsData()
     },
     onDateChange2() {
       if (new Date(this.dateRange2[1]).getTime() - new Date(this.dateRange2[0]).getTime() >= 30 * 24 * 3600 * 1000) {
