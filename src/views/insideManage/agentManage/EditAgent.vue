@@ -412,7 +412,7 @@ export default {
             agentUserId: info.agentUserId, // 代理商Id，修改时使用
             bdId: info.BD, // BD同事ID
             agentBusinessIds: tempCheckBoxArr, // 经营项目
-            loginPhone: info.password, // 登录账号
+            loginPhone: info.loginPhone, // 登录账号
             associatedType: Number(info.dataMonitor), // 关联类型  0：手动关联 1：自动关联
             issend: Number(info.codeValidate) // 是否发生验证码  0：不发送 1：发送
           }
