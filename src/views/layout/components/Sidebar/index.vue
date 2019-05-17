@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar wrap-class="scrollbar-wrapper">
-    <h3 class="left-nav-title" >代理商管理后台</h3>
+    <h3 class="left-nav-title" >生产商管理后台</h3>
     <el-menu
       :show-timeout="200"
       :default-active="$route.path"

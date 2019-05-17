@@ -135,4 +135,12 @@ export default class insideManageAPI {
       params: params
     })
   }
+  // 新增添加经营项目
+  static async saveAgentBusiness(data) {
+    return request({
+      url: '/agentManage/saveAgentBusiness',
+      method: 'post',
+      data
+    })
+  }
 }

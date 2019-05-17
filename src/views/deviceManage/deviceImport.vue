@@ -91,7 +91,7 @@ export default {
       },
       equipmentTypesArr: [],
       agentUsers: [],
-      message: '请导入含设备编号的txt文档（注意：可以将Excel的数据直接复制到txt文档中，每一行代表一个设备编号）。不支持导入以下设备：出厂未通电的设备，已被导入的设备，老号段的设备。',
+      message: '请导入含设备编号的txt文档（注意：可以将Excel的数据直接复制到txt文档中，每一行代表一个设备编号）。不支持导入以下设备：出厂未通电的设备，已被导入的设备。',
       colums: [
         { key: 'failIndex', label: '序号' },
         { key: 'value', label: '设备编号' },

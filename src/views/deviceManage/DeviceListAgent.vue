@@ -26,7 +26,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="8">
-          <el-form-item label="设备状态" prop="status">
+          <el-form-item label="禁用状态" prop="status">
             <!--<el-input v-model="form.groupNumber" placeholder="请输入机台号"/>-->
             <el-select v-model="form.status" placeholder="请选择">
               <el-option
@@ -102,49 +102,9 @@
           <span>{{ scope.row.equipmentId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="禁用状态" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.status }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="设备机台号" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.groupNumber || '' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="场地名称" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.groupName }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="设备类型" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentTypeName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="商家名称" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.agentUserName }}</span>
-        </template>
-      </el-table-column>
-      <!-- <el-table-column label="角色" align="center" prop="role">
-        <template slot-scope="scope">
-          <span>{{ scope.row.role }}</span>
-        </template>
-      </el-table-column> -->
-      <el-table-column label="账号" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.phone }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="区域" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.districtName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="注册状态" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.isRegister }}</span>
         </template>
       </el-table-column>
       <el-table-column label="在线状态" align="center">
@@ -152,16 +112,68 @@
           <span>{{ scope.row.online ? '在线' : '离线' }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="信号" align="center">
+        <template slot-scope="scope">
+          <ul :class="signalUI[scope.row.signal]" class="signal-ui">
+            <li /><li /><li /><li />
+          </ul>
+        </template>
+      </el-table-column>
+      <el-table-column label="禁用状态" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.status == '正常' ? scope.row.status + '启用' : scope.row.status }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :render-header="renderEquipState" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.isRegister }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="固件版本" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.firmwareVersion }}</span>
         </template>
       </el-table-column>
-      <el-table-column :render-header="renderHeader" align="center">
+      <el-table-column label="设备参数" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.equipmentParam }}</span>
+          <span>{{ scope.row.equipmentParam || '默认' }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="设备机台号" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.groupNumber || '未设置' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="区域" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.districtName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="场地名称" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.groupName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="商家名称" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.agentUserName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="角色" align="center" prop="role">
+        <template slot-scope="scope">
+          <span>{{ scope.row.role }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="账号" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.phone }}</span>
+        </template>
+      </el-table-column>
+      <!-- <el-table-column label="设备注册状态" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.isRegister }}</span>
+        </template>
+      </el-table-column> -->
     </el-table>
     <div class="pagination-container">
       <el-pagination
@@ -193,6 +205,17 @@
         @cancel="equipmentParaDialog = false"
         @confirom="confirom"/>
     </el-dialog>
+
+    <!-- 设置注册状态弹窗 -->
+    <el-dialog :visible.sync="dialogVisiable" :close-on-click-modal="false" width="500px" title="温馨提示">
+      <p class="dialogP">1、“设备注册状态” 指的是该设备是否已被商家在B端进行绑定。</p>
+      <p class="dialogP">2、已注册：该设备已被商家绑定。</p>
+      <p class="dialogP">3、未注册：该设备未被商家绑定。</p>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisiable = false">知道了</el-button>
+      </span>
+    </el-dialog>
+    <!-- 设置注册状态弹窗end -->
   </el-main>
 </template>
 
@@ -294,7 +317,15 @@ export default {
         type: '',
         status: 'published'
       },
-      downloadLoading: false
+      downloadLoading: false,
+      dialogVisiable: false,
+      signalUI: {
+        0: 'signal-none',
+        1: 'signal-bad',
+        2: 'signal-mid',
+        3: 'signal-good',
+        4: 'signal-best'
+      }
     }
   },
   created() {
@@ -317,6 +348,20 @@ export default {
   methods: {
     renderHeader(h) {
       return [h('p', {}, ['设备参数']), h('p', {}, ['(脉冲宽度/脉冲间隔/待机电平)'])]
+    },
+    renderEquipState(h) {
+      return [
+        h('span', {}, ['设备注册状态']),
+        h('i', {
+          class: 'el-icon-warning',
+          style: 'margin-left: 5px',
+          on: {
+            click: () => {
+              this.dialogVisiable = true
+            }
+          }
+        })
+      ]
     },
     confirom(data) {
       this.equipmentParaDialog = false
@@ -608,5 +653,49 @@ export default {
       }
     }
   }
-
+  .dialogP{
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .signal-ui{
+    li{
+      width: 3px;
+      background-color: #999;
+      border-radius: 2px;
+      display: inline-block;
+      margin-right: 2px;
+      &:nth-child(1){
+        height: 5px;
+      }
+      &:nth-child(2){
+        height: 8px;
+      }
+      &:nth-child(3){
+        height: 11px;
+      }
+      &:nth-child(4){
+        height: 14px;
+      }
+    }
+    &.signal-bad{
+      li:nth-child(1){
+        background-color: #14bc00;
+      }
+    }
+    &.signal-mid{
+      li:nth-child(1), li:nth-child(2){
+        background-color: #14bc00;
+      }
+    }
+    &.signal-good{
+      li:nth-child(1), li:nth-child(2), li:nth-child(3){
+        background-color: #14bc00;
+      }
+    }
+    &.signal-best{
+      li{
+        background-color: #14bc00;
+      }
+    }
+  }
 </style>

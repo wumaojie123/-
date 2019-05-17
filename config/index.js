@@ -11,9 +11,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/agent': {
-        target: 'https://sag.leyaoyao.com',
+         target: 'https://dag.leyaoyao.com',
         // target: 'http://192.168.21.83',
-        // target: 'http://192.168.20.62:8041',
+        // target: 'http://192.168.20.20:8041',
         // target: 'http:// jpeb74.natappfree.cc',
         changeOrigin: true, //开启代理
         // pathRewrite: {'^/agent': '/agent'}  //这里重写路径/run就代理到对应地址
