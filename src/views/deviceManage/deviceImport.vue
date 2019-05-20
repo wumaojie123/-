@@ -127,6 +127,10 @@ export default {
               label: item.name
             })
           })
+          this.equipmentTypesArr.push({
+            label: '其他',
+            value: ''
+          })
         }
       })
   },
