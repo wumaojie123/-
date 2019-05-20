@@ -41,7 +41,7 @@
         <template v-for="(box,index) in allBusinProjects">
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
-        <span class="add-project" @click="toggleProjectModal">+添加经营项目</span>
+        <span class="add-project" @click="dialogVisiable = true">+添加经营项目</span>
         <br>
         <!-- el-form-item__error -->
         <span class="input-anno " style="color: red;">此处的经营项目是记录该代理的经营范围，仅作为记录用途。</span>
@@ -96,25 +96,16 @@
       <p style="margin: 10px;padding-bottom:10px;color: red;">{{ `注意：如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码。` }}</p>
       <el-button type="primary" @click="handleAccountInfo">创建</el-button>
     </el-form>
-
-    <!-- 添加经营项目弹窗 -->
-    <el-dialog :visible.sync="dialogVisiable" width="500px" title="添加经营项目">
-      <el-input v-model="newAgentName" placeholder="请输入经营项目名称 (不超过15个字）" class="project-input" />
-      <p class="project-node">温馨提醒：添加后将作为公共选项，且不可删除，请认真填写。</p>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="addProject">确定</el-button>
-        <el-button @click="toggleProjectModal">取消</el-button>
-      </span>
-    </el-dialog>
-    <!-- 添加经营项目弹窗 end -->
+    <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog" />
   </div>
 </template>
 
 <script>
 import { telCheck } from '@/utils/rules'
 import insideManage from '@/api/insideManage'
-
+import DialogAgent from './DialogAgent'
 export default {
+  components: { DialogAgent },
   data() {
     return {
       baseInfo: {
@@ -163,8 +154,7 @@ export default {
       agentProject: [],
       showProjectTips: false, // 经营项目提示
       allBusinProjects: [], // 所有的经营项目
-      dialogVisiable: false,
-      newAgentName: null // 新增加的经营项目
+      dialogVisiable: false
     }
   },
   computed: {
@@ -323,48 +313,18 @@ export default {
         }
       })
     },
-    // 打开或关闭添加经营项目弹窗
-    toggleProjectModal() {
-      this.dialogVisiable = !this.dialogVisiable
-      this.newAgentName = null
-    },
-    // 添加经营项目
-    addProject() {
-      let flag = false
-      if (this.newAgentName && this.newAgentName.length > 15) {
-        this.$message({
-          message: '项目名称不能超过15个字',
-          type: 'warning'
-        })
-        return
-      }
-      this.allBusinProjects.forEach(item => {
-        if (item.name === this.newAgentName) {
-          this.$message({
-            message: '该项目已存在',
-            type: 'warning'
-          })
-          flag = true
+    // 接收从Dialog组件返回的数据
+    toggleDialog(data) {
+      this.dialogVisiable = data.status
+      const res = data.response
+      if (res) {
+        const newAgentProto = {
+          id: res.data,
+          isChecked: false,
+          name: data.newAgentName
         }
-      })
-      if (flag) return
-      const newAgentData = {
-        agentBusinessId: '',
-        name: this.newAgentName
+        this.allBusinProjects.push(newAgentProto)
       }
-      insideManage.saveAgentBusiness(newAgentData).then(res => {
-        if (res && res.result === 0) {
-          const newAgentProto = {
-            id: res.data,
-            isChecked: false,
-            name: this.newAgentName
-          }
-          this.allBusinProjects.push(newAgentProto)
-        } else {
-          this.$message.error('增加经营项目失败')
-        }
-      })
-      this.dialogVisiable = false
     }
   }
 }
@@ -421,13 +381,5 @@ export default {
     color: #3089dc;
     cursor: pointer;
     margin-left: 10px;
-  }
-  .project-input{
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  .project-node{
-    font-size: 12px;
-    color: #666;
   }
 </style>

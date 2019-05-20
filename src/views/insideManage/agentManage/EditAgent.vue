@@ -30,6 +30,7 @@
         <template v-for="(box, index) in checkBoxList">
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
+        <span class="add-project" @click="dialogVisiable = true">+添加经营项目</span>
       </el-form-item>
       <br>
       <!-- 账号信息区域 -->
@@ -79,13 +80,15 @@
       <br>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
+    <DialogAgent :visiable="dialogVisiable" @toggle-dialog="toggleDialog" />
   </div>
 </template>
-
 <script>
 import { telCheck } from '@/utils/rules'
 import insideManage from '@/api/insideManage'
+import DialogAgent from './DialogAgent'
 export default {
+  components: { DialogAgent },
   data() {
     return {
       baseInfo: {
@@ -205,7 +208,8 @@ export default {
       restaurants: '',
       checkBoxList: null,
       agentProject: [],
-      allBusinProjects: [] // 所有的经营项目
+      allBusinProjects: [], // 所有的经营项目
+      dialogVisiable: false
     }
   },
   computed: {
@@ -421,6 +425,19 @@ export default {
           return false
         }
       })
+    },
+    // 接收从Dialog组件返回的数据
+    toggleDialog(data) {
+      this.dialogVisiable = data.status
+      const res = data.response
+      if (res) {
+        const newAgentProto = {
+          id: res.data,
+          isChecked: false,
+          name: data.newAgentName
+        }
+        this.allBusinProjects.push(newAgentProto)
+      }
     }
   }
 }
@@ -454,5 +471,11 @@ export default {
   line-height: 20px;
   font-size: 13px;
   overflow: hidden;
+}
+.add-project{
+  font-size: 14px;
+  color: #3089dc;
+  cursor: pointer;
+  margin-left: 10px;
 }
 </style>
