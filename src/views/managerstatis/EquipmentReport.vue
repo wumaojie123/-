@@ -32,9 +32,9 @@
     <!-- 列表 -->
     <el-table v-loading="listLoading" :data="list" show-summary border style="width: 100%;margin-bottom: 20px;">
       <!-- <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/> -->
-      <el-table-column label="设备编号" align="center" prop="eValue">
+      <el-table-column label="设备编号" align="center" prop="evalue">
         <template slot-scope="scope">
-          <span>{{ scope.row.eValue }}</span>
+          <span>{{ scope.row.evalue }}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单数量" align="center" prop="orderCount" sortable="true">
@@ -128,7 +128,7 @@ export default {
       showCoinsFields: false, // 展示投币相关
       showMaterialFields: false, // 展示出礼相关
       colums: [
-        { key: 'eValue', label: '设备编号' },
+        { key: 'evalue', label: '设备编号' },
         { key: 'orderCount', label: '订单数量', sortable: true },
         { key: 'totalIncome', label: '收入总额(元)', sortable: true },
         { key: 'onlineIncome', label: '在线收入(元)', sortable: true },
