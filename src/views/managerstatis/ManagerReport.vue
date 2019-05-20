@@ -347,7 +347,8 @@ export default {
     },
     // 导出数据
     exportData() {
-      location.href = encodeURI('/agent/rest/export/reportFroms?startDate=' + this.dateRange[0] + '&endDate=' + this.dateRange[1] + '&roleStr=' + this.active)
+      const userName = this.roletype === '商家' ? this.queryParams.associateSellerPhone : this.queryParams.agentUserName
+      location.href = encodeURI('/agent/rest/export/reportFroms?startDate=' + this.dateRange[0] + '&endDate=' + this.dateRange[1] + '&roleStr=' + this.active + '&associateSellerName=' + userName)
     },
     // 查询时间
     searchDate(time) {
