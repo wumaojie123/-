@@ -80,7 +80,7 @@
       <br>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
-    <DialogAgent :visiable="dialogVisiable" @toggle-dialog="toggleDialog" />
+    <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog" />
   </div>
 </template>
 <script>

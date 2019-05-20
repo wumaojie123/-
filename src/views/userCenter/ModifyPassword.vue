@@ -44,7 +44,7 @@ export default {
         originPwd: {
           required: true, // 是否必填
           validator: (rule, value, callback) => {
-            checkfn(rule, value, callback, '原始密码为空')
+            checkfn(rule, value, callback, '原始密码不能为空')
           },
           trigger: 'blur' // 何事件触发
         },
