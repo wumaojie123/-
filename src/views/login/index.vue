@@ -8,7 +8,7 @@
       auto-complete="on"
       label-position="left">
       <div class="title-container">
-        <h3 class="title">{{ `生产商管理后台` }}</h3>
+        <h3 class="title">{{ `生产商管理平台` }}</h3>
         <!--<hr style="margin-bottom: 30px;height:1px;background-color:white;border: none;"/>-->
         <lang-select class="set-language"/>
       </div>

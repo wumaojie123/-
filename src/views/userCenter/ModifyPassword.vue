@@ -1,6 +1,5 @@
 <template>
   <el-main>
-    <el-alert :title="message" :closable="false" type="warning" class="info" />
     <el-form ref="form" :model="form" :rules="rules" label-width="90px" class="modify" >
       <el-form-item label="旧密码" prop="originPwd">
         <el-input v-model="form.originPwd" type="password" placeholder="原始密码"/>
@@ -34,7 +33,6 @@ export default {
   name: 'ModifyPassword',
   data() {
     return {
-      message: '注意：此页面修改到的密码暂时只是代理商系统的，商家后台的登录密码请在微信端页面内修改。',
       form: {
         originPwd: '',
         newPwd: '',

@@ -104,7 +104,7 @@ export default {
   },
   computed: {
     disabled() {
-      if (!this.form.equipmentTypes || !this.form.agent) {
+      if (!this.form.agent) {
         return true
       } else {
         return false

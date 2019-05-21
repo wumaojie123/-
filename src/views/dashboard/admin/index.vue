@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-editor-container">
-    <h3 class="title">乐摇摇生产商管理后台, 欢迎您!</h3>
+    <h3 class="title">乐摇摇生产商管理平台, 欢迎您!</h3>
   </div>
 </template>
 
