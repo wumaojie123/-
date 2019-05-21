@@ -273,5 +273,6 @@ export default {
 .date-btn.active{
   background-color: #fff;
   border-color: #3089dc;
+  color: #3089dc;
 }
 </style>
