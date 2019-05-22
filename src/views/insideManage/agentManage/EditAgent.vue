@@ -437,6 +437,10 @@ export default {
           name: data.newAgentName
         }
         this.allBusinProjects.push(newAgentProto)
+        this.$message({
+          message: '添加成功',
+          type: 'success'
+        })
       }
     }
   }

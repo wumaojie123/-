@@ -105,7 +105,7 @@
       </el-table-column>
       <el-table-column label="信号" align="center">
         <template slot-scope="scope">
-          <ul :class="signalUI[scope.row.signal]" class="signal-ui">
+          <ul :class="scope.row.online ? signalUI[scope.row.signal] : 'signal-none'" class="signal-ui">
             <li /><li /><li /><li />
           </ul>
         </template>

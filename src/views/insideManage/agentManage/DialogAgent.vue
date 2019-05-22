@@ -30,7 +30,10 @@ export default {
   },
   methods: {
     toggleModal(type) {
-      const newAgentName = this.newAgentName.replace(/\s*/g, '')
+      var newAgentName = this.newAgentName
+      if (this.newAgentName) {
+        newAgentName = this.newAgentName.replace(/\s*/g, '')
+      }
       const modalObj = {
         status: false,
         newAgentName: newAgentName,
