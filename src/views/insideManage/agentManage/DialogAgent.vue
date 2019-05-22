@@ -43,7 +43,7 @@ export default {
         let flag = false
         if (!newAgentName || newAgentName === '') {
           this.$message({
-            message: '请输入正确的项目名称',
+            message: '请输入要添加的项目名称',
             type: 'warning'
           })
           return
