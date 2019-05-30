@@ -183,6 +183,33 @@ export let constantRouterMap = [
     ]
   },
   {
+    path: '/brand',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'brand',
+    hidden: false,
+    meta: {
+      title: '品牌信息配置',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: '/toCBrand',
+        component: () => import('@/views/brand/toCBrand'),
+        name: 'toC',
+        meta: { title: '消费者前台配置' },
+        hidden: false
+      },
+      {
+        path: '/toB',
+        component: () => import('@/views/brand/ToBBrand'),
+        name: 'toB',
+        meta: { title: '运行商后台配置' },
+        hidden: false
+      }
+    ]
+  },
+  {
     path: '/businessCharts',
     component: Layout,
     redirect: 'noredirect',
