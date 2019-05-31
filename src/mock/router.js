@@ -25,6 +25,31 @@ export const userCenter = [
       }
     ]
   },
+
+  {
+    parentId: null,
+    value: '/brand',
+    name: '品牌信息配置',
+    icon: 'component',
+    htmlTemplet: 'brand',
+    adResourcesId: 1102846,
+    selected: true,
+    seq: 3,
+    menuResourcesList: [
+      {
+        htmlTemplet: 'brand/ToBBrand',
+        parentId: 'brand',
+        value: 'toB',
+        name: '运行商后台配置'
+      },
+      {
+        parentId: 'brand',
+        htmlTemplet: 'brand/ToCBrand',
+        value: 'toCBrand',
+        name: '消费者前台配置'
+      }
+    ]
+  },
   {
     value: '/agentManage',
     htmlTemplet: 'agentManage',

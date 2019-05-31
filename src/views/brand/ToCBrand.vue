@@ -74,6 +74,9 @@ export default {
       if (res.result === 0) {
         if (res.data) {
           this.baseInfo = res.data
+          if (this.baseInfo.bannerImg) {
+            this.imageUrl = `${this.preUrl}${this.baseInfo.bannerImg}`
+          }
         } else {
           this.baseInfo = { title: '', businessName: '', agentUserId: agentUserId, isdel: 'N', adConsumersConfigId: '', bannerImg: '' }
         }
@@ -85,10 +88,14 @@ export default {
     },
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 0.5
-      if (!isLt2M) {
-        this.$message.error('图片大小不能超过500K!')
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg'
+      if (!isJPG) {
+        this.$message.error('格式为jpeg，png， jpg')
       }
-      return isLt2M
+      if (!isLt2M) {
+        this.$message.error('文件不能超过500K!')
+      }
+      return isJPG && isLt2M
     },
     handleBaseInfo() {
       this.$refs['baseInfoRef'].validate(valid => {
@@ -101,11 +108,15 @@ export default {
     },
     handleAngentInfo() {
       const postData = this.baseInfo
+      if (!postData.title && !postData.bannerImg && !postData.businessName) {
+        this.$message({ message: '至少输入一项配置信息失败', type: 'error' })
+        return
+      }
       editAdConsumersConfig(postData).then(res => {
         if (res.result === 0) {
-          this.$message({ message: res.data, type: 'success' })
+          this.$message({ message: res.data || '配置信息成功', type: 'success' })
         } else {
-          this.$message({ message: '新增商家信息失败', type: 'error' })
+          this.$message({ message: '配置信息失败', type: 'error' })
         }
       })
     }
