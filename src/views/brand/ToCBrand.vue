@@ -12,15 +12,20 @@
       </el-form-item>
       <el-form-item label="扫码消费页面banner图">
         <el-upload
+          v-if="!imageUrl"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
-          :on-remove="handleRemove"
           :action="uploadUrl"
           class="avatar-uploader">
-          <img v-if="imageUrl" :src="imageUrl" class="avatar">
-          <i v-else class="el-icon-plus avatar-uploader-icon"/>
+          <i class="el-icon-plus avatar-uploader-icon"/>
         </el-upload>
+        <div v-if="imageUrl" class="uploader-wrap">
+          <img :src="imageUrl" class="avatar">
+          <div class="uploader-wrap-avatar" @click="handleRemove">
+            <i class="el-icon-delete el-icon"/>
+          </div>
+        </div>
         <p class="input-anno">1.用户扫描设备二维码进入页面显示的banner图,
           <el-popover placement="top-start" trigger="hover">
             <img src="@/assets/img/banner.png" class="popver-img">
@@ -110,7 +115,7 @@ export default {
     handleAngentInfo() {
       const postData = this.baseInfo
       if (!postData.title && !postData.bannerImg && !postData.businessName) {
-        this.$message({ message: '至少输入一项配置信息失败', type: 'error' })
+        this.$message({ message: '配置信息不能全部为空', type: 'error' })
         return
       }
       editAdConsumersConfig(postData).then(res => {
@@ -179,10 +184,39 @@ export default {
     left: 0;
     top: 0;
     background: rgba(240, 240, 240, .6);
-    /* display: none; */
     z-index: 10;
   }
   .avatar-wrap:hover{
     display: block;
+  }
+  .uploader-wrap{
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    width: 202px;
+    height: 102px;
+  }
+  .uploader-wrap-avatar{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    text-align: center;
+    opacity: 0;
+    background: rgba(0,0,0,.6);
+  }
+  .uploader-wrap-avatar .el-icon{
+    position: absolute;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    text-align: center;
+    color: #fff;
+    font-size: 30px;
+  }
+
+  .uploader-wrap-avatar:hover{
+    opacity: 1;
   }
 </style>

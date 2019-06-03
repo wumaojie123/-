@@ -25,14 +25,20 @@
         </el-form-item>
         <el-form-item label="运营商后台logo">
           <el-upload
+            v-if="!bannerUrl"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             :action="uploadUrl"
             class="avatar-uploader">
-            <img v-if="bannerUrl" :src="bannerUrl" class="avatar" style="width: 74px;height: 98px;">
-            <i v-else class="el-icon-plus avatar-uploader-icon"/>
+            <i class="el-icon-plus avatar-uploader-icon banner-width-height" style="line-height: 98px;"/>
           </el-upload>
+          <div v-if="bannerUrl" class="uploader-wrap banner-width-height">
+            <img :src="bannerUrl" class="avatar banner-width-height">
+            <div class="uploader-wrap-avatar banner-width-height" @click="handleRemove('bannerUrl')">
+              <i class="el-icon-delete el-icon"/>
+            </div>
+          </div>
           <p class="input-anno">1.运营商后台登陆页logo，
             <el-popover placement="top-start" trigger="hover">
               <img src="@/assets/img/logo.png" class="popver-img">
@@ -52,20 +58,26 @@
         </el-form-item>
         <el-form-item label="运营商后台客服微信">
           <el-upload
+            v-if="!wechartUrl"
             :show-file-list="false"
             :on-success="handleWechartSuccess"
             :before-upload="beforeAvatarUpload"
             :action="uploadUrl"
             class="avatar-uploader">
-            <img v-if="wechartUrl" :src="wechartUrl" class="avatar" style="width: 130px;height: 130px;">
-            <i v-else class="el-icon-plus avatar-uploader-icon"/>
+            <i class="el-icon-plus avatar-uploader-icon wechart-width-height" style="line-height: 130px"/>
           </el-upload>
-          <span class="input-anno">请上传客服公众号或个人微信二维码; 建议尺寸：344*344px
+          <div v-if="wechartUrl" class="uploader-wrap wechart-width-height">
+            <img :src="wechartUrl" class="avatar wechart-width-height">
+            <div class="uploader-wrap-avatar wechart-width-height" @click="handleRemove('wechatImg')">
+              <i class="el-icon-delete el-icon"/>
+            </div>
+          </div>
+          <p class="input-anno">请上传客服公众号或个人微信二维码; 建议尺寸：344*344px
             <el-popover placement="top-start" trigger="hover">
               <img src="@/assets/img/qrcode.png" class="popver-img">
               <span slot="reference" style="color: #409EFF;">查看示例></span>
             </el-popover>
-          </span>
+          </p>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleBaseInfo">保存</el-button>
@@ -123,8 +135,12 @@ export default {
       if (res.result === 0) {
         if (res.data) {
           this.baseInfo = res.data
-          this.bannerUrl = `${this.preUrl}${this.baseInfo.bannerImg}`
-          this.wechartUrl = `${this.preUrl}${this.baseInfo.wechatImg}`
+          if (this.baseInfo.bannerImg) {
+            this.bannerUrl = `${this.preUrl}${this.baseInfo.bannerImg}`
+          }
+          if (this.baseInfo.wechatImg) {
+            this.wechartUrl = `${this.preUrl}${this.baseInfo.wechatImg}`
+          }
         } else {
           this.baseInfo = { title: '', agentUserId: agentUserId, isdel: 'N', wechatImg: '', telephone: '', bannerImg: '', adBrandConfigId: '' }
         }
@@ -160,18 +176,27 @@ export default {
     },
     handleAngentInfo() {
       const postData = this.baseInfo
-      if (postData.title && !postData.wechatImg && !postData.telephone && !postData.bannerImg) {
-        this.$message({ message: '至少输入一项配置信息失败', type: 'error' })
+      if (!postData.title && !postData.wechatImg && !postData.telephone && !postData.bannerImg) {
+        this.$message({ message: '配置信息不能全部为空', type: 'error' })
         return
       }
       editAdBrandConfig(postData).then(res => {
         if (res.result === 0) {
-          this.$message({ message: res.data || '消费者前台信息配置成功', type: 'success' })
+          this.$message({ message: res.data || '运营商后台信息配置成功', type: 'success' })
           this.getAdConfig(this.baseInfo.agentUserId)
         } else {
           this.$message({ message: '配置信息失败', type: 'error' })
         }
       })
+    },
+    handleRemove(type) {
+      if (type === 'bannerUrl') {
+        this.bannerUrl = ''
+        this.baseInfo.bannerImg = ''
+      } else if (type === 'wechatImg') {
+        this.baseInfo.wechatImg = ''
+        this.wechartUrl = ''
+      }
     }
   }
 }
@@ -210,5 +235,13 @@ export default {
   }
   .input-anno {
     font-size: 16px;
+  }
+  .banner-width-height{
+    width: 74px!important;
+    height: 98px!important;
+  }
+  .wechart-width-height{
+    width: 130px!important;
+    height: 130px!important;
   }
 </style>
