@@ -167,6 +167,7 @@ export default {
       editAdBrandConfig(postData).then(res => {
         if (res.result === 0) {
           this.$message({ message: res.data || '消费者前台信息配置成功', type: 'success' })
+          this.getAdConfig(this.baseInfo.agentUserId)
         } else {
           this.$message({ message: '配置信息失败', type: 'error' })
         }

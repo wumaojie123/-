@@ -116,20 +116,26 @@ export default {
       editAdConsumersConfig(postData).then(res => {
         if (res.result === 0) {
           this.$message({ message: res.data || '配置信息成功', type: 'success' })
+          this.getAdConfig(this.baseInfo.agentUserId)
         } else {
           this.$message({ message: '配置信息失败', type: 'error' })
         }
       })
     },
     handleRemove() {
-
+      this.imageUrl = ''
+      this.baseInfo.bannerImg = ''
     }
   }
 }
 </script>
 
 <style>
-   .avatar-uploader .el-upload {
+  .avatar-uploader{
+    display: inline-block;
+    position: relative;
+  }
+  .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
@@ -153,11 +159,30 @@ export default {
     display: block;
     position: relative;
   }
+  .avatar-del{
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    transform: translate3d(50%, -50%, 0);
+  }
   .popver-img {
     width: 300px;
     height: 300px;
   }
   .input-anno {
     font-size: 16px;
+  }
+  .avatar-wrap{
+    width: 200px;
+    height: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(240, 240, 240, .6);
+    /* display: none; */
+    z-index: 10;
+  }
+  .avatar-wrap:hover{
+    display: block;
   }
 </style>
