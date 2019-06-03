@@ -182,33 +182,33 @@ export let constantRouterMap = [
       }
     ]
   },
-  {
-    path: '/brand',
-    component: Layout,
-    redirect: 'noredirect',
-    name: 'brand',
-    hidden: false,
-    meta: {
-      title: '品牌信息配置',
-      icon: 'component'
-    },
-    children: [
-      {
-        path: '/toCBrand',
-        component: () => import('@/views/brand/toCBrand'),
-        name: 'toC',
-        meta: { title: '消费者前台配置' },
-        hidden: false
-      },
-      {
-        path: '/toB',
-        component: () => import('@/views/brand/ToBBrand'),
-        name: 'toB',
-        meta: { title: '运行商后台配置' },
-        hidden: false
-      }
-    ]
-  },
+  // {
+  //   path: '/brand',
+  //   component: Layout,
+  //   redirect: 'noredirect',
+  //   name: 'brand',
+  //   hidden: false,
+  //   meta: {
+  //     title: '品牌信息配置',
+  //     icon: 'component'
+  //   },
+  //   children: [
+  //     {
+  //       path: '/toCBrand',
+  //       component: () => import('@/views/brand/toCBrand'),
+  //       name: 'toC',
+  //       meta: { title: '消费者前台配置' },
+  //       hidden: false
+  //     },
+  //     {
+  //       path: '/toB',
+  //       component: () => import('@/views/brand/ToBBrand'),
+  //       name: 'toB',
+  //       meta: { title: '运行商后台配置' },
+  //       hidden: false
+  //     }
+  //   ]
+  // },
   {
     path: '/businessCharts',
     component: Layout,
@@ -320,6 +320,33 @@ export let constantRouterMap = [
     ]
   }
 ]
+
+// let info = [
+//   {
+//     parentId: null,
+//     value: '/brand',
+//     name: '品牌信息配置',
+//     icon: 'component',
+//     htmlTemplet: 'brand',
+//     adResourcesId: 1102846,
+//     selected: true,
+//     seq: 3,
+//     menuResourcesList: [
+//       {
+//         htmlTemplet: 'brand/ToBBrand',
+//         parentId: 'brand',
+//         value: 'toB',
+//         name: '运行商后台配置'
+//       },
+//       {
+//         parentId: 'brand',
+//         htmlTemplet: 'brand/ToCBrand',
+//         value: 'toCBrand',
+//         name: '消费者前台配置'
+//       }
+//     ]
+//   },
+// ]
 
 // const addRouters = getSession('addRouters') && JSON.parse(getSession('addRouters'))
 if (addRoute) {
