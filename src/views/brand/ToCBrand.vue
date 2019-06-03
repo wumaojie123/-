@@ -15,6 +15,7 @@
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
+          :on-remove="handleRemove"
           :action="uploadUrl"
           class="avatar-uploader">
           <img v-if="imageUrl" :src="imageUrl" class="avatar">
@@ -52,7 +53,7 @@ import uploadUrl from '@/api/upload'
 export default {
   data() {
     return {
-      baseInfo: { title: '', businessName: '', agentUserId: '', isdel: '', adConsumersConfigId: '' },
+      baseInfo: { title: '', businessName: '', agentUserId: '', isdel: 'N', adConsumersConfigId: '' },
       baseInfoRules: {},
       imageUrl: '',
       uploadUrl: uploadUrl,
@@ -119,6 +120,9 @@ export default {
           this.$message({ message: '配置信息失败', type: 'error' })
         }
       })
+    },
+    handleRemove() {
+
     }
   }
 }
@@ -147,6 +151,7 @@ export default {
     width: 300px;
     height: 100px;
     display: block;
+    position: relative;
   }
   .popver-img {
     width: 300px;

@@ -88,7 +88,7 @@ import clipboard from '@/utils/clipboard'
 export default {
   data() {
     return {
-      baseInfo: { title: '', agentUserId: '', isdel: '', wechatImg: '', telephone: '', bannerImg: '', adBrandConfigId: '' },
+      baseInfo: { title: '', agentUserId: '', isdel: 'N', wechatImg: '', telephone: '', bannerImg: '', adBrandConfigId: '' },
       baseInfoRules: {
       },
       imageUrl: '',
@@ -126,7 +126,7 @@ export default {
           this.bannerUrl = `${this.preUrl}${this.baseInfo.bannerImg}`
           this.wechartUrl = `${this.preUrl}${this.baseInfo.wechatImg}`
         } else {
-          this.baseInfo = { title: '', agentUserId: agentUserId, isdel: '', wechatImg: '', telephone: '', bannerImg: '', adBrandConfigId: '' }
+          this.baseInfo = { title: '', agentUserId: agentUserId, isdel: 'N', wechatImg: '', telephone: '', bannerImg: '', adBrandConfigId: '' }
         }
       }
     },
