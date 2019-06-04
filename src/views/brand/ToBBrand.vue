@@ -17,7 +17,7 @@
         <el-form-item label="运营商后台标题" >
           <el-input v-model="baseInfo.title" placeholder="请输入运营商后台标题" type="text" class="input-300" maxlength="10" clearable/>
           <span class="input-anno">运营商管理后台页面顶部标题，最多可输入10个文字
-            <el-popover placement="top-start" trigger="click">
+            <el-popover placement="top-start" trigger="hover">
               <img src="@/assets/img/b-title.png" class="popver-img" style="width: 255px;height: 290px;">
               <span slot="reference" style="color: #409EFF;">查看示例></span>
             </el-popover>
