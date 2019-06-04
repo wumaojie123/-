@@ -240,6 +240,16 @@ export default {
   .input-anno {
     font-size: 16px;
   }
+  .uploader-wrap-avatar{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    text-align: center;
+    opacity: 0;
+    background: rgba(0,0,0,.4);
+  }
   .banner-width-height{
     width: 74px!important;
     height: 98px!important;
@@ -247,5 +257,17 @@ export default {
   .wechart-width-height{
     width: 130px!important;
     height: 130px!important;
+  }
+  .uploader-wrap-avatar .el-icon{
+    position: absolute;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    text-align: center;
+    color: #fff;
+    font-size: 30px;
+  }
+
+  .uploader-wrap-avatar:hover{
+    opacity: 1;
   }
 </style>
