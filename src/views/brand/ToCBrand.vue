@@ -5,7 +5,7 @@
         <el-input v-model="baseInfo.title" placeholder="请输入扫码消费页面标题" type="text" class="input-300" maxlength="10" clearable/>
         <span class="input-anno">用户扫描设备二维码进入页面显示的顶部标题，不超过10个文字
           <el-popover placement="top-start" trigger="hover">
-            <img src="@/assets/img/title.png" class="popver-img">
+            <img src="@/assets/img/title.png" class="popver-img" style="width: 255px;height: 190px;">
             <span slot="reference" style="color: #409EFF;">查看示例></span>
           </el-popover>
         </span>
@@ -28,7 +28,7 @@
         </div>
         <p class="input-anno" style="margin-left: 0;">1.用户扫描设备二维码进入页面显示的banner图,
           <el-popover placement="top-start" trigger="hover">
-            <img src="@/assets/img/banner.png" class="popver-img">
+            <img src="@/assets/img/banner.png" class="popver-img" style="width: 315px;height: 190px;">
             <span slot="reference" style="color: #409EFF;">查看示例></span>
           </el-popover>
         </p>
@@ -38,7 +38,7 @@
         <el-input v-model="baseInfo.businessName" placeholder="请输入扫码支付品牌名称" type="text" class="input-300" maxlength="10" clearable />
         <span class="input-anno">用户扫码支付时显示的商户品牌名称，不超过10个文字，
           <el-popover placement="top-start" trigger="hover">
-            <img src="@/assets/img/pay.png" class="popver-img">
+            <img src="@/assets/img/pay.png" class="popver-img" style="width: 255px;height: 240px;">
             <span slot="reference" style="color: #409EFF;">查看示例></span>
           </el-popover>
         </span>
