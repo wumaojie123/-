@@ -6,14 +6,14 @@
         <el-form-item >
           <el-input v-model="linkInfo" placeholder="链接地址" type="text" class="input-600" readonly maxlength="10" clearable/>
           <el-button class="copy-link" type="primary" @click="handleClipboard($event)">复制链接</el-button>
-          <p class="input-anno">1.通过定制链接进入管理后台可实现以下配置的功能。</p>
-          <p class="input-anno">2.可将链接插入公众号菜单或发送给运营商。</p>
+          <p class="input-anno" style="margin-left: 0;">1.通过定制链接进入管理后台可实现以下配置的功能。</p>
+          <p class="input-anno" style="margin-left: 0;">2.可将链接插入公众号菜单或发送给运营商。</p>
         </el-form-item>
       </el-form>
     </div>
     <div style="margin-top: 20px;border-bottom: 1px solid #f0f0f0;">
       <h1 style="font-size: 28px;font-weight: 700;">品牌信息配置</h1>
-      <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfoRules" label-width="180px" label-position="right" style="margin-top: 20px;">
+      <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfoRules" label-width="145px" label-position="right" style="margin-top: 20px;">
         <el-form-item label="运营商后台标题" >
           <el-input v-model="baseInfo.title" placeholder="请输入运营商后台标题" type="text" class="input-300" maxlength="10" clearable/>
           <span class="input-anno">运营商管理后台页面顶部标题，最多可输入10个文字
@@ -39,13 +39,13 @@
               <i class="el-icon-delete el-icon"/>
             </div>
           </div>
-          <p class="input-anno">1.运营商后台登陆页logo，
+          <p class="input-anno" style="margin-left: 0;">1.运营商后台登陆页logo，
             <el-popover placement="top-start" trigger="hover">
               <img src="@/assets/img/logo.png" class="popver-img">
               <span slot="reference" style="color: #409EFF;">查看示例></span>
             </el-popover>
           </p>
-          <p class="input-anno">2.建议尺寸：148*195px，文件大小不超过500k，建议格式：png格式，透明底</p>
+          <p class="input-anno" style="margin-left: 0;">2.建议尺寸：148*195px，文件大小不超过500k，建议格式：png格式，透明底</p>
         </el-form-item>
         <el-form-item label="运营商后台客服电话">
           <el-input v-model="baseInfo.telephone" placeholder="请输入运营商后台客服电话" type="text" class="input-300" maxlength="10" clearable />
@@ -72,7 +72,7 @@
               <i class="el-icon-delete el-icon"/>
             </div>
           </div>
-          <p class="input-anno">请上传客服公众号或个人微信二维码; 建议尺寸：344*344px
+          <p class="input-anno" style="margin-left: 0;">请上传客服公众号或个人微信二维码; 建议尺寸：344*344px
             <el-popover placement="top-start" trigger="hover">
               <img src="@/assets/img/qrcode.png" class="popver-img">
               <span slot="reference" style="color: #409EFF;">查看示例></span>
@@ -203,6 +203,10 @@ export default {
 </script>
 
 <style>
+  .input-small{
+    font-size: 14px;
+    color: #b1a8a8;
+  }
   .input-600{
     width: 600px;
   }

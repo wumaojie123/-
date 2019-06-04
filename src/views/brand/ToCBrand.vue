@@ -26,13 +26,13 @@
             <i class="el-icon-delete el-icon"/>
           </div>
         </div>
-        <p class="input-anno">1.用户扫描设备二维码进入页面显示的banner图,
+        <p class="input-anno" style="margin-left: 0;">1.用户扫描设备二维码进入页面显示的banner图,
           <el-popover placement="top-start" trigger="hover">
             <img src="@/assets/img/banner.png" class="popver-img">
             <span slot="reference" style="color: #409EFF;">查看示例></span>
           </el-popover>
         </p>
-        <p class="input-anno">2.建议尺寸：xxx*xxxcm，文件大小不超过500k。</p>
+        <p class="input-anno" style="margin-left: 0;">2.建议尺寸：375*125px，文件大小不超过500k。</p>
       </el-form-item>
       <el-form-item label="扫码支付品牌名称">
         <el-input v-model="baseInfo.businessName" placeholder="请输入扫码支付品牌名称" type="text" class="input-300" maxlength="10" clearable />
@@ -183,7 +183,7 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
-    background: rgba(240, 240, 240, .6);
+    background: rgba(240, 240, 240, .4);
     z-index: 10;
   }
   .avatar-wrap:hover{
@@ -194,7 +194,7 @@ export default {
     border-radius: 6px;
     cursor: pointer;
     position: relative;
-    width: 202px;
+    width: 302px;
     height: 102px;
   }
   .uploader-wrap-avatar{
@@ -205,7 +205,7 @@ export default {
     top: 0;
     text-align: center;
     opacity: 0;
-    background: rgba(0,0,0,.6);
+    background: rgba(0,0,0,.4);
   }
   .uploader-wrap-avatar .el-icon{
     position: absolute;
