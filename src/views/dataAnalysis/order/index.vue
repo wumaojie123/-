@@ -11,7 +11,58 @@
       abd
     </card-wrapper>
     <card-wrapper label="订单报表">
-      abd
+      <el-table
+        :data="orderTableData"
+        :header-cell-style="{
+          backgroundColor: '#F8F8F8'
+        }"
+        height="280"
+        class="rank-table"
+        border
+        style="width: 100%">
+        <el-table-column
+          align="center"
+          prop="lyyMaterialName"
+          label="日期" />
+        <el-table-column
+          align="center"
+          prop="materialNo"
+          label="成交订单量(笔)" />
+        <el-table-column
+          align="center"
+          prop="amount"
+          label="成交金额(元)" />
+        <el-table-column
+          align="center"
+          prop="quantity"
+          label="成交人数" />
+        <el-table-column
+          width="240"
+          align="center">
+          <template slot="header" slot-scope="scope">
+            <el-tooltip class="profit-tips" effect="dark" content="单笔平均支付金额=成交金额/成交订单量" placement="top">
+              <span>单笔平均支付金额(元) <i class="el-icon-question" /> </span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="quantity">
+          <template slot="header" slot-scope="scope">
+            <el-tooltip class="profit-tips" effect="dark" content="客单价=成交金额/成交人数" placement="top">
+              <span>客单价 <i class="el-icon-question" /> </span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="quantity"
+          label="退款订单量(笔)" />
+        <el-table-column
+          align="center"
+          prop="quantity"
+          label="退款金额(元)" />
+      </el-table>
     </card-wrapper>
   </div>
 </template>
@@ -30,7 +81,8 @@ export default {
   data() {
     return {
       orderTrend: null,
-      orderTimeTrend: null
+      orderTimeTrend: null,
+      orderTableData: []
     }
   },
   mounted() {
