@@ -340,3 +340,13 @@ export function mul(arg1, arg2) {
   }
   return Number(s1.replace('.', '')) * Number(s2.replace('.', '')) / Math.pow(10, m)
 }
+
+// 获取时间戳
+export function getTimeStamp(time) {
+  if (time) {
+    const newTime = ('' + time).replace(/-/g, '/')
+    return ((new Date(newTime)).valueOf() / 1000).toFixed(0)
+  } else {
+    return ((new Date()).valueOf() / 1000).toFixed(0)
+  }
+}
