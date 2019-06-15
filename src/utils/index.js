@@ -350,3 +350,23 @@ export function getTimeStamp(time) {
     return ((new Date()).valueOf() / 1000).toFixed(0)
   }
 }
+
+function get2decimals(initNumber) {
+  var result = (Math.round(initNumber * 100) / 100).toFixed(2)
+  result = result.replace('.00', '')
+  return result
+}
+
+// echarts Y轴数据格式化
+export function echartsAxisLabelFormatter(value) {
+  if (value >= 1000 && value < 1000000) {
+    value = get2decimals(value) / 1000 + 'K'
+  } else if (value >= 1000000 && value < 1000000000) {
+    value = get2decimals(value) / 1000000 + 'M'
+  } else if (value >= 1000000000) {
+    value = get2decimals(value) / 1000000000 + 'B'
+  } else {
+    value = get2decimals(value)
+  }
+  return value
+}

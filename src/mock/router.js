@@ -184,9 +184,9 @@ const userCenter = [
     icon: 'chart',
     menuResourcesList: [
       {
-        htmlTemplet: 'dataAnalysis/client/index',
-        value: '/dataAnalysis/client',
-        name: '客户分析',
+        htmlTemplet: 'dataAnalysis/order/index',
+        name: '订单分析',
+        value: '/dataAnalysis/order',
         parentId: '/dataAnalysis'
       },
       {
@@ -196,9 +196,9 @@ const userCenter = [
         parentId: '/dataAnalysis'
       },
       {
-        htmlTemplet: 'dataAnalysis/order/index',
-        name: '订单分析',
-        value: '/dataAnalysis/order',
+        htmlTemplet: 'dataAnalysis/site/index',
+        value: '/dataAnalysis/site',
+        name: '点位分析',
         parentId: '/dataAnalysis'
       }
     ]

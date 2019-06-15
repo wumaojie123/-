@@ -1,17 +1,11 @@
 <template lang="html">
   <div class="page-container">
     <analysis-picker />
-    <card-wrapper label="订单趋势">
-      <div ref="orderTrend" class="echarts-item" />
-    </card-wrapper>
-    <card-wrapper label="订单高峰分布">
-      <div ref="orderTimeTrend" class="echarts-item" />
-    </card-wrapper>
-    <card-wrapper label="占比分析">
+    <card-wrapper label="点位投放效果">
       abd
     </card-wrapper>
-    <card-wrapper label="订单报表">
-      abd
+    <card-wrapper label="点位收益趋势">
+      <div ref="siteEarnTrend" class="echarts-item" />
     </card-wrapper>
   </div>
 </template>
@@ -20,7 +14,7 @@
 import AnalysisPicker from '../components/AnalysisPicker/'
 import CardWrapper from '../components/CardWrapper/'
 import echarts from 'echarts'
-import { orderTrendOption, orderTimeTrendOption } from './option'
+import { siteEarnTrendOption } from './option'
 
 export default {
   components: {
@@ -29,8 +23,7 @@ export default {
   },
   data() {
     return {
-      orderTrend: null,
-      orderTimeTrend: null
+      siteEarnTrend: null
     }
   },
   mounted() {
@@ -39,13 +32,12 @@ export default {
   methods: {
     creatEcharts() {
       this.$nextTick(() => {
-        this.orderTrend = echarts.init(this.$refs.orderTrend)
-        this.orderTimeTrend = echarts.init(this.$refs.orderTimeTrend)
-        this.orderTrend.setOption(orderTrendOption)
-        this.orderTimeTrend.setOption(orderTimeTrendOption)
+        this.siteEarnTrend = echarts.init(this.$refs.siteEarnTrend)
+        this.siteEarnTrend.setOption(siteEarnTrendOption)
       })
     }
   }
+
 }
 </script>
 

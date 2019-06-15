@@ -1,51 +1,54 @@
 <template lang="html">
   <div class="analysis-picker">
-    <h3>{{ label }}</h3>
-    <el-select v-model="curQuicklySelect" class="picker-item" placeholder="请选择" @change="quicklySelectChange">
-      <el-option
-        v-for="item in quicklySelectOptions"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"/>
-    </el-select>
 
-    <el-date-picker
-      v-model="selectDates"
-      :picker-options="pickerOptions"
-      class="picker-date-item"
-      type="daterange"
-      align="center"
-      value-format="yyyy-MM-dd"
-      unlink-panels
-      range-separator="至"
-      prefix-icon="el-icon-time"
-      start-placeholder="开始时间"
-      end-placeholder="结束时间"
-      @change="dateChange"/>
+    <div class="picker-panel">
+      时间：
+      <el-select v-model="curQuicklySelect" style="width: 100px" placeholder="请选择" @change="quicklySelectChange">
+        <el-option
+          v-for="item in quicklySelectOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"/>
+      </el-select>
 
-    <el-select v-if="noGroup !== ''" v-model="curGroupType" class="picker-item" placeholder="请选择" @change="groupTypeChange">
-      <el-option
-        v-for="item in groupTypeOptions"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"/>
-    </el-select>
+      <el-date-picker
+        v-model="selectDates"
+        :picker-options="pickerOptions"
+        class="picker-date-item"
+        type="daterange"
+        align="center"
+        value-format="yyyy-MM-dd"
+        unlink-panels
+        range-separator="至"
+        prefix-icon="el-icon-time"
+        start-placeholder="开始时间"
+        end-placeholder="结束时间"
+        @change="dateChange"/>
+    </div>
 
-    <el-select v-if="noGroup !=='' && curGroupType === 1" v-model="curGroup" class="picker-item" placeholder="请选择" @change="groupChange">
-      <el-option
-        v-for="item in placeOptions"
-        :key="item.group_id"
-        :label="item.group_name"
-        :value="item.group_id"/>
-    </el-select>
+    <div class="picker-panel">
+      代理/商家：
+      <el-select v-model="merchantName" filterable placeholder="请选择">
+        <el-option
+          v-for="item in merchantOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value" />
+      </el-select>
+    </div>
 
-    <el-select v-if="noGroup !=='' && curGroupType !== 1" v-model="curGroup" class="picker-item" placeholder="请选择" @change="groupChange">
-      <el-option
-        v-for="item in groupOptions"
-        :key="item.group_id"
-        :label="item.group_name"
-        :value="item.group_id"/>
-    </el-select>
+    <div class="picker-panel">
+      设备类型：
+      <el-select v-model="merchantName" filterable placeholder="请选择">
+        <el-option
+          v-for="item in merchantOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value" />
+      </el-select>
+    </div>
+
+    <slot />
   </div>
 </template>
 
@@ -54,28 +57,19 @@ import {
   getTimeStamp,
   parseTime
 } from '@/utils/index'
-import {
-  mapGetters
-} from 'vuex'
 
 export default {
   name: 'AnalysisPicker',
   props: {
-    label: {
-      type: String,
-      default: ''
-    },
-    noGroup: {
-      type: [String, Boolean],
-      default: ''
-    }
+
   },
   data() {
     return {
+      merchantName: '',
+      merchantOptions: [],
       selectDates: [],
+
       curQuicklySelect: 'yesterday',
-      curGroupType: 1,
-      curGroup: -1,
       quicklySelectOptions: [
         {
           value: 'yesterday',
@@ -117,7 +111,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['groupList', 'placeList']),
     placeOptions() {
       const initOptions = [{
         group_id: -1,
@@ -134,8 +127,6 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('GetPlaceList')
-    this.$store.dispatch('GetGroupList')
     this.initQuicklySelect()
     this.quicklySelectChange('yesterday')
   },
@@ -228,21 +219,10 @@ export default {
       this.curQuicklySelect = 'selfDefine'
       this.emitPickerChange()
     },
-    groupTypeChange(val) {
-      this.curGroup = -1
-      this.emitPickerChange()
-    },
-    groupChange(val) {
-      this.emitPickerChange()
-    },
     emitPickerChange() {
       const params = {
         startDate: this.selectDates[0],
         endDate: this.selectDates[1]
-      }
-      if (this.noGroup !== '') {
-        params.model = this.curGroupType === 1
-        params.groups = this.curGroup
       }
       this.$emit('change', params)
     },
@@ -286,26 +266,22 @@ export default {
 
 <style lang="scss" scoped>
 .analysis-picker {
-    padding-bottom: 20px;
+  padding: 20px;
 
-    > h3 {
-        display: inline-block;
-        font-size: 20px;
-        padding: 0 20px 0 10px;
-        border-left: 6px solid #2F75F5;
-        line-height: 22px;
-        margin: 10px 0;
-    }
+  .picker-panel {
+    margin-right: 25px;
+    display: inline-block;
+  }
 
-    .picker-item {
-        width: 160px;
-        margin-right: 20px;
-        margin-bottom: 10px;
-    }
+  .picker-item {
+    width: 160px;
+    margin-bottom: 10px;
+  }
 
-    .picker-date-item {
-        margin-right: 20px;
-        margin-bottom: 10px;
-    }
+  .picker-date-item {
+    width: 380px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
 }
 </style>
