@@ -87,13 +87,40 @@
       <div class="hint-info-panel">
         <div class="fl">说明：</div>
         <div class="ovh">
-          <p>（1）若勾选了 “手动关联” ，则BD将设备导入给该一级代理后，该一级代理必须在代理后台创建（或绑定）下级商家 ，才能看到的设备的经营数据。</p>
-          <p>（2）若勾选了“自动关联”，则该一级代理无需在代理后台手动创建（或绑定）下级商家，只要BD将设备导入给该一级代理，系统就会自动关联并显示下级商家和经营数据。</p>
+          <p>
+            （1）若勾选了 “手动关联” ，则BD将设备导入给该一级代理后，
+            该一级代理必须在代理后台创建（或绑定）下级商家 ，才能看到的设备的经营数据。
+          </p>
+          <p>
+            （2）若勾选了“自动关联”，则该一级代理无需在代理后台手动创建（或绑定）下级商家，
+            只要BD将设备导入给该一级代理，系统就会自动关联并显示下级商家和经营数据。
+          </p>
           <p>（3）为保证用户的信息安全，如非特殊情况，请不要轻易勾选 “自动关联”。</p>
         </div>
       </div>
+      <el-form-item label="权限设置" prop="authSetting" class="checkbox-group-form">
+        <el-checkbox-group v-model="baseInfo.authSetting" @change="authListChange">
+          <el-checkbox label="经营报表"/>
+          <el-checkbox label="数据分析" @change="dataAuthChange"/>
+          <el-checkbox-group v-model="dataAnalysisList" @change="subAuthChange">
+            <el-checkbox label="订单分析"/>
+            <el-checkbox label="设备分析"/>
+            <el-checkbox label="客户分析"/>
+            <el-checkbox label="区域分析"/>
+            <el-checkbox label="点位分析"/>
+            <el-checkbox label="商品分析"/>
+          </el-checkbox-group>
+          <el-checkbox label="代理列表"/>
+          <el-checkbox label="商家列表"/>
+          <el-checkbox label="设备管理"/>
+          <el-checkbox label="用户中心"/>
+          <el-checkbox label="广告分成"/>
+        </el-checkbox-group>
+      </el-form-item>
       <br>
-      <p style="margin: 10px;padding-bottom:10px;color: red;">{{ `注意：如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码。` }}</p>
+      <p style="margin: 10px;padding-bottom:10px;color: red;">
+        {{ `注意：如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码。` }}
+      </p>
       <el-button type="primary" @click="handleAccountInfo">创建</el-button>
     </el-form>
     <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog" />
@@ -108,6 +135,7 @@ export default {
   components: { DialogAgent },
   data() {
     return {
+      dataAnalysisList: [],
       baseInfo: {
         contractId: '',
         agentUserId: null,
@@ -118,6 +146,7 @@ export default {
         BD: '',
         codeValidate: '1',
         dataMonitor: '0',
+        authSetting: ['经营报表', '代理列表', '商家列表', '设备管理', '用户中心'],
         projects: [],
         account: '',
         password: '',
@@ -141,6 +170,9 @@ export default {
         ],
         dataMonitor: [
           { required: true }
+        ],
+        authSetting: [
+          { required: true, message: '请选择至少一个权限' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -176,6 +208,19 @@ export default {
     checkChange() {
       this.$nextTick(function() {
       })
+    },
+    authListChange(selected) {
+      console.log('--log--:', selected)
+    },
+    dataAuthChange(selected) {
+      this.dataAnalysisList = selected ? ['订单分析', '设备分析', '客户分析', '区域分析', '点位分析', '商品分析'] : []
+    },
+    subAuthChange(selected) {
+      if (selected.length > 0 && !this.baseInfo.authSetting.includes('数据分析')) {
+        this.baseInfo.authSetting.push('数据分析')
+      } else if (selected.length === 0 && this.baseInfo.authSetting.includes('数据分析')) {
+        this.baseInfo.authSetting = this.baseInfo.authSetting.filter(v => v !== '数据分析')
+      }
     },
     getBDList() {
       insideManage.getBDList().then(res => {
@@ -338,8 +383,26 @@ export default {
   .input-300 {
     width: 350px;
   }
+  .checkbox-group-form {
+    .el-checkbox{
+      display: block;
+      margin-left: 0;
+      width: 100px;
+    }
+    .el-checkbox-group {
+      margin-left: 30px;
+    }
+  }
   .project-form{
     position: relative;
+    .el-checkbox{
+      margin-left: 0;
+      width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: top;
+    }
   }
   .project-form label.el-form-item__label{
     padding: 0 12px 0 0;
@@ -351,7 +414,6 @@ export default {
       position: absolute;
       font-weight: 700;
       transform: translate3d(50%,50%,0);
-      /*top: 0;*/
     }
   }
 

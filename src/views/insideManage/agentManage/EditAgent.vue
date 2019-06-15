@@ -26,7 +26,7 @@
         </el-select>
         <span class="input-anno">选择一位BD同事作为跟进负责人</span>
       </el-form-item>
-      <el-form-item v-if="checkBoxList&&checkBoxList.length>0" ref="projectsRef" label="经营项目" prop="project">
+      <el-form-item v-if="checkBoxList&&checkBoxList.length>0" ref="projectsRef" label="经营项目" prop="project" class="project-checkbox">
         <template v-for="(box, index) in checkBoxList">
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
@@ -62,7 +62,6 @@
           <p>（3）为保证用户的信息安全，如非特殊情况，请不要轻易勾选 “不需要短信验证码”。</p>
         </div>
       </div>
-
       <el-form-item label="数据监控" prop="dataMonitor" class="mb5 mt10">
         <el-radio-group v-model="baseInfo.dataMonitor">
           <el-radio label="0">手动关联</el-radio>
@@ -77,6 +76,25 @@
           <p>（3）为保证用户的信息安全，如非特殊情况，请不要轻易勾选 “自动关联”。</p>
         </div>
       </div>
+      <el-form-item label="权限设置" prop="authSetting" class="checkbox-group-form">
+        <el-checkbox-group ref="checkbox-auth" v-model="baseInfo.authSetting" @change="authListChange">
+          <el-checkbox label="经营报表"/>
+          <el-checkbox label="数据分析" @change="dataAuthChange"/>
+          <el-checkbox-group v-model="dataAnalysisList" @change="subAuthChange">
+            <el-checkbox label="订单分析"/>
+            <el-checkbox label="设备分析"/>
+            <el-checkbox label="客户分析"/>
+            <el-checkbox label="区域分析"/>
+            <el-checkbox label="点位分析"/>
+            <el-checkbox label="商品分析"/>
+          </el-checkbox-group>
+          <el-checkbox label="代理列表"/>
+          <el-checkbox label="商家列表"/>
+          <el-checkbox label="设备管理"/>
+          <el-checkbox label="用户中心"/>
+          <el-checkbox label="广告分成"/>
+        </el-checkbox-group>
+      </el-form-item>
       <br>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
@@ -91,6 +109,7 @@ export default {
   components: { DialogAgent },
   data() {
     return {
+      dataAnalysisList: [],
       baseInfo: {
         num: '',
         agentUserName: '',
@@ -104,7 +123,8 @@ export default {
         loginPhone: '',
         password: '',
         account: '',
-        acc: ''
+        acc: '',
+        authSetting: ['经营报表', '代理列表', '商家列表', '设备管理', '用户中心']
       },
       baseInfoRules: {
         num: [
@@ -202,6 +222,9 @@ export default {
             validator: telCheck,
             trigger: 'blur'
           }
+        ],
+        authSetting: [
+          { required: true, message: '请选择至少一个权限' }
         ]
       },
       bdList: [],
@@ -237,6 +260,19 @@ export default {
       this.$nextTick(function() {
         this.$refs['baseInfoRef'].clearValidate(['preject'])
       })
+    },
+    authListChange(selected) {
+      console.log('--log--:', selected)
+    },
+    dataAuthChange(selected) {
+      this.dataAnalysisList = selected ? ['订单分析', '设备分析', '客户分析', '区域分析', '点位分析', '商品分析'] : []
+    },
+    subAuthChange(selected) {
+      if (selected.length > 0 && !this.baseInfo.authSetting.includes('数据分析')) {
+        this.baseInfo.authSetting.push('数据分析')
+      } else if (selected.length === 0 && this.baseInfo.authSetting.includes('数据分析')) {
+        this.baseInfo.authSetting = this.baseInfo.authSetting.filter(v => v !== '数据分析')
+      }
     },
     getBDList() {
       insideManage.getBDList().then(
@@ -332,7 +368,8 @@ export default {
               password: '',
               acc: data.phone,
               codeValidate: '' + data.issend,
-              dataMonitor: '' + data.associatedType
+              dataMonitor: '' + data.associatedType,
+              authSetting: ['经营报表', '代理列表', '商家列表', '设备管理', '用户中心'] // todo
             }
             this.agentProject = data.agentBusiness
             // this.accountOnBlur()
@@ -447,39 +484,60 @@ export default {
 }
 </script>
 
-<style scoped>
-.input-300 {
-  width: 350px;
-}
-.input-anno {
-  margin-left: 20px;
-  font-size: 12px;
-  color: #b1a8a8;
-}
-.ovh{
-  overflow: hidden;
-}
-.fl{
-  float: left;
-}
-.mb5{
-  margin-bottom: 5px;
-}
-.mt10{
-  margin-top: 10px;
-}
-.hint-info-panel{
-  margin-left: 120px;
-  color: #666;
-  text-align: justify;
-  line-height: 20px;
-  font-size: 13px;
-  overflow: hidden;
-}
-.add-project{
-  font-size: 14px;
-  color: #3089dc;
-  cursor: pointer;
-  margin-left: 10px;
-}
+<style lang="scss" scoped>
+  .checkbox-group-form {
+    margin-top: 20px;
+    .el-checkbox{
+      display: block;
+      margin-left: 0;
+      width: 100px;
+    }
+    .el-checkbox-group {
+      margin-left: 30px;
+    }
+  }
+  .project-checkbox {
+    .el-checkbox {
+      margin-left: 0;
+      width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+  }
+  .input-300 {
+    width: 350px;
+  }
+  .input-anno {
+    margin-left: 20px;
+    font-size: 12px;
+    color: #b1a8a8;
+  }
+  .ovh{
+    overflow: hidden;
+  }
+  .fl{
+    float: left;
+  }
+  .mb5{
+    margin-bottom: 5px;
+  }
+  .mt10{
+    margin-top: 10px;
+  }
+  .hint-info-panel{
+    margin-left: 120px;
+    color: #666;
+    text-align: justify;
+    line-height: 20px;
+    font-size: 13px;
+    overflow: hidden;
+  }
+  .add-project{
+    font-size: 14px;
+    color: #3089dc;
+    cursor: pointer;
+    margin-left: 10px;
+  }
 </style>
