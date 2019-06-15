@@ -48,7 +48,7 @@
           <p class="input-anno" style="margin-left: 0;">2.建议尺寸：148*195px，文件大小不超过500k，建议格式：png格式，透明底</p>
         </el-form-item>
         <el-form-item label="运营商后台客服电话">
-          <el-input v-model="baseInfo.telephone" placeholder="请输入运营商后台客服电话" type="text" class="input-300" maxlength="11" clearable />
+          <el-input v-model="baseInfo.telephone" placeholder="请输入运营商后台客服电话" type="text" class="input-300" maxlength="20" clearable />
           <span class="input-anno">
             <el-popover placement="top-start" trigger="hover">
               <img src="@/assets/img/phone.png" class="popver-img" style="width: 255px;height: 309px;">
