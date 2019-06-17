@@ -2,7 +2,14 @@
   <div class="page-container">
     <analysis-picker />
     <card-wrapper label="点位投放效果">
-      abd
+      <el-row>
+        <el-col :span="12">
+          <div ref="siteInfo" class="echarts-item" />
+        </el-col>
+        <el-col :span="12">
+          <div ref="siteInfoPercent" class="echarts-item" />
+        </el-col>
+      </el-row>
     </card-wrapper>
     <card-wrapper label="点位收益趋势">
       <div ref="siteEarnTrend" class="echarts-item" />
@@ -14,7 +21,7 @@
 import AnalysisPicker from '../components/AnalysisPicker/'
 import CardWrapper from '../components/CardWrapper/'
 import echarts from 'echarts'
-import { siteEarnTrendOption } from './option'
+import { siteEarnTrendOption, siteInfoOption, siteInfoPercentOption } from './option'
 
 export default {
   components: {
@@ -23,7 +30,8 @@ export default {
   },
   data() {
     return {
-      siteEarnTrend: null
+      siteEarnTrend: null,
+      siteInfoCharts: null
     }
   },
   mounted() {
@@ -33,7 +41,11 @@ export default {
     creatEcharts() {
       this.$nextTick(() => {
         this.siteEarnTrend = echarts.init(this.$refs.siteEarnTrend)
+        this.siteInfoCharts = echarts.init(this.$refs.siteInfo)
+        this.siteInfoPercentCharts = echarts.init(this.$refs.siteInfoPercent)
         this.siteEarnTrend.setOption(siteEarnTrendOption)
+        this.siteInfoCharts.setOption(siteInfoOption)
+        this.siteInfoPercentCharts.setOption(siteInfoPercentOption)
       })
     }
   }

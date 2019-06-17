@@ -8,7 +8,19 @@
       <div ref="orderTimeTrend" class="echarts-item" />
     </card-wrapper>
     <card-wrapper label="占比分析">
-      abd
+      <el-row>
+        <el-col :span="8">
+          <div ref="paymentType" class="echarts-item" />
+        </el-col>
+        <el-col :span="8">
+          <div ref="paymentState" class="echarts-item" />
+        </el-col>
+        <el-col :span="8">
+          <div class="translate-charts">
+            a
+          </div>
+        </el-col>
+      </el-row>
     </card-wrapper>
     <card-wrapper label="订单报表">
       <el-table
@@ -71,7 +83,7 @@
 import AnalysisPicker from '../components/AnalysisPicker/'
 import CardWrapper from '../components/CardWrapper/'
 import echarts from 'echarts'
-import { orderTrendOption, orderTimeTrendOption } from './option'
+import { orderTrendOption, orderTimeTrendOption, paymentTypeOption, paymentStateOption } from './option'
 
 export default {
   components: {
@@ -82,6 +94,9 @@ export default {
     return {
       orderTrend: null,
       orderTimeTrend: null,
+      paymentType: null,
+      paymentState: null,
+      translate: null,
       orderTableData: []
     }
   },
@@ -93,8 +108,12 @@ export default {
       this.$nextTick(() => {
         this.orderTrend = echarts.init(this.$refs.orderTrend)
         this.orderTimeTrend = echarts.init(this.$refs.orderTimeTrend)
+        this.paymentType = echarts.init(this.$refs.paymentType)
+        this.paymentState = echarts.init(this.$refs.paymentState)
         this.orderTrend.setOption(orderTrendOption)
         this.orderTimeTrend.setOption(orderTimeTrendOption)
+        this.paymentType.setOption(paymentTypeOption)
+        this.paymentState.setOption(paymentStateOption)
       })
     }
   }

@@ -2,6 +2,9 @@ import {
   echartsAxisLabelFormatter
 } from '@/utils/'
 
+var colors = ['#5793f3', '#d14a61', '#675bba']
+
+// 订单趋势配参
 export const orderTrendOption = {
   xAxis: {
     type: 'category',
@@ -62,6 +65,7 @@ export const orderTrendOption = {
   }]
 }
 
+// 订单时间分布配参
 export const orderTimeTrendOption = {
   xAxis: {
     type: 'category',
@@ -98,5 +102,109 @@ export const orderTimeTrendOption = {
       color: 'rgba(79, 168, 249, .5)'
     },
     color: '#4fa8f9'
+  }]
+}
+
+// 支付方式占比
+export const paymentTypeOption = {
+  color: colors,
+  title: {
+    text: '支付方式',
+    left: '50%',
+    textAlign: 'center'
+  },
+  legend: {
+    data: [{
+      name: 'a',
+      icon: 'rect'
+    }, {
+      name: 'b',
+      icon: 'rect'
+    }],
+    x: 'center',
+    bottom: 0,
+    itemHeight: 15,
+    itemWidth: 15
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: '{ a } <br/>{ b }: { c } ({ d }%)',
+    textStyle: {
+      fontSize: '11',
+      color: '#fff'
+    }
+  },
+  series: [{
+    name: '订单占比',
+    type: 'pie',
+    radius: '55%',
+    label: {
+      show: false
+    },
+    labelLine: {
+      show: false
+    },
+    data: [
+      {
+        name: 'a',
+        value: 1
+      },
+      {
+        name: 'b',
+        value: 2
+      }
+    ]
+  }]
+}
+
+// 支付结果
+export const paymentStateOption = {
+  color: colors,
+  title: {
+    text: '支付结果',
+    left: '50%',
+    textAlign: 'center'
+  },
+  legend: {
+    data: [{
+      name: 'a',
+      icon: 'rect'
+    }, {
+      name: 'b',
+      icon: 'rect'
+    }],
+    x: 'center',
+    bottom: 0,
+    itemHeight: 15,
+    itemWidth: 15
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: '{ a } <br/>{ b }: { c } ({ d }%)',
+    textStyle: {
+      fontSize: '11',
+      color: '#fff'
+    }
+  },
+  series: [{
+    name: '订单占比',
+    type: 'pie',
+    radius: '55%',
+    label: {
+      show: false
+    },
+    labelLine: {
+      show: false
+    },
+    data: [
+      {
+        name: 'a',
+        value: 1
+      },
+      {
+        name: 'b',
+        value: 2
+      }
+    ]
   }]
 }
