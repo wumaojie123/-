@@ -41,35 +41,40 @@ export const zoneChinaMapOption = {
       return relVal
     }
   },
-  legend: {
-    data: [
-      {
-        name: '设备量',
-        icon: 'circle'
-      },
-      {
-        name: '订单量',
-        icon: 'circle'
-      },
-      {
-        name: '订单总额',
-        icon: 'circle'
-      },
-      {
-        name: '客单价',
-        icon: 'circle'
-      }
-    ],
-    itemGap: 20,
-    bottom: 0,
-    itemHeight: 15,
-    itemWidth: 15
-  },
+  // legend: {
+  //   show: false,
+  //   data: [
+  //     {
+  //       name: '设备量',
+  //       icon: 'circle'
+  //     },
+  //     {
+  //       name: '订单量',
+  //       icon: 'circle'
+  //     },
+  //     {
+  //       name: '订单总额',
+  //       icon: 'circle'
+  //     },
+  //     {
+  //       name: '客单价',
+  //       icon: 'circle'
+  //     }
+  //   ],
+  //   formatter: function() {
+  //     return ''
+  //   },
+  //   itemGap: 20,
+  //   bottom: 0,
+  //   itemHeight: 15,
+  //   itemWidth: 15
+  // },
   visualMap: {
+    show: false,
     bottom: 40,
     type: 'continuous',
     min: 0,
-    max: 4000,
+    max: 2000,
     text: ['高', '低'],
     orient: 'horizontal',
     itemWidth: 30,
@@ -184,8 +189,8 @@ export const zoneChinaMapOption = {
         },
         {
           name: '新疆',
-          value: randomData(),
-          value1: randomData(),
+          value: 111,
+          value1: 111,
           value2: randomData2(),
           value3: randomData3(),
           value4: randomData4()
@@ -415,8 +420,8 @@ export const zoneChinaMapOption = {
         },
         {
           name: '新疆',
-          value: randomData(),
-          value1: randomData(),
+          value: 222,
+          value1: 222,
           value2: randomData2(),
           value3: randomData3(),
           value4: randomData4()
@@ -455,22 +460,6 @@ export const zoneChinaMapOption = {
         },
         {
           name: '吉林',
-          value: randomData(),
-          value1: randomData(),
-          value2: randomData2(),
-          value3: randomData3(),
-          value4: randomData4()
-        },
-        {
-          name: '福建',
-          value: randomData(),
-          value1: randomData(),
-          value2: randomData2(),
-          value3: randomData3(),
-          value4: randomData4()
-        },
-        {
-          name: '广东',
           value: randomData(),
           value1: randomData(),
           value2: randomData2(),
@@ -525,6 +514,14 @@ export const zoneChinaMapOption = {
       mapType: 'china',
       data: [
         {
+          name: '新疆',
+          value: 333,
+          value1: 333,
+          value2: randomData2(),
+          value3: randomData3(),
+          value4: randomData4()
+        },
+        {
           name: '北京',
           value: randomData(),
           value1: randomData(),
@@ -557,22 +554,6 @@ export const zoneChinaMapOption = {
           value4: randomData4()
         },
         {
-          name: '台湾',
-          value: randomData(),
-          value1: randomData(),
-          value2: randomData2(),
-          value3: randomData3(),
-          value4: randomData4()
-        },
-        {
-          name: '香港',
-          value: randomData(),
-          value1: randomData(),
-          value2: randomData2(),
-          value3: randomData3(),
-          value4: randomData4()
-        },
-        {
           name: '澳门',
           value: randomData(),
           value1: randomData(),
@@ -588,17 +569,9 @@ export const zoneChinaMapOption = {
       mapType: 'china',
       data: [
         {
-          name: '北京',
-          value: randomData(),
-          value1: randomData(),
-          value2: randomData2(),
-          value3: randomData3(),
-          value4: randomData4()
-        },
-        {
-          name: '天津',
-          value: randomData(),
-          value1: randomData(),
+          name: '新疆',
+          value: 444,
+          value1: 444,
           value2: randomData2(),
           value3: randomData3(),
           value4: randomData4()

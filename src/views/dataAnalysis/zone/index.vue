@@ -9,7 +9,27 @@
       </analysis-picker>
     </div>
     <div class="main">
-      <div ref="chinaMap" class="left-map"/>
+      <div class="">
+        <div ref="chinaMap" class="left-map"/>
+        <div class="range-item">
+          <span class="high">高</span>
+          <span class="range range4"/>
+          <span class="range range3"/>
+          <span class="range range2"/>
+          <span class="range range1"/>
+          <span class="range range0"/>
+          <span class="low">低</span>
+        </div>
+        <div class="select-type">
+          <span>图例指标: </span>
+          <el-radio-group v-model="radio" @change="changeType">
+            <el-radio label="设备量">设备量</el-radio>
+            <el-radio label="订单量">订单量</el-radio>
+            <el-radio label="订单总额">订单总额</el-radio>
+            <el-radio label="客单价">客单价</el-radio>
+          </el-radio-group>
+        </div>
+      </div>
       <div class="right-table">
         <el-table
           :border="true"
@@ -64,6 +84,7 @@ import echarts from 'echarts'
 import 'echarts/map/js/china.js'
 import AnalysisPicker from '../components/AnalysisPicker'
 import { zoneChinaMapOption } from './option'
+import { deepClone } from '@/utils'
 
 export default {
   name: 'Zone',
@@ -72,6 +93,7 @@ export default {
   },
   data() {
     return {
+      radio: '设备量',
       searchFormInfo: {
         pageIndex: 1,
         total: 10
@@ -123,10 +145,19 @@ export default {
     createEcharts() {
       this.$nextTick(() => {
         this.chinaMap = echarts.init(this.$refs.chinaMap)
-        this.chinaMap.setOption(zoneChinaMapOption)
+        const newMap = deepClone(zoneChinaMapOption)
+        newMap.series = zoneChinaMapOption.series.filter(v => {
+          return v.name === this.radio
+        })
+        this.chinaMap.setOption(newMap)
       })
     },
     exportData() {
+    },
+    changeType(value) {
+      const newMap = deepClone(zoneChinaMapOption)
+      newMap.series = zoneChinaMapOption.series.filter(v => v.name === this.radio)
+      this.chinaMap.setOption(newMap, true)
     },
     remoteMethod(query) {
       if (query !== '') {
@@ -159,8 +190,81 @@ export default {
       justify-content: space-around;
       align-items: center;
 
+      .range-item {
+        font-size: 0;
+        margin-bottom: 20px;
+        .high {
+          margin-right: 10px;
+          font-size: 16px;
+        }
+        .low {
+          margin-left: 10px;
+          font-size: 16px;
+        }
+        .range {
+          display: inline-block;
+          width: 20px;
+          background: #2c7aef;
+          position: relative;
+          &::before{
+            position: absolute;
+            display: inline-block;
+            content: '';
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+          }
+        }
+        .range4 {
+          height: 20px;
+          background: #2c7aef;
+          &::before {
+            top: -4px;
+            border-width: 4px 0 0 20px;
+            border-color: transparent transparent transparent #2c7aef;
+          }
+        }
+        .range3 {
+          height: 16px;
+          background: #5092e6;
+          &::before {
+            top: -4px;
+            border-width: 4px 0 0 20px;
+            border-color: transparent transparent transparent #5092e6;
+          }
+        }
+        .range2 {
+          height: 12px;
+          background: #85b4ee;
+          &::before {
+            top: -4px;
+            border-width: 4px 0 0 20px;
+            border-color: transparent transparent transparent #85b4ee;
+          }
+        }
+        .range1 {
+          height: 8px;
+          background: #bfd8f6;
+          &::before {
+            top: -4px;
+            border-width: 4px 0 0 20px;
+            border-color: transparent transparent transparent #bfd8f6;
+          }
+        }
+        .range0 {
+          height: 4px;
+          background: #e8f1fc;
+          &::before {
+            top: -4px;
+            border-width: 4px 0 0 20px;
+            border-color: transparent transparent transparent #e8f1fc;
+          }
+        }
+      }
+
       .left-map {
-        width: 1200px;
+        width: 650px;
         height: 500px;
         position: relative;
 
@@ -172,7 +276,7 @@ export default {
           bottom: 0;
           right: 0;
           width: 1px;
-          height: 100%;
+          height: 115%;
           background: #f0f2f5;
         }
       }
