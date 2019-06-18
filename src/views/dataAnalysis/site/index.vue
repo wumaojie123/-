@@ -1,6 +1,11 @@
 <template lang="html">
   <div class="page-container">
-    <analysis-picker />
+    <analysis-picker>
+      <el-button type="text" @click="exportData">
+        <i class="el-icon-download" />
+        导出数据
+      </el-button>
+    </analysis-picker>
     <card-wrapper label="点位投放效果">
       <el-row>
         <el-col :span="12">
@@ -47,6 +52,9 @@ export default {
         this.siteInfoCharts.setOption(siteInfoOption)
         this.siteInfoPercentCharts.setOption(siteInfoPercentOption)
       })
+    },
+    exportData() {
+
     }
   }
 

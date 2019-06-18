@@ -108,11 +108,6 @@ export const orderTimeTrendOption = {
 // 支付方式占比
 export const paymentTypeOption = {
   color: colors,
-  title: {
-    text: '支付方式',
-    left: '50%',
-    textAlign: 'center'
-  },
   legend: {
     data: [{
       name: 'a',
@@ -160,11 +155,6 @@ export const paymentTypeOption = {
 // 支付结果
 export const paymentStateOption = {
   color: colors,
-  title: {
-    text: '支付结果',
-    left: '50%',
-    textAlign: 'center'
-  },
   legend: {
     data: [{
       name: 'a',

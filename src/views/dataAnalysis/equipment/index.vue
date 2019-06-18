@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="page-container">
-    <analysis-picker />
+    <analysis-picker layout="equipmentType" @change="pickerChange" />
     <card-wrapper label="设备状况">
       <el-row>
         <el-col :span="12">
@@ -48,6 +48,9 @@ export default {
         this.onlineScale.setOption(onlineScaleOption)
         this.equipmentTypeScale.setOption(equipmentTypeScaleOption)
       })
+    },
+    pickerChange(value) {
+      console.log(value)
     }
   }
 }

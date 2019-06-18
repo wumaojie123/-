@@ -1,15 +1,17 @@
 <template lang="html">
   <div class="analysis-picker">
 
-    <div class="picker-panel">
+    <div v-if="layoutInfo.isShowDate" class="picker-panel">
       时间：
-      <el-select v-model="curQuicklySelect" style="width: 100px" placeholder="请选择" @change="quicklySelectChange">
-        <el-option
+      <ul class="quickly-select-list">
+        <li
           v-for="item in quicklySelectOptions"
+          :class="{'cur': item.value === curQuicklySelect}"
           :key="item.value"
-          :label="item.label"
-          :value="item.value"/>
-      </el-select>
+          @click="toggleQuicklySelect(item.value)">
+          {{ item.label }}
+        </li>
+      </ul>
 
       <el-date-picker
         v-model="selectDates"
@@ -22,11 +24,10 @@
         range-separator="至"
         prefix-icon="el-icon-time"
         start-placeholder="开始时间"
-        end-placeholder="结束时间"
-        @change="dateChange"/>
+        end-placeholder="结束时间" />
     </div>
 
-    <div class="picker-panel">
+    <div v-if="layoutInfo.isShowMerchant" class="picker-panel" >
       代理/商家：
       <el-select v-model="merchantName" filterable placeholder="请选择">
         <el-option
@@ -37,15 +38,19 @@
       </el-select>
     </div>
 
-    <div class="picker-panel">
+    <div v-if="layoutInfo.isShowEquipmentType" class="picker-panel">
       设备类型：
-      <el-select v-model="merchantName" filterable placeholder="请选择">
+      <el-select v-model="equipmentType" placeholder="请选择">
         <el-option
-          v-for="item in merchantOptions"
+          v-for="item in dataAnalysisEquipmentType"
           :key="item.value"
           :label="item.label"
           :value="item.value" />
       </el-select>
+    </div>
+
+    <div class="picker-panel">
+      <el-button type="primary" @click="search">搜索</el-button>
     </div>
 
     <slot />
@@ -58,44 +63,41 @@ import {
   parseTime
 } from '@/utils/index'
 
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'AnalysisPicker',
   props: {
-
+    layout: {
+      type: String,
+      default: 'date, merchant, equipmentType'
+    }
   },
   data() {
     return {
       merchantName: '',
       merchantOptions: [],
       selectDates: [],
-
-      curQuicklySelect: 'yesterday',
+      equipmentType: '',
+      layoutInfo: {
+        isShowDate: false,
+        isShowMerchant: false,
+        isShowEquipmentType: false,
+        isShowExport: false
+      },
+      curQuicklySelect: -1,
       quicklySelectOptions: [
         {
-          value: 'yesterday',
+          value: -1,
           label: '昨天'
         },
         {
-          value: 'week',
-          label: '本周'
+          value: -7,
+          label: '最近7天'
         },
         {
-          value: 'month',
-          label: '本月'
-        },
-        {
-          value: 'selfDefine',
-          label: '自定义'
-        }
-      ],
-      groupTypeOptions: [
-        {
-          value: 1,
-          label: '按场地'
-        },
-        {
-          value: 0,
-          label: '按分组'
+          value: -30,
+          label: '最近30天'
         }
       ],
       pickerOptions: {
@@ -111,154 +113,63 @@ export default {
     }
   },
   computed: {
-    placeOptions() {
-      const initOptions = [{
-        group_id: -1,
-        group_name: '全部'
-      }].concat(this.placeList)
-      return initOptions
-    },
-    groupOptions() {
-      const initOptions = [{
-        group_id: -1,
-        group_name: '全部'
-      }].concat(this.groupList)
-      return initOptions
-    }
+    ...mapGetters(['dataAnalysisEquipmentType'])
   },
-  created() {
-    this.initQuicklySelect()
-    this.quicklySelectChange('yesterday')
+  mounted() {
+    this.initLayout()
+    this.initSelectorData()
   },
   methods: {
-    // 周一和每月一号自动将本周和本月替换为上周和上月
-    initQuicklySelect() {
-      const monthDay = new Date().getDate()
-      const weekDay = new Date().getDay()
+    // 初始化组件结构
+    initLayout() {
+      let layoutArray = this.layout.split(',')
 
-      if (monthDay === 1) {
-        const monthIndex = this.quicklySelectOptions.findIndex(item => item.value === 'month')
-        this.quicklySelectOptions.splice(monthIndex, 1, {
-          value: 'lastMonth',
-          label: '上月'
-        })
+      layoutArray = layoutArray.map(item => {
+        return item.replace(/(^\s*)|(\s*$)/g, '')
+      })
+
+      if (layoutArray.indexOf('date') > -1) {
+        this.toggleQuicklySelect(-1)
+        this.layoutInfo.isShowDate = true
       }
-      if (weekDay === 1) {
-        const weekIndex = this.quicklySelectOptions.findIndex(item => item.value === 'week')
-        this.quicklySelectOptions.splice(weekIndex, 1, {
-          value: 'lastWeek',
-          label: '上周'
-        })
+      if (layoutArray.indexOf('merchant') > -1) {
+        this.layoutInfo.isShowMerchant = true
+      }
+      if (layoutArray.indexOf('equipmentType') > -1) {
+        this.layoutInfo.isShowEquipmentType = true
       }
     },
-    quicklySelectChange(quicklyValue) {
-      const today = new Date(new Date().toDateString())
-      const monthDay = new Date().getDate()
-      let start = new Date()
-      let end = new Date()
-      let year = new Date().getFullYear()
-      let month = new Date().getMonth() + 1
-      let weekDay = new Date().getDay()
-      let startDate, day
-      const lastMonth1st = this.getPreMonth(parseTime(getTimeStamp(today), '{y}-{m}-{d}'))
-      const isLeapYear = this.isLeapYear(year)
-
-      switch (quicklyValue) {
-        case 'yesterday':
-          start = start.setTime(today.getTime() - 3600 * 1000 * 24)
-          end = end.setTime(today.getTime() - 3600 * 1000 * 24)
-          break
-        case 'week':
-          if (weekDay === 0) {
-            weekDay = 7
-          }
-          start = +getTimeStamp(today) - 3600 * 24 * (weekDay - 1)
-          end = +getTimeStamp(today) - 1
-          break
-        case 'lastWeek':
-          if (weekDay === 0) {
-            weekDay = 7
-          }
-          start = +getTimeStamp(today) - 3600 * 24 * (weekDay - 1) - 3600 * 24 * 7
-          end = +getTimeStamp(today) - 1
-          break
-        case 'month':
-          start = +getTimeStamp(today) - 3600 * 24 * (monthDay - 1)
-          end = +getTimeStamp(today) - 1
-          break
-        case 'lastMonth':
-          start = +getTimeStamp(lastMonth1st)
-          end = +getTimeStamp(today) - 1
-          break
-        case 'halfYear':
-          day = monthDay - 1
-          if (month > 6) {
-            month -= 6
-          } else {
-            month += 6
-            year -= 1
-          }
-          if (month === 2 && day > 28) {
-            day = isLeapYear ? 29 : 28
-          }
-          startDate = `${year}-${month}-${day}`
-          start = +getTimeStamp(startDate)
-          end = +getTimeStamp(today) - 1
-          break
-        case 'selfDefine':
-          start = +getTimeStamp(this.selectDates[0])
-          end = +getTimeStamp(this.selectDates[1])
-          break
-        default:
+    initSelectorData() {
+      if (this.layoutInfo.isShowEquipmentType) {
+        this.$store.dispatch('GetEquipmentType')
       }
-
+    },
+    toggleQuicklySelect(quicklyValue) {
+      const end = new Date(new Date().toDateString())
+      const start = new Date()
+      end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
+      start.setTime(end.getTime() + 3600 * 1000 * 24 * quicklyValue)
+      this.curQuicklySelect = quicklyValue
       this.selectDates = [parseTime(start, '{y}-{m}-{d}'), parseTime(end, '{y}-{m}-{d}')]
-      this.emitPickerChange()
     },
-    dateChange(val) {
-      this.curQuicklySelect = 'selfDefine'
+    search() {
       this.emitPickerChange()
     },
     emitPickerChange() {
-      const params = {
-        startDate: this.selectDates[0],
-        endDate: this.selectDates[1]
+      const params = {}
+
+      if (this.layoutInfo.isShowDate) {
+        params.startDate = this.selectDates[0]
+        params.endDate = this.selectDates[1]
       }
+      if (this.layoutInfo.isShowMerchant) {
+        params.merchantName = this.merchantName
+      }
+      if (this.layoutInfo.isShowEquipmentType) {
+        params.equipmentType = this.equipmentType
+      }
+
       this.$emit('change', params)
-    },
-    getPreMonth(date) {
-      const arr = date.split('-')
-      const year = arr[0] // 获取当前日期的年份
-      const month = arr[1] // 获取当前日期的月份
-      const day = arr[2] // 获取当前日期的日
-      let year2 = year
-      let month2 = parseInt(month) - 1
-      if (month2 === 0) {
-        year2 = parseInt(year2) - 1
-        month2 = 12
-      }
-      let day2 = day
-      let days2 = new Date(year2, month2, 0)
-      days2 = days2.getDate()
-      if (day2 > days2) {
-        day2 = days2
-      }
-      if (month2 < 10) {
-        month2 = '0' + month2
-      }
-      const t2 = year2 + '-' + month2 + '-' + '01'
-      return t2
-    },
-    isLeapYear(year) {
-      const cond1 = year % 4 === 0
-      const cond2 = year % 100 === 0
-      const cond3 = year % 400 === 0
-      const cond = (cond1 && !cond2) || (cond1 && cond2 && cond3)
-      if (cond) {
-        return true
-      } else {
-        return false
-      }
     }
   }
 }
@@ -271,6 +182,33 @@ export default {
   .picker-panel {
     margin-right: 25px;
     display: inline-block;
+
+    .quickly-select-list {
+      display: inline-flex;
+      align-items: center;
+      width: 240px;
+      height: 30px;
+      margin-right: 10px;
+      line-height: 30px;
+      border: 1px solid #e5e5e5;
+      border-radius: 3px;
+
+      >li {
+        flex: 1;
+        text-align: center;
+        cursor: pointer;
+        border-right: 1px solid #e5e5e5;
+
+        &.cur {
+          background-color: #66b1ff;
+          color: #fff;
+        }
+      }
+
+      >li:nth-child(3) {
+        border-right: none;
+      }
+    }
   }
 
   .picker-item {
