@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="page-container">
+  <div class="zone-contanter">
     <div class="search-form-item">
       <analysis-picker label="时间" @change="pickerChange"/>
     </div>
@@ -31,6 +31,15 @@
             label="客单价(元)"
             sortable/>
         </el-table>
+        <el-pagination
+          :current-page="searchFormInfo.pageIndex"
+          :page-sizes="[20, 50, 100, 200]"
+          :page-size="20"
+          :total="searchFormInfo.total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </div>
     </div>
   </div>
@@ -49,6 +58,10 @@ export default {
   },
   data() {
     return {
+      searchFormInfo: {
+        pageIndex: 1,
+        total: 10
+      },
       tableData: [
         {
           devicenum: 1000,
@@ -79,74 +92,22 @@ export default {
           city: '江西省-新蜂市'
         }
       ],
-      chart: null,
-      loading: false,
-      searchFormInfo: {
-        client: [],
-        type: ''
-      },
-      clientList: [
-        {
-          label: '所有',
-          value: ''
-        },
-        {
-          label: 'truexin店',
-          value: 1
-        },
-        {
-          label: '小红花店',
-          value: 2
-        },
-        {
-          label: 'd订单',
-          value: 3
-        },
-        {
-          label: '可目前',
-          value: 4
-        },
-        {
-          label: '大口大口',
-          value: 5
-        },
-        {
-          label: '多少克',
-          value: 6
-        }
-      ],
-      deviceTypeList: [
-        {
-          label: '所有',
-          value: ''
-        },
-        {
-          label: '按摩椅',
-          value: '0'
-        },
-        {
-          label: '充电桩',
-          value: '1'
-        },
-        {
-          label: '娃娃机',
-          value: '2'
-        },
-        {
-          label: '洗衣机',
-          value: '3'
-        },
-        {
-          label: '售货机',
-          value: '4'
-        }
-      ]
+      loading: false
     }
   },
   mounted() {
     this.createEcharts()
   },
   methods: {
+    // 分页设置
+    handleSizeChange(val) {
+      this.searchFormInfo.pageSize = val
+      this.getTableData(true)
+    },
+    handleCurrentChange(val) {
+      this.searchFormInfo.pageIndex = val
+      this.getTableData()
+    },
     createEcharts() {
       this.$nextTick(() => {
         this.chinaMap = echarts.init(this.$refs.chinaMap)
@@ -175,27 +136,51 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-  .page-container {
+<style lang="scss">
+  .zone-contanter {
     padding: 20px;
+    .main {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+
+      #countryMap {
+        width: 620px;
+        height: 500px;
+        border-right: 1px solid #dcdcdc;
+      }
+
+      .right-table {
+        width: 620px;
+      }
+    }
+    .hover-class {
+      background: #fff;
+      width: 270px;
+      .province-item {
+        padding: 15px;
+        background: #f2f4f5;
+      }
+      .type-list {
+        height: 90px;
+        padding: 10px 30px;
+      }
+      .type-item {
+        position: relative;
+        &::before{
+          display: inline-block;
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: -15px;
+          margin-top: -5px;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: rgba(255, 225, 103, 1);
+        }
+      }
+    }
   }
 
-  .main {
-    min-width: 1280px;
-    margin: auto;
-    overflow: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    #countryMap {
-      width: 620px;
-      height: 500px;
-    }
-
-    .right-table {
-      width: 620px;
-      height: 500px;
-    }
-  }
 </style>
