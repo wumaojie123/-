@@ -200,6 +200,18 @@ const userCenter = [
         value: '/dataAnalysis/site',
         name: '点位分析',
         parentId: '/dataAnalysis'
+      },
+      {
+        htmlTemplet: 'dataAnalysis/zone/index',
+        value: '/dataAnalysis/zone',
+        name: '区域分析',
+        parentId: '/dataAnalysis'
+      },
+      {
+        htmlTemplet: 'dataAnalysis/product/index',
+        name: '商品分析',
+        value: '/dataAnalysis/product',
+        parentId: '/dataAnalysis'
       }
     ]
   }

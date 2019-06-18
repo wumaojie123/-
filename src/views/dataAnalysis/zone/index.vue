@@ -1,32 +1,46 @@
 <template lang="html">
   <div class="zone-contanter">
     <div class="search-form-item">
-      <analysis-picker label="时间" @change="pickerChange"/>
+      <analysis-picker>
+        <el-button type="text" @click="exportData">
+          <i class="el-icon-download" />
+          导出数据
+        </el-button>
+      </analysis-picker>
     </div>
     <div class="main">
-      <div id="countryMap" ref="chinaMap" class="left-map"/>
+      <div ref="chinaMap" class="left-map"/>
       <div class="right-table">
         <el-table
+          :border="true"
           :data="tableData"
+          :header-cell-style="{
+            backgroundColor: '#F3F3F3'
+          }"
           :height="500"
           :default-sort="{prop: 'devicenum', order: 'descending'}"
         >
           <el-table-column
+            align="center"
             prop="city"
             label="城市"/>
           <el-table-column
+            align="center"
             prop="devicenum"
             label="设备量(台)"
             sortable/>
           <el-table-column
+            align="center"
             prop="ordernum"
             label="订单量"
             sortable/>
           <el-table-column
+            align="center"
             prop="orderprice"
             label="订单总额(元)"
             sortable/>
           <el-table-column
+            align="center"
             prop="guestprice"
             label="客单价(元)"
             sortable/>
@@ -102,11 +116,9 @@ export default {
     // 分页设置
     handleSizeChange(val) {
       this.searchFormInfo.pageSize = val
-      this.getTableData(true)
     },
     handleCurrentChange(val) {
       this.searchFormInfo.pageIndex = val
-      this.getTableData()
     },
     createEcharts() {
       this.$nextTick(() => {
@@ -139,35 +151,59 @@ export default {
 <style lang="scss">
   .zone-contanter {
     padding: 20px;
+
     .main {
+      background: #fff;
+      margin-top: 20px;
       display: flex;
       justify-content: space-around;
       align-items: center;
 
-      #countryMap {
-        width: 620px;
+      .left-map {
+        width: 1200px;
         height: 500px;
-        border-right: 1px solid #dcdcdc;
+        position: relative;
+
+        &::after {
+          display: inline-block;
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          width: 1px;
+          height: 100%;
+          background: #f0f2f5;
+        }
       }
 
       .right-table {
-        width: 620px;
+        margin-left: 20px;
+        width: 100%;
       }
     }
+
+    .el-pagination {
+      margin-top: 20px;
+    }
+
     .hover-class {
       background: #fff;
       width: 270px;
+
       .province-item {
-        padding: 15px;
+        padding: 10px 15px;
         background: #f2f4f5;
       }
+
       .type-list {
-        height: 90px;
         padding: 10px 30px;
       }
+
       .type-item {
         position: relative;
-        &::before{
+
+        &::before {
           display: inline-block;
           content: '';
           position: absolute;
