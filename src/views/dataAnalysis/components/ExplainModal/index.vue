@@ -44,12 +44,16 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .explainModal {
     .dialog-content {
       font-size: 14px;
       line-height: 20px;
       color: #333;
+      padding: 5px 0;
+    }
+    .el-dialog__footer {
+      padding: 0;
     }
     .dialog-footer {
       font-size: 16px;

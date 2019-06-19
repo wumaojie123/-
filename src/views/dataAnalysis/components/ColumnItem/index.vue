@@ -5,7 +5,7 @@
         <div :key="i" class="item">
           <p class="txt">
             {{ item.txt }}
-            <span v-if="showTipsIcon" class="el-icon-question" @mouseover="showTooltip(item.tips)"/>
+            <span v-if="showTipsIcon" class="el-icon-question" @click="showTooltip(item.tips)"/>
           </p>
           <p class="num">{{ item.count }}</p>
         </div>
@@ -71,6 +71,11 @@ export default {
     align-items: center;
     height: 100px;
     text-align: center;
+    .el-icon-question {
+      font-size: 20px;
+      color: #dcdcdc;
+      cursor: pointer;
+    }
 
     .item {
       width: 25%;

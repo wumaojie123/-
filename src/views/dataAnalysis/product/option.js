@@ -21,14 +21,14 @@ export const salesTrendOption = {
     data: [
       {
         name: '商品出货量',
-        icon: 'circle'
+        icon: 'rect'
       },
       {
         name: '成交金额(元)',
-        icon: 'circle'
+        icon: 'rect'
       }
     ],
-    itemGap: 20,
+    itemGap: 80,
     bottom: 0,
     itemHeight: 15,
     itemWidth: 15
@@ -78,26 +78,18 @@ export const doneNumOption = {
       }
     }
   },
-  // toolbox: {
-  //   feature: {
-  //     dataView: { show: true, readOnly: false },
-  //     magicType: { show: true, type: ['line', 'bar'] },
-  //     restore: { show: true },
-  //     saveAsImage: { show: true }
-  //   }
-  // },
   legend: {
     data: [
       {
         name: '成交金额(元)',
-        icon: 'circle'
+        icon: 'rect'
       },
       {
         name: '出货量',
-        icon: 'circle'
+        icon: 'rect'
       }
     ],
-    itemGap: 20,
+    itemGap: 80,
     bottom: 0,
     itemHeight: 15,
     itemWidth: 15

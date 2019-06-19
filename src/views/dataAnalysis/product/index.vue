@@ -12,44 +12,57 @@
         <div ref="doneNumTrend" class="echarts-item"/>
       </card-wrapper>
       <card-wrapper label="商品销售排行榜">
-        <el-radio-group v-model="radio">
-          <el-radio :label="3">备选项</el-radio>
-          <el-radio :label="6">备选项</el-radio>
-          <el-radio :label="9">备选项</el-radio>
+        <el-radio-group v-model="radio" class="radio-group">
+          <el-radio :label="1">按成交金额</el-radio>
+          <el-radio :label="2">按利润贡献率</el-radio>
+          <el-radio :label="3">按出货量</el-radio>
+          <el-radio :label="4">按成交订单量</el-radio>
         </el-radio-group>
         <el-table
+          :border="true"
           :data="tableData"
+          :header-cell-style="{
+            backgroundColor: '#F3F3F3'
+          }"
           :height="500"
           :default-sort="{prop: 'devicenum', order: 'descending'}"
           class="sales-range-table"
         >
           <el-table-column
-            prop="sort"
+            align="center"
+            type="index"
+            width="50"
             label="排名"/>
           <el-table-column
             prop="name"
+            align="center"
             label="商品名称"
           />
           <el-table-column
+            align="center"
             prop="quantity"
             label="出货量"
           />
           <el-table-column
+            align="center"
             prop="orderNum"
             label="成交订单量（笔）"
           />
           <el-table-column
+            align="center"
             prop="price"
             label="成交金额（元）"
           />
           <el-table-column
+            align="center"
             prop="profit"
             label="利润贡献率"
           >
             <template slot="header" slot-scope="scope">
+              利润贡献率
               <i
                 class="el-icon-question"
-                @mouseover="showTooltip('','利润贡献率=（单个商品零售总额-单个商品成本总额）/（全部售卖出去的商品成交总额-全部售卖出去的商品成本总额）*100%')"
+                @click="showTooltip('','利润贡献率=（单个商品零售总额-单个商品成本总额）/（全部售卖出去的商品成交总额-全部售卖出去的商品成本总额）*100%')"
               />
             </template>
           </el-table-column>
@@ -220,12 +233,20 @@ export default {
   }
 
   .main {
+    .el-icon-question {
+      font-size: 20px;
+      color: #dcdcdc;
+      cursor: pointer;
+    }
+    .el-pagination {
+      margin-top: 10px;
+    }
+    .radio-group {
+      margin-bottom: 20px;
+    }
     .echarts-item {
       width: 100%;
       height: 300px;
-    }
-    .el-table::before {
-      height: 0;
     }
   }
 </style>
