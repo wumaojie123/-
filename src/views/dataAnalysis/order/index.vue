@@ -152,6 +152,9 @@ export default {
     },
     pickerChange(value) {
       console.log(value)
+    },
+    getOrderTrendData() {
+
     }
   }
 }

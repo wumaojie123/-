@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="page-container">
-    <analysis-picker layout="date, merchant, equipmentType">
+    <analysis-picker layout="date, merchant, equipmentType" @change="pickerChange">
       <el-button type="text" @click="exportData">
         <i class="el-icon-download" />
         导出数据
@@ -55,6 +55,9 @@ export default {
     },
     exportData() {
 
+    },
+    pickerChange(params) {
+      console.log(params)
     }
   }
 

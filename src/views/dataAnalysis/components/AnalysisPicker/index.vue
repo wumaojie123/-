@@ -47,6 +47,7 @@
       <el-cascader
         v-model="areaInfo"
         :options="areaList"
+        :change-on-select="true"
         :show-all-levels="false"
         :props="cascaderProps"
         placeholder="全部"
@@ -100,6 +101,7 @@ export default {
       agent: true,
       selectDates: [],
       district: '',
+      districtLevel: 1,
       areaInfo: ['', '', ''],
       lyyEquipmentTypeId: -1,
       equipmentTypeOptions: [],
@@ -169,6 +171,7 @@ export default {
         this.layoutInfo.isShowArea = true
       }
     },
+    // 初始化下拉框的数据
     initSelectorData() {
       if (this.layoutInfo.isShowEquipmentType) {
         const sendData = {
@@ -184,6 +187,7 @@ export default {
         this.$store.dispatch('GetAgentAndMerchant')
       }
     },
+    // 代理、商家更改后更新设备类型列表
     getEquipmentType(sendData) {
       getEquipmentType(sendData).then(res => {
         if (res.result === 0) {
@@ -195,6 +199,7 @@ export default {
         }
       })
     },
+    // 快捷选择时间时修改时间范围
     toggleQuicklySelect(quicklyValue) {
       const end = new Date(new Date().toDateString())
       const start = new Date()
@@ -203,6 +208,7 @@ export default {
       this.curQuicklySelect = quicklyValue
       this.selectDates = [parseTime(start, '{y}-{m}-{d}'), parseTime(end, '{y}-{m}-{d}')]
     },
+    // 商家变化时触发事件
     merchantChange(val) {
       this.agentMerchantList.forEach(item => {
         if (val === item.id) {
@@ -215,9 +221,12 @@ export default {
       }
       this.getEquipmentType(sendData)
     },
+    // 地区切换时触发事件
     districtChange(val) {
-      this.district = val[2]
+      this.district = val[val.length - 1]
+      this.districtLevel = val.length
     },
+    // 在父组件触发change事件，并且将数据提交
     emitPickerChange() {
       const params = {}
 
@@ -234,7 +243,7 @@ export default {
       }
       if (this.layoutInfo.isShowArea) {
         params.district = this.district
-        params.districtLevel = this.district === '' ? 1 : 3
+        params.districtLevel = this.districtLevel
       }
 
       this.$emit('change', params)

@@ -24,3 +24,57 @@ export function getEquipmentType(sendData) {
     params: sendData
   })
 }
+
+// 获取订单趋势
+export function getOrderTrendData(sendData) {
+  return request({
+    url: '/rest/payment/order/analysis',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取订单高峰分布
+export function getOrderPeakData(sendData) {
+  return request({
+    url: '/rest/payment/order/peak',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取支付方式数据
+export function getOrderPattern(sendData) {
+  return request({
+    url: '/rest/payment/order/pattern',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取支付结果
+export function getOrderResult(sendData) {
+  return request({
+    url: '/rest/payment/order/result',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取订单转化率信息
+export function getOrderConversion(sendData) {
+  return request({
+    url: '/rest/payment/order/conversion',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取订单报表数据
+export function getOrderReportForms(sendData) {
+  return request({
+    url: '/rest/payment/order/pagination',
+    method: 'get',
+    params: sendData
+  })
+}
