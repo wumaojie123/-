@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="page-container">
-    <analysis-picker>
+    <analysis-picker @change="pickerChange">
       <el-button type="text" @click="exportData">
         <i class="el-icon-download" />
         导出数据
@@ -15,11 +15,11 @@
     <card-wrapper label="占比分析">
       <el-row>
         <el-col :span="8" class="echarts-panel">
-          <p class="title">订单转化率</p>
+          <p class="title">支付方式</p>
           <div ref="paymentType" class="echarts-item" />
         </el-col>
         <el-col :span="8" class="echarts-panel">
-          <p class="title">订单转化率</p>
+          <p class="title">支付结果</p>
           <div ref="paymentState" class="echarts-item" />
         </el-col>
         <el-col :span="8" class="echarts-panel">
@@ -149,6 +149,9 @@ export default {
     },
     exportData() {
 
+    },
+    pickerChange(value) {
+      console.log(value)
     }
   }
 }
@@ -157,7 +160,6 @@ export default {
 <style lang="scss" scoped>
   .page-container {
     padding: 20px;
-    font-family: "Microsoft YaHei";
 
     .echarts-panel {
       position: relative;
@@ -210,6 +212,7 @@ export default {
 
         .col-1 {
           height: 75px;
+          padding-top: 10px;
         }
         .col-2 {
           height: 70px;

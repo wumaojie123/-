@@ -1,32 +1,71 @@
+import { getAgentAndMerchant, getAreaList } from '@/api/dataAnalysis'
+
 const dataAnalysis = {
   state: {
-    equipmentType: [],
-    isGetEquipmentType: false
+    agentMerchantList: [],
+    areaList: [],
+    isGetAgentMerchant: false,
+    isGetArea: false
   },
   mutations: {
-    SET_EQUIPMENT_TYPE: (state, equipmentType) => {
-      state.equipmentType = equipmentType
-      state.isGetEquipmentType = true
+    SET_AGENT_MERCHANT: (state, agentMerchantList) => {
+      state.agentMerchantList = agentMerchantList
+      state.isGetAgentMerchant = true
+    },
+    SET_AREA: (state, areaList) => {
+      state.areaList = areaList
+      state.isGetArea = true
     }
   },
   actions: {
-    GetEquipmentType({
+    GetAreaList({
       commit,
       state
     }) {
       return new Promise((resolve, reject) => {
-        const mockData = [
-          {
-            label: '哈哈',
-            value: 1
-          },
-          {
-            label: '嘿嘿',
-            value: 2
+        getAreaList().then(res => {
+          if (res.result === 0) {
+            const areaList = [{
+              text: '全部',
+              value: '',
+              children: [
+                {
+                  text: '全部',
+                  value: '',
+                  children: [
+                    {
+                      text: '全部',
+                      value: ''
+                    }
+                  ]
+                }
+              ]
+            }]
+            commit('SET_AREA', areaList.concat(res.para))
+            resolve()
+          } else {
+            reject()
           }
-        ]
-        commit('SET_EQUIPMENT_TYPE', mockData)
-        resolve()
+        })
+      })
+    },
+    GetAgentAndMerchant({
+      commit,
+      state
+    }) {
+      return new Promise((resolve, reject) => {
+        getAgentAndMerchant().then(res => {
+          if (res.result === 0) {
+            const merchantList = [{
+              id: -1,
+              name: '全部'
+            }]
+            commit('SET_AGENT_MERCHANT', merchantList.concat(res.data))
+            resolve()
+          } else {
+            reject()
+          }
+        })
       })
     }
   }

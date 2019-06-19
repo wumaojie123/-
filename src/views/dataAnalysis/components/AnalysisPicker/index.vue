@@ -29,28 +29,44 @@
 
     <div v-if="layoutInfo.isShowMerchant" class="picker-panel" >
       代理/商家：
-      <el-select v-model="merchantName" filterable placeholder="请选择">
+      <el-select
+        v-model="agentId"
+        filterable
+        placeholder="请选择"
+        @change="merchantChange">
         <el-option
-          v-for="item in merchantOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value" />
+          v-for="item in agentMerchantList"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id" />
       </el-select>
+    </div>
+
+    <div v-if="layoutInfo.isShowArea" class="picker-panel" >
+      区域：
+      <el-cascader
+        v-model="areaInfo"
+        :options="areaList"
+        :show-all-levels="false"
+        :props="cascaderProps"
+        placeholder="全部"
+        filterable
+        @change="districtChange"/>
     </div>
 
     <div v-if="layoutInfo.isShowEquipmentType" class="picker-panel">
       设备类型：
-      <el-select v-model="equipmentType" placeholder="请选择">
+      <el-select v-model="lyyEquipmentTypeId" placeholder="请选择">
         <el-option
-          v-for="item in dataAnalysisEquipmentType"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value" />
+          v-for="item in equipmentTypeOptions"
+          :key="item.lyyEquipmentTypeId"
+          :label="item.equipmentTypeName"
+          :value="item.lyyEquipmentTypeId" />
       </el-select>
     </div>
 
     <div class="picker-panel">
-      <el-button type="primary" @click="search">搜索</el-button>
+      <el-button type="primary" @click="emitPickerChange">搜索</el-button>
     </div>
 
     <slot />
@@ -63,6 +79,7 @@ import {
   parseTime
 } from '@/utils/index'
 
+import { getEquipmentType } from '@/api/dataAnalysis'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -70,22 +87,29 @@ export default {
   props: {
     layout: {
       type: String,
-      default: 'date, merchant, equipmentType'
+      default: 'date, merchant, equipmentType, area'
     }
   },
   data() {
     return {
-      merchantName: '',
-      merchantOptions: [],
+      cascaderProps: {
+        value: 'value',
+        label: 'text'
+      },
+      agentId: -1,
+      agent: true,
       selectDates: [],
-      equipmentType: '',
+      district: '',
+      areaInfo: ['', '', ''],
+      lyyEquipmentTypeId: -1,
+      equipmentTypeOptions: [],
       layoutInfo: {
         isShowDate: false,
         isShowMerchant: false,
-        isShowEquipmentType: false,
-        isShowExport: false
+        isShowArea: false,
+        isShowEquipmentType: false
       },
-      curQuicklySelect: -1,
+      curQuicklySelect: -30,
       quicklySelectOptions: [
         {
           value: -1,
@@ -113,11 +137,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['dataAnalysisEquipmentType'])
+    ...mapGetters(['areaList', 'agentMerchantList'])
   },
-  mounted() {
+  created() {
     this.initLayout()
     this.initSelectorData()
+  },
+  mounted() {
+    this.emitPickerChange()
   },
   methods: {
     // 初始化组件结构
@@ -129,7 +156,7 @@ export default {
       })
 
       if (layoutArray.indexOf('date') > -1) {
-        this.toggleQuicklySelect(-1)
+        this.toggleQuicklySelect(-30)
         this.layoutInfo.isShowDate = true
       }
       if (layoutArray.indexOf('merchant') > -1) {
@@ -138,11 +165,35 @@ export default {
       if (layoutArray.indexOf('equipmentType') > -1) {
         this.layoutInfo.isShowEquipmentType = true
       }
+      if (layoutArray.indexOf('area') > -1) {
+        this.layoutInfo.isShowArea = true
+      }
     },
     initSelectorData() {
       if (this.layoutInfo.isShowEquipmentType) {
-        this.$store.dispatch('GetEquipmentType')
+        const sendData = {
+          agentUser: -1,
+          agent: true
+        }
+        this.getEquipmentType(sendData)
       }
+      if (this.layoutInfo.isShowArea) {
+        this.$store.dispatch('GetAreaList')
+      }
+      if (this.layoutInfo.isShowMerchant) {
+        this.$store.dispatch('GetAgentAndMerchant')
+      }
+    },
+    getEquipmentType(sendData) {
+      getEquipmentType(sendData).then(res => {
+        if (res.result === 0) {
+          this.equipmentTypeOptions = [{
+            lyyEquipmentTypeId: -1,
+            equipmentTypeName: '全部'
+          }]
+          this.equipmentTypeOptions = this.equipmentTypeOptions.concat(res.data)
+        }
+      })
     },
     toggleQuicklySelect(quicklyValue) {
       const end = new Date(new Date().toDateString())
@@ -152,8 +203,20 @@ export default {
       this.curQuicklySelect = quicklyValue
       this.selectDates = [parseTime(start, '{y}-{m}-{d}'), parseTime(end, '{y}-{m}-{d}')]
     },
-    search() {
-      this.emitPickerChange()
+    merchantChange(val) {
+      this.agentMerchantList.forEach(item => {
+        if (val === item.id) {
+          this.agent = item.agent
+        }
+      })
+      const sendData = {
+        agentUser: val,
+        agent: this.agent
+      }
+      this.getEquipmentType(sendData)
+    },
+    districtChange(val) {
+      this.district = val[2]
     },
     emitPickerChange() {
       const params = {}
@@ -163,10 +226,15 @@ export default {
         params.endDate = this.selectDates[1]
       }
       if (this.layoutInfo.isShowMerchant) {
-        params.merchantName = this.merchantName
+        params.agent = this.agent
+        params.agentId = this.agentId
       }
       if (this.layoutInfo.isShowEquipmentType) {
-        params.equipmentType = this.equipmentType
+        params.lyyEquipmentTypeId = this.lyyEquipmentTypeId
+      }
+      if (this.layoutInfo.isShowArea) {
+        params.district = this.district
+        params.districtLevel = this.district === '' ? 1 : 3
       }
 
       this.$emit('change', params)

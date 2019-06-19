@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="page-container">
-    <analysis-picker>
+    <analysis-picker layout="date, merchant, equipmentType">
       <el-button type="text" @click="exportData">
         <i class="el-icon-download" />
         导出数据
