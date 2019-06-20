@@ -370,3 +370,14 @@ export function echartsAxisLabelFormatter(value) {
   }
   return value
 }
+
+// 导出文件
+export function exportFile(url) {
+  const elink = document.createElement('a')
+  elink.style.display = 'none'
+  elink.href = url
+  elink.target = '_blank'
+  document.body.appendChild(elink)
+  elink.click()
+  document.body.removeChild(elink)
+}

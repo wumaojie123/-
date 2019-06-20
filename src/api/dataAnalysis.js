@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { param, exportFile } from '@/utils'
 
 // 查询代理商和商家列表
 export function getAgentAndMerchant() {
@@ -108,9 +109,8 @@ export function analysisMaterialRankingApi(data) {
 
 // 商品销售排行榜导出
 export function analysisExportMaterialSaleRankingApi(data) {
-  return request({
-    url: '/rest/analysis/export/material/saleRanking',
-    method: 'get',
-    params: data
-  })
+  const url = '/rest/analysis/export/material/saleRanking'
+  const downloadUrl = `${process.env.BASE_API}${url}?${param(data)}`
+  exportFile(downloadUrl)
 }
+

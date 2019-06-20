@@ -223,21 +223,14 @@ export default {
         }
       })
     },
+    // 导出数据
     exportData() {
-      analysisExportMaterialSaleRankingApi({
-        ...this.searchFormInfo
-      }).then((res) => {
-        if (res.result === 0) {
-          this.exportDataList = res.data.items || []
-        }
-      })
+      analysisExportMaterialSaleRankingApi(this.searchFormInfo)
     },
     pickerChange(data) {
       this.searchFormInfo = {
         ...this.searchFormInfo,
         ...data
-        // startDate: '2019-04-01',
-        // endDate: '2019-06-12'
       }
       this.getProductTrend()
       this.getProductDone()
