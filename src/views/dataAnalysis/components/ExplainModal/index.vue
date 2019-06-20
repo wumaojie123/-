@@ -2,12 +2,12 @@
   <el-dialog
     :title="title"
     :visible="visible"
+    :class="'explainModal ' + selfDefineClass"
     width="350px"
     center
-    class="explainModal"
     @close="confirmFn"
   >
-    <div class="dialog-content">{{ content }}</div>
+    <div class="dialog-content" v-html="content" />
     <div slot="footer" class="dialog-footer">
       <span @click="confirmFn">{{ confirmBtn }}</span>
     </div>
@@ -39,6 +39,10 @@ export default {
       default: () => {
         this.visible = false
       }
+    },
+    selfDefineClass: {
+      type: String,
+      default: ''
     }
   }
 }
@@ -46,6 +50,22 @@ export default {
 
 <style lang="scss">
   .explainModal {
+
+    &.long-text {
+
+      .el-dialog__body {
+        padding: 0 30px 10px;
+
+        .title {
+          margin-bottom: 10px;
+        }
+
+        .text {
+          margin-bottom: 5px;
+        }
+      }
+    }
+
     .dialog-content {
       font-size: 14px;
       line-height: 20px;
@@ -60,6 +80,10 @@ export default {
       padding: 15px 0;
       color: rgb(2, 123, 254);
       border-top: 1px solid #dcdcdc;
+
+      >span {
+        cursor: pointer;
+      }
     }
   }
 </style>

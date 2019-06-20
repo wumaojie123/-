@@ -1,6 +1,9 @@
 <template lang="html">
   <div class="card-wrapper">
-    <h3>{{ label }}</h3>
+    <h3>
+      {{ label }}
+      <slot name="sub-title" />
+    </h3>
     <div class="content-wrapper">
       <slot />
     </div>

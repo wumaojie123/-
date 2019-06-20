@@ -10,6 +10,9 @@
       <div ref="orderTrend" class="echarts-item" />
     </card-wrapper>
     <card-wrapper label="订单高峰分布">
+      <template slot="sub-title">
+        <i class="el-icon-question" @click="showTooltip(1)" />
+      </template>
       <div ref="orderTimeTrend" class="echarts-item" />
     </card-wrapper>
     <card-wrapper label="占比分析">
@@ -23,24 +26,24 @@
           <div ref="paymentState" class="echarts-item" />
         </el-col>
         <el-col :span="8" class="echarts-panel">
-          <p class="title">订单转化率</p>
+          <p class="title">订单转化率 <i class="el-icon-question" @click="showTooltip(2)" /> </p>
           <div class="translate-charts">
             <div class="charts-panel">
               <div class="col-1">
                 <p>
-                  <span>(25人)提交订单</span>
+                  <span>{{ `(${ conversionData.totalCount || 0 })笔提交订单` }}</span>
                 </p>
               </div>
               <div class="col-2">
                 <p>
-                  <span>(5人)支付成功</span>
-                  <span>转化率为18%</span>
+                  <span>{{ `(${ conversionData.payCount || 0 })笔支付成功` }}</span>
+                  <span>{{ `转化率为${ conversionData.linkPay || 0 }%` }}</span>
                 </p>
               </div>
               <div class="col-3">
                 <p>
-                  <span>(1人)交易成功</span>
-                  <span>转化率为10%</span>
+                  <span>{{ `(${ conversionData.compCount || 0 })笔交易成功` }}</span>
+                  <span>{{ `转化率为${ conversionData.linkComp || 0 }%` }}</span>
                 </p>
               </div>
             </div>
@@ -65,61 +68,95 @@
         style="width: 100%">
         <el-table-column
           align="center"
-          prop="lyyMaterialName"
+          prop="statisticsDate"
           label="日期" />
         <el-table-column
           align="center"
-          prop="materialNo"
-          label="成交订单量(笔)" />
+          label="成交订单量(笔)">
+          <template slot-scope="scope">
+            {{ scope.row.payCount || 0 }}
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
-          prop="amount"
-          label="成交金额(元)" />
+          label="成交金额(元)">
+          <template slot-scope="scope">
+            {{ scope.row.payAmount | moneyFilter }}
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
-          prop="quantity"
-          label="成交人数" />
+          label="成交人数">
+          <template slot-scope="scope">
+            {{ scope.row.payUser || 0 }}
+          </template>
+        </el-table-column>
         <el-table-column
           width="240"
           align="center">
           <template slot="header" slot-scope="scope">
-            <el-tooltip class="profit-tips" effect="dark" content="单笔平均支付金额=成交金额/成交订单量" placement="top">
-              <span>单笔平均支付金额(元) <i class="el-icon-question" /> </span>
-            </el-tooltip>
+            <span>单笔平均支付金额(元) <i class="el-icon-question" @click="showTooltip(3)" /></span>
+          </template>
+          <template slot-scope="scope">
+            {{ scope.row.unitPrice | moneyFilter }}
           </template>
         </el-table-column>
         <el-table-column
-          align="center"
-          prop="quantity">
+          align="center">
           <template slot="header" slot-scope="scope">
-            <el-tooltip class="profit-tips" effect="dark" content="客单价=成交金额/成交人数" placement="top">
-              <span>客单价 <i class="el-icon-question" /> </span>
-            </el-tooltip>
+            <span>客单价 <i class="el-icon-question" @click="showTooltip(4)" /> </span>
+          </template>
+          <template slot-scope="scope">
+            {{ scope.row.unitPrice || 0 }}
           </template>
         </el-table-column>
         <el-table-column
           align="center"
-          prop="quantity"
-          label="退款订单量(笔)" />
+          label="退款订单量(笔)">
+          <template slot-scope="scope">
+            {{ scope.row.refundCount || 0 }}
+          </template>
+        </el-table-column>
         <el-table-column
           align="center"
-          prop="quantity"
-          label="退款金额(元)" />
+          label="退款金额(元)">
+          <template slot-scope="scope">
+            {{ scope.row.refundAmount | moneyFilter }}
+          </template>
+        </el-table-column>
       </el-table>
+      <el-pagination
+        :current-page="paginationInfo.pageIndex"
+        :page-sizes="[10, 20, 50, 100]"
+        :page-size="paginationInfo.pageSize"
+        :total="paginationInfo.total"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" />
     </card-wrapper>
+    <explain-modal
+      :visible="tooltipsInfo.tooltipsVisible"
+      :title="tooltipsInfo.title"
+      :content="tooltipsInfo.content"
+      :self-define-class="tooltipsInfo.selfDefineClass"
+      :confirm-fn="closeTooltip"
+    />
   </div>
 </template>
 
 <script>
 import AnalysisPicker from '../components/AnalysisPicker/'
 import CardWrapper from '../components/CardWrapper/'
+import ExplainModal from '../components/ExplainModal'
 import echarts from 'echarts'
+import { getOrderTrendData, getOrderPeakData, getOrderPattern, getOrderResult, getOrderConversion, getOrderReportForms } from '@/api/dataAnalysis'
 import { orderTrendOption, orderTimeTrendOption, paymentTypeOption, paymentStateOption } from './option'
 
 export default {
   components: {
     AnalysisPicker,
-    CardWrapper
+    CardWrapper,
+    ExplainModal
   },
   data() {
     return {
@@ -128,7 +165,19 @@ export default {
       paymentType: null,
       paymentState: null,
       translate: null,
-      orderTableData: []
+      orderTableData: [],
+      paginationInfo: {
+        pageIndex: 1,
+        pageSize: 20,
+        total: 0
+      },
+      conversionData: {},
+      paramsData: {},
+      tooltipsInfo: {
+        tooltipsVisible: false,
+        content: '',
+        title: ''
+      }
     }
   },
   mounted() {
@@ -141,8 +190,7 @@ export default {
         this.orderTimeTrend = echarts.init(this.$refs.orderTimeTrend)
         this.paymentType = echarts.init(this.$refs.paymentType)
         this.paymentState = echarts.init(this.$refs.paymentState)
-        this.orderTrend.setOption(orderTrendOption)
-        this.orderTimeTrend.setOption(orderTimeTrendOption)
+
         this.paymentType.setOption(paymentTypeOption)
         this.paymentState.setOption(paymentStateOption)
       })
@@ -150,11 +198,176 @@ export default {
     exportData() {
 
     },
-    pickerChange(value) {
-      console.log(value)
+    showTooltip(index) {
+      switch (index) {
+        case 1:
+          this.tooltipsInfo.selfDefineClass = 'long-text'
+          this.tooltipsInfo.title = '订单高峰分布'
+          this.tooltipsInfo.content = `
+            <p class='text'>1.横轴为具体的时间点，纵轴为查询时段内对应时间点下，各天的订单量之和。</p>
+            <p class='text'>举例：假设查询时段为最近7天。则4点对应的纵轴是最近这7天在4点的下单量之和。</p>
+          `
+          this.tooltipsInfo.tooltipsVisible = true
+          break
+        case 2:
+          this.tooltipsInfo.selfDefineClass = 'long-text'
+          this.tooltipsInfo.title = '订单转化率'
+          this.tooltipsInfo.content = `
+            <p class='title'>
+                漏斗每一层统计订单说明：
+            </p>
+            <p class='text'>1.提交订单层：显示统计区间内全部订单（支付成功&支付失败，包含退款的）的总数。</p>
+            <p class='text'>2.支付成功层：显示统计区间内全部订单（支付成功包含退款的）的总数。</p>
+            <p class='text'>3.完成交易层：显示统计区间内全部订单（支付成功的订单剔除全额退款的订单）对应的总数。</p>
+          `
+          this.tooltipsInfo.tooltipsVisible = true
+          break
+        case 3:
+          this.tooltipsInfo.title = '温馨提示'
+          this.tooltipsInfo.content = `单笔平均支付金额 = 成交金额 / 成交订单量`
+          this.tooltipsInfo.tooltipsVisible = true
+          break
+        case 4:
+          this.tooltipsInfo.title = '温馨提示'
+          this.tooltipsInfo.content = `客单价= 成交金额 / 成交人数`
+          this.tooltipsInfo.tooltipsVisible = true
+          break
+        default:
+      }
     },
-    getOrderTrendData() {
+    pickerChange(value) {
+      const paramsData = {
+        ...value
+      }
+      this.paramsData = paramsData
+      this.getOrderTrendData(paramsData)
+      this.getOrderPeakData(paramsData)
+      this.getOrderPattern(paramsData)
+      this.getOrderResult(paramsData)
+      this.getOrderConversion(paramsData)
+      this.getOrderReportForms(paramsData)
+    },
+    getOrderTrendData(paramsData) {
+      getOrderTrendData(paramsData).then(res => {
+        if (!res) {
+          return
+        }
+        const echartsData = this._orderTrendDataTube(res.data)
+        orderTrendOption.series[0].data = echartsData.line1
+        orderTrendOption.series[1].data = echartsData.line2
+        orderTrendOption.series[2].data = echartsData.line3
+        orderTrendOption.series[3].data = echartsData.line4
+        orderTrendOption.xAxis.data = echartsData.xAxis
+        this.orderTrend.setOption(orderTrendOption)
+      })
+    },
+    _orderTrendDataTube(data) {
+      const line1 = []
+      const line2 = []
+      const line3 = []
+      const line4 = []
+      const xAxis = []
+      data.forEach(item => {
+        xAxis.push(item.statisticsDate)
+        line1.push(item.payCount)
+        line2.push(item.payAmount)
+        line3.push(item.refundCount)
+        line4.push(item.refundAmount)
+      })
 
+      return {
+        line1,
+        line2,
+        line3,
+        line4,
+        xAxis
+      }
+    },
+    getOrderPeakData(paramsData) {
+      getOrderPeakData(paramsData).then(res => {
+        if (!res) {
+          return
+        }
+        const echartsData = this._orderPeakDataTube(res.data)
+        orderTimeTrendOption.series[0].data = echartsData.line1
+        orderTimeTrendOption.xAxis.data = echartsData.xAxis
+        this.orderTimeTrend.setOption(orderTimeTrendOption)
+      })
+    },
+    _orderPeakDataTube(data) {
+      const line1 = []
+      const xAxis = []
+
+      data.forEach(item => {
+        xAxis.push(item.statisticsTime)
+        line1.push(item.orderCount || 0)
+      })
+
+      return {
+        line1,
+        xAxis
+      }
+    },
+    getOrderPattern(paramsData) {
+      getOrderPattern(paramsData).then(res => {
+        if (!res) {
+          return
+        }
+        // const echartsData = this._orderPatternDataTube(res.data)
+        // orderTrendOption.series[0].data = echartsData.line1
+        // orderTrendOption.series[1].data = echartsData.line2
+        // orderTrendOption.series[2].data = echartsData.line3
+        // orderTrendOption.series[3].data = echartsData.line4
+        // orderTrendOption.xAxis.data = echartsData.xAxis
+        // this.orderTrend.setOption(orderTrendOption)
+      })
+    },
+    getOrderResult(paramsData) {
+      getOrderResult(paramsData).then(res => {
+        if (!res) {
+          return
+        }
+        // const echartsData = this._orderPatternDataTube(res.data)
+        // orderTrendOption.series[0].data = echartsData.line1
+        // orderTrendOption.series[1].data = echartsData.line2
+        // orderTrendOption.series[2].data = echartsData.line3
+        // orderTrendOption.series[3].data = echartsData.line4
+        // orderTrendOption.xAxis.data = echartsData.xAxis
+        // this.orderTrend.setOption(orderTrendOption)
+      })
+    },
+    getOrderConversion(paramsData) {
+      getOrderConversion(paramsData).then(res => {
+        this.conversionData.totalCount = res.data.totalCount
+        this.conversionData.payCount = res.data.payCount
+        this.conversionData.compCount = res.data.compCount
+        this.conversionData.linkPay = res.data.linkPay
+        this.conversionData.linkComp = res.data.linkComp
+      })
+    },
+    getOrderReportForms(paramsData) {
+      paramsData.pageIndex = this.paginationInfo.pageIndex
+      paramsData.pageSize = this.paginationInfo.pageSize
+      getOrderReportForms(paramsData).then(res => {
+        this.orderTableData = res.data.items
+        this.paginationInfo.total = res.data.total
+      })
+    },
+    handleSizeChange() {
+
+    },
+    handleCurrentChange(val) {
+      this.paginationInfo.pageIndex = val
+      this.getOrderReportForms({
+        ...this.paramsData
+      })
+    },
+    closeTooltip() {
+      this.tooltipsInfo = {
+        tooltipsVisible: false,
+        title: '说明',
+        content: ''
+      }
     }
   }
 }
@@ -163,6 +376,11 @@ export default {
 <style lang="scss" scoped>
   .page-container {
     padding: 20px;
+
+    .el-icon-question {
+      color: #999;
+      cursor: pointer;
+    }
 
     .echarts-panel {
       position: relative;
@@ -227,7 +445,7 @@ export default {
 
       .legend-panel {
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
         height: 20px;
         margin-top: 15px;
         align-items: center;
@@ -235,15 +453,17 @@ export default {
         >p {
           position: relative;
           padding-left: 20px;
+          font-size: 12px;
+          margin: 0 10px;
 
           &::after {
             position: absolute;
             content: "";
-            width: 16px;
-            height: 16px;
+            width: 15px;
+            height: 15px;
             left: 0;
             top: 50%;
-            margin-top: -8px;
+            margin-top: -7px;
           }
 
           &.order-prepare::after {
@@ -259,6 +479,10 @@ export default {
           }
         }
       }
+    }
+
+    .el-pagination {
+      padding: 20px;
     }
   }
 </style>

@@ -27,19 +27,7 @@ const dataAnalysis = {
           if (res.result === 0) {
             const areaList = [{
               text: '全部',
-              value: '',
-              children: [
-                {
-                  text: '全部',
-                  value: '',
-                  children: [
-                    {
-                      text: '全部',
-                      value: ''
-                    }
-                  ]
-                }
-              ]
+              value: -1
             }]
             commit('SET_AREA', areaList.concat(res.para))
             resolve()

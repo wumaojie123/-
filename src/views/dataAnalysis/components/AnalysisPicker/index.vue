@@ -37,7 +37,7 @@
         <el-option
           v-for="item in agentMerchantList"
           :key="item.id"
-          :label="item.name"
+          :label="item.name + (item.phone || '')"
           :value="item.id" />
       </el-select>
     </div>
@@ -100,9 +100,9 @@ export default {
       agentId: -1,
       agent: true,
       selectDates: [],
-      district: '',
+      district: -1,
       districtLevel: 1,
-      areaInfo: ['', '', ''],
+      areaInfo: [-1],
       lyyEquipmentTypeId: -1,
       equipmentTypeOptions: [],
       layoutInfo: {
@@ -212,7 +212,7 @@ export default {
     merchantChange(val) {
       this.agentMerchantList.forEach(item => {
         if (val === item.id) {
-          this.agent = item.agent
+          this.agent = item.agent || true
         }
       })
       const sendData = {

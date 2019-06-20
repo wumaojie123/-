@@ -1,15 +1,17 @@
+/* eslint-disable */
+
 import {
   echartsAxisLabelFormatter
 } from '@/utils/'
 
-var colors = ['#5793f3', '#d14a61', '#675bba']
+var colors = ['#4fa8f9', '#6ec71e', '#5793f3', '#d14a61', '#675bba']
 
 // 订单趋势配参
 export const orderTrendOption = {
   xAxis: {
     type: 'category',
     boundaryGap: false,
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    data: []
   },
   yAxis: {
     type: 'value',
@@ -26,6 +28,12 @@ export const orderTrendOption = {
       icon: 'circle'
     }, {
       name: '成交金额(元)',
+      icon: 'circle'
+    }, {
+      name: '退款订单(笔)',
+      icon: 'circle'
+    }, {
+      name: '退款金额(元)',
       icon: 'circle'
     }],
     itemGap: 20,
@@ -47,7 +55,7 @@ export const orderTrendOption = {
     right: 50
   },
   series: [{
-    data: [820, 932, 901, 934, 1290, 1330, 1320],
+    data: [],
     name: '成交订单(笔)',
     type: 'line',
     areaStyle: {
@@ -55,13 +63,29 @@ export const orderTrendOption = {
     },
     color: '#4fa8f9'
   }, {
-    data: [400, 1932, 501, 734, 1790, 1330, 1920],
+    data: [],
     name: '成交金额(元)',
     type: 'line',
     areaStyle: {
       color: 'rgba(110, 199, 30, .4)'
     },
     color: '#6ec71e'
+  }, {
+    data: [],
+    name: '退款订单(笔)',
+    type: 'line',
+    areaStyle: {
+      color: 'rgba(87, 147, 243, .4)'
+    },
+    color: '#5793f3'
+  }, {
+    data: [],
+    name: '退款金额(元)',
+    type: 'line',
+    areaStyle: {
+      color: 'rgba(209, 74, 97, .4)'
+    },
+    color: '#d14a61'
   }]
 }
 
@@ -95,7 +119,7 @@ export const orderTimeTrendOption = {
     right: 50
   },
   series: [{
-    data: [820, 932, 901, 934, 1290, 1330, 1320, 820, 932, 901, 934, 1290],
+    data: [],
     name: '订单量(笔)',
     type: 'line',
     areaStyle: {
@@ -110,10 +134,10 @@ export const paymentTypeOption = {
   color: colors,
   legend: {
     data: [{
-      name: 'a',
+      name: '微信',
       icon: 'rect'
     }, {
-      name: 'b',
+      name: '支付宝',
       icon: 'rect'
     }],
     x: 'center',
@@ -123,30 +147,26 @@ export const paymentTypeOption = {
   },
   tooltip: {
     trigger: 'item',
-    formatter: '{ a } <br/>{ b }: { c } ({ d }%)',
+    formatter: '{a} <br/>{b}: {c} ({d}%)',
     textStyle: {
       fontSize: '11',
       color: '#fff'
     }
   },
   series: [{
-    name: '订单占比',
+    name: '支付方式占比',
     type: 'pie',
     radius: '55%',
-    label: {
-      show: false
-    },
-    labelLine: {
-      show: false
-    },
+    avoidLabelOverlap: true,
+		minShowLabelAngle: 1,
     data: [
       {
-        name: 'a',
-        value: 1
+        name: '微信',
+        value: 0
       },
       {
-        name: 'b',
-        value: 2
+        name: '支付宝',
+        value: 0
       }
     ]
   }]
@@ -157,10 +177,10 @@ export const paymentStateOption = {
   color: colors,
   legend: {
     data: [{
-      name: 'a',
+      name: '已成交',
       icon: 'rect'
     }, {
-      name: 'b',
+      name: '退款',
       icon: 'rect'
     }],
     x: 'center',
@@ -170,30 +190,26 @@ export const paymentStateOption = {
   },
   tooltip: {
     trigger: 'item',
-    formatter: '{ a } <br/>{ b }: { c } ({ d }%)',
+    formatter: '{a} <br/>{b}: {c} ({d}%)',
     textStyle: {
       fontSize: '11',
       color: '#fff'
     }
   },
   series: [{
-    name: '订单占比',
+    name: '支付结果占比',
     type: 'pie',
     radius: '55%',
-    label: {
-      show: false
-    },
-    labelLine: {
-      show: false
-    },
+    avoidLabelOverlap: true,
+		minShowLabelAngle: 1,
     data: [
       {
-        name: 'a',
-        value: 1
+        name: '已成交',
+        value: 0
       },
       {
-        name: 'b',
-        value: 2
+        name: '退款',
+        value: 0
       }
     ]
   }]
