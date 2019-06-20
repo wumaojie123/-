@@ -4,7 +4,7 @@ import {
   echartsAxisLabelFormatter
 } from '@/utils/'
 
-var colors = ['#4fa8f9', '#6ec71e', '#5793f3', '#d14a61', '#675bba']
+var colors = ['#4fa8f9', '#6ec71e', '#d14a61', '#675bba']
 
 // 订单趋势配参
 export const orderTrendOption = {
@@ -75,9 +75,9 @@ export const orderTrendOption = {
     name: '退款订单(笔)',
     type: 'line',
     areaStyle: {
-      color: 'rgba(87, 147, 243, .4)'
+      color: 'rgba(103, 91, 186, .4)'
     },
-    color: '#5793f3'
+    color: '#675bba'
   }, {
     data: [],
     name: '退款金额(元)',
@@ -131,7 +131,7 @@ export const orderTimeTrendOption = {
 
 // 支付方式占比
 export const paymentTypeOption = {
-  color: colors,
+  color: ['#6ec71e', '#4fa8f9'],
   legend: {
     data: [{
       name: '微信',
@@ -174,7 +174,7 @@ export const paymentTypeOption = {
 
 // 支付结果
 export const paymentStateOption = {
-  color: colors,
+  color: ['#4fa8f9', '#d14a61'],
   legend: {
     data: [{
       name: '已成交',

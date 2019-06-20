@@ -114,3 +114,9 @@ export function analysisExportMaterialSaleRankingApi(data) {
   exportFile(downloadUrl)
 }
 
+// 订单数据导出
+export function exportOrderAnalysisData(data) {
+  const url = '/rest/analysis/export/payment/order'
+  const downloadUrl = `${process.env.BASE_API}${url}?${param(data)}`
+  exportFile(downloadUrl)
+}

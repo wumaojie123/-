@@ -70,6 +70,12 @@
       <el-button type="primary" @click="emitPickerChange">搜索</el-button>
     </div>
 
+    <div v-if="layoutInfo.isShowExport" class="picker-panel">
+      <el-button type="text" @click="exportDataHandle">
+        <i class="el-icon-download" />
+        导出数据
+      </el-button>
+    </div>
     <slot />
   </div>
 </template>
@@ -88,7 +94,7 @@ export default {
   props: {
     layout: {
       type: String,
-      default: 'date, merchant, equipmentType, area'
+      default: 'date, merchant, equipmentType, area, export'
     }
   },
   data() {
@@ -109,7 +115,8 @@ export default {
         isShowDate: false,
         isShowMerchant: false,
         isShowArea: false,
-        isShowEquipmentType: false
+        isShowEquipmentType: false,
+        isShowExport: false
       },
       curQuicklySelect: -30,
       quicklySelectOptions: [
@@ -170,6 +177,9 @@ export default {
       if (layoutArray.indexOf('area') > -1) {
         this.layoutInfo.isShowArea = true
       }
+      if (layoutArray.indexOf('export') > -1) {
+        this.layoutInfo.isShowExport = true
+      }
     },
     // 初始化下拉框的数据
     initSelectorData() {
@@ -228,6 +238,10 @@ export default {
     },
     // 在父组件触发change事件，并且将数据提交
     emitPickerChange() {
+      const params = this.getParamsData()
+      this.$emit('change', params)
+    },
+    getParamsData() {
       const params = {}
 
       if (this.layoutInfo.isShowDate) {
@@ -246,7 +260,11 @@ export default {
         params.districtLevel = this.districtLevel
       }
 
-      this.$emit('change', params)
+      return params
+    },
+    exportDataHandle() {
+      const params = this.getParamsData()
+      this.$emit('exportFile', params)
     }
   }
 }

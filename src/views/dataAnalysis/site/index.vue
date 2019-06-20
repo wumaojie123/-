@@ -1,11 +1,6 @@
 <template lang="html">
   <div class="page-container">
-    <analysis-picker layout="date, merchant, equipmentType" @change="pickerChange">
-      <el-button type="text" @click="exportData">
-        <i class="el-icon-download" />
-        导出数据
-      </el-button>
-    </analysis-picker>
+    <analysis-picker layout="date, merchant, equipmentType, export" @change="pickerChange" />
     <card-wrapper label="点位投放效果">
       <el-row>
         <el-col :span="12">

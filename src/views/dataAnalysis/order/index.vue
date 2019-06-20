@@ -1,11 +1,6 @@
 <template lang="html">
   <div class="page-container">
-    <analysis-picker @change="pickerChange">
-      <el-button type="text" @click="exportData">
-        <i class="el-icon-download" />
-        导出数据
-      </el-button>
-    </analysis-picker>
+    <analysis-picker @change="pickerChange" @exportFile="exportDataHandle" />
     <card-wrapper label="订单趋势">
       <div ref="orderTrend" class="echarts-item" />
     </card-wrapper>
@@ -149,7 +144,15 @@ import AnalysisPicker from '../components/AnalysisPicker/'
 import CardWrapper from '../components/CardWrapper/'
 import ExplainModal from '../components/ExplainModal'
 import echarts from 'echarts'
-import { getOrderTrendData, getOrderPeakData, getOrderPattern, getOrderResult, getOrderConversion, getOrderReportForms } from '@/api/dataAnalysis'
+import {
+  getOrderTrendData,
+  getOrderPeakData,
+  getOrderPattern,
+  getOrderResult,
+  getOrderConversion,
+  getOrderReportForms,
+  exportOrderAnalysisData
+} from '@/api/dataAnalysis'
 import { orderTrendOption, orderTimeTrendOption, paymentTypeOption, paymentStateOption } from './option'
 
 export default {
@@ -195,8 +198,8 @@ export default {
         this.paymentState.setOption(paymentStateOption)
       })
     },
-    exportData() {
-
+    exportDataHandle(params) {
+      exportOrderAnalysisData(params)
     },
     showTooltip(index) {
       switch (index) {
@@ -249,7 +252,7 @@ export default {
     },
     getOrderTrendData(paramsData) {
       getOrderTrendData(paramsData).then(res => {
-        if (!res) {
+        if (!res.data) {
           return
         }
         const echartsData = this._orderTrendDataTube(res.data)
@@ -285,7 +288,7 @@ export default {
     },
     getOrderPeakData(paramsData) {
       getOrderPeakData(paramsData).then(res => {
-        if (!res) {
+        if (!res.data) {
           return
         }
         const echartsData = this._orderPeakDataTube(res.data)
@@ -310,7 +313,7 @@ export default {
     },
     getOrderPattern(paramsData) {
       getOrderPattern(paramsData).then(res => {
-        if (!res) {
+        if (!res.data) {
           return
         }
         // const echartsData = this._orderPatternDataTube(res.data)
@@ -324,7 +327,7 @@ export default {
     },
     getOrderResult(paramsData) {
       getOrderResult(paramsData).then(res => {
-        if (!res) {
+        if (!res.data) {
           return
         }
         // const echartsData = this._orderPatternDataTube(res.data)
@@ -338,6 +341,9 @@ export default {
     },
     getOrderConversion(paramsData) {
       getOrderConversion(paramsData).then(res => {
+        if (!res.data) {
+          return
+        }
         this.conversionData.totalCount = res.data.totalCount
         this.conversionData.payCount = res.data.payCount
         this.conversionData.compCount = res.data.compCount
@@ -349,6 +355,9 @@ export default {
       paramsData.pageIndex = this.paginationInfo.pageIndex
       paramsData.pageSize = this.paginationInfo.pageSize
       getOrderReportForms(paramsData).then(res => {
+        if (!res.data) {
+          return
+        }
         this.orderTableData = res.data.items
         this.paginationInfo.total = res.data.total
       })
