@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="zone-contanter">
     <div class="search-form-item">
-      <analysis-picker>
+      <analysis-picker layout="date, merchant, equipmentType" @change="pickerChange">
         <el-button type="text" @click="exportData">
           <i class="el-icon-download" />
           导出数据

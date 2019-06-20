@@ -1,7 +1,12 @@
 <template lang="html">
   <div class="page-container">
     <div class="search-form-item">
-      <analysis-picker label="时间" @change="pickerChange"/>
+      <analysis-picker layout="date, merchant, equipmentType" @change="pickerChange">
+        <el-button type="text" @click="exportData">
+          <i class="el-icon-download" />
+          导出数据
+        </el-button>
+      </analysis-picker>
     </div>
     <div class="main">
       <card-wrapper label="整体销售趋势">
@@ -12,15 +17,15 @@
         <div ref="doneNumTrend" class="echarts-item"/>
       </card-wrapper>
       <card-wrapper label="商品销售排行榜">
-        <el-radio-group v-model="radio" class="radio-group">
-          <el-radio :label="1">按成交金额</el-radio>
-          <el-radio :label="2">按利润贡献率</el-radio>
-          <el-radio :label="3">按出货量</el-radio>
-          <el-radio :label="4">按成交订单量</el-radio>
+        <el-radio-group v-model="searchFormInfo.orderBy" class="radio-group" @change="getProductRanking">
+          <el-radio label="amount">按成交金额</el-radio>
+          <el-radio label="rate">按利润贡献率</el-radio>
+          <el-radio label="quantity">按出货量</el-radio>
+          <el-radio label="order_count">按成交订单量</el-radio>
         </el-radio-group>
         <el-table
           :border="true"
-          :data="tableData"
+          :data="rankingList"
           :header-cell-style="{
             backgroundColor: '#F3F3F3'
           }"
@@ -30,11 +35,11 @@
         >
           <el-table-column
             align="center"
-            type="index"
+            prop="rank"
             width="50"
             label="排名"/>
           <el-table-column
-            prop="name"
+            prop="lyyMaterialName"
             align="center"
             label="商品名称"
           />
@@ -45,25 +50,22 @@
           />
           <el-table-column
             align="center"
-            prop="orderNum"
+            prop="orderCount"
             label="成交订单量（笔）"
           />
           <el-table-column
             align="center"
-            prop="price"
+            prop="amount"
             label="成交金额（元）"
           />
           <el-table-column
             align="center"
-            prop="profit"
+            prop="rate"
             label="利润贡献率"
           >
             <template slot="header" slot-scope="scope">
               利润贡献率
-              <i
-                class="el-icon-question"
-                @click="showTooltip('','利润贡献率=（单个商品零售总额-单个商品成本总额）/（全部售卖出去的商品成交总额-全部售卖出去的商品成本总额）*100%')"
-              />
+              <i class="el-icon-question" @click="showTooltip(profitTips)"/>
             </template>
           </el-table-column>
         </el-table>
@@ -94,6 +96,12 @@ import CardWrapper from '../components/CardWrapper'
 import ColumnItem from '../components/ColumnItem'
 import ExplainModal from '../components/ExplainModal'
 import { salesTrendOption, doneNumOption } from './option'
+import {
+  analysisMaterialSaleTrendApi,
+  analysisMaterialByMaterialApi,
+  analysisMaterialRankingApi,
+  analysisExportMaterialSaleRankingApi
+} from '@/api/dataAnalysis'
 
 export default {
   name: 'Zone',
@@ -107,112 +115,130 @@ export default {
     return {
       searchFormInfo: {
         pageIndex: 1,
-        total: 10
+        pageSize: 20,
+        total: 20,
+        orderBy: 'amount'
       },
       tooltipsVisible: false,
       tooltipsInfo: {
         title: '说明',
         content: ''
       },
-      radio: '',
-      tableData: [
-        {
-          sort: 1,
-          name: '康师傅绿茶',
-          quantity: 1000,
-          orderNum: 1000,
-          price: 3000,
-          profit: '60%'
-        },
-        {
-          sort: 2,
-          name: '康师傅绿茶',
-          quantity: 1000,
-          orderNum: 1000,
-          price: 3000,
-          profit: '23%'
-        },
-        {
-          sort: 3,
-          name: '康师傅绿茶',
-          quantity: 1000,
-          orderNum: 1000,
-          price: 3000,
-          profit: '45%'
-        },
-        {
-          sort: 4,
-          name: '康师傅绿茶',
-          quantity: 1000,
-          orderNum: 1000,
-          price: 3000,
-          profit: '56%'
-        }
-      ],
       itemList: [
         {
           txt: '在架商品种数',
           tips: '“在架商品种数” 指统计时间段内，关联了设备的商品种类数量。',
-          count: 800
+          count: null,
+          type: 'quantity'
         },
         {
           txt: '动销商品种数',
           tips: '“动销商品种数” 指统计时间段内，销量 > 0的商品种类数量。',
-          count: 700
+          count: null,
+          type: 'sortCount'
         },
         {
           txt: '商品出货量',
           tips: '“商品出货量” 指统计时间段内，出货的总数量。',
-          count: 3600
+          count: null,
+          type: 'sortSales'
         }
       ],
-      chart: null,
-      loading: false
+      salesTrend: null,
+      doneNumTrend: null,
+      loading: false,
+      exportDataList: [],
+      rankingList: [],
+      productTrend: {},
+      productDone: {},
+      profitTips: '利润贡献率=（单个商品零售总额-单个商品成本总额）/（全部售卖出去的商品成交总额-全部售卖出去的商品成本总额）*100%'
     }
-  },
-  mounted() {
-    this.createEcharts()
   },
   methods: {
     // 分页设置
     handleSizeChange(val) {
       this.searchFormInfo.pageSize = val
-      this.getTableData(true)
+      this.getProductRanking()
     },
     handleCurrentChange(val) {
       this.searchFormInfo.pageIndex = val
-      this.getTableData()
+      this.getProductRanking()
     },
-    createEcharts() {
-      this.$nextTick(() => {
-        this.salesTrend = echarts.init(this.$refs.salesTrend)
-        this.doneNumTrend = echarts.init(this.$refs.doneNumTrend)
-        this.salesTrend.setOption(salesTrendOption)
-        this.doneNumTrend.setOption(doneNumOption)
+    getProductTrend() {
+      analysisMaterialSaleTrendApi({
+        ...this.searchFormInfo
+      }).then((res) => {
+        if (res.result === 0) {
+          this.productTrend = res.data.trend
+          const { quantity, sortCount, sortSales } = res.data.yesterday
+          this.itemList = this.itemList.map((v) => {
+            if (v.type === 'quantity') {
+              v.count = quantity
+            } else if (v.type === 'sortCount') {
+              v.count = sortCount
+            } else if (v.type === 'sortSales') {
+              v.count = sortSales
+            }
+            return v
+          })
+          const statisticsDateList = res.data.trend.map(v => v.statisticsDate) || []
+          const quantityList = res.data.trend.map(v => v.quantity) || []
+          const amountList = res.data.trend.map(v => v.amount) || []
+          salesTrendOption.xAxis.data = statisticsDateList
+          salesTrendOption.series[0].data = quantityList
+          salesTrendOption.series[1].data = amountList
+          this.$nextTick(() => {
+            this.salesTrend = echarts.init(this.$refs.salesTrend)
+            this.salesTrend.setOption(salesTrendOption, true)
+          })
+        }
       })
     },
-    exportData() {
-    },
-    remoteMethod(query) {
-      if (query !== '') {
-        this.loading = true
-        setTimeout(() => {
-          this.loading = false
-          this.clientList = this.clientList.filter(item => {
-            return item.label.indexOf(query) > -1
+    getProductDone() {
+      analysisMaterialByMaterialApi({
+        ...this.searchFormInfo
+      }).then((res) => {
+        if (res.result === 0) {
+          this.productDone = res.data
+          const nameList = res.data.map(v => v.lyyMaterialName) || []
+          const quantityList = res.data.map(v => v.quantity) || []
+          const amountList = res.data.map(v => v.amount) || []
+          doneNumOption.xAxis[0].data = nameList
+          doneNumOption.series[0].data = amountList
+          doneNumOption.series[1].data = quantityList
+          this.$nextTick(() => {
+            this.doneNumTrend = echarts.init(this.$refs.doneNumTrend)
+            this.doneNumTrend.setOption(doneNumOption, true)
           })
-        }, 200)
-      } else {
-        this.clientList = []
-      }
+        }
+      })
+    },
+    getProductRanking() {
+      analysisMaterialRankingApi({
+        ...this.searchFormInfo
+      }).then((res) => {
+        if (res.result === 0) {
+          this.rankingList = res.data.items
+          this.searchFormInfo.total = res.data.total
+        }
+      })
+    },
+    // 导出数据
+    exportData() {
+      analysisExportMaterialSaleRankingApi(this.searchFormInfo)
     },
     pickerChange(data) {
-      this.selectInfo = null
+      this.searchFormInfo = {
+        ...this.searchFormInfo,
+        ...data
+      }
+      this.getProductTrend()
+      this.getProductDone()
+      this.getProductRanking()
     },
-    showTooltip(title = '说明', content = '') {
+    showTooltip(content) {
       this.tooltipsVisible = true
       this.tooltipsInfo = {
-        title,
         content
       }
     },
