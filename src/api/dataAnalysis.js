@@ -78,3 +78,39 @@ export function getOrderReportForms(sendData) {
     params: sendData
   })
 }
+
+// 商品销售趋势
+export function analysisMaterialSaleTrendApi(data) {
+  return request({
+    url: '/rest/analysis/material/saleTrend',
+    method: 'get',
+    params: data
+  })
+}
+
+// 商品成交分析
+export function analysisMaterialByMaterialApi(data) {
+  return request({
+    url: '/rest/analysis/material/byMaterial',
+    method: 'get',
+    params: data
+  })
+}
+
+// 商品销售排行榜
+export function analysisMaterialRankingApi(data) {
+  return request({
+    url: '/rest/analysis/material/ranking',
+    method: 'get',
+    params: data
+  })
+}
+
+// 商品销售排行榜导出
+export function analysisExportMaterialSaleRankingApi(data) {
+  return request({
+    url: '/rest/analysis/export/material/saleRanking',
+    method: 'get',
+    params: data
+  })
+}
