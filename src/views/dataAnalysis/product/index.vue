@@ -116,7 +116,7 @@ export default {
       searchFormInfo: {
         pageIndex: 1,
         pageSize: 20,
-        total: 20,
+        total: 0,
         orderBy: 'amount'
       },
       tooltipsVisible: false,
@@ -146,11 +146,7 @@ export default {
       ],
       salesTrend: null,
       doneNumTrend: null,
-      loading: false,
-      exportDataList: [],
       rankingList: [],
-      productTrend: {},
-      productDone: {},
       profitTips: '利润贡献率=（单个商品零售总额-单个商品成本总额）/（全部售卖出去的商品成交总额-全部售卖出去的商品成本总额）*100%'
     }
   },
@@ -169,7 +165,6 @@ export default {
         ...this.searchFormInfo
       }).then((res) => {
         if (res.result === 0) {
-          this.productTrend = res.data.trend
           const { quantity, sortCount, sortSales } = res.data.yesterday
           this.itemList = this.itemList.map((v) => {
             if (v.type === 'quantity') {
@@ -199,7 +194,6 @@ export default {
         ...this.searchFormInfo
       }).then((res) => {
         if (res.result === 0) {
-          this.productDone = res.data
           const nameList = res.data.map(v => v.lyyMaterialName) || []
           const quantityList = res.data.map(v => v.quantity) || []
           const amountList = res.data.map(v => v.amount) || []
