@@ -44,12 +44,8 @@ export const onlineScaleOption = {
     name: '订单占比',
     type: 'pie',
     radius: '55%',
-    label: {
-      show: false
-    },
-    labelLine: {
-      show: false
-    },
+    avoidLabelOverlap: true,
+		minShowLabelAngle: 1,
     data: [
       {
         name: '在线',
@@ -74,9 +70,11 @@ export const equipmentTypeScaleOption = {
   legend: {
     data: [],
     x: 'center',
+    width: '80%',
     bottom: 0,
     itemHeight: 15,
-    itemWidth: 15
+    itemWidth: 15,
+    type: 'scroll'
   },
   tooltip: {
     trigger: 'item',
@@ -90,12 +88,8 @@ export const equipmentTypeScaleOption = {
     name: '订单占比',
     type: 'pie',
     radius: '55%',
-    label: {
-      show: false
-    },
-    labelLine: {
-      show: false
-    },
+    avoidLabelOverlap: true,
+		minShowLabelAngle: 1,
     data: []
   }]
 }
