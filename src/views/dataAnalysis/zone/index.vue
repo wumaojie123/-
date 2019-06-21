@@ -118,12 +118,12 @@ export default {
   mounted() {
     const sidebarElm = document.getElementsByClassName('sidebar-container')[0]
     const mainContainer = this.$refs.mainContainer
-    this.width = (mainContainer.clientWidth - 670) + 'px'
+    this.width = (mainContainer.clientWidth - 600) + 'px'
     sidebarElm.addEventListener('transitionend', () => {
-      this.width = (mainContainer.clientWidth - 670) + 'px'
+      this.width = (mainContainer.clientWidth - 600) + 'px'
     })
     window.addEventListener('resize', () => {
-      this.width = (mainContainer.clientWidth - 670) + 'px'
+      this.width = (mainContainer.clientWidth - 600) + 'px'
     })
   },
   methods: {
@@ -308,7 +308,7 @@ export default {
         position: relative;
         display: inline-block;
         vertical-align: top;
-        width: 650px;
+        width: 600px;
         &::after {
           display: inline-block;
           content: '';
@@ -321,7 +321,7 @@ export default {
           background: #f0f2f5;
         }
         .map {
-          width: 650px;
+          width: 600px;
           height: 500px;
         }
       }
