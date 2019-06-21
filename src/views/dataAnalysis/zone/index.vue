@@ -22,11 +22,11 @@
         </div>
         <div class="select-type">
           <span>图例指标: </span>
-          <el-radio-group v-model="radio" @change="changeType">
-            <el-radio label="设备量">设备量</el-radio>
-            <el-radio label="订单量">订单量</el-radio>
-            <el-radio label="订单总额">订单总额</el-radio>
-            <el-radio label="客单价">客单价</el-radio>
+          <el-radio-group v-model="searchFormInfo.orderBy" @change="changeType">
+            <el-radio label="equipment_count">设备量</el-radio>
+            <el-radio label="pay_count">订单量</el-radio>
+            <el-radio label="pay_amount">订单总额</el-radio>
+            <el-radio label="unit_price">客单价</el-radio>
           </el-radio-group>
         </div>
       </div>
@@ -40,28 +40,29 @@
           :height="500"
           :default-sort="{prop: 'devicenum', order: 'descending'}"
         >
+          <el-table-column align="center" label="城市" width="120">
+            <template slot-scope="scope">
+              <span>{{ scope.row.provinceName + '-' + scope.row.cityName }}</span>
+            </template>
+          </el-table-column>
           <el-table-column
             align="center"
-            prop="city"
-            label="城市"/>
-          <el-table-column
-            align="center"
-            prop="devicenum"
+            prop="equipmentCount"
             label="设备量(台)"
             sortable/>
           <el-table-column
             align="center"
-            prop="ordernum"
+            prop="payCount"
             label="订单量"
             sortable/>
           <el-table-column
             align="center"
-            prop="orderprice"
+            prop="payAmount"
             label="订单总额(元)"
             sortable/>
           <el-table-column
             align="center"
-            prop="guestprice"
+            prop="unitPrice"
             label="客单价(元)"
             sortable/>
         </el-table>
@@ -84,7 +85,11 @@ import echarts from 'echarts'
 import 'echarts/map/js/china.js'
 import AnalysisPicker from '../components/AnalysisPicker'
 import { zoneChinaMapOption } from './option'
-import { deepClone } from '@/utils'
+
+import {
+  analysisAreaPaginationApi,
+  analysisExportAreaApi
+} from '@/api/dataAnalysis'
 
 export default {
   name: 'Zone',
@@ -93,87 +98,122 @@ export default {
   },
   data() {
     return {
-      radio: '设备量',
       searchFormInfo: {
         pageIndex: 1,
-        total: 10
+        pageSize: 20,
+        total: 10,
+        district: -1,
+        startDate: '2019-06-21',
+        endDate: '2019-06-21',
+        agentId: -1,
+        agent: true,
+        lyyEquipmentTypeId: -1,
+        orderBy: 'equipment_count'
       },
-      tableData: [
-        {
-          devicenum: 1000,
-          ordernum: 100,
-          orderprice: 200,
-          guestprice: 3.5,
-          city: '湖南省-石狮市'
-        },
-        {
-          devicenum: 200,
-          ordernum: 80,
-          orderprice: 300,
-          guestprice: 3.5,
-          city: '广东省-广州市'
-        },
-        {
-          devicenum: 600,
-          ordernum: 40,
-          orderprice: 600,
-          guestprice: 3.5,
-          city: '广西省-南宁市'
-        },
-        {
-          devicenum: 500,
-          ordernum: 90,
-          orderprice: 800,
-          guestprice: 3.5,
-          city: '江西省-新蜂市'
-        }
-      ],
+      tableData: [],
       loading: false
     }
-  },
-  mounted() {
-    this.createEcharts()
   },
   methods: {
     // 分页设置
     handleSizeChange(val) {
       this.searchFormInfo.pageSize = val
+      this.createEcharts()
     },
     handleCurrentChange(val) {
       this.searchFormInfo.pageIndex = val
+      this.createEcharts()
     },
     createEcharts() {
-      this.$nextTick(() => {
-        this.chinaMap = echarts.init(this.$refs.chinaMap)
-        const newMap = deepClone(zoneChinaMapOption)
-        newMap.series = zoneChinaMapOption.series.filter(v => {
-          return v.name === this.radio
-        })
-        this.chinaMap.setOption(newMap)
+      analysisAreaPaginationApi({
+        ...this.searchFormInfo
+      }).then((res) => {
+        if (res.result === 0) {
+          const items = res.data.items
+          this.searchFormInfo.total = res.data.total
+          this.tableData = items
+          const noRepeatData = {}
+          let finalResult = []
+          const seriesList = items.map(v => {
+            let resetSeriesItem = {}
+            const name = v.provinceName.split('省')[0]
+            if (this.searchFormInfo.orderBy === 'equipment_count') {
+              resetSeriesItem = {
+                name,
+                value: v.equipmentCount,
+                ...v
+              }
+            } else if (this.searchFormInfo.orderBy === 'pay_count') {
+              resetSeriesItem = {
+                name,
+                value: v.payAmount,
+                ...v
+              }
+            } else if (this.searchFormInfo.orderBy === 'pay_amount') {
+              resetSeriesItem = {
+                name,
+                value: v.unitPrice,
+                ...v
+              }
+            } else if (this.searchFormInfo.orderBy === 'unit_price') {
+              resetSeriesItem = {
+                name,
+                value: v.payCount,
+                ...v
+              }
+            }
+            noRepeatData[name] = resetSeriesItem // 存在多个市在同一个省份，需要处理用于地图显示，最好是接口直接返回
+            return resetSeriesItem
+          })
+          for (const key in noRepeatData) {
+            finalResult.push(noRepeatData[key])
+          }
+          finalResult = finalResult.map((v) => {
+            const result = { ...v }
+            function add(a, b) {
+              return a + b
+            }
+            const fitlerItem = seriesList.filter(s => s.name === v.name)
+            result.equipmentCount = fitlerItem.map(o => o.equipmentCount).reduce(add)
+            result.payCount = fitlerItem.map(o => o.payCount).reduce(add)
+            result.payAmount = fitlerItem.map(o => o.payAmount).reduce(add)
+            result.unitPrice = fitlerItem.map(o => o.unitPrice).reduce(add)
+            return result
+          })
+          const seriesData = {
+            type: 'map',
+            mapType: 'china',
+            data: finalResult
+          }
+          if (this.searchFormInfo.orderBy === 'equipment_count') {
+            seriesData.name = '设备量'
+          } else if (this.searchFormInfo.orderBy === 'pay_count') {
+            seriesData.name = '订单量'
+          } else if (this.searchFormInfo.orderBy === 'pay_amount') {
+            seriesData.name = '订单总额'
+          } else if (this.searchFormInfo.orderBy === 'unit_price') {
+            seriesData.name = '客单价'
+          }
+          zoneChinaMapOption.series[0] = seriesData
+          this.$nextTick(() => {
+            this.chinaMap = echarts.init(this.$refs.chinaMap)
+            this.chinaMap.setOption(zoneChinaMapOption, true)
+          })
+        }
       })
     },
     exportData() {
+      analysisExportAreaApi(this.searchFormInfo)
     },
-    changeType(value) {
-      const newMap = deepClone(zoneChinaMapOption)
-      newMap.series = zoneChinaMapOption.series.filter(v => v.name === this.radio)
-      this.chinaMap.setOption(newMap, true)
-    },
-    remoteMethod(query) {
-      if (query !== '') {
-        this.loading = true
-        setTimeout(() => {
-          this.loading = false
-          this.clientList = this.clientList.filter(item => {
-            return item.label.indexOf(query) > -1
-          })
-        }, 200)
-      } else {
-        this.clientList = []
-      }
+    changeType() {
+      this.createEcharts()
     },
     pickerChange(data) {
-      this.selectInfo = null
+      this.searchFormInfo = {
+        ...this.searchFormInfo,
+        ...data
+      }
+      this.createEcharts()
     }
   }
 }
