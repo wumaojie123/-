@@ -8,7 +8,7 @@
         </el-button>
       </analysis-picker>
     </div>
-    <div ref="mainContainer" class="main">
+    <div v-loading="loading" ref="mainContainer" class="main">
       <div class="left-map">
         <div ref="chinaMap" class="map"/>
         <div class="range-item">
@@ -137,10 +137,12 @@ export default {
       this.createEcharts()
     },
     createEcharts() {
+      this.loading = true
       analysisAreaPaginationApi({
         ...this.searchFormInfo
       }).then((res) => {
         if (res.result === 0) {
+          this.loading = false
           const items = res.data.items
           this.searchFormInfo.total = res.data.total
           this.tableData = items

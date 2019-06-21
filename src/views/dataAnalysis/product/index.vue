@@ -8,7 +8,7 @@
         </el-button>
       </analysis-picker>
     </div>
-    <div class="main">
+    <div v-loading="loading" class="main">
       <card-wrapper label="整体销售趋势">
         <column-item :item-list="itemList" :show-tips-icon="true" :mouseover="showTooltip"/>
         <div ref="salesTrend" class="echarts-item"/>
@@ -147,7 +147,8 @@ export default {
       salesTrend: null,
       doneNumTrend: null,
       rankingList: [],
-      profitTips: '利润贡献率=（单个商品零售总额-单个商品成本总额）/（全部售卖出去的商品成交总额-全部售卖出去的商品成本总额）*100%'
+      profitTips: '利润贡献率=（单个商品零售总额-单个商品成本总额）/（全部售卖出去的商品成交总额-全部售卖出去的商品成本总额）*100%',
+      loading: false
     }
   },
   methods: {
@@ -161,10 +162,12 @@ export default {
       this.getProductRanking()
     },
     getProductTrend() {
+      this.loading = true
       analysisMaterialSaleTrendApi({
         ...this.searchFormInfo
       }).then((res) => {
         if (res.result === 0) {
+          this.loading = false
           const { quantity, sortCount, sortSales } = res.data.yesterday
           this.itemList = this.itemList.map((v) => {
             if (v.type === 'quantity') {
