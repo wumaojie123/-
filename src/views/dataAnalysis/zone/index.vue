@@ -30,7 +30,7 @@
           </el-radio-group>
         </div>
       </div>
-      <div :style="{width:width}" class="right-table">
+      <div class="right-table">
         <el-table
           :border="true"
           :data="tableData"
@@ -114,17 +114,6 @@ export default {
       tableData: [],
       loading: false
     }
-  },
-  mounted() {
-    const sidebarElm = document.getElementsByClassName('sidebar-container')[0]
-    const mainContainer = this.$refs.mainContainer
-    this.width = (mainContainer.clientWidth - 670) + 'px'
-    sidebarElm.addEventListener('transitionend', () => {
-      this.width = (mainContainer.clientWidth - 670) + 'px'
-    })
-    window.addEventListener('resize', () => {
-      this.width = (mainContainer.clientWidth - 670) + 'px'
-    })
   },
   methods: {
     // 分页设置
@@ -308,7 +297,7 @@ export default {
         position: relative;
         display: inline-block;
         vertical-align: top;
-        width: 650px;
+        width: 50%;
         &::after {
           display: inline-block;
           content: '';
@@ -321,7 +310,6 @@ export default {
           background: #f0f2f5;
         }
         .map {
-          width: 650px;
           height: 500px;
         }
       }
@@ -330,6 +318,7 @@ export default {
         display: inline-block;
         vertical-align: top;
         padding-left: 20px;
+        width: 50%;
       }
     }
 
