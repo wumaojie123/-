@@ -8,9 +8,9 @@
         </el-button>
       </analysis-picker>
     </div>
-    <div class="main">
-      <div class="">
-        <div ref="chinaMap" class="left-map"/>
+    <div ref="mainContainer" class="main">
+      <div class="left-map">
+        <div ref="chinaMap" class="map"/>
         <div class="range-item">
           <span class="high">高</span>
           <span class="range range4"/>
@@ -30,7 +30,7 @@
           </el-radio-group>
         </div>
       </div>
-      <div class="right-table">
+      <div :style="{width:width}" class="right-table">
         <el-table
           :border="true"
           :data="tableData"
@@ -98,6 +98,7 @@ export default {
   },
   data() {
     return {
+      width: '600px',
       searchFormInfo: {
         pageIndex: 1,
         pageSize: 20,
@@ -113,6 +114,17 @@ export default {
       tableData: [],
       loading: false
     }
+  },
+  mounted() {
+    const sidebarElm = document.getElementsByClassName('sidebar-container')[0]
+    const mainContainer = this.$refs.mainContainer
+    this.width = (mainContainer.clientWidth - 670) + 'px'
+    sidebarElm.addEventListener('transitionend', () => {
+      this.width = (mainContainer.clientWidth - 670) + 'px'
+    })
+    window.addEventListener('resize', () => {
+      this.width = (mainContainer.clientWidth - 670) + 'px'
+    })
   },
   methods: {
     // 分页设置
@@ -183,7 +195,8 @@ export default {
           }
           zoneChinaMapOption.series[0] = seriesData
           this.$nextTick(() => {
-            this.chinaMap = echarts.init(this.$refs.chinaMap)
+            const chinaMap = this.$refs.chinaMap
+            this.chinaMap = echarts.init(chinaMap)
             this.chinaMap.setOption(zoneChinaMapOption, true)
           })
         }
@@ -213,9 +226,8 @@ export default {
     .main {
       background: #fff;
       margin-top: 20px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
+      font-size: 0;
+      box-sizing: border-box;
 
       .range-item {
         font-size: 0;
@@ -291,10 +303,10 @@ export default {
       }
 
       .left-map {
-        width: 650px;
-        height: 500px;
         position: relative;
-
+        display: inline-block;
+        vertical-align: top;
+        width: 650px;
         &::after {
           display: inline-block;
           content: '';
@@ -303,14 +315,19 @@ export default {
           bottom: 0;
           right: 0;
           width: 1px;
-          height: 115%;
+          height: 100%;
           background: #f0f2f5;
+        }
+        .map {
+          width: 650px;
+          height: 500px;
         }
       }
 
       .right-table {
-        margin-left: 20px;
-        width: 100%;
+        display: inline-block;
+        vertical-align: top;
+        padding-left: 20px;
       }
     }
 
