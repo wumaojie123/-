@@ -7,10 +7,10 @@
           <column-item :item-list="typeInfoList" />
         </el-col>
         <el-col :span="12">
-          <div ref="onlineScale" class="echarts-item" />
+          <div v-loading="onlineScaleLoading" ref="onlineScale" class="echarts-item" />
         </el-col>
         <el-col :span="12">
-          <div ref="equipmentTypeScale" class="echarts-item" />
+          <div v-loading="equipmentTypeScaleLoading" ref="equipmentTypeScale" class="echarts-item" />
         </el-col>
       </el-row>
     </card-wrapper>
@@ -19,7 +19,7 @@
         <i class="el-icon-question" @click="showTooltip" />
       </template>
       <column-item :item-list="shipmentInfoList" />
-      <div ref="importAndExport" class="echarts-item" />
+      <div v-loading="shipmentLoading" ref="shipment" class="echarts-item" />
     </card-wrapper>
     <explain-modal
       :visible="tooltipsInfo.tooltipsVisible"
@@ -54,9 +54,12 @@ export default {
   },
   data() {
     return {
-      importAndExport: null,
+      shipment: null,
       onlineScale: null,
       equipmentTypeScale: null,
+      shipmentLoading: false,
+      onlineScaleLoading: false,
+      equipmentTypeScaleLoading: false,
       typeInfoList: [
         {
           txt: '设备总数(昨日)',
@@ -104,6 +107,7 @@ export default {
       this.getEquipmentAllStorageData(params)
     },
     getEquipmentStatusData(params) {
+      this.onlineScaleLoading = true
       getEquipmentStatusData(params).then(res => {
         if (!res.data) {
           return
@@ -122,9 +126,12 @@ export default {
           value: res.data.offLine
         }
         this.onlineScale.setOption(onlineScaleOption)
+      }).finally(() => {
+        this.onlineScaleLoading = false
       })
     },
     getEquipmentTypeData(params) {
+      this.equipmentTypeScaleLoading = true
       getEquipmentTypeData(params).then(res => {
         if (!res.data || res.data.length === 0) {
           return
@@ -134,6 +141,8 @@ export default {
         equipmentTypeScaleOption.legend.data = echartsData.legendData
         equipmentTypeScaleOption.series[0].data = echartsData.seriesData
         this.equipmentTypeScale.setOption(equipmentTypeScaleOption)
+      }).finally(() => {
+        this.equipmentTypeScaleLoading = false
       })
     },
     _equipmentTypeDataTube(data) {
@@ -156,13 +165,16 @@ export default {
       }
     },
     getShipmentData(params) {
+      this.shipmentLoading = true
       getEquipmentStorageData(params).then(res => {
         const echartsData = this._shipmentDataTube(res.data)
-        this.importAndExport = echarts.init(this.$refs.importAndExport)
+        this.shipment = echarts.init(this.$refs.shipment)
         shipmentOption.xAxis.data = echartsData.xaxisData
         shipmentOption.series[0].data = echartsData.seriesData1
         shipmentOption.series[1].data = echartsData.seriesData2
-        this.importAndExport.setOption(shipmentOption)
+        this.shipment.setOption(shipmentOption)
+      }).finally(() => {
+        this.shipmentLoading = false
       })
     },
     _shipmentDataTube(data) {

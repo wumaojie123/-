@@ -4,7 +4,7 @@
     <card-wrapper label="点位投放效果">
       <el-row>
         <el-col :span="12">
-          <div ref="siteInfo" class="echarts-item">
+          <div v-loading="siteInfoChartsLoading" ref="siteInfo" class="echarts-item">
             <div class="empty-panel">
               <img src="../image/nothing.png" alt="">
               <p>暂无数据</p>
@@ -12,7 +12,7 @@
           </div>
         </el-col>
         <el-col :span="12">
-          <div ref="siteInfoPercent" class="echarts-item">
+          <div v-loading="siteInfoPercentChartsLoading" ref="siteInfoPercent" class="echarts-item">
             <div class="empty-panel">
               <img src="../image/nothing.png" alt="">
               <p>暂无数据</p>
@@ -22,7 +22,7 @@
       </el-row>
     </card-wrapper>
     <card-wrapper label="点位收益趋势">
-      <div ref="siteEarnTrend" class="echarts-item" />
+      <div v-loading="siteEarnTrendLoading" ref="siteEarnTrend" class="echarts-item" />
     </card-wrapper>
   </div>
 </template>
@@ -43,7 +43,10 @@ export default {
     return {
       siteEarnTrend: null,
       siteInfoCharts: null,
-      siteInfoPercentCharts: null
+      siteInfoPercentCharts: null,
+      siteEarnTrendLoading: false,
+      siteInfoChartsLoading: false,
+      siteInfoPercentChartsLoading: false
     }
   },
   methods: {
@@ -52,6 +55,8 @@ export default {
       this.getSiteIncomeTrend(params)
     },
     getSiteEffectData(params) {
+      this.siteInfoChartsLoading = true
+      this.siteInfoPercentChartsLoading = true
       getSiteEffectData(params).then(res => {
         if (!res.data || res.data.length === 0) {
           return
@@ -68,6 +73,9 @@ export default {
         siteInfoPercentOption.legend.data = pieEchartsData.legendData
         siteInfoPercentOption.series[0].data = pieEchartsData.seriesData
         this.siteInfoPercentCharts.setOption(siteInfoPercentOption)
+      }).finally(() => {
+        this.siteInfoChartsLoading = false
+        this.siteInfoPercentChartsLoading = false
       })
     },
     _siteEffctBarDataTube(data) {
@@ -109,6 +117,7 @@ export default {
       }
     },
     getSiteIncomeTrend(params) {
+      this.siteEarnTrendLoading = true
       getSiteIncomeTrend(params).then(res => {
         if (!res.data) {
           return
@@ -119,6 +128,8 @@ export default {
         siteEarnTrendOption.legend.data = echartsData.legendData
         siteEarnTrendOption.series = echartsData.seriesData
         this.siteEarnTrend.setOption(siteEarnTrendOption)
+      }).finally(() => {
+        this.siteEarnTrendLoading = false
       })
     },
     _siteIncomeTrendDataTube(data) {

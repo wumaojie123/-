@@ -9,23 +9,23 @@
         @change="checkedTypeChange">
         <el-checkbox v-for="type in typeOptions" :label="type.value" :key="type.value">{{ type.text }}</el-checkbox>
       </el-checkbox-group>
-      <div ref="orderTrend" class="echarts-item" />
+      <div v-loading="orderTrendLoading" ref="orderTrend" class="echarts-item" />
     </card-wrapper>
     <card-wrapper label="订单高峰分布">
       <template slot="sub-title">
         <i class="el-icon-question" @click="showTooltip(1)" />
       </template>
-      <div ref="orderTimeTrend" class="echarts-item" />
+      <div v-loading="orderTimeTrendLoading" ref="orderTimeTrend" class="echarts-item" />
     </card-wrapper>
     <card-wrapper label="占比分析">
       <el-row>
         <el-col :span="8" class="echarts-panel">
           <p class="title">支付方式</p>
-          <div ref="paymentType" class="echarts-item" />
+          <div v-loading="paymentTypeLoading" ref="paymentType" class="echarts-item" />
         </el-col>
         <el-col :span="8" class="echarts-panel">
           <p class="title">支付结果</p>
-          <div ref="paymentState" class="echarts-item" />
+          <div v-loading="paymentStateLoading" ref="paymentState" class="echarts-item" />
         </el-col>
         <el-col :span="8" class="echarts-panel">
           <p class="title">订单转化率 <i class="el-icon-question" @click="showTooltip(2)" /> </p>
@@ -60,6 +60,7 @@
     </card-wrapper>
     <card-wrapper label="订单报表">
       <el-table
+        v-loading="orderTableLoading"
         :data="orderTableData"
         :header-cell-style="{
           backgroundColor: '#F8F8F8'
@@ -197,6 +198,13 @@ export default {
       paymentType: null,
       paymentState: null,
       translate: null,
+
+      orderTrendLoading: false,
+      orderTimeTrendLoading: false,
+      paymentTypeLoading: false,
+      paymentStateLoading: false,
+      orderTableLoading: false,
+
       orderTableData: [],
       paginationInfo: {
         pageIndex: 1,
@@ -211,9 +219,6 @@ export default {
         title: ''
       }
     }
-  },
-  mounted() {
-    this.creatEcharts()
   },
   methods: {
     checkedTypeChange() {
@@ -232,14 +237,6 @@ export default {
             name: item.text + item.unit
           })
         }
-      })
-    },
-    creatEcharts() {
-      this.$nextTick(() => {
-        this.orderTrend = echarts.init(this.$refs.orderTrend)
-        this.orderTimeTrend = echarts.init(this.$refs.orderTimeTrend)
-        this.paymentType = echarts.init(this.$refs.paymentType)
-        this.paymentState = echarts.init(this.$refs.paymentState)
       })
     },
     exportDataHandle(params) {
@@ -295,11 +292,13 @@ export default {
       this.getOrderReportForms(paramsData)
     },
     getOrderTrendData(paramsData) {
+      this.orderTrendLoading = true
       getOrderTrendData(paramsData).then(res => {
         if (!res.data) {
           return
         }
         const echartsData = this._orderTrendDataTube(res.data)
+        this.orderTrend = echarts.init(this.$refs.orderTrend)
         this.orderTrendData = echartsData
         orderTrendOption.series[0].data = echartsData.line1
         orderTrendOption.series[1].data = echartsData.line2
@@ -308,6 +307,8 @@ export default {
         orderTrendOption.xAxis.data = echartsData.xAxis
         this.orderTrend.setOption(orderTrendOption)
         this.checkedTypeChange()
+      }).finally(() => {
+        this.orderTrendLoading = false
       })
     },
     _orderTrendDataTube(data) {
@@ -333,14 +334,18 @@ export default {
       }
     },
     getOrderPeakData(paramsData) {
+      this.orderTimeTrendLoading = true
       getOrderPeakData(paramsData).then(res => {
         if (!res.data) {
           return
         }
+        this.orderTimeTrend = echarts.init(this.$refs.orderTimeTrend)
         const echartsData = this._orderPeakDataTube(res.data)
         orderTimeTrendOption.series[0].data = echartsData.line1
         orderTimeTrendOption.xAxis.data = echartsData.xAxis
         this.orderTimeTrend.setOption(orderTimeTrendOption)
+      }).finally(() => {
+        this.orderTimeTrendLoading = false
       })
     },
     _orderPeakDataTube(data) {
@@ -358,24 +363,32 @@ export default {
       }
     },
     getOrderPattern(paramsData) {
+      this.paymentTypeLoading = true
       getOrderPattern(paramsData).then(res => {
         if (!res.data) {
           return
         }
+        this.paymentType = echarts.init(this.$refs.paymentType)
         paymentTypeOption.series[0].data[0].value = res.data[1].payCount
         paymentTypeOption.series[0].data[1].value = res.data[0].payCount
         paymentTypeOption.series[0].data[2].value = res.data[2].payCount
         this.paymentType.setOption(paymentTypeOption)
+      }).finally(() => {
+        this.paymentTypeLoading = false
       })
     },
     getOrderResult(paramsData) {
+      this.paymentStateLoading = true
       getOrderResult(paramsData).then(res => {
         if (!res.data) {
           return
         }
+        this.paymentState = echarts.init(this.$refs.paymentState)
         paymentStateOption.series[0].data[0].value = res.data[0].payCount
         paymentStateOption.series[0].data[1].value = res.data[1].payCount
         this.paymentState.setOption(paymentStateOption)
+      }).finally(() => {
+        this.paymentStateLoading = false
       })
     },
     getOrderConversion(paramsData) {
@@ -391,6 +404,7 @@ export default {
       })
     },
     getOrderReportForms(paramsData) {
+      this.orderTableLoading = true
       paramsData.pageIndex = this.paginationInfo.pageIndex
       paramsData.pageSize = this.paginationInfo.pageSize
       getOrderReportForms(paramsData).then(res => {
@@ -399,6 +413,8 @@ export default {
         }
         this.orderTableData = res.data.items
         this.paginationInfo.total = res.data.total
+      }).finally(() => {
+        this.orderTableLoading = false
       })
     },
     handleSizeChange() {
