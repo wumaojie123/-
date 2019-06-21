@@ -38,7 +38,7 @@
             backgroundColor: '#F3F3F3'
           }"
           :height="500"
-          :default-sort="{prop: 'devicenum', order: 'descending'}"
+          :default-sort="{prop: 'equipmentCount', order: 'descending'}"
         >
           <el-table-column align="center" label="城市" width="120">
             <template slot-scope="scope">
@@ -135,32 +135,19 @@ export default {
           const noRepeatData = {}
           let finalResult = []
           const seriesList = items.map(v => {
-            let resetSeriesItem = {}
             const name = v.provinceName.split('省')[0]
+            const resetSeriesItem = {
+              name,
+              ...v
+            }
             if (this.searchFormInfo.orderBy === 'equipment_count') {
-              resetSeriesItem = {
-                name,
-                value: v.equipmentCount,
-                ...v
-              }
+              resetSeriesItem.value = v.equipmentCount
             } else if (this.searchFormInfo.orderBy === 'pay_count') {
-              resetSeriesItem = {
-                name,
-                value: v.payAmount,
-                ...v
-              }
+              resetSeriesItem.value = v.payCount
             } else if (this.searchFormInfo.orderBy === 'pay_amount') {
-              resetSeriesItem = {
-                name,
-                value: v.unitPrice,
-                ...v
-              }
+              resetSeriesItem.value = v.payAmount
             } else if (this.searchFormInfo.orderBy === 'unit_price') {
-              resetSeriesItem = {
-                name,
-                value: v.payCount,
-                ...v
-              }
+              resetSeriesItem.value = v.unitPrice
             }
             noRepeatData[name] = resetSeriesItem // 存在多个市在同一个省份，需要处理用于地图显示，最好是接口直接返回
             return resetSeriesItem
@@ -169,7 +156,7 @@ export default {
             finalResult.push(noRepeatData[key])
           }
           finalResult = finalResult.map((v) => {
-            const result = { ...v }
+            const result = v
             function add(a, b) {
               return a + b
             }
