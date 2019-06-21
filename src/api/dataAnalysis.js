@@ -174,3 +174,19 @@ export function getEquipmentAllStorageData(sendData) {
     params: sendData
   })
 }
+
+// 区域分析
+export function analysisAreaPaginationApi(data) {
+  return request({
+    url: '/rest/analysis/area/pagination',
+    method: 'get',
+    params: data
+  })
+}
+
+// 导出区域分析
+export function analysisExportAreaApi(data) {
+  const url = '/rest/analysis/export/area'
+  const downloadUrl = `${process.env.BASE_API}${url}?${param(data)}`
+  exportFile(downloadUrl)
+}

@@ -11,10 +11,10 @@
     <div class="main">
       <card-wrapper label="整体销售趋势">
         <column-item :item-list="itemList" :show-tips-icon="true" :mouseover="showTooltip"/>
-        <div ref="salesTrend" class="echarts-item"/>
+        <div v-loading="salesTrendloading" ref="salesTrend" class="echarts-item"/>
       </card-wrapper>
       <card-wrapper label="各商品成交分析">
-        <div ref="doneNumTrend" class="echarts-item"/>
+        <div v-loading="doneNumloading" ref="doneNumTrend" class="echarts-item"/>
       </card-wrapper>
       <card-wrapper label="商品销售排行榜">
         <el-radio-group v-model="searchFormInfo.orderBy" class="radio-group" @change="getProductRanking">
@@ -24,6 +24,7 @@
           <el-radio label="order_count">按成交订单量</el-radio>
         </el-radio-group>
         <el-table
+          v-loading="rankingloading"
           :border="true"
           :data="rankingList"
           :header-cell-style="{
@@ -147,7 +148,10 @@ export default {
       salesTrend: null,
       doneNumTrend: null,
       rankingList: [],
-      profitTips: '利润贡献率=（单个商品零售总额-单个商品成本总额）/（全部售卖出去的商品成交总额-全部售卖出去的商品成本总额）*100%'
+      profitTips: '利润贡献率=（单个商品零售总额-单个商品成本总额）/（全部售卖出去的商品成交总额-全部售卖出去的商品成本总额）*100%',
+      salesTrendloading: false,
+      doneNumloading: false,
+      rankingloading: false
     }
   },
   methods: {
@@ -161,10 +165,12 @@ export default {
       this.getProductRanking()
     },
     getProductTrend() {
+      this.salesTrendloading = true
       analysisMaterialSaleTrendApi({
         ...this.searchFormInfo
       }).then((res) => {
         if (res.result === 0) {
+          this.salesTrendloading = false
           const { quantity, sortCount, sortSales } = res.data.yesterday
           this.itemList = this.itemList.map((v) => {
             if (v.type === 'quantity') {
@@ -190,10 +196,12 @@ export default {
       })
     },
     getProductDone() {
+      this.doneNumloading = true
       analysisMaterialByMaterialApi({
         ...this.searchFormInfo
       }).then((res) => {
         if (res.result === 0) {
+          this.doneNumloading = false
           const nameList = res.data.map(v => v.lyyMaterialName) || []
           const quantityList = res.data.map(v => v.quantity) || []
           const amountList = res.data.map(v => v.amount) || []
@@ -208,10 +216,12 @@ export default {
       })
     },
     getProductRanking() {
+      this.rankingloading = true
       analysisMaterialRankingApi({
         ...this.searchFormInfo
       }).then((res) => {
         if (res.result === 0) {
+          this.rankingloading = false
           this.rankingList = res.data.items
           this.searchFormInfo.total = res.data.total
         }
