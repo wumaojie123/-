@@ -2,6 +2,13 @@
   <div class="page-container">
     <analysis-picker @change="pickerChange" @exportFile="exportDataHandle" />
     <card-wrapper label="订单趋势">
+      <el-checkbox-group
+        v-model="checkedType"
+        :min="1"
+        :max="4"
+        @change="checkedTypeChange">
+        <el-checkbox v-for="type in typeOptions" :label="type.value" :key="type.value">{{ type.text }}</el-checkbox>
+      </el-checkbox-group>
       <div ref="orderTrend" class="echarts-item" />
     </card-wrapper>
     <card-wrapper label="订单高峰分布">
@@ -163,6 +170,28 @@ export default {
   },
   data() {
     return {
+      checkedType: [1, 2],
+      typeOptions: [{
+        text: '成交订单',
+        value: 1,
+        unit: '(笔)'
+      },
+      {
+        text: '成交金额',
+        value: 2,
+        unit: '(元)'
+      },
+      {
+        text: '退款订单',
+        value: 3,
+        unit: '(笔)'
+      },
+      {
+        text: '退款金额',
+        value: 4,
+        unit: '(元)'
+      }],
+      orderTrendData: [],
       orderTrend: null,
       orderTimeTrend: null,
       paymentType: null,
@@ -187,15 +216,30 @@ export default {
     this.creatEcharts()
   },
   methods: {
+    checkedTypeChange() {
+      this.typeOptions.forEach(item => {
+        const checkedTypeState = this.checkedType.some(typeItem => {
+          return item.value === typeItem
+        })
+        if (checkedTypeState) {
+          this.orderTrend.dispatchAction({
+            type: 'legendSelect',
+            name: item.text + item.unit
+          })
+        } else {
+          this.orderTrend.dispatchAction({
+            type: 'legendUnSelect',
+            name: item.text + item.unit
+          })
+        }
+      })
+    },
     creatEcharts() {
       this.$nextTick(() => {
         this.orderTrend = echarts.init(this.$refs.orderTrend)
         this.orderTimeTrend = echarts.init(this.$refs.orderTimeTrend)
         this.paymentType = echarts.init(this.$refs.paymentType)
         this.paymentState = echarts.init(this.$refs.paymentState)
-
-        this.paymentType.setOption(paymentTypeOption)
-        this.paymentState.setOption(paymentStateOption)
       })
     },
     exportDataHandle(params) {
@@ -256,12 +300,14 @@ export default {
           return
         }
         const echartsData = this._orderTrendDataTube(res.data)
+        this.orderTrendData = echartsData
         orderTrendOption.series[0].data = echartsData.line1
         orderTrendOption.series[1].data = echartsData.line2
         orderTrendOption.series[2].data = echartsData.line3
         orderTrendOption.series[3].data = echartsData.line4
         orderTrendOption.xAxis.data = echartsData.xAxis
         this.orderTrend.setOption(orderTrendOption)
+        this.checkedTypeChange()
       })
     },
     _orderTrendDataTube(data) {
@@ -316,13 +362,10 @@ export default {
         if (!res.data) {
           return
         }
-        // const echartsData = this._orderPatternDataTube(res.data)
-        // orderTrendOption.series[0].data = echartsData.line1
-        // orderTrendOption.series[1].data = echartsData.line2
-        // orderTrendOption.series[2].data = echartsData.line3
-        // orderTrendOption.series[3].data = echartsData.line4
-        // orderTrendOption.xAxis.data = echartsData.xAxis
-        // this.orderTrend.setOption(orderTrendOption)
+        paymentTypeOption.series[0].data[0].value = res.data[1].payCount
+        paymentTypeOption.series[0].data[1].value = res.data[0].payCount
+        paymentTypeOption.series[0].data[2].value = res.data[2].payCount
+        this.paymentType.setOption(paymentTypeOption)
       })
     },
     getOrderResult(paramsData) {
@@ -330,13 +373,9 @@ export default {
         if (!res.data) {
           return
         }
-        // const echartsData = this._orderPatternDataTube(res.data)
-        // orderTrendOption.series[0].data = echartsData.line1
-        // orderTrendOption.series[1].data = echartsData.line2
-        // orderTrendOption.series[2].data = echartsData.line3
-        // orderTrendOption.series[3].data = echartsData.line4
-        // orderTrendOption.xAxis.data = echartsData.xAxis
-        // this.orderTrend.setOption(orderTrendOption)
+        paymentStateOption.series[0].data[0].value = res.data[0].payCount
+        paymentStateOption.series[0].data[1].value = res.data[1].payCount
+        this.paymentState.setOption(paymentStateOption)
       })
     },
     getOrderConversion(paramsData) {
@@ -363,7 +402,9 @@ export default {
       })
     },
     handleSizeChange() {
-
+      this.getOrderReportForms({
+        ...this.paramsData
+      })
     },
     handleCurrentChange(val) {
       this.paginationInfo.pageIndex = val
@@ -374,7 +415,7 @@ export default {
     closeTooltip() {
       this.tooltipsInfo = {
         tooltipsVisible: false,
-        title: '说明',
+        title: '',
         content: ''
       }
     }
@@ -385,6 +426,10 @@ export default {
 <style lang="scss" scoped>
   .page-container {
     padding: 20px;
+
+    .el-checkbox-group {
+      padding-left: 50px;
+    }
 
     .el-icon-question {
       color: #999;

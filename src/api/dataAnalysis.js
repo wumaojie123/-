@@ -120,3 +120,57 @@ export function exportOrderAnalysisData(data) {
   const downloadUrl = `${process.env.BASE_API}${url}?${param(data)}`
   exportFile(downloadUrl)
 }
+
+// 获取点位投放效果数据
+export function getSiteEffectData(sendData) {
+  return request({
+    url: '/rest/analysis/location/yesterday',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取点位收益趋势
+export function getSiteIncomeTrend(sendData) {
+  return request({
+    url: '/rest/analysis/location/incomeTrend',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取设备占比
+export function getEquipmentStatusData(sendData) {
+  return request({
+    url: '/rest/analysis/equipment/status',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取设备类型占比
+export function getEquipmentTypeData(sendData) {
+  return request({
+    url: '/rest/analysis/equipment/hold',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取设备库存
+export function getEquipmentStorageData(sendData) {
+  return request({
+    url: '/rest/analysis/equipment/storage',
+    method: 'get',
+    params: sendData
+  })
+}
+
+// 获取设备总库存
+export function getEquipmentAllStorageData(sendData) {
+  return request({
+    url: '/rest/analysis/equipment/all/storage',
+    method: 'get',
+    params: sendData
+  })
+}

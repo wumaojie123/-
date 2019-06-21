@@ -4,10 +4,16 @@ import {
   echartsAxisLabelFormatter
 } from '@/utils/'
 
-var colors = ['#4fa8f9', '#6ec71e', '#d14a61', '#675bba']
+const colors = [
+    '#2ec7c9','#b6a2de','#5ab1ef','#ffb980','#d87a80',
+    '#8d98b3','#e5cf0d','#97b552','#95706d','#dc69aa',
+    '#07a2a4','#9a7fd1','#588dd5','#f5994e','#c05050',
+    '#59678c','#c9ab00','#7eb00a','#6f5553','#c14089'
+]
 
 // 订单趋势配参
 export const orderTrendOption = {
+  color: colors,
   xAxis: {
     type: 'category',
     boundaryGap: false,
@@ -91,6 +97,7 @@ export const orderTrendOption = {
 
 // 订单时间分布配参
 export const orderTimeTrendOption = {
+  color: colors,
   xAxis: {
     type: 'category',
     boundaryGap: false,
@@ -131,13 +138,16 @@ export const orderTimeTrendOption = {
 
 // 支付方式占比
 export const paymentTypeOption = {
-  color: ['#6ec71e', '#4fa8f9'],
+  color: colors,
   legend: {
     data: [{
       name: '微信',
       icon: 'rect'
     }, {
       name: '支付宝',
+      icon: 'rect'
+    }, {
+      name: '云闪付',
       icon: 'rect'
     }],
     x: 'center',
@@ -167,6 +177,10 @@ export const paymentTypeOption = {
       {
         name: '支付宝',
         value: 0
+      },
+      {
+        name: '云闪付',
+        value: 0
       }
     ]
   }]
@@ -174,7 +188,7 @@ export const paymentTypeOption = {
 
 // 支付结果
 export const paymentStateOption = {
-  color: ['#4fa8f9', '#d14a61'],
+  color: colors,
   legend: {
     data: [{
       name: '已成交',

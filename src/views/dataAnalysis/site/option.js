@@ -1,15 +1,50 @@
+/* eslint-disable */
+
 import {
   echartsAxisLabelFormatter
 } from '@/utils/'
 
-var colors = ['#5793f3', '#d14a61', '#675bba']
+const colors = [
+    '#2ec7c9','#b6a2de','#5ab1ef','#ffb980','#d87a80',
+    '#8d98b3','#e5cf0d','#97b552','#95706d','#dc69aa',
+    '#07a2a4','#9a7fd1','#588dd5','#f5994e','#c05050',
+    '#59678c','#c9ab00','#7eb00a','#6f5553','#c14089'
+]
+
+export const siteDict = [
+  { 'name': '商场', 'value': 'Mall_Aisle' },
+  { 'name': '电影院', 'value': 'Cinema' },
+  { 'name': 'KTV', 'value': 'KTV' },
+  { 'name': '游艺厅', 'value': 'Games_Hall' },
+  { 'name': '酒店', 'value': 'MALL,002' },
+  { 'name': '步行街', 'value': 'MALL,004' },
+  { 'name': '4S店', 'value': 'MALL,003' },
+  { 'name': '旅游景点', 'value': 'SCENIC_SPOT,001' },
+  { 'name': '机场', 'value': 'STATION,001' },
+  { 'name': '火车站', 'value': 'STATION,002' },
+  { 'name': '汽车站', 'value': 'STATION,003' },
+  { 'name': '地铁站', 'value': 'STATION,004' },
+  { 'name': '工厂', 'value': 'FACTORY,001' },
+  { 'name': '社区', 'value': 'COMMUNITY,001' },
+  { 'name': '办公楼', 'value': 'OFFICE,001' },
+  { 'name': '医院', 'value': 'HOSPITAL,001' },
+  { 'name': '政府机构', 'value': 'GOVERNMENT,001' },
+  { 'name': '大学', 'value': 'SCHOOL,005' },
+  { 'name': '初中', 'value': 'SCHOOL,003' },
+  { 'name': '小学', 'value': 'SCHOOL,002' },
+  { 'name': '幼儿园', 'value': 'SCHOOL,001' },
+  { 'name': '培训机构', 'value': 'SCHOOL,006' },
+  { 'name': '高中&职业技术学院', 'value': 'SCHOOL,004' },
+  { 'name': '其他', 'value': 'OTHERS,001' }
+]
 
 // 点位收益趋势配参
 export const siteEarnTrendOption = {
+  color: colors,
   xAxis: {
     type: 'category',
     boundaryGap: false,
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    data: []
   },
   yAxis: {
     type: 'value',
@@ -21,13 +56,7 @@ export const siteEarnTrendOption = {
     }
   },
   legend: {
-    data: [{
-      name: '商场-成交金额(元)',
-      icon: 'circle'
-    }, {
-      name: '游艺场-成交金额(元)',
-      icon: 'circle'
-    }],
+    data: [],
     itemGap: 20,
     bottom: 0,
     itemHeight: 15,
@@ -46,34 +75,18 @@ export const siteEarnTrendOption = {
     left: 50,
     right: 50
   },
-  series: [{
-    data: [820, 932, 901, 934, 1290, 1330, 1320],
-    name: '商场-成交金额(元)',
-    type: 'line',
-    areaStyle: {
-      color: 'rgba(79,168,249, .4)'
-    },
-    color: '#4fa8f9'
-  }, {
-    data: [400, 1932, 501, 734, 1790, 1330, 1920],
-    name: '游艺场-成交金额(元)',
-    type: 'line',
-    areaStyle: {
-      color: 'rgba(110,199,30, .4)'
-    },
-    color: '#6ec71e'
-  }]
+  series: []
 }
 
 // 点位投放效果配参
 export const siteInfoOption = {
-  color: ['#3398DB', '#6ec71e'],
+  color: colors,
   legend: {
     data: [{
       name: '设备数量(台)',
       icon: 'rect'
     }, {
-      name: '出货数量(台)',
+      name: '成交金额(元)',
       icon: 'rect'
     }],
     itemGap: 20,
@@ -117,7 +130,7 @@ export const siteInfoOption = {
     type: 'bar',
     barMaxWidth: 30,
     barGap: 0,
-    name: '出货数量(台)'
+    name: '成交金额(元)'
   }]
 }
 
@@ -129,25 +142,7 @@ export const siteInfoPercentOption = {
     textAlign: 'center'
   },
   legend: {
-    data: [{
-      name: 'a',
-      icon: 'rect'
-    }, {
-      name: 'b',
-      icon: 'rect'
-    }, {
-      name: 'c',
-      icon: 'rect'
-    }, {
-      name: 'd',
-      icon: 'rect'
-    }, {
-      name: 'e',
-      icon: 'rect'
-    }, {
-      name: 'f',
-      icon: 'rect'
-    }],
+    data: [],
     x: 'center',
     bottom: 20,
     itemHeight: 15,
@@ -155,7 +150,7 @@ export const siteInfoPercentOption = {
   },
   tooltip: {
     trigger: 'item',
-    formatter: '{ a } <br/>{ b }: { c } ({ d }%)',
+    formatter: '{a} <br/>{b}: {c} ({d}%)',
     textStyle: {
       fontSize: '11',
       color: '#fff'
@@ -171,31 +166,6 @@ export const siteInfoPercentOption = {
     labelLine: {
       show: false
     },
-    data: [
-      {
-        name: 'a',
-        value: 1
-      },
-      {
-        name: 'b',
-        value: 2
-      },
-      {
-        name: 'c',
-        value: 3
-      },
-      {
-        name: 'd',
-        value: 4
-      },
-      {
-        name: 'e',
-        value: 5
-      },
-      {
-        name: 'f',
-        value: 6
-      }
-    ]
+    data: []
   }]
 }

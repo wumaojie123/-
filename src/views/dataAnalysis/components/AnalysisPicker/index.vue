@@ -16,6 +16,7 @@
       <el-date-picker
         v-model="selectDates"
         :picker-options="pickerOptions"
+        :clearable="false"
         class="picker-date-item"
         type="daterange"
         align="center"
@@ -37,7 +38,7 @@
         <el-option
           v-for="item in agentMerchantList"
           :key="item.id"
-          :label="item.name + (item.phone || '')"
+          :label="(item.name || '') + (item.phone || '')"
           :value="item.id" />
       </el-select>
     </div>

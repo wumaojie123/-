@@ -1,8 +1,15 @@
+/* eslint-disable */
+
 import {
   echartsAxisLabelFormatter
 } from '@/utils/'
 
-var colors = ['#5793f3', '#d14a61', '#675bba']
+const colors = [
+    '#2ec7c9','#b6a2de','#5ab1ef','#ffb980','#d87a80',
+    '#8d98b3','#e5cf0d','#97b552','#95706d','#dc69aa',
+    '#07a2a4','#9a7fd1','#588dd5','#f5994e','#c05050',
+    '#59678c','#c9ab00','#7eb00a','#6f5553','#c14089'
+]
 
 // 在线数量占比配参
 export const onlineScaleOption = {
@@ -14,10 +21,10 @@ export const onlineScaleOption = {
   },
   legend: {
     data: [{
-      name: 'a',
+      name: '在线',
       icon: 'rect'
     }, {
-      name: 'b',
+      name: '离线',
       icon: 'rect'
     }],
     x: 'center',
@@ -27,7 +34,7 @@ export const onlineScaleOption = {
   },
   tooltip: {
     trigger: 'item',
-    formatter: '{ a } <br/>{ b }: { c } ({ d }%)',
+    formatter: '{a} <br/>{b}: {c} ({d}%)',
     textStyle: {
       fontSize: '11',
       color: '#fff'
@@ -45,12 +52,12 @@ export const onlineScaleOption = {
     },
     data: [
       {
-        name: 'a',
-        value: 1
+        name: '在线',
+        value: 0
       },
       {
-        name: 'b',
-        value: 2
+        name: '离线',
+        value: 0
       }
     ]
   }]
@@ -65,25 +72,7 @@ export const equipmentTypeScaleOption = {
     textAlign: 'center'
   },
   legend: {
-    data: [{
-      name: 'a',
-      icon: 'rect'
-    }, {
-      name: 'b',
-      icon: 'rect'
-    }, {
-      name: 'c',
-      icon: 'rect'
-    }, {
-      name: 'd',
-      icon: 'rect'
-    }, {
-      name: 'e',
-      icon: 'rect'
-    }, {
-      name: 'f',
-      icon: 'rect'
-    }],
+    data: [],
     x: 'center',
     bottom: 0,
     itemHeight: 15,
@@ -91,7 +80,7 @@ export const equipmentTypeScaleOption = {
   },
   tooltip: {
     trigger: 'item',
-    formatter: '{ a } <br/>{ b }: { c } ({ d }%)',
+    formatter: '{a} <br/>{b}: {c} ({d}%)',
     textStyle: {
       fontSize: '11',
       color: '#fff'
@@ -107,38 +96,13 @@ export const equipmentTypeScaleOption = {
     labelLine: {
       show: false
     },
-    data: [
-      {
-        name: 'a',
-        value: 1
-      },
-      {
-        name: 'b',
-        value: 2
-      },
-      {
-        name: 'c',
-        value: 3
-      },
-      {
-        name: 'd',
-        value: 4
-      },
-      {
-        name: 'e',
-        value: 5
-      },
-      {
-        name: 'f',
-        value: 6
-      }
-    ]
+    data: []
   }]
 }
 
 // 进出货配置参数
-export const importAndExportOption = {
-  color: ['#3398DB', '#6ec71e'],
+export const shipmentOption = {
+  color: colors,
   legend: {
     data: [{
       name: '进货数量(台)',
