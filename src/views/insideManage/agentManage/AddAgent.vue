@@ -37,7 +37,12 @@
         </el-select>
         <span class="input-anno">选择一位BD同事作为跟进负责人</span>
       </el-form-item>
-      <el-form-item v-if="allBusinProjects&&allBusinProjects.length>0" ref="projectsRef" class="project-form" label="经营项目" prop="project">
+      <el-form-item
+        v-if="allBusinProjects&&allBusinProjects.length>0"
+        ref="projectsRef"
+        class="project-form"
+        label="经营项目"
+        prop="project">
         <template v-for="(box,index) in allBusinProjects">
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
@@ -98,24 +103,15 @@
           <p>（3）为保证用户的信息安全，如非特殊情况，请不要轻易勾选 “自动关联”。</p>
         </div>
       </div>
-      <el-form-item label="权限设置" prop="authSetting" class="checkbox-group-form">
-        <el-checkbox-group v-model="baseInfo.authSetting" @change="authListChange">
-          <el-checkbox label="经营报表"/>
-          <el-checkbox label="数据分析" @change="dataAuthChange"/>
-          <el-checkbox-group v-model="dataAnalysisList" @change="subAuthChange">
-            <el-checkbox label="订单分析"/>
-            <el-checkbox label="设备分析"/>
-            <el-checkbox label="客户分析"/>
-            <el-checkbox label="区域分析"/>
-            <el-checkbox label="点位分析"/>
-            <el-checkbox label="商品分析"/>
-          </el-checkbox-group>
-          <el-checkbox label="代理列表"/>
-          <el-checkbox label="商家列表"/>
-          <el-checkbox label="设备管理"/>
-          <el-checkbox label="用户中心"/>
-          <el-checkbox label="广告分成"/>
-        </el-checkbox-group>
+      <el-form-item label="权限设置" class="checkbox-group-form">
+        <el-tree
+          ref="tree"
+          :data="authSettingList"
+          :props="treeProps"
+          show-checkbox
+          accordion
+          node-key="adResourcesId"
+          highlight-current/>
       </el-form-item>
       <br>
       <p style="margin: 10px;padding-bottom:10px;color: red;">
@@ -123,7 +119,7 @@
       </p>
       <el-button type="primary" @click="handleAccountInfo">创建</el-button>
     </el-form>
-    <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog" />
+    <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog"/>
   </div>
 </template>
 
@@ -131,11 +127,11 @@
 import { telCheck } from '@/utils/rules'
 import insideManage from '@/api/insideManage'
 import DialogAgent from './DialogAgent'
+
 export default {
   components: { DialogAgent },
   data() {
     return {
-      dataAnalysisList: [],
       baseInfo: {
         contractId: '',
         agentUserId: null,
@@ -146,7 +142,6 @@ export default {
         BD: '',
         codeValidate: '1',
         dataMonitor: '0',
-        authSetting: ['经营报表', '代理列表', '商家列表', '设备管理', '用户中心'],
         projects: [],
         account: '',
         password: '',
@@ -171,9 +166,6 @@ export default {
         dataMonitor: [
           { required: true }
         ],
-        authSetting: [
-          { required: true, message: '请选择至少一个权限' }
-        ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
           { min: 6, max: 16, message: '请输入6-16位的数字或字母', trigger: 'blur' }
@@ -186,7 +178,12 @@ export default {
       agentProject: [],
       showProjectTips: false, // 经营项目提示
       allBusinProjects: [], // 所有的经营项目
-      dialogVisiable: false
+      dialogVisiable: false,
+      authSettingList: [],
+      treeProps: {
+        children: 'menuResourcesList',
+        label: 'name'
+      }
     }
   },
   computed: {
@@ -203,24 +200,22 @@ export default {
   async created() {
     await this.getBDList()
     await this.getBusinProjects()
+    await this.getRolesList()
   },
   methods: {
-    checkChange() {
-      this.$nextTick(function() {
+    getRolesList() {
+      this.$nextTick(() => {
+        this.$refs.tree.setCheckedKeys([])
+        insideManage.agentManageRoleMapResourcesApi().then((res) => {
+          if (res.result === 0) {
+            this.authSettingList = res.data.map((v, i) => {
+              return {
+                ...v
+              }
+            })
+          }
+        })
       })
-    },
-    authListChange(selected) {
-      console.log('--log--:', selected)
-    },
-    dataAuthChange(selected) {
-      this.dataAnalysisList = selected ? ['订单分析', '设备分析', '客户分析', '区域分析', '点位分析', '商品分析'] : []
-    },
-    subAuthChange(selected) {
-      if (selected.length > 0 && !this.baseInfo.authSetting.includes('数据分析')) {
-        this.baseInfo.authSetting.push('数据分析')
-      } else if (selected.length === 0 && this.baseInfo.authSetting.includes('数据分析')) {
-        this.baseInfo.authSetting = this.baseInfo.authSetting.filter(v => v !== '数据分析')
-      }
     },
     getBDList() {
       insideManage.getBDList().then(res => {
@@ -300,7 +295,6 @@ export default {
       }
       return temp
     },
-
     // 获取代理商信息
     updataAgentInfo(submitData) {
       insideManage.addAgentInfo(submitData).then(res => {
@@ -318,6 +312,18 @@ export default {
       })
     },
     handleAccountInfo() {
+      const selectedMenu = this.$refs.tree.getCheckedNodes()
+      const selectedIDList = []
+      selectedMenu.map(item => {
+        selectedIDList.push(item.adResourcesId)
+      })
+      if (selectedIDList.length <= 0) {
+        this.$message({
+          message: '请设置权限',
+          type: 'error'
+        })
+        return
+      }
       if (this.projects.length === 0) {
         this.$message({
           message: '请至少选择一项经营项目!',
@@ -350,7 +356,10 @@ export default {
             agentBusinessIds: this.projects, // 经营项目
             agentUserId: info.agentUserId, // 代理商Id，修改时使用
             associatedType: Number(info.dataMonitor), // 关联类型  0：手动关联 1：自动关联
-            issend: Number(info.codeValidate) // 是否发生验证码  0：不发送 1：发送
+            issend: Number(info.codeValidate), // 是否发生验证码  0：不发送 1：发送
+            adRoleSaveParam: {
+              adResourceIds: selectedIDList
+            }
           }
           this.updataAgentInfo(submitData)
         } else {
@@ -383,19 +392,15 @@ export default {
   .input-300 {
     width: 350px;
   }
+
   .checkbox-group-form {
-    .el-checkbox{
-      display: block;
-      margin-left: 0;
-      width: 100px;
-    }
-    .el-checkbox-group {
-      margin-left: 30px;
-    }
+    margin-top: 20px;
   }
-  .project-form{
+
+  .project-form {
     position: relative;
-    .el-checkbox{
+
+    .el-checkbox {
       margin-left: 0;
       width: 150px;
       overflow: hidden;
@@ -404,16 +409,18 @@ export default {
       vertical-align: top;
     }
   }
-  .project-form label.el-form-item__label{
+
+  .project-form label.el-form-item__label {
     padding: 0 12px 0 0;
     box-sizing: border-box;
-    &::before{
+
+    &::before {
       content: '*';
       color: red;
       margin-right: 4px;
       position: absolute;
       font-weight: 700;
-      transform: translate3d(50%,50%,0);
+      transform: translate3d(50%, 50%, 0);
     }
   }
 
@@ -422,19 +429,24 @@ export default {
     font-size: 12px;
     color: #b1a8a8;
   }
-  .ovh{
+
+  .ovh {
     overflow: hidden;
   }
-  .fl{
+
+  .fl {
     float: left;
   }
-  .mb5{
+
+  .mb5 {
     margin-bottom: 5px;
   }
-  .mt10{
+
+  .mt10 {
     margin-top: 10px;
   }
-  .hint-info-panel{
+
+  .hint-info-panel {
     margin-left: 120px;
     color: #666;
     text-align: justify;
@@ -442,7 +454,8 @@ export default {
     font-size: 13px;
     overflow: hidden;
   }
-  .add-project{
+
+  .add-project {
     font-size: 14px;
     color: #3089dc;
     cursor: pointer;
