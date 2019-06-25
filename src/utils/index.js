@@ -340,3 +340,44 @@ export function mul(arg1, arg2) {
   }
   return Number(s1.replace('.', '')) * Number(s2.replace('.', '')) / Math.pow(10, m)
 }
+
+// 获取时间戳
+export function getTimeStamp(time) {
+  if (time) {
+    const newTime = ('' + time).replace(/-/g, '/')
+    return ((new Date(newTime)).valueOf() / 1000).toFixed(0)
+  } else {
+    return ((new Date()).valueOf() / 1000).toFixed(0)
+  }
+}
+
+function get2decimals(initNumber) {
+  var result = (Math.round(initNumber * 100) / 100).toFixed(2)
+  result = result.replace('.00', '')
+  return result
+}
+
+// echarts Y轴数据格式化
+export function echartsAxisLabelFormatter(value) {
+  if (value >= 1000 && value < 1000000) {
+    value = get2decimals(value) / 1000 + 'K'
+  } else if (value >= 1000000 && value < 1000000000) {
+    value = get2decimals(value) / 1000000 + 'M'
+  } else if (value >= 1000000000) {
+    value = get2decimals(value) / 1000000000 + 'B'
+  } else {
+    value = get2decimals(value)
+  }
+  return value
+}
+
+// 导出文件
+export function exportFile(url) {
+  const elink = document.createElement('a')
+  elink.style.display = 'none'
+  elink.href = url
+  elink.target = '_blank'
+  document.body.appendChild(elink)
+  elink.click()
+  document.body.removeChild(elink)
+}

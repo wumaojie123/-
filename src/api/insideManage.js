@@ -143,4 +143,12 @@ export default class insideManageAPI {
       data
     })
   }
+  // 查询一级代理下的所有菜单
+  static async agentManageRoleMapResourcesApi(params) {
+    return request({
+      url: '/agentManage/roleMapResources',
+      method: 'get',
+      params: params
+    })
+  }
 }

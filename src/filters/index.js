@@ -40,3 +40,16 @@ export function numberFormatter(num, digits) {
 export function toThousandFilter(num) {
   return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
 }
+
+// 转化货币
+export function moneyFilter(num) {
+  let moneyNum = +num
+  if (!num) {
+    moneyNum = 0
+    return moneyNum.toFixed(2)
+  } else if (isNaN(moneyNum)) {
+    return '-'
+  } else {
+    return moneyNum.toFixed(2)
+  }
+}

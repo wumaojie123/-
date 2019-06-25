@@ -1,32 +1,48 @@
- <!--suppress ALL -->
+<!--suppress ALL -->
 <template>
   <div class="content-area bd-manage">
     <el-menu default-active="1" class="el-menu-demo" mode="horizontal">
       <el-menu-item index="1">基础信息</el-menu-item>
     </el-menu>
-    <el-form ref="baseInfoRef" :model="baseInfo" :rules="baseInfo&&baseInfoRules" label-width="120px" label-position="left" style="margin-top: 20px;">
+    <el-form
+      ref="baseInfoRef"
+      :model="baseInfo"
+      :rules="baseInfo&&baseInfoRules"
+      label-width="120px"
+      label-position="left"
+      style="margin-top: 20px;">
       <el-form-item label="合同编号" prop="num">
-        <el-input v-model="baseInfo.num" placeholder="请输入合同编号" class="input-300" maxlength="64" />
+        <el-input v-model="baseInfo.num" placeholder="请输入合同编号" class="input-300" maxlength="64"/>
       </el-form-item>
       <el-form-item label="代理商名称" prop="agentUserName">
-        <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" class="input-300" maxlength="16" />
+        <el-input v-model="baseInfo.agentUserName" placeholder="请输入代理商名称" class="input-300" maxlength="16"/>
       </el-form-item>
       <el-form-item label="联系人姓名" prop="linkName">
-        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" class="input-300" maxlength="16" />
+        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" class="input-300" maxlength="16"/>
       </el-form-item>
       <el-form-item label="手机号码" prop="phone">
-        <el-input v-model="baseInfo.phone" placeholder="请输入手机号" type="number" class="input-300" maxlength="11" />
+        <el-input v-model="baseInfo.phone" placeholder="请输入手机号" type="number" class="input-300" maxlength="11"/>
       </el-form-item>
       <el-form-item label="联系地址" prop="address">
-        <el-input v-model="baseInfo.address" placeholder="请输入联系地址" style="width: 600px;" maxlength="40" />
+        <el-input v-model="baseInfo.address" placeholder="请输入联系地址" style="width: 600px;" maxlength="40"/>
       </el-form-item>
       <el-form-item label="BD同事" prop="BD">
         <el-select v-model="baseInfo.BD" :placeholder="`选择一位BD同事`" clearable class="input-300">
-          <el-option v-for="item in bdList" :key="item.id" :label="item.username" :value="item.adUserId" style="text-align: left" />
+          <el-option
+            v-for="item in bdList"
+            :key="item.id"
+            :label="item.username"
+            :value="item.adUserId"
+            style="text-align: left"/>
         </el-select>
         <span class="input-anno">选择一位BD同事作为跟进负责人</span>
       </el-form-item>
-      <el-form-item v-if="checkBoxList&&checkBoxList.length>0" ref="projectsRef" label="经营项目" prop="project">
+      <el-form-item
+        v-if="checkBoxList&&checkBoxList.length>0"
+        ref="projectsRef"
+        label="经营项目"
+        prop="project"
+        class="project-checkbox">
         <template v-for="(box, index) in checkBoxList">
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
@@ -62,7 +78,6 @@
           <p>（3）为保证用户的信息安全，如非特殊情况，请不要轻易勾选 “不需要短信验证码”。</p>
         </div>
       </div>
-
       <el-form-item label="数据监控" prop="dataMonitor" class="mb5 mt10">
         <el-radio-group v-model="baseInfo.dataMonitor">
           <el-radio label="0">手动关联</el-radio>
@@ -77,16 +92,27 @@
           <p>（3）为保证用户的信息安全，如非特殊情况，请不要轻易勾选 “自动关联”。</p>
         </div>
       </div>
+      <el-form-item label="权限设置" class="checkbox-group-form">
+        <el-tree
+          ref="tree"
+          :data="authSettingList"
+          :props="treeProps"
+          show-checkbox
+          accordion
+          node-key="adResourcesId"
+          highlight-current/>
+      </el-form-item>
       <br>
       <el-button type="primary" @click="handleAccountInfo">保存</el-button>
     </el-form>
-    <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog" />
+    <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog"/>
   </div>
 </template>
 <script>
 import { telCheck } from '@/utils/rules'
 import insideManage from '@/api/insideManage'
 import DialogAgent from './DialogAgent'
+
 export default {
   components: { DialogAgent },
   data() {
@@ -209,7 +235,13 @@ export default {
       checkBoxList: null,
       agentProject: [],
       allBusinProjects: [], // 所有的经营项目
-      dialogVisiable: false
+      dialogVisiable: false,
+      authSettingList: [],
+      treeProps: {
+        children: 'menuResourcesList',
+        label: 'name'
+      },
+      adRoleId: ''
     }
   },
   computed: {
@@ -229,10 +261,26 @@ export default {
     if (this.$route.query.id) {
       await this.getBDList()
       await this.getBusinProjects()
+      await this.getRolesList()
     }
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
+    getRolesList() {
+      this.$nextTick(() => {
+        this.$refs.tree.setCheckedKeys([])
+        insideManage.agentManageRoleMapResourcesApi().then((res) => {
+          if (res.result === 0) {
+            this.authSettingList = res.data.map((v, i) => {
+              return {
+                ...v
+              }
+            })
+          }
+        })
+      })
+    },
     checkChange() {
       this.$nextTick(function() {
         this.$refs['baseInfoRef'].clearValidate(['preject'])
@@ -309,7 +357,7 @@ export default {
       return restaurant => {
         return (
           restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
+            0
         )
       }
     },
@@ -320,6 +368,8 @@ export default {
         res => {
           const data = res && res.data
           if (data) {
+            this.$refs.tree.setCheckedNodes(data.adResourcesDTOS)
+            this.adRoleId = data.adRoleSaveParam.adRoleId
             this.baseInfo = {
               num: data.contractId,
               agentUserName: data.agentUserName,
@@ -341,17 +391,18 @@ export default {
               this.allBusinProjects.length > 0 &&
               this.allBusinProjects.map(item => {
                 this.agentProject &&
-                  this.agentProject.map(ele => {
-                    if (ele.agentBusinessId === item.id) {
-                      item.isChecked = true
-                    }
-                  })
+                this.agentProject.map(ele => {
+                  if (ele.agentBusinessId === item.id) {
+                    item.isChecked = true
+                  }
+                })
                 tempArr.push(item)
               })
             this.checkBoxList = tempArr
           }
         },
-        () => {}
+        () => {
+        }
       )
     },
     projectHandler(arr, id) {
@@ -382,7 +433,8 @@ export default {
             }, 500)
           }
         },
-        () => {}
+        () => {
+        }
       )
     },
     handleAccountInfo() {
@@ -397,6 +449,18 @@ export default {
                 tempCheckBoxArr.push(item.id)
               }
             })
+          }
+          const selectedMenu = this.$refs.tree.getCheckedNodes()
+          const selectedIDList = []
+          selectedMenu.map(item => {
+            selectedIDList.push(item.adResourcesId)
+          })
+          if (selectedIDList.length <= 0) {
+            this.$message({
+              message: '请设置权限',
+              type: 'error'
+            })
+            return
           }
           if (tempCheckBoxArr.length === 0) {
             this.$message({
@@ -418,7 +482,11 @@ export default {
             agentBusinessIds: tempCheckBoxArr, // 经营项目
             loginPhone: info.loginPhone, // 登录账号
             associatedType: Number(info.dataMonitor), // 关联类型  0：手动关联 1：自动关联
-            issend: Number(info.codeValidate) // 是否发生验证码  0：不发送 1：发送
+            issend: Number(info.codeValidate), // 是否发生验证码  0：不发送 1：发送
+            adRoleSaveParam: {
+              adResourceIds: selectedIDList,
+              adRoleId: this.adRoleId
+            }
           }
           this.updataAgentInfo(submitData)
         } else {
@@ -447,39 +515,71 @@ export default {
 }
 </script>
 
-<style scoped>
-.input-300 {
-  width: 350px;
-}
-.input-anno {
-  margin-left: 20px;
-  font-size: 12px;
-  color: #b1a8a8;
-}
-.ovh{
-  overflow: hidden;
-}
-.fl{
-  float: left;
-}
-.mb5{
-  margin-bottom: 5px;
-}
-.mt10{
-  margin-top: 10px;
-}
-.hint-info-panel{
-  margin-left: 120px;
-  color: #666;
-  text-align: justify;
-  line-height: 20px;
-  font-size: 13px;
-  overflow: hidden;
-}
-.add-project{
-  font-size: 14px;
-  color: #3089dc;
-  cursor: pointer;
-  margin-left: 10px;
-}
+<style lang="scss" scoped>
+  .checkbox-group-form {
+    margin-top: 20px;
+
+    .el-checkbox {
+      display: block;
+      margin-left: 0;
+      width: 100px;
+    }
+
+    .el-checkbox-group {
+      margin-left: 30px;
+    }
+  }
+
+  .project-checkbox {
+    .el-checkbox {
+      margin-left: 0;
+      width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+  }
+
+  .input-300 {
+    width: 350px;
+  }
+
+  .input-anno {
+    margin-left: 20px;
+    font-size: 12px;
+    color: #b1a8a8;
+  }
+
+  .ovh {
+    overflow: hidden;
+  }
+
+  .fl {
+    float: left;
+  }
+
+  .mb5 {
+    margin-bottom: 5px;
+  }
+
+  .mt10 {
+    margin-top: 10px;
+  }
+
+  .hint-info-panel {
+    margin-left: 120px;
+    color: #666;
+    text-align: justify;
+    line-height: 20px;
+    font-size: 13px;
+    overflow: hidden;
+  }
+
+  .add-project {
+    font-size: 14px;
+    color: #3089dc;
+    cursor: pointer;
+    margin-left: 10px;
+  }
 </style>

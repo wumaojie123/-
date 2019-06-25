@@ -1,250 +1,228 @@
 // 对应 用户中心 菜单
 
-export const userCenter = [
+const userCenter = [
   {
-    parentId: null,
-    value: '/userCenter',
-    name: '用户中心',
-    icon: 'user',
-    htmlTemplet: 'userCenter',
-    adResourcesId: 1102846,
-    selected: true,
-    seq: 0,
-    menuResourcesList: [
-      {
-        htmlTemplet: 'userCenter/baseInfo',
-        parentId: 'userCenter',
-        value: 'baseInfo',
-        name: '基本资料'
-      },
-      {
-        parentId: 'userCenter',
-        htmlTemplet: 'userCenter/ModifyPassword',
-        value: 'ModifyPassword',
-        name: '修改密码'
-      }
-    ]
-  },
-
-  {
-    parentId: null,
-    value: '/brand',
-    name: '品牌信息配置',
-    icon: 'component',
-    htmlTemplet: 'brand',
-    adResourcesId: 1102846,
-    selected: true,
-    seq: 3,
-    menuResourcesList: [
-      {
-        htmlTemplet: 'brand/ToBBrand',
-        parentId: 'brand',
-        value: 'toB',
-        name: '运行商后台配置'
-      },
-      {
-        parentId: 'brand',
-        htmlTemplet: 'brand/ToCBrand',
-        value: 'toCBrand',
-        name: '消费者前台配置'
-      }
-    ]
+    'adResourcesId': 1102156,
+    'parentId': null,
+    'name': '经营统计',
+    'value': '/businessCharts',
+    'selected': true,
+    'htmlTemplet': 'businessCharts',
+    'icon': 'chart',
+    'seq': 1,
+    'menuResourcesList': [{
+      'adResourcesId': 1102157,
+      'parentId': 1102156,
+      'name': '经营报表',
+      'value': 'businessStatistics',
+      'selected': true,
+      'htmlTemplet': 'managerstatis/ManagerReport',
+      'icon': null,
+      'seq': 0,
+      'buttonResourcesList': null
+    }]
   },
   {
-    value: '/agentManage',
-    htmlTemplet: 'agentManage',
-    alwaysShow: true,
-    name: '代理商管理',
-    icon: 'component',
-    menuResourcesList: [
-      {
-        value: 'angentList',
-        parentId: 'agentManage',
-        htmlTemplet: 'angentManage/AngentList',
-        redirect: '/agentManage/angentList/list',
-        name: '代理商列表',
-        menuResourcesList: [
-          {
-            value: 'list',
-            parentId: 'angentList',
-            htmlTemplet: 'angentManage/AngentList',
-            name: '代理商列表'
-          },
-          {
-            value: 'edit',
-            parentId: 'angentList',
-            htmlTemplet: 'angentManage/EditAngent',
-            name: '编辑代理商'
-          },
-          {
-            value: 'add',
-            parentId: 'angentList',
-            htmlTemplet: 'angentManage/NewAngent',
-            name: '新增代理商'
-          }
-        ]
-      }
-    ]
+    'adResourcesId': 1102160,
+    'parentId': null,
+    'name': '代理商管理',
+    'value': '/agentManage',
+    'selected': true,
+    'htmlTemplet': 'agentManage',
+    'icon': 'superagent',
+    'seq': 2,
+    'menuResourcesList': [{
+      'adResourcesId': 1102161,
+      'parentId': 1102160,
+      'name': '代理列表',
+      'value': 'agentList',
+      'selected': true,
+      'htmlTemplet': 'agentManage/AgentsList',
+      'icon': null,
+      'seq': 0,
+      'buttonResourcesList': null
+    }]
   },
   {
-    value: '/businessCharts',
-    name: '经营统计',
-    htmlTemplet: 'businessCharts',
-    alwaysShow: true,
+    'adResourcesId': 1102287,
+    'parentId': null,
+    'name': '商家管理',
+    'value': '/businessManage',
+    'selected': true,
+    'htmlTemplet': 'businessManage',
+    'icon': 'component',
+    'seq': 3,
+    'menuResourcesList': [{
+      'adResourcesId': 1102288,
+      'parentId': 1102287,
+      'name': '商家列表',
+      'value': 'businessList',
+      'selected': true,
+      'htmlTemplet': 'businessManage/BusinessList',
+      'icon': null,
+      'seq': 0,
+      'buttonResourcesList': null
+    }]
+  },
+  {
+    'adResourcesId': 1102167,
+    'parentId': null,
+    'name': '设备管理',
+    'value': '/deviceManage',
+    'selected': true,
+    'htmlTemplet': 'deviceManage',
+    'icon': 'list',
+    'seq': 4,
+    'menuResourcesList': [{
+      'adResourcesId': 1102168,
+      'parentId': 1102167,
+      'name': '已转移设备',
+      'value': 'deviceList',
+      'selected': true,
+      'htmlTemplet': 'deviceManage/DeviceList',
+      'icon': null,
+      'seq': 0,
+      'buttonResourcesList': null
+    }, {
+      'adResourcesId': 1102244,
+      'parentId': 1102167,
+      'name': '待转移设备',
+      'value': 'transfer',
+      'selected': true,
+      'htmlTemplet': 'deviceManage/deviceTransfer',
+      'icon': null,
+      'seq': 0,
+      'buttonResourcesList': null
+    }]
+  },
+  {
+    'adResourcesId': 1102170,
+    'parentId': null,
+    'name': '用户中心',
+    'value': '/userCenter',
+    'selected': true,
+    'htmlTemplet': 'userCenter',
+    'icon': 'user',
+    'seq': 5,
+    'menuResourcesList': [{
+      'adResourcesId': 1102171,
+      'parentId': 1102170,
+      'name': '基本资料',
+      'value': 'userInfo',
+      'selected': true,
+      'htmlTemplet': 'userCenter/baseInfo',
+      'icon': null,
+      'seq': 0,
+      'buttonResourcesList': null
+    }, {
+      'adResourcesId': 1102172,
+      'parentId': 1102170,
+      'name': '修改密码',
+      'value': 'ModifyPassword',
+      'selected': true,
+      'htmlTemplet': 'userCenter/ModifyPassword',
+      'icon': null,
+      'seq': 0,
+      'buttonResourcesList': null
+    }]
+  },
+  {
+    'adResourcesId': 1102678,
+    'parentId': null,
+    'name': '广告分成',
+    'value': '/advertiseDivideOne',
+    'selected': true,
+    'htmlTemplet': 'advertiseDivideOne',
+    'icon': 'addivide',
+    'seq': null,
+    'menuResourcesList': [{
+      'adResourcesId': 1102679,
+      'parentId': 1102678,
+      'name': '广告分成',
+      'value': 'withdrawRecord',
+      'selected': true,
+      'htmlTemplet': 'advertiseDivideOne/WithdrawRecord',
+      'icon': null,
+      'seq': null,
+      'buttonResourcesList': null
+    }]
+  }, {
+    'adResourcesId': 1102826,
+    'parentId': null,
+    'name': '品牌信息配置',
+    'value': '/brand',
+    'selected': true,
+    'htmlTemplet': 'brand',
+    'icon': 'component',
+    'seq': null,
+    'menuResourcesList': [{
+      'adResourcesId': 1102828,
+      'parentId': 1102826,
+      'name': '消费者前台配置',
+      'value': 'toCBrand',
+      'selected': true,
+      'htmlTemplet': 'brand/ToCBrand',
+      'icon': null,
+      'seq': null,
+      'buttonResourcesList': null
+    }, {
+      'adResourcesId': 1102827,
+      'parentId': 1102826,
+      'name': '运营商后台配置',
+      'value': 'toB',
+      'selected': true,
+      'htmlTemplet': 'brand/ToBBrand',
+      'icon': null,
+      'seq': null,
+      'buttonResourcesList': null
+    }]
+  },
+  {
+    value: '/dataAnalysis',
+    name: '数据分析',
+    htmlTemplet: 'dataAnalysis',
     icon: 'chart',
     menuResourcesList: [
       {
-        value: 'businessStatistics',
-        htmlTemplet: 'managerstatis/ManagerReport',
-        parentId: 'businessCharts',
-        name: '经营报表'
-      }
-    ]
-  },
-  // 2018-12-17新增
-  {
-    value: '/super',
-    name: '总控',
-    htmlTemplet: 'super',
-    icon: 'chart',
-    alwaysShow: true,
-    menuResourcesList: [
-      {
-        icon: 'peoples',
-        value: 'agent',
-        htmlTemplet: 'agent/AgentList',
-        parentId: 'super',
-        name: '一级代理'
-      }
-    ]
-  },
-  {
-    value: '/deviceManage',
-    htmlTemplet: 'deviceManage',
-    name: '设备管理',
-    alwaysShow: true,
-    icon: 'list',
-    menuResourcesList: [
-      {
-        value: 'deviceList',
-        parentId: 'deviceList',
-        name: '设备列表',
-        htmlTemplet: 'deviceManage/DeviceList'
+        htmlTemplet: 'dataAnalysis/order/index',
+        name: '订单分析',
+        value: '/dataAnalysis/order',
+        parentId: '/dataAnalysis'
       },
       {
-        value: 'transfer',
-        parentId: 'deviceList',
-        name: '转移设备',
-        htmlTemplet: 'deviceManage/deviceTransfer'
+        htmlTemplet: 'dataAnalysis/equipment/index',
+        value: '/dataAnalysis/equipment',
+        name: '设备分析',
+        parentId: '/dataAnalysis'
       },
       {
-        value: 'deviceImport',
-        parentId: 'deviceList',
-        name: '批量导入设备',
-        htmlTemplet: 'deviceManage/deviceImport'
-      }
-    ]
-  },
-  {
-    value: '/businessManage',
-    name: '商家管理',
-    htmlTemplet: 'businessManage',
-    icon: 'component',
-    menuResourcesList: [
-      {
-        htmlTemplet: 'businessManage/BusinessList',
-        value: 'businessList',
-        name: '商家列表',
-        parentId: 'businessManage'
+        htmlTemplet: 'dataAnalysis/site/index',
+        value: '/dataAnalysis/site',
+        name: '点位分析',
+        parentId: '/dataAnalysis'
       },
       {
-        htmlTemplet: 'businessManage/AddBusiness',
-        value: 'addBusiness',
-        name: '新增商家',
-        parentId: 'businessManage'
+        htmlTemplet: 'dataAnalysis/zone/index',
+        value: '/dataAnalysis/zone',
+        name: '区域分析',
+        parentId: '/dataAnalysis'
       },
       {
-        htmlTemplet: 'businessManage/EditBusiness',
-        name: '编辑商家',
-        value: 'editBusiness',
-        parentId: 'businessManage'
-      }
-    ]
-  },
-  {
-    value: '/insideManage',
-    name: '内部管理',
-    htmlTemplet: 'insideManage',
-    icon: 'peoples',
-    menuResourcesList: [
-      {
-        value: 'agentRoleManage',
-        parentId: 'insideManage',
-        htmlTemplet: 'insideManage/agentManage/AgentmanageLayout',
-        name: '一级代理商管理',
-        redirect: '/insideManage/agentRoleManage/agentsList',
-        // alwaysShow: true,
-        menuResourcesList: [
-          {
-            value: 'agentsList',
-            parentId: 'agentRoleManage',
-            htmlTemplet: 'insideManage/agentManage/AgentsList',
-            name: '一级代理商列表',
-            hidden: false
-          },
-          {
-            value: 'subAgent/:id(\\d+)',
-            parentId: 'agentRoleManage',
-            htmlTemplet: 'insideManage/agentManage/ShowSubAgent',
-            name: '查看下级代理',
-            hidden: true
-          },
-          {
-            value: 'createAgent',
-            parentId: 'agentRoleManage',
-            htmlTemplet: 'insideManage/agentManage/AddAgent',
-            name: '代理商新增',
-            hidden: true
-          },
-          {
-            value: 'agentEdit/:id(\\d+)',
-            parentId: 'agentRoleManage',
-            htmlTemplet: 'insideManage/agentManage/EditAgent',
-            name: '代理商编辑',
-            hidden: true
-          }
-        ]
-      },
-      {
-        value: 'bdRoleManage',
-        htmlTemplet: 'insideManage/bdManage/BdManageLayout',
-        redirect: '/insideManage/bdRoleManage/bdList',
-        name: 'BD人员',
-        parentId: 'bdRoleManage',
-        menuResourcesList: [
-          {
-            value: 'bdList',
-            htmlTemplet: 'insideManage/bdManage/BdList',
-            parentId: 'bdRoleManage',
-            name: 'BD人员列表',
-            hidden: false
-          },
-          {
-            value: 'addBD',
-            htmlTemplet: 'insideManage/bdManage/AddBd',
-            parentId: 'bdRoleManage',
-            name: '新增BD',
-            hidden: true
-          }
-          // {
-          //   value: 'editBD/:id(\\d+)',
-          //   htmlTemplet: 'insideManage/bdManage/editBd',
-          //   parentId: 'bdRoleManage',
-          //   name: '修改BD',
-          //   hidden: true
-          // }
-        ]
+        htmlTemplet: 'dataAnalysis/product/index',
+        name: '商品分析',
+        value: '/dataAnalysis/product',
+        parentId: '/dataAnalysis'
       }
     ]
   }
 ]
+
+export default {
+  getMenu: config => {
+    return {
+      result: 0,
+      description: '',
+      data: userCenter
+    }
+  }
+}

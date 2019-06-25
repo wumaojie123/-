@@ -37,7 +37,12 @@
         </el-select>
         <span class="input-anno">选择一位BD同事作为跟进负责人</span>
       </el-form-item>
-      <el-form-item v-if="allBusinProjects&&allBusinProjects.length>0" ref="projectsRef" class="project-form" label="经营项目" prop="project">
+      <el-form-item
+        v-if="allBusinProjects&&allBusinProjects.length>0"
+        ref="projectsRef"
+        class="project-form"
+        label="经营项目"
+        prop="project">
         <template v-for="(box,index) in allBusinProjects">
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
@@ -87,16 +92,34 @@
       <div class="hint-info-panel">
         <div class="fl">说明：</div>
         <div class="ovh">
-          <p>（1）若勾选了 “手动关联” ，则BD将设备导入给该一级代理后，该一级代理必须在代理后台创建（或绑定）下级商家 ，才能看到的设备的经营数据。</p>
-          <p>（2）若勾选了“自动关联”，则该一级代理无需在代理后台手动创建（或绑定）下级商家，只要BD将设备导入给该一级代理，系统就会自动关联并显示下级商家和经营数据。</p>
+          <p>
+            （1）若勾选了 “手动关联” ，则BD将设备导入给该一级代理后，
+            该一级代理必须在代理后台创建（或绑定）下级商家 ，才能看到的设备的经营数据。
+          </p>
+          <p>
+            （2）若勾选了“自动关联”，则该一级代理无需在代理后台手动创建（或绑定）下级商家，
+            只要BD将设备导入给该一级代理，系统就会自动关联并显示下级商家和经营数据。
+          </p>
           <p>（3）为保证用户的信息安全，如非特殊情况，请不要轻易勾选 “自动关联”。</p>
         </div>
       </div>
+      <el-form-item label="权限设置" class="checkbox-group-form">
+        <el-tree
+          ref="tree"
+          :data="authSettingList"
+          :props="treeProps"
+          show-checkbox
+          accordion
+          node-key="adResourcesId"
+          highlight-current/>
+      </el-form-item>
       <br>
-      <p style="margin: 10px;padding-bottom:10px;color: red;">{{ `注意：如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码。` }}</p>
+      <p style="margin: 10px;padding-bottom:10px;color: red;">
+        {{ `注意：如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码。` }}
+      </p>
       <el-button type="primary" @click="handleAccountInfo">创建</el-button>
     </el-form>
-    <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog" />
+    <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog"/>
   </div>
 </template>
 
@@ -104,6 +127,7 @@
 import { telCheck } from '@/utils/rules'
 import insideManage from '@/api/insideManage'
 import DialogAgent from './DialogAgent'
+
 export default {
   components: { DialogAgent },
   data() {
@@ -154,7 +178,12 @@ export default {
       agentProject: [],
       showProjectTips: false, // 经营项目提示
       allBusinProjects: [], // 所有的经营项目
-      dialogVisiable: false
+      dialogVisiable: false,
+      authSettingList: [],
+      treeProps: {
+        children: 'menuResourcesList',
+        label: 'name'
+      }
     }
   },
   computed: {
@@ -171,10 +200,21 @@ export default {
   async created() {
     await this.getBDList()
     await this.getBusinProjects()
+    await this.getRolesList()
   },
   methods: {
-    checkChange() {
-      this.$nextTick(function() {
+    getRolesList() {
+      this.$nextTick(() => {
+        this.$refs.tree.setCheckedKeys([])
+        insideManage.agentManageRoleMapResourcesApi().then((res) => {
+          if (res.result === 0) {
+            this.authSettingList = res.data.map((v, i) => {
+              return {
+                ...v
+              }
+            })
+          }
+        })
       })
     },
     getBDList() {
@@ -255,7 +295,6 @@ export default {
       }
       return temp
     },
-
     // 获取代理商信息
     updataAgentInfo(submitData) {
       insideManage.addAgentInfo(submitData).then(res => {
@@ -273,6 +312,18 @@ export default {
       })
     },
     handleAccountInfo() {
+      const selectedMenu = this.$refs.tree.getCheckedNodes()
+      const selectedIDList = []
+      selectedMenu.map(item => {
+        selectedIDList.push(item.adResourcesId)
+      })
+      if (selectedIDList.length <= 0) {
+        this.$message({
+          message: '请设置权限',
+          type: 'error'
+        })
+        return
+      }
       if (this.projects.length === 0) {
         this.$message({
           message: '请至少选择一项经营项目!',
@@ -305,7 +356,10 @@ export default {
             agentBusinessIds: this.projects, // 经营项目
             agentUserId: info.agentUserId, // 代理商Id，修改时使用
             associatedType: Number(info.dataMonitor), // 关联类型  0：手动关联 1：自动关联
-            issend: Number(info.codeValidate) // 是否发生验证码  0：不发送 1：发送
+            issend: Number(info.codeValidate), // 是否发生验证码  0：不发送 1：发送
+            adRoleSaveParam: {
+              adResourceIds: selectedIDList
+            }
           }
           this.updataAgentInfo(submitData)
         } else {
@@ -338,20 +392,35 @@ export default {
   .input-300 {
     width: 350px;
   }
-  .project-form{
-    position: relative;
+
+  .checkbox-group-form {
+    margin-top: 20px;
   }
-  .project-form label.el-form-item__label{
+
+  .project-form {
+    position: relative;
+
+    .el-checkbox {
+      margin-left: 0;
+      width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: top;
+    }
+  }
+
+  .project-form label.el-form-item__label {
     padding: 0 12px 0 0;
     box-sizing: border-box;
-    &::before{
+
+    &::before {
       content: '*';
       color: red;
       margin-right: 4px;
       position: absolute;
       font-weight: 700;
-      transform: translate3d(50%,50%,0);
-      /*top: 0;*/
+      transform: translate3d(50%, 50%, 0);
     }
   }
 
@@ -360,19 +429,24 @@ export default {
     font-size: 12px;
     color: #b1a8a8;
   }
-  .ovh{
+
+  .ovh {
     overflow: hidden;
   }
-  .fl{
+
+  .fl {
     float: left;
   }
-  .mb5{
+
+  .mb5 {
     margin-bottom: 5px;
   }
-  .mt10{
+
+  .mt10 {
     margin-top: 10px;
   }
-  .hint-info-panel{
+
+  .hint-info-panel {
     margin-left: 120px;
     color: #666;
     text-align: justify;
@@ -380,7 +454,8 @@ export default {
     font-size: 13px;
     overflow: hidden;
   }
-  .add-project{
+
+  .add-project {
     font-size: 14px;
     color: #3089dc;
     cursor: pointer;
