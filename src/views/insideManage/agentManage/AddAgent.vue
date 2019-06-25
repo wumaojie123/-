@@ -47,8 +47,6 @@
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
         <span class="add-project" @click="dialogVisiable = true">+添加经营项目</span>
-        <br>
-        <!-- el-form-item__error -->
         <span class="input-anno " style="color: red;">此处的经营项目是记录该代理的经营范围，仅作为记录用途。</span>
       </el-form-item>
       <br>
@@ -456,9 +454,9 @@ export default {
   }
 
   .add-project {
+    display: block;
     font-size: 14px;
     color: #3089dc;
     cursor: pointer;
-    margin-left: 10px;
   }
 </style>
