@@ -116,6 +116,7 @@
         {{ `注意：如果该账号未注册，则会直接开通注册，初始密码为16881688，请提醒及时修改密码。` }}
       </p>
       <el-button type="primary" @click="handleAccountInfo">创建</el-button>
+      <p>test-truexin</p>
     </el-form>
     <DialogAgent :visiable="dialogVisiable" :projects="allBusinProjects" @toggle-dialog="toggleDialog"/>
   </div>
@@ -200,7 +201,6 @@ export default {
     await this.getBusinProjects()
     await this.getDefaultCheckedList()
     await this.getRolesList()
-    console.log('--truexin--:', 222520)
   },
   methods: {
     getDefaultCheckedList() {
