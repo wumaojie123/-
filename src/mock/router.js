@@ -1,3 +1,4 @@
+/* eslint-disable */
 // 对应 用户中心 菜单
 
 const userCenter = [

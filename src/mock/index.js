@@ -3,7 +3,7 @@ import Mock from 'mockjs'
 // import articleAPI from './article'
 // import remoteSearchAPI from './remoteSearch'
 // import transactionAPI from './transaction'
-import menuAPI from './router.js'
+// import menuAPI from './router.js'
 // Mock.setup({
 //   timeout: '350-600'
 // })
@@ -27,6 +27,6 @@ import menuAPI from './router.js'
 // Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
 
 // 菜单相关
-Mock.mock(/\/authority\/getCatalogAndMenu/, 'get', menuAPI.getMenu)
+// Mock.mock(/\/authority\/getCatalogAndMenu/, 'get', menuAPI.getMenu)
 
 export default Mock
