@@ -47,8 +47,6 @@
           <el-checkbox :key="index" v-model="box.isChecked" :checked="box.isChecked" :label="box.name"/>
         </template>
         <span class="add-project" @click="dialogVisiable = true">+添加经营项目</span>
-        <br>
-        <!-- el-form-item__error -->
         <span class="input-anno " style="color: red;">此处的经营项目是记录该代理的经营范围，仅作为记录用途。</span>
       </el-form-item>
       <br>
@@ -200,19 +198,23 @@ export default {
   async created() {
     await this.getBDList()
     await this.getBusinProjects()
+    await this.getDefaultCheckedList()
     await this.getRolesList()
   },
   methods: {
+    getDefaultCheckedList() {
+      insideManage.agentManageListDefaultMenuApi().then((res) => {
+        if (res.result === 0) {
+          this.$refs.tree.setCheckedNodes(res.data)
+        }
+      })
+    },
     getRolesList() {
       this.$nextTick(() => {
         this.$refs.tree.setCheckedKeys([])
         insideManage.agentManageRoleMapResourcesApi().then((res) => {
           if (res.result === 0) {
-            this.authSettingList = res.data.map((v, i) => {
-              return {
-                ...v
-              }
-            })
+            this.authSettingList = res.data
           }
         })
       })
@@ -456,9 +458,9 @@ export default {
   }
 
   .add-project {
+    display: block;
     font-size: 14px;
     color: #3089dc;
     cursor: pointer;
-    margin-left: 10px;
   }
 </style>

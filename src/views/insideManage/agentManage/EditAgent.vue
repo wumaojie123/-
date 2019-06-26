@@ -241,7 +241,8 @@ export default {
         children: 'menuResourcesList',
         label: 'name'
       },
-      adRoleId: ''
+      adRoleId: '',
+      agentType: ''
     }
   },
   computed: {
@@ -272,11 +273,7 @@ export default {
         this.$refs.tree.setCheckedKeys([])
         insideManage.agentManageRoleMapResourcesApi().then((res) => {
           if (res.result === 0) {
-            this.authSettingList = res.data.map((v, i) => {
-              return {
-                ...v
-              }
-            })
+            this.authSettingList = res.data
           }
         })
       })
@@ -370,6 +367,7 @@ export default {
           if (data) {
             this.$refs.tree.setCheckedNodes(data.adResourcesDTOS)
             this.adRoleId = data.adRoleSaveParam.adRoleId
+            this.agentType = data.type
             this.baseInfo = {
               num: data.contractId,
               agentUserName: data.agentUserName,
@@ -470,7 +468,7 @@ export default {
             return false
           }
           const submitData = {
-            // type: 1, // 0:BD用户 1:一级代理商  2:子级代理商
+            type: this.agentType, // 0:BD用户 1:一级代理商  2:子级代理商
             // code: '', // 短信验证码
             contractId: info.num, // 合同号
             agentUserName: info.agentUserName, // 代理商名称
@@ -577,9 +575,9 @@ export default {
   }
 
   .add-project {
+    display: block;
     font-size: 14px;
     color: #3089dc;
     cursor: pointer;
-    margin-left: 10px;
   }
 </style>

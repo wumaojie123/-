@@ -151,4 +151,12 @@ export default class insideManageAPI {
       params: params
     })
   }
+  // 查询默认选中的菜单ID
+  static async agentManageListDefaultMenuApi(params) {
+    return request({
+      url: '/agentManage/listDefaultMenu',
+      method: 'get',
+      params: params
+    })
+  }
 }
