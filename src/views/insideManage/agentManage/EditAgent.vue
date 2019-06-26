@@ -273,11 +273,7 @@ export default {
         this.$refs.tree.setCheckedKeys([])
         insideManage.agentManageRoleMapResourcesApi().then((res) => {
           if (res.result === 0) {
-            this.authSettingList = res.data.map((v, i) => {
-              return {
-                ...v
-              }
-            })
+            this.authSettingList = res.data
           }
         })
       })

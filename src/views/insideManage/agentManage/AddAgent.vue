@@ -198,19 +198,23 @@ export default {
   async created() {
     await this.getBDList()
     await this.getBusinProjects()
+    await this.getDefaultCheckedList()
     await this.getRolesList()
   },
   methods: {
+    getDefaultCheckedList() {
+      insideManage.agentManageListDefaultMenuApi().then((res) => {
+        if (res.result === 0) {
+          this.$refs.tree.setCheckedNodes(res.data)
+        }
+      })
+    },
     getRolesList() {
       this.$nextTick(() => {
         this.$refs.tree.setCheckedKeys([])
         insideManage.agentManageRoleMapResourcesApi().then((res) => {
           if (res.result === 0) {
-            this.authSettingList = res.data.map((v, i) => {
-              return {
-                ...v
-              }
-            })
+            this.authSettingList = res.data
           }
         })
       })
