@@ -23,6 +23,10 @@ const dataAnalysis = {
       state
     }) {
       return new Promise((resolve, reject) => {
+        if (state.isGetArea) {
+          resolve()
+          return
+        }
         getAreaList().then(res => {
           if (res.result === 0) {
             const areaList = [{
@@ -42,6 +46,10 @@ const dataAnalysis = {
       state
     }) {
       return new Promise((resolve, reject) => {
+        if (state.isGetAgentMerchant) {
+          resolve()
+          return
+        }
         getAgentAndMerchant().then(res => {
           if (res.result === 0) {
             const merchantList = []
