@@ -44,10 +44,7 @@ const dataAnalysis = {
       return new Promise((resolve, reject) => {
         getAgentAndMerchant().then(res => {
           if (res.result === 0) {
-            const merchantList = [{
-              id: -1,
-              name: '全部'
-            }]
+            const merchantList = []
             commit('SET_AGENT_MERCHANT', merchantList.concat(res.data))
             resolve()
           } else {

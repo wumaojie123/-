@@ -195,9 +195,15 @@ export default {
     },
     getEquipmentAllStorageData(params) {
       getEquipmentAllStorageData(params).then(res => {
-        this.shipmentInfoList[0].count = res.data.storageCount
-        this.shipmentInfoList[1].count = res.data.outCount
-        this.shipmentInfoList[2].count = res.data.stock
+        if (!res.data) {
+          this.shipmentInfoList[0].count = 0
+          this.shipmentInfoList[1].count = 0
+          this.shipmentInfoList[2].count = 0
+        } else {
+          this.shipmentInfoList[0].count = res.data.storageCount
+          this.shipmentInfoList[1].count = res.data.outCount
+          this.shipmentInfoList[2].count = res.data.stock
+        }
       })
     },
     showTooltip() {

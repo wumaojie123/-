@@ -36,9 +36,13 @@
         placeholder="请选择"
         @change="merchantChange">
         <el-option
+          key="-1"
+          :value="-1"
+          label="全部" />
+        <el-option
           v-for="item in agentMerchantList"
           :key="item.id"
-          :label="(item.name || '') + (item.phone || '')"
+          :label="(item.name || '') + '(' + (item.agent ? '代理账号':'商家账号') + (item.phone || '') + ')'"
           :value="item.id" />
       </el-select>
     </div>
