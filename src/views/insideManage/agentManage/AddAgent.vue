@@ -200,6 +200,7 @@ export default {
     await this.getBusinProjects()
     await this.getDefaultCheckedList()
     await this.getRolesList()
+    console.log('--log--:', 520)
   },
   methods: {
     getDefaultCheckedList() {
