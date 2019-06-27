@@ -130,19 +130,19 @@ export default {
           txt: '在架商品种数',
           tips: '“在架商品种数” 指统计时间段内，关联了设备的商品种类数量。',
           count: null,
-          type: 'quantity'
+          type: 'sortCount'
         },
         {
           txt: '动销商品种数',
           tips: '“动销商品种数” 指统计时间段内，销量 > 0的商品种类数量。',
           count: null,
-          type: 'sortCount'
+          type: 'sortSales'
         },
         {
           txt: '商品出货量',
           tips: '“商品出货量” 指统计时间段内，出货的总数量。',
           count: null,
-          type: 'sortSales'
+          type: 'quantity'
         }
       ],
       salesTrend: null,
