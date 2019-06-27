@@ -107,9 +107,9 @@ export const doneNumOption = {
     {
       type: 'value',
       name: '',
-      min: 0,
-      max: 400,
-      interval: 50,
+      // min: 0,
+      // max: 400,
+      // interval: 50,
       axisLabel: {
         formatter: '{value}'
       }
