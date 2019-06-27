@@ -211,6 +211,7 @@ export default {
             equipmentTypeName: '全部'
           }]
           this.equipmentTypeOptions = this.equipmentTypeOptions.concat(res.data)
+          this.lyyEquipmentTypeId = -1
         }
       })
     },
@@ -227,7 +228,7 @@ export default {
     merchantChange(val) {
       this.agentMerchantList.forEach(item => {
         if (val === item.id) {
-          this.agent = item.agent || true
+          this.agent = !!item.agent
         }
       })
       const sendData = {
