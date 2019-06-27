@@ -220,7 +220,7 @@ export default {
       const end = new Date(new Date().toDateString())
       const start = new Date()
       end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
-      start.setTime(end.getTime() + 3600 * 1000 * 24 * quicklyValue)
+      start.setTime(end.getTime() + 3600 * 1000 * 24 * (quicklyValue + 1))
       this.curQuicklySelect = quicklyValue
       this.selectDates = [parseTime(start, '{y}-{m}-{d}'), parseTime(end, '{y}-{m}-{d}')]
     },
