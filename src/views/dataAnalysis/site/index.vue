@@ -84,8 +84,8 @@ export default {
       const seriesData2 = []
       data.forEach(item => {
         xAxisData.push(this.searchSiteName(item.location))
-        seriesData1.push(item.equipmentCount)
-        seriesData2.push(item.amount)
+        seriesData1.push(item.equipmentCount || 0)
+        seriesData2.push(item.amount || 0)
       })
       return {
         xAxisData,

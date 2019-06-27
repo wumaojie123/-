@@ -319,10 +319,10 @@ export default {
       const xAxis = []
       data.forEach(item => {
         xAxis.push(item.statisticsDate)
-        line1.push(item.payCount)
-        line2.push(item.payAmount)
-        line3.push(item.refundCount)
-        line4.push(item.refundAmount)
+        line1.push(item.payCount || 0)
+        line2.push(item.payAmount || 0)
+        line3.push(item.refundCount || 0)
+        line4.push(item.refundAmount || 0)
       })
 
       return {
