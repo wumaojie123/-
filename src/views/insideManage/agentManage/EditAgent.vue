@@ -260,9 +260,9 @@ export default {
   },
   async created() {
     if (this.$route.query.id) {
+      await this.getRolesList()
       await this.getBDList()
       await this.getBusinProjects()
-      await this.getRolesList()
     }
   },
   mounted() {
