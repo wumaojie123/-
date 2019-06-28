@@ -1,12 +1,7 @@
 <template lang="html">
   <div class="page-container">
     <div class="search-form-item">
-      <analysis-picker layout="date, merchant, equipmentType" @change="pickerChange">
-        <el-button type="text" @click="exportData">
-          <i class="el-icon-download" />
-          导出数据
-        </el-button>
-      </analysis-picker>
+      <analysis-picker layout="date, merchant, export" @change="pickerChange" @exportFile="exportData"/>
     </div>
     <div class="main">
       <card-wrapper label="整体销售趋势">

@@ -1,12 +1,7 @@
 <template lang="html">
   <div class="zone-contanter">
     <div class="search-form-item">
-      <analysis-picker layout="date, merchant, equipmentType" @change="pickerChange">
-        <el-button type="text" @click="exportData">
-          <i class="el-icon-download" />
-          导出数据
-        </el-button>
-      </analysis-picker>
+      <analysis-picker layout="date, merchant, equipmentType, export" @change="pickerChange" @exportFile="exportData"/>
     </div>
     <div v-loading="loading" ref="mainContainer" class="main">
       <div class="left-map">
@@ -160,9 +155,11 @@ export default {
           }
           finalResult = finalResult.map((v) => {
             const result = v
+
             function add(a, b) {
               return a + b
             }
+
             const fitlerItem = seriesList.filter(s => s.name === v.name)
             result.equipmentCount = fitlerItem.map(o => o.equipmentCount).reduce(add)
             result.payCount = fitlerItem.map(o => o.payCount).reduce(add)
@@ -223,20 +220,24 @@ export default {
       .range-item {
         font-size: 0;
         margin-bottom: 20px;
+
         .high {
           margin-right: 10px;
           font-size: 16px;
         }
+
         .low {
           margin-left: 10px;
           font-size: 16px;
         }
+
         .range {
           display: inline-block;
           width: 20px;
           background: #2c7aef;
           position: relative;
-          &::before{
+
+          &::before {
             position: absolute;
             display: inline-block;
             content: '';
@@ -246,45 +247,55 @@ export default {
             border-style: solid;
           }
         }
+
         .range4 {
           height: 20px;
           background: #2c7aef;
+
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
             border-color: transparent transparent transparent #2c7aef;
           }
         }
+
         .range3 {
           height: 16px;
           background: #5092e6;
+
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
             border-color: transparent transparent transparent #5092e6;
           }
         }
+
         .range2 {
           height: 12px;
           background: #85b4ee;
+
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
             border-color: transparent transparent transparent #85b4ee;
           }
         }
+
         .range1 {
           height: 8px;
           background: #bfd8f6;
+
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
             border-color: transparent transparent transparent #bfd8f6;
           }
         }
+
         .range0 {
           height: 4px;
           background: #e8f1fc;
+
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
@@ -298,6 +309,7 @@ export default {
         display: inline-block;
         vertical-align: top;
         width: 50%;
+
         &::after {
           display: inline-block;
           content: '';
@@ -309,6 +321,7 @@ export default {
           height: 100%;
           background: #f0f2f5;
         }
+
         .map {
           height: 500px;
         }
