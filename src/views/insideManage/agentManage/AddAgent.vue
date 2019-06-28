@@ -179,7 +179,7 @@ export default {
       dialogVisiable: false,
       authSettingList: [],
       treeProps: {
-        children: 'menuResourcesList',
+        children: 'childs',
         label: 'name'
       }
     }
