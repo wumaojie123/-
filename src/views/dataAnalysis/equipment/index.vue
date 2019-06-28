@@ -110,6 +110,10 @@ export default {
       this.onlineScaleLoading = true
       getEquipmentStatusData(params).then(res => {
         if (!res.data) {
+          this.typeInfoList[0].count = 0
+          this.typeInfoList[1].count = 0
+          this.typeInfoList[2].count = 0
+          this.typeInfoList[3].count = '0%'
           return
         }
         this.typeInfoList[0].count = res.data.total
@@ -200,9 +204,9 @@ export default {
           this.shipmentInfoList[1].count = 0
           this.shipmentInfoList[2].count = 0
         } else {
-          this.shipmentInfoList[0].count = res.data.storageCount
+          this.shipmentInfoList[0].count = res.data.stock
           this.shipmentInfoList[1].count = res.data.outCount
-          this.shipmentInfoList[2].count = res.data.stock
+          this.shipmentInfoList[2].count = res.data.storageCount
         }
       })
     },

@@ -39,13 +39,13 @@
               <div class="col-2">
                 <p>
                   <span>{{ `(${ conversionData.payCount || 0 })笔支付成功` }}</span>
-                  <span>{{ `转化率为${ conversionData.linkPay || 0 }%` }}</span>
+                  <span>转化率为{{ conversionData.linkPay | percentFilter }}%</span>
                 </p>
               </div>
               <div class="col-3">
                 <p>
                   <span>{{ `(${ conversionData.compCount || 0 })笔交易成功` }}</span>
-                  <span>{{ `转化率为${ conversionData.linkComp || 0 }%` }}</span>
+                  <span>转化率为{{ conversionData.linkComp | percentFilter }}%</span>
                 </p>
               </div>
             </div>
@@ -168,6 +168,15 @@ export default {
     AnalysisPicker,
     CardWrapper,
     ExplainModal
+  },
+  filters: {
+    percentFilter(originData) {
+      if (!originData) {
+        return 0
+      } else {
+        return +originData.toFixed(2)
+      }
+    }
   },
   data() {
     return {
@@ -365,10 +374,14 @@ export default {
     getOrderPattern(paramsData) {
       this.paymentTypeLoading = true
       getOrderPattern(paramsData).then(res => {
-        if (!res.data) {
+        this.paymentType = echarts.init(this.$refs.paymentType)
+        if (!res.data || res.data.length <= 0) {
+          paymentTypeOption.series[0].data[0].value = 0
+          paymentTypeOption.series[0].data[1].value = 0
+          paymentTypeOption.series[0].data[2].value = 0
+          this.paymentType.setOption(paymentTypeOption)
           return
         }
-        this.paymentType = echarts.init(this.$refs.paymentType)
         paymentTypeOption.series[0].data[0].value = res.data[1].payCount
         paymentTypeOption.series[0].data[1].value = res.data[0].payCount
         paymentTypeOption.series[0].data[2].value = res.data[2].payCount
@@ -380,10 +393,13 @@ export default {
     getOrderResult(paramsData) {
       this.paymentStateLoading = true
       getOrderResult(paramsData).then(res => {
-        if (!res.data) {
+        this.paymentState = echarts.init(this.$refs.paymentState)
+        if (!res.data || res.data.length <= 0) {
+          paymentStateOption.series[0].data[0].value = 0
+          paymentStateOption.series[0].data[1].value = 0
+          this.paymentState.setOption(paymentStateOption)
           return
         }
-        this.paymentState = echarts.init(this.$refs.paymentState)
         paymentStateOption.series[0].data[0].value = res.data[0].payCount
         paymentStateOption.series[0].data[1].value = res.data[1].payCount
         this.paymentState.setOption(paymentStateOption)
