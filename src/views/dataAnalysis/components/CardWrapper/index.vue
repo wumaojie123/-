@@ -33,6 +33,7 @@ export default {
     position: relative;
     padding-left: 15px;
     margin-bottom: 20px;
+    font-weight: normal;
 
     &::after {
       content: "";

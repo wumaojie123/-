@@ -3,7 +3,7 @@
     <div class="column-item">
       <template v-for="(item,i) in itemList">
         <div :key="i" class="item">
-          <p class="txt">
+          <p :class="{'has-icon':showTipsIcon}" class="txt">
             {{ item.txt }}
             <span v-if="showTipsIcon" class="el-icon-question" @click="showTooltip(item.tips)"/>
           </p>
@@ -75,11 +75,13 @@ export default {
       font-size: 20px;
       color: #dcdcdc;
       cursor: pointer;
+      vertical-align: middle;
     }
 
     .item {
       width: 25%;
       position: relative;
+      text-align: center;
 
       &::after {
         display: inline-block;
@@ -98,8 +100,19 @@ export default {
         }
       }
 
+      .txt {
+        font-size: 16px;
+        color: #666;
+      }
+
+      .has-icon {
+        padding-left: 20px;
+      }
+
       .num {
         margin-top: 20px;
+        font-size: 16px;
+        font-weight: bold;
       }
     }
   }
