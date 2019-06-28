@@ -163,28 +163,16 @@ export default {
   methods: {
     // 初始化组件结构
     initLayout() {
-      let layoutArray = this.layout.split(',')
-
-      layoutArray = layoutArray.map(item => {
-        return item.replace(/(^\s*)|(\s*$)/g, '')
-      })
+      const layoutArray = this.layout.split(',').map(item => item.replace(/(^\s*)|(\s*$)/g, ''))
 
       if (layoutArray.indexOf('date') > -1) {
         this.toggleQuicklySelect(-30)
         this.layoutInfo.isShowDate = true
       }
-      if (layoutArray.indexOf('merchant') > -1) {
-        this.layoutInfo.isShowMerchant = true
-      }
-      if (layoutArray.indexOf('equipmentType') > -1) {
-        this.layoutInfo.isShowEquipmentType = true
-      }
-      if (layoutArray.indexOf('area') > -1) {
-        this.layoutInfo.isShowArea = true
-      }
-      if (layoutArray.indexOf('export') > -1) {
-        this.layoutInfo.isShowExport = true
-      }
+      this.layoutInfo.isShowMerchant = layoutArray.indexOf('merchant') > -1
+      this.layoutInfo.isShowEquipmentType = layoutArray.indexOf('equipmentType') > -1
+      this.layoutInfo.isShowArea = layoutArray.indexOf('area') > -1
+      this.layoutInfo.isShowExport = layoutArray.indexOf('export') > -1
     },
     // 初始化下拉框的数据
     initSelectorData() {
