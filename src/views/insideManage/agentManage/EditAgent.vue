@@ -262,7 +262,6 @@ export default {
     if (this.$route.query.id) {
       await this.getRolesList()
       await this.getBDList()
-      await this.getBusinProjects()
     }
   },
   mounted() {
@@ -274,6 +273,7 @@ export default {
         insideManage.agentManageRoleMapResourcesApi().then((res) => {
           if (res.result === 0) {
             this.authSettingList = res.data
+            this.getBusinProjects()
           }
         })
       })
