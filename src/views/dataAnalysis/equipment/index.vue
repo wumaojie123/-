@@ -187,7 +187,7 @@ export default {
       const seriesData2 = []
       data.forEach(item => {
         xaxisData.push(item.statisticsDate)
-        seriesData1.push(item.storageCount || 0)
+        seriesData1.push(item.stock || 0)
         seriesData2.push(item.outCount || 0)
       })
 
