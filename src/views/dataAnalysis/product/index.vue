@@ -56,9 +56,11 @@
           />
           <el-table-column
             align="center"
-            prop="rate"
             label="利润贡献率"
           >
+            <template slot-scope="scope">
+              {{ scope.row.rate }}%
+            </template>
             <template slot="header" slot-scope="scope">
               利润贡献率
               <i class="el-icon-question" @click="showTooltip(profitTips)"/>
