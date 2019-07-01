@@ -168,7 +168,7 @@ export default {
       }).then((res) => {
         if (res.result === 0) {
           this.salesTrendloading = false
-          const { quantity, sortCount, sortSales } = res.data.yesterday
+          const { quantity, sortCount, sortSales } = res.data.total
           this.itemList = this.itemList.map((v) => {
             if (v.type === 'quantity') {
               v.count = quantity
