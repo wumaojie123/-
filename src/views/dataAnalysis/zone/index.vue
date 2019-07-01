@@ -172,7 +172,6 @@ export default {
             mapType: 'china',
             data: finalResult
           }
-          console.log('--log--:', finalResult)
           if (this.searchFormInfo.orderBy === 'equipment_count') {
             seriesData.name = '设备量'
           } else if (this.searchFormInfo.orderBy === 'pay_count') {
