@@ -133,7 +133,18 @@ export default {
           const noRepeatData = {}
           let finalResult = []
           const seriesList = items.map(v => {
-            const name = v.provinceName.slice(0, v.provinceName.length - 1)
+            // 省-直辖市-自治区三种类型判断条件
+            // const zones = ['广西', '新疆', '内蒙古', '西藏', '宁夏', '香港', '澳门']
+            let name = v.provinceName
+            if (name.indexOf('内蒙古') > 0) {
+              name = '内蒙古'
+            } else if (name.indexOf('自治区') > 0) {
+              name = v.provinceName.slice(0, 2)
+            } else if (name.indexOf('行政区') > 0) {
+              name = v.provinceName.slice(0, 2)
+            } else {
+              name = v.provinceName.slice(0, v.provinceName.length - 1)
+            }
             const resetSeriesItem = {
               name,
               ...v
