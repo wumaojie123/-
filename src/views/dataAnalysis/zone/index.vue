@@ -133,7 +133,7 @@ export default {
           const noRepeatData = {}
           let finalResult = []
           const seriesList = items.map(v => {
-            const name = v.provinceName.split('省')[0]
+            const name = v.provinceName.slice(0, v.provinceName.length - 1)
             const resetSeriesItem = {
               name,
               ...v
@@ -172,6 +172,7 @@ export default {
             mapType: 'china',
             data: finalResult
           }
+          console.log('--log--:', finalResult)
           if (this.searchFormInfo.orderBy === 'equipment_count') {
             seriesData.name = '设备量'
           } else if (this.searchFormInfo.orderBy === 'pay_count') {
