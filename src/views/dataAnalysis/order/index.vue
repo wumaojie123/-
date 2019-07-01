@@ -174,7 +174,7 @@ export default {
       if (!originData) {
         return 0
       } else {
-        return +originData.toFixed(2)
+        return (+originData).toFixed(2)
       }
     }
   },

@@ -1,12 +1,12 @@
 <template lang="html">
   <div class="page-container">
     <analysis-picker layout="date, merchant, equipmentType" @change="pickerChange" />
-    <card-wrapper label="点位投放效果">
+    <card-wrapper label="昨日点位投放效果">
       <el-row>
         <el-col :span="12">
           <div v-loading="siteInfoChartsLoading" ref="siteInfo" class="echarts-item">
             <div class="empty-panel">
-              <img src="../image/nothing.png" alt="">
+              <!-- <img src="../image/nothing.png" alt=""> -->
               <p>暂无数据</p>
             </div>
           </div>
@@ -14,7 +14,7 @@
         <el-col :span="12">
           <div v-loading="siteInfoPercentChartsLoading" ref="siteInfoPercent" class="echarts-item">
             <div class="empty-panel">
-              <img src="../image/nothing.png" alt="">
+              <!-- <img src="../image/nothing.png" alt=""> -->
               <p>暂无数据</p>
             </div>
           </div>
@@ -178,6 +178,10 @@ export default {
     padding: 20px;
 
     .empty-panel {
+      display: flex;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
 
       img {
         height: 220px;

@@ -100,6 +100,13 @@ export default {
     }
   },
   methods: {
+    percentFilter(data) {
+      if (!data) {
+        return 0
+      } else {
+        return (+data).toFixed(2)
+      }
+    },
     pickerChange(params) {
       this.getEquipmentStatusData(params)
       this.getEquipmentTypeData(params)
@@ -116,18 +123,18 @@ export default {
           this.typeInfoList[3].count = '0%'
           return
         }
-        this.typeInfoList[0].count = res.data.total
-        this.typeInfoList[1].count = res.data.onLine
-        this.typeInfoList[2].count = res.data.offLine
-        this.typeInfoList[3].count = res.data.rate + '%'
+        this.typeInfoList[0].count = res.data.total || 0
+        this.typeInfoList[1].count = res.data.onLine || 0
+        this.typeInfoList[2].count = res.data.offLine || 0
+        this.typeInfoList[3].count = this.percentFilter(res.data.rate) + '%'
         this.onlineScale = echarts.init(this.$refs.onlineScale)
         onlineScaleOption.series[0].data[0] = {
           name: '在线',
-          value: res.data.onLine
+          value: res.data.onLine || 0
         }
         onlineScaleOption.series[0].data[1] = {
           name: '离线',
-          value: res.data.offLine
+          value: res.data.offLine || 0
         }
         this.onlineScale.setOption(onlineScaleOption)
       }).finally(() => {
