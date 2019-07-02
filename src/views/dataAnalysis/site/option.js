@@ -60,7 +60,8 @@ export const siteEarnTrendOption = {
     itemGap: 20,
     bottom: 0,
     itemHeight: 15,
-    itemWidth: 15
+    itemWidth: 15,
+    type: 'scroll'
   },
   tooltip: {
     trigger: 'axis',
@@ -146,7 +147,8 @@ export const siteInfoPercentOption = {
     x: 'center',
     bottom: 20,
     itemHeight: 15,
-    itemWidth: 15
+    itemWidth: 15,
+    type: 'scroll'
   },
   tooltip: {
     trigger: 'item',

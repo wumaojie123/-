@@ -306,7 +306,7 @@ export default {
   }
 
   .picker-date-item {
-    width: 380px;
+    width: 400px;
     margin-right: 20px;
     margin-bottom: 10px;
   }
