@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!item.hidden&&item.children" class="menu-wrapper">
+  <div v-if="!item.hidden&&item.children" :class="item.icon" class="menu-wrapper">
     <template v-if="hasOneShowingChild(item.children) && !onlyOneChild.children&&!item.alwaysShow">
       <a :href="onlyOneChild.path" target="_blank" @click="clickLink(onlyOneChild.path,$event)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
@@ -11,7 +11,7 @@
       </a>
     </template>
 
-    <el-submenu v-else :index="item.name||item.path">
+    <el-submenu v-else :class="item.icon" :index="item.name||item.path">
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta.icon" :title="item.meta.title"/>
       </template>

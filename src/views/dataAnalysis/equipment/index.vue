@@ -223,7 +223,7 @@ export default {
       this.tooltipsInfo.content = `
         <p class='text'>1，“设备出货量”：是指你卖给下级商家（或下级代理）的设备数量。这些已出货的设备，将显示在“设备管理 > 已转移设备”列表中。</p>
         <p class='text'>2，“设备进货量”：是指你跟乐摇摇购买的设备数量。</p>
-        <p class='text'>3，设备库存量 =设备进货量 - 设备出货量。库存的设备将显示在“设备管理 > 待转移设备”列表中。（注意：商家解绑返回的设备，不计入库存量）</p>
+        <p class='text'>3，设备库存量 =设备进货量 - 设备出货量。库存的设备将显示在“设备管理 > 待转移设备”列表中。</p>
       `
       this.tooltipsInfo.tooltipsVisible = true
     },
