@@ -46,7 +46,7 @@ export const zoneChinaMapOption = {
     itemWidth: 30,
     itemHeight: 120,
     inRange: {
-      color: ['#e8f1fc', '#c0d8f5', '#87b5e7', '#5ab1ef'],
+      color: ['#ea5cba','#e938ad','#e10f9a','#c80285'],
       symbolSize: [110, 230]
     },
     inverse: true

@@ -261,56 +261,56 @@ export default {
 
         .range4 {
           height: 20px;
-          background: #2c7aef;
+          background: #b20076;
 
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
-            border-color: transparent transparent transparent #2c7aef;
+            border-color: transparent transparent transparent #b20076;
           }
         }
 
         .range3 {
           height: 16px;
-          background: #5092e6;
+          background: #c80285;
 
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
-            border-color: transparent transparent transparent #5092e6;
+            border-color: transparent transparent transparent #c80285;
           }
         }
 
         .range2 {
           height: 12px;
-          background: #85b4ee;
+          background: #e10f9a;
 
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
-            border-color: transparent transparent transparent #85b4ee;
+            border-color: transparent transparent transparent #e10f9a;
           }
         }
 
         .range1 {
           height: 8px;
-          background: #bfd8f6;
+          background: #e938ad;
 
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
-            border-color: transparent transparent transparent #bfd8f6;
+            border-color: transparent transparent transparent #e938ad;
           }
         }
 
         .range0 {
           height: 4px;
-          background: #e8f1fc;
+          background: #ea5cba;
 
           &::before {
             top: -4px;
             border-width: 4px 0 0 20px;
-            border-color: transparent transparent transparent #e8f1fc;
+            border-color: transparent transparent transparent #ea5cba;
           }
         }
       }
