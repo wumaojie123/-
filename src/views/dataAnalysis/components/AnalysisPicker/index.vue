@@ -94,6 +94,8 @@ import {
 import { getEquipmentType } from '@/api/dataAnalysis'
 import { mapGetters } from 'vuex'
 
+const agoHideDate = '2019/7/1'
+
 export default {
   name: 'AnalysisPicker',
   props: {
@@ -141,7 +143,8 @@ export default {
       pickerOptions: {
         disabledDate: function(val) {
           const today = new Date(new Date().toDateString())
-          if (getTimeStamp(val) > getTimeStamp(today) - 3600 * 24) {
+          const agoHideDay = new Date(new Date(agoHideDate).toDateString())
+          if (getTimeStamp(val) > getTimeStamp(today) - 3600 * 24 || getTimeStamp(val) < getTimeStamp(agoHideDay)) {
             return true
           } else {
             return false
@@ -206,9 +209,13 @@ export default {
     // 快捷选择时间时修改时间范围
     toggleQuicklySelect(quicklyValue) {
       const end = new Date(new Date().toDateString())
-      const start = new Date()
+      let start = new Date()
+      const agoHideDay = new Date(new Date(agoHideDate).toDateString())
       end.setTime(end.getTime() - 3600 * 1000 * 24 * 1)
       start.setTime(end.getTime() + 3600 * 1000 * 24 * (quicklyValue + 1))
+      if (new Date(agoHideDay) > new Date(start)) {
+        start = agoHideDay
+      }
       this.curQuicklySelect = quicklyValue
       this.selectDates = [parseTime(start, '{y}-{m}-{d}'), parseTime(end, '{y}-{m}-{d}')]
     },
