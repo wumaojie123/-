@@ -108,6 +108,7 @@
           :props="treeProps"
           show-checkbox
           accordion
+          default-expand-all
           node-key="adResourcesId"
           highlight-current/>
       </el-form-item>
