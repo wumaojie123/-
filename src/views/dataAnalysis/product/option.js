@@ -2,6 +2,13 @@ import {
   echartsAxisLabelFormatter
 } from '@/utils/'
 
+const colors = [
+  '#5c70ea', '#ff46a9', '#5ce5ea', '#2b75f5', '#ac7cbb',
+  '#8d98b3', '#e5cf0d', '#97b552', '#95706d', '#dc69aa',
+  '#07a2a4', '#9a7fd1', '#588dd5', '#f5994e', '#c05050',
+  '#59678c', '#c9ab00', '#7eb00a', '#6f5553', '#c14089'
+]
+
 export const salesTrendOption = {
   xAxis: {
     type: 'category',
@@ -69,6 +76,7 @@ export const salesTrendOption = {
 }
 
 export const doneNumOption = {
+  color: colors,
   tooltip: {
     trigger: 'axis',
     axisPointer: {
@@ -107,9 +115,6 @@ export const doneNumOption = {
     {
       type: 'value',
       name: '',
-      // min: 0,
-      // max: 400,
-      // interval: 50,
       axisLabel: {
         formatter: '{value}'
       }
@@ -119,20 +124,12 @@ export const doneNumOption = {
     {
       name: '成交金额(元)',
       type: 'bar',
-      data: [20, 389, 70, 232, 256, 76.7, 136, 162, 326, 200, 60, 30],
-      areaStyle: {
-        color: 'rgba(79, 168, 249, .4)'
-      },
-      color: '#4fa8f9'
+      data: [20, 389, 70, 232, 256, 76.7, 136, 162, 326, 200, 60, 30]
     },
     {
       name: '出货量',
       type: 'bar',
-      data: [26, 59, 90, 264, 287, 307, 176, 122, 287, 18, 60, 23],
-      areaStyle: {
-        color: 'rgba(110, 199, 30, .4)'
-      },
-      color: '#6ec71e'
+      data: [26, 59, 90, 264, 287, 307, 176, 122, 287, 18, 60, 23]
     }
   ]
 }
