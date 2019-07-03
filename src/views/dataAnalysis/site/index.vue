@@ -32,7 +32,7 @@ import AnalysisPicker from '../components/AnalysisPicker/'
 import CardWrapper from '../components/CardWrapper/'
 import echarts from 'echarts'
 import { getSiteEffectData, getSiteIncomeTrend } from '@/api/dataAnalysis'
-import { siteDict, siteEarnTrendOption, siteInfoOption, siteInfoPercentOption } from './option'
+import { siteDict, siteEarnTrendOption, siteInfoOption, siteInfoPercentOption, trendColors } from './option'
 
 export default {
   components: {
@@ -135,6 +135,7 @@ export default {
     _siteIncomeTrendDataTube(data) {
       const legendData = []
       const seriesData = []
+      let seriesIndex = 0
       let xAxisData = []
       for (const key in data) {
         const itemName = this.searchSiteName(key) + '-成交金额(元)'
@@ -148,8 +149,13 @@ export default {
         const seriesItem = {
           data: itemData.map(item => item.amount),
           name: itemName,
-          type: 'line'
+          type: 'line',
+          areaStyle: {
+            color: trendColors[seriesIndex],
+            opacity: 0.1
+          }
         }
+        seriesIndex++
         seriesData.push(seriesItem)
 
         xAxisData = itemData.map(item => item.statisticsDate)

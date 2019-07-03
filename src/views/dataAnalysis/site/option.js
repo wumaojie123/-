@@ -11,6 +11,13 @@ const colors = [
     '#59678c','#c9ab00','#7eb00a','#6f5553','#c14089'
 ]
 
+export const trendColors = [
+    '#ff0078','#0a36bf','#00879e','#008305',
+    '#abd500','#fdfb00','#fd5f00','#fdb300',
+    '#adfd00','#00fd8f','#00fdf4','#ca00fd',
+    '#fd00d6','#fd0000'
+  ]
+
 export const siteDict = [
   { 'name': '商场', 'value': 'Mall_Aisle' },
   { 'name': '电影院', 'value': 'Cinema' },
@@ -40,7 +47,7 @@ export const siteDict = [
 
 // 点位收益趋势配参
 export const siteEarnTrendOption = {
-  color: colors,
+  color: trendColors,
   xAxis: {
     type: 'category',
     boundaryGap: false,
@@ -53,6 +60,11 @@ export const siteEarnTrendOption = {
         color: '#333'
       },
       formatter: echartsAxisLabelFormatter
+    },
+    splitLine: {
+      lineStyle: {
+        color: '#dcdcdc'
+      }
     }
   },
   legend: {

@@ -26,6 +26,11 @@ export const orderTrendOption = {
         color: '#333'
       },
       formatter: echartsAxisLabelFormatter
+    },
+    splitLine: {
+      lineStyle: {
+        color: '#dcdcdc'
+      }
     }
   },
   legend: {
@@ -110,6 +115,11 @@ export const orderTimeTrendOption = {
         color: '#333'
       },
       formatter: echartsAxisLabelFormatter
+    },
+    splitLine: {
+      lineStyle: {
+        color: '#dcdcdc'
+      }
     }
   },
   tooltip: {
