@@ -259,11 +259,11 @@ export default {
             value: 1
           },
           {
-            label: '导入失败',
+            label: '已撤回',
             value: 2
           },
           {
-            label: '已撤回',
+            label: '导入失败',
             value: 3
           }
         ],
