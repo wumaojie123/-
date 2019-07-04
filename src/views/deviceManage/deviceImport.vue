@@ -408,6 +408,10 @@ export default {
     },
 
     queryAgentList(queryString, cb) {
+      if (queryString === '') {
+        console.log('输入为空')
+        this.formSearch.selectedAgentUid = ''
+      }
       const quer = /^(.+)\((.+)\)$/.exec(queryString)
       if (quer) {
         queryString = quer[1] && quer[1].trim()
