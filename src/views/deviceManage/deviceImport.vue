@@ -209,7 +209,7 @@ import {
   getImportDetailList,
   myCancelImport,
   download
-} from '../../api/deviceImport'
+} from '../../api//deviceImport'
 export default {
   name: 'DevicesImport',
   data() {
