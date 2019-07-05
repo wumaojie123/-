@@ -99,7 +99,7 @@
     </el-dialog>
 
     <!-- add by lss 20190702 导入数据统计 -->
-    <div style="width:100%;height:1px;border:1px solid #ccc"/>
+    <div style="width:100%;height:1px;border:1px solid #ccc" />
 
     <el-row>
       <el-col :span="24" style="margin-top:20px;margin-bottom:20px;font-weight:600">导入数据</el-col>
@@ -140,15 +140,19 @@
       </el-form>
     </el-row>
     <el-table v-loading="listLoading" :data="importDataList" border>
-      <el-table-column prop="lyyEquipmentTypeName" label="设备类型"/>
-      <el-table-column prop="totalCount" label="导入设备数"/>
-      <el-table-column prop="agentName" label="一级代理商"/>
-      <el-table-column prop="created" label="导入时间"/>
-      <el-table-column prop="statusName" label="导入状态"/>
+      <el-table-column prop="lyyEquipmentTypeName" label="设备类型" />
+      <el-table-column prop="totalCount" label="导入设备数" />
+      <el-table-column prop="agentName" label="一级代理商" />
+      <el-table-column prop="created" label="导入时间" />
+      <el-table-column prop="statusName" label="导入状态" />
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="text" @click="showImportDetail(scope.row)">查看导入详情</el-button>
-          <el-button v-show="scope.row.status==0||scope.row.status==1" type="text" @click="batchCancelImport(scope.row)">批次撤回</el-button>
+          <el-button
+            v-show="scope.row.status==0||scope.row.status==1"
+            type="text"
+            @click="batchCancelImport(scope.row)"
+          >批次撤回</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -174,28 +178,32 @@
         @click="myDownload"
       >下载</el-button>
       <el-table :data="importDetailList" border>
-        <el-table-column prop="lyyEquipmentValue" label="设备编号"/>
-        <el-table-column prop="statusName" label="导入状态"/>
-        <el-table-column prop="reason" label="原因"/>
+        <el-table-column prop="lyyEquipmentValue" label="设备编号" />
+        <el-table-column prop="statusName" label="导入状态" />
+        <el-table-column prop="reason" label="原因" />
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button v-show="scope.row.status==0" type="text" @click="ckCancelImport(scope.row)">导入撤回</el-button>
+            <el-button
+              v-show="scope.row.status==0"
+              type="text"
+              @click="ckCancelImport(scope.row)"
+            >导入撤回</el-button>
           </template>
         </el-table-column>
-        <div class="pagination-container">
-          <el-pagination
-            v-show="total > 0"
-            :current-page="detailPageIndex"
-            :page-sizes="[10, 20, 30, 40, 50]"
-            :page-size="detailPageSize"
-            :total="detailTotal"
-            background
-            layout="total, sizes, prev, pager, next, jumper"
-            @size-change="handleDetailSizeChange"
-            @current-change="handleDetailCurrentChange"
-          />
-        </div>
       </el-table>
+      <div class="pagination-container">
+        <el-pagination
+          v-show="detailTotal > 0"
+          :current-page="detailPageIndex"
+          :page-sizes="[10, 20, 30, 40, 50]"
+          :page-size="detailPageSize"
+          :total="detailTotal"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleDetailSizeChange"
+          @current-change="handleDetailCurrentChange"
+        />
+      </div>
     </el-dialog>
   </el-main>
 </template>
@@ -251,11 +259,11 @@ export default {
             value: 1
           },
           {
-            label: '导入失败',
+            label: '已撤回',
             value: 2
           },
           {
-            label: '已撤回',
+            label: '导入失败',
             value: 3
           }
         ],
@@ -400,6 +408,10 @@ export default {
     },
 
     queryAgentList(queryString, cb) {
+      if (queryString === '') {
+        console.log('输入为空')
+        this.formSearch.selectedAgentUid = ''
+      }
       const quer = /^(.+)\((.+)\)$/.exec(queryString)
       if (quer) {
         queryString = quer[1] && quer[1].trim()
@@ -534,8 +546,8 @@ export default {
     async queryImportDetailList() {
       var param = {
         agentEquipmentImportLogId: this.currentImportLogId,
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize
+        pageIndex: this.detailPageIndex,
+        pageSize: this.detailPageSize
       }
       var res = await getImportDetailList(param)
       if (res.result === 0) {
