@@ -205,7 +205,7 @@ export default {
     },
     handleAngentInfo() {
       const postData = this.baseInfo
-      if (!postData.title && !postData.wechatImg && !postData.telephone && !postData.bannerImg) {
+      if (!postData.title && !postData.wechatImg && !postData.telephone && !postData.bannerImg && !postData.defaultHeadImg) {
         this.$message({ message: '配置信息不能全部为空', type: 'error' })
         return
       }
