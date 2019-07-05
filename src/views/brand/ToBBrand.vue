@@ -166,8 +166,11 @@ export default {
           if (this.baseInfo.wechatImg) {
             this.wechartUrl = `${this.preUrl}${this.baseInfo.wechatImg}`
           }
+          if (this.baseInfo.defaultHeadImg) {
+            this.defaultHeadImgUrl = `${this.preUrl}${this.baseInfo.defaultHeadImg}`
+          }
         } else {
-          this.baseInfo = { title: '', agentUserId: agentUserId, isdel: 'N', wechatImg: '', telephone: '', bannerImg: '', adBrandConfigId: '' }
+          this.baseInfo = { title: '', agentUserId: agentUserId, isdel: 'N', wechatImg: '', telephone: '', bannerImg: '', adBrandConfigId: '', defaultHeadImg: '' }
         }
       }
     },
