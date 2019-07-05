@@ -97,7 +97,7 @@
           </div>
           <p class="input-anno" style="margin-left: 0;">1.商户在管理后台的默认头像，请上传公司品牌logo，
             <el-popover placement="top-start" trigger="hover">
-              <img src="@/assets/img/qrcode.png" class="popver-img" style="width:255px;height: 309px;">
+              <img src="@/assets/img/toBheader.png" class="popver-img" style="width:255px;height: 309px;">
               <span slot="reference" style="color: #409EFF;">查看示例></span>
             </el-popover>
           </p>
