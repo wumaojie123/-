@@ -72,12 +72,36 @@
               <i class="el-icon-delete el-icon"/>
             </div>
           </div>
-          <p class="input-anno" style="margin-left: 0;">请上传客服公众号或个人微信二维码; 建议尺寸：344*344px
+          <p class="input-anno" style="margin-left: 0;">请上传客服公众号或个人微信二维码
             <el-popover placement="top-start" trigger="hover">
               <img src="@/assets/img/qrcode.png" class="popver-img" style="width:255px;height: 309px;">
               <span slot="reference" style="color: #409EFF;">查看示例></span>
             </el-popover>
           </p>
+        </el-form-item>
+        <el-form-item label="运营商默认头像">
+          <el-upload
+            v-if="!defaultHeadImgUrl"
+            :show-file-list="false"
+            :on-success="handleDefaultHeadImgSuccess"
+            :before-upload="beforeAvatarUpload"
+            :action="uploadUrl"
+            class="avatar-uploader">
+            <i class="el-icon-plus avatar-uploader-icon wechart-width-height" style="line-height: 130px"/>
+          </el-upload>
+          <div v-if="defaultHeadImgUrl" class="uploader-wrap wechart-width-height">
+            <img :src="defaultHeadImgUrl" class="avatar wechart-width-height">
+            <div class="uploader-wrap-avatar wechart-width-height" @click="handleRemove('defaultHeadImgUrl')">
+              <i class="el-icon-delete el-icon"/>
+            </div>
+          </div>
+          <p class="input-anno" style="margin-left: 0;">1.商户在管理后台的默认头像，请上传公司品牌logo，
+            <el-popover placement="top-start" trigger="hover">
+              <img src="@/assets/img/qrcode.png" class="popver-img" style="width:255px;height: 309px;">
+              <span slot="reference" style="color: #409EFF;">查看示例></span>
+            </el-popover>
+          </p>
+          <p class="input-anno" style="margin-left: 0;">2.建议尺寸：200*200cm，文件大小不超过500k。</p>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleBaseInfo">保存</el-button>
@@ -100,10 +124,11 @@ import clipboard from '@/utils/clipboard'
 export default {
   data() {
     return {
-      baseInfo: { title: '', agentUserId: '', isdel: 'N', wechatImg: '', telephone: '', bannerImg: '', adBrandConfigId: '' },
+      baseInfo: { title: '', agentUserId: '', isdel: 'N', wechatImg: '', telephone: '', bannerImg: '', adBrandConfigId: '', defaultHeadImg: '' },
       baseInfoRules: {
       },
       imageUrl: '',
+      defaultHeadImgUrl: '',
       bannerUrl: '',
       wechartUrl: '',
       uploadUrl: uploadUrl,
@@ -154,6 +179,10 @@ export default {
       this.baseInfo.wechatImg = res.para
       this.wechartUrl = `${this.preUrl}${res.para}`
     },
+    handleDefaultHeadImgSuccess(res, file) {
+      this.baseInfo.defaultHeadImg = res.para
+      this.defaultHeadImgUrl = `${this.preUrl}${res.para}`
+    },
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 0.5
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg'
@@ -196,6 +225,9 @@ export default {
       } else if (type === 'wechatImg') {
         this.baseInfo.wechatImg = ''
         this.wechartUrl = ''
+      } else if (type === 'defaultHeadImgUrl') {
+        this.baseInfo.defaultHeadImg = ''
+        this.defaultHeadImgUrl = ''
       }
     }
   }
