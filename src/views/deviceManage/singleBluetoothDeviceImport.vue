@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <div>导入单蓝牙设备</div>
-    <el-form ref="form" :model="form" label-width="90px" class="deviceForm" style="padding: 16px 0; width: 400px;">
+    <el-form ref="form" :model="form" :rules="rules" label-width="90px" class="deviceForm" style="padding: 16px 0; width: 400px;">
       <el-row>
         <el-col >
           <el-form-item label="代理商" prop="agent">
@@ -53,13 +53,28 @@ import { queryAgents } from '../../api/getAgentUserId'
 export default {
   name: 'SingleBluetoothDeviceImport',
   data() {
+    const validateChinese = (rule, value, callback) => {
+      if (/[\u4e00-\u9fa5]/.test(value)) {
+        callback(new Error('密钥不能有中文'))
+      } else {
+        callback()
+      }
+    }
     return {
       file: null,
       agentnick: '',
       isCanClickModalTag: false,
       infoChecked: false,
       form: {
-        agent: ''
+        agent: '',
+        salt: ''
+      },
+      rules: {
+        salt: [
+          { required: true, message: '请输入长度为16位的密钥', trigger: 'blur' },
+          { min: 16, max: 16, message: '长度为16个字符', trigger: 'blur' },
+          { validator: validateChinese, trigger: 'blur' }
+        ]
       },
       isCanClickTag: true,
       agentUsers: [],
@@ -75,7 +90,7 @@ export default {
   },
   computed: {
     url() {
-      return '/agent/lyyEquipmentBluetooth/import?agentUserId=' + this.form.agent
+      return '/agent/lyyEquipmentBluetooth/import?agentUserId=' + this.form.agent + '&salt=' + this.form.salt
     }
   },
   methods: {
@@ -96,11 +111,19 @@ export default {
       }
     },
     submitUpload() {
-      if (!this.file) {
-        this.$message.error('请选择上传文件！')
-        return
-      }
       this.$refs.upload.submit()
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          if (!this.file) {
+            this.$message.error('请选择上传文件！')
+            return
+          }
+          this.$refs.upload.submit()
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     onBeforeUpload(file) {
       var Xls = file.name.split('.')
