@@ -19,7 +19,7 @@
             <p v-show="infoChecked" style="font-size: 14px;color:red;">未查询到相应的商家，请重新输入！</p>
           </el-form-item>
           <el-form-item label="密钥" prop="salt">
-            <el-input v-model="form.salt" style="width: 250px;" clearable maxlength="16" />
+            <el-input v-model="form.salt" style="width: 250px;" clearable maxlength="16" placeholder="请输入长度为16位的密钥" />
           </el-form-item>
         </el-col>
       </el-row>
