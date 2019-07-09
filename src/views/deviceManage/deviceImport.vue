@@ -418,13 +418,15 @@ export default {
       }
       queryAgents({ agentQuery: queryString }).then(res => {
         if (res.result === 0 && res.data && res.data.length !== 0) {
+          const results = []
           res.data.forEach(item => {
-            this.formSearch.agentList.push({
+            results.push({
               value: `${item.agentusername} (${item.phone})`,
               agentId: item.agentuserid
             })
           })
           console.log(this.formSearch.agentList)
+          this.formSearch.agentList = results
           this.formSearch.searchInfoChecked = false
           cb(this.formSearch.agentList)
         } else {
