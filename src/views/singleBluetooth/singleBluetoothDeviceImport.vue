@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <div>导入单蓝牙设备</div>
-    <el-form ref="form" :model="form" :rules="rules" label-width="90px" class="deviceForm" style="padding: 16px 0; width: 400px;">
+    <el-form ref="form" :model="form" :rules="rules" label-width="120px" class="deviceForm" style="padding: 16px 0; width: 400px;">
       <el-row>
         <el-col >
           <el-form-item label="代理商" prop="agent">

@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <div>导入单蓝牙设备</div>
-    <el-form ref="form" :model="form" :rules="rules" label-width="90px" class="deviceForm" style="padding: 16px 0; width: 400px;">
+    <el-form ref="form" :model="form" :rules="rules" label-width="120px" class="deviceForm" style="padding: 16px 0; width: 400px;">
       <el-row>
         <el-col >
           <el-form-item label="代理商" prop="agent">
@@ -17,6 +17,9 @@
               </template>
             </el-autocomplete>
             <p v-show="infoChecked" style="font-size: 14px;color:red;">未查询到相应的商家，请重新输入！</p>
+          </el-form-item>
+          <el-form-item label="生产商标识" prop="salt">
+            <el-input v-model="form.salt" style="width: 250px;" clearable maxlength="16" placeholder="请输入长度为16位的生产商标识" />
           </el-form-item>
         </el-col>
       </el-row>
