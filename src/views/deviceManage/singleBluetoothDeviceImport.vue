@@ -55,7 +55,7 @@ export default {
   data() {
     const validateChinese = (rule, value, callback) => {
       if (/[\u4e00-\u9fa5]/.test(value)) {
-        callback(new Error('密钥不能有中文'))
+        callback(new Error('生产商标识不能有中文'))
       } else {
         callback()
       }

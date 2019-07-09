@@ -18,8 +18,8 @@
             </el-autocomplete>
             <p v-show="infoChecked" style="font-size: 14px;color:red;">未查询到相应的商家，请重新输入！</p>
           </el-form-item>
-          <el-form-item label="密钥" prop="salt">
-            <el-input v-model="form.salt" style="width: 250px;" clearable maxlength="16" placeholder="请输入长度为16位的密钥" />
+          <el-form-item label="生产商标识" prop="salt">
+            <el-input v-model="form.salt" style="width: 250px;" clearable maxlength="16" placeholder="请输入长度为16位的生产商标识" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -58,7 +58,7 @@ export default {
   data() {
     const validateChinese = (rule, value, callback) => {
       if (/[\u4e00-\u9fa5]/.test(value)) {
-        callback(new Error('密钥不能有中文'))
+        callback(new Error('生产商标识不能有中文'))
       } else {
         callback()
       }
@@ -73,7 +73,7 @@ export default {
       },
       rules: {
         salt: [
-          { required: true, message: '请输入长度为16位的密钥', trigger: 'blur' },
+          { required: true, message: '请输入长度为16位的生产商标识', trigger: 'blur' },
           { min: 16, max: 16, message: '长度为16个字符', trigger: 'blur' },
           { validator: validateChinese, trigger: 'blur' }
         ]
