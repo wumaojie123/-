@@ -5,6 +5,7 @@
     "dev": "cross-env BABEL_ENV=development webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src",
+    "fix": "eslint --fix .js,.vue src",
     "test": "npm run lint",
     "precommit": "lint-staged"
   },
@@ -86,6 +87,8 @@
     "hash-sum": "1.0.2",
     "html-webpack-plugin": "4.0.0-alpha",
     "husky": "0.14.3",
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0",
     "lint-staged": "7.2.2",
     "mini-css-extract-plugin": "0.4.1",
     "node-notifier": "5.2.1",

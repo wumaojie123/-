@@ -8,12 +8,15 @@
       auto-complete="on"
       label-position="left">
       <div class="title-container">
-        <h3 class="title">{{ `生产商管理平台` }}</h3>
+        <div class="flex-wrapper">
+          <h3 :class="{'select': type === '1'}" class="title" @click="type='1'">{{ `生产商管理平台` }}</h3>
+          <h3 :class="{'select': type === '2'}" class="title " @click="type='2'">{{ `运维管理平台` }}</h3>
+        </div>
         <!--<hr style="margin-bottom: 30px;height:1px;background-color:white;border: none;"/>-->
         <lang-select class="set-language"/>
       </div>
       <!-- 用户名 -->
-      <el-form-item prop="username">
+      <el-form-item prop="username" style="margin-top: 20px;">
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user"/>
         </span>
@@ -121,7 +124,8 @@ export default {
       loading: false,
       showDialog: false,
       redirect: undefined,
-      timerId: null
+      timerId: null,
+      type: '1'
     }
   },
   watch: {
@@ -277,9 +281,23 @@ $light_gray: #eee;
     .title {
       font-size: 26px;
       color: $light_gray;
-      margin: 0px auto 40px auto;
+      // margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
+      padding: 0 0 40px 0;
+      color: #cbbcbc;
+      flex: 1;
+      &::after{
+        content: '';
+        width: 100%;
+        display: inline-block;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        color: #cbbcbc;
+        background: #cbbcbc;
+      }
     }
     .set-language {
       color: #fff;
@@ -311,6 +329,26 @@ $light_gray: #eee;
       .textbtn{
         margin-left: 100px;
       }
+    }
+  }
+  .flex-wrapper{
+    display: flex;
+    justify-content: space-between;
+  }
+  .flex-wrapper .select{
+    // border-bottom: 4px solid red;
+    position: relative;
+    color: #fff;
+    &::after{
+      content: '';
+      width: 100%;
+      display: inline-block;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      color: #fff;
+      background: #fff;
     }
   }
 }
