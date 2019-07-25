@@ -6,8 +6,8 @@
     </div>
     <div class="content-wrapper">
       <div v-for="(item, index) in list" :key="index" class="item">
-        <img src="https://pic4.ajkimg.com/display/xinfang/c306ffe04799c1f225985e6a556aea28/245x167m.jpg" class="header-img">
-        <p class="order-info">if你快点快点快点看          sdfsdfsdf</p>
+        <img :src="item.headImg" class="header-img">
+        <p class="order-info">{{ item.createTime }}         {{ item.userName }}启动{{ item.equipmentTypeName }}</p>
       </div>
     </div>
   </section>
@@ -19,7 +19,7 @@ export default {
   props: {
     list: {
       type: Array,
-      default: () => [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      default: () => []
     }
   }
 }

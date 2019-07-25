@@ -16,14 +16,14 @@
           <div class="status-item">
             <div class="item-title">在线设备数</div>
             <div class="staus-num">
-              <span>{{ inlineNum }}</span>
+              <span>{{ data.onlineCount }}</span>
             </div>
           </div>
 
           <div class="status-item">
             <div class="item-title">离线设备数</div>
             <div class="staus-num">
-              <span>{{ offlineNum }}</span>
+              <span>{{ data.offlineCount }}</span>
             </div>
           </div>
         </div>
@@ -36,12 +36,16 @@
 
 export default {
   name: 'Equipment',
-  data() {
-    return {
-      total: 907897,
-      totalStr: [7, 8, 9, 7],
-      inlineNum: 500007,
-      offlineNum: 7890
+  props: {
+    data: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  computed: {
+    totalStr() {
+      const str = this.data.totalQuipmentCount.toString().split('')
+      return str
     }
   }
 }

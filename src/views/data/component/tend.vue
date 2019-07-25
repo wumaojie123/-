@@ -2,29 +2,79 @@
   <section class="tend-wrapper">
     <div class="title">
       <div class="left">
-        <span class="select">订单趋势</span>
+        <span :class="{'select': type === '1' }" @click="handleType('1')">订单趋势</span>
         <span style="padding: 0 6px;">|</span>
-        <span>营业额趋势</span>
+        <span :class="{'select': type === '2' }" @click="handleType('2')">营业额趋势</span>
       </div>
       <div class="right">
-        <span class="select default">近1月</span>
-        <span class="default">近半年</span>
+        <span :class="{'select': timeType === 1}" class="default" @click="handleTime(1)">近1月</span>
+        <span :class="{'select': timeType === 2}" class="default" @click="handleTime(2)">近半年</span>
       </div>
     </div>
-    <section class="echart">
-      1
-    </section>
+    <section class="echart"/>
   </section>
 </template>
 
 <script>
 import echarts from 'echarts'
 export default {
-  mounted() {
-    this.initData()
+  props: {
+    data: {
+      type: Array,
+      default: () => []
+    },
+    timeType: {
+      type: Number,
+      default: 1
+    }
+  },
+  data() {
+    return {
+      type: '1',
+      localData: this.data
+    }
+  },
+  computed: {
+    dateList() {
+      const dateList = []
+      this.data.map(i => {
+        dateList.push(i.statisticsDate)
+      })
+      return dateList
+    },
+    incomeList() {
+      const incomeList = []
+      this.data.map(i => {
+        incomeList.push(i.dayPayCount)
+      })
+      return incomeList
+    },
+    orderLst() {
+      const orderLst = []
+      this.data.map(i => {
+        orderLst.push(i.dayOnlineIncomde)
+      })
+      return orderLst
+    }
+  },
+  created() {
+    this.handleType(this.type)
   },
   methods: {
-    initData() {
+    handleTime(value) {
+      this.timeType = value
+      this.$emit('on-change-time', value)
+    },
+    handleType(type) {
+      this.type = type
+      if (type === '1') {
+        this.initData(this.dateList, this.orderLst)
+      } else {
+        this.initData(this.dateList, this.incomeList)
+      }
+    },
+    initData(dateList, dataList) {
+      console.log(dateList)
       const initData = echarts.init(document.querySelector('.echart'))
       const options = {
         grid: {
@@ -38,7 +88,7 @@ export default {
           {
             type: 'category',
             boundaryGap: false,
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            data: dateList,
             axisTick: {
               alignWithLabel: true,
               show: false
@@ -57,7 +107,6 @@ export default {
                 width: 2,
                 color: '#44CFD9'
               }
-
             }
           }
         ],
@@ -97,7 +146,7 @@ export default {
             name: '邮件营销',
             type: 'line',
             stack: '总量',
-            data: [120, 132, 101, 134, 90, 230, 210],
+            data: dataList,
             areaStyle: {
               normal: {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{

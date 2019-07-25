@@ -1,12 +1,12 @@
 <template>
   <div class="income-wrap">
-    <section class="left">
-      <p class="title">累积总收益(元)</p>
-      <p class="price">{{ data.totalOnlineIncomde }}</p>
-    </section>
     <section class="right">
-      <p class="title">今日收益(元）</p>
-      <p class="price">{{ data.todayOnlineIncomde }}</p>
+      <p class="title">累积订单</p>
+      <p class="price">{{ data.totalPayCount }}</p>
+    </section>
+    <section class="left">
+      <p class="title">今日订单</p>
+      <p class="price">{{ data.todayPayCount }}</p>
     </section>
   </div>
 </template>
