@@ -303,6 +303,7 @@ export default {
     getOrderTrendData(paramsData) {
       this.orderTrendLoading = true
       getOrderTrendData(paramsData).then(res => {
+        this.orderTrendLoading = false
         if (!res.data) {
           return
         }
@@ -316,7 +317,7 @@ export default {
         orderTrendOption.xAxis.data = echartsData.xAxis
         this.orderTrend.setOption(orderTrendOption)
         this.checkedTypeChange()
-      }).finally(() => {
+      }).catch(() => {
         this.orderTrendLoading = false
       })
     },
@@ -345,6 +346,7 @@ export default {
     getOrderPeakData(paramsData) {
       this.orderTimeTrendLoading = true
       getOrderPeakData(paramsData).then(res => {
+        this.orderTimeTrendLoading = false
         if (!res.data) {
           return
         }
@@ -353,7 +355,7 @@ export default {
         orderTimeTrendOption.series[0].data = echartsData.line1
         orderTimeTrendOption.xAxis.data = echartsData.xAxis
         this.orderTimeTrend.setOption(orderTimeTrendOption)
-      }).finally(() => {
+      }).catch(() => {
         this.orderTimeTrendLoading = false
       })
     },
@@ -376,6 +378,7 @@ export default {
       getOrderPattern(paramsData).then(res => {
         this.paymentType = echarts.init(this.$refs.paymentType)
         if (!res.data || res.data.length <= 0) {
+          this.paymentTypeLoading = false
           paymentTypeOption.series[0].data[0].value = 0
           paymentTypeOption.series[0].data[1].value = 0
           paymentTypeOption.series[0].data[2].value = 0
@@ -386,13 +389,14 @@ export default {
         paymentTypeOption.series[0].data[1].value = res.data[0].payCount
         paymentTypeOption.series[0].data[2].value = res.data[2].payCount
         this.paymentType.setOption(paymentTypeOption)
-      }).finally(() => {
+      }).catch(() => {
         this.paymentTypeLoading = false
       })
     },
     getOrderResult(paramsData) {
       this.paymentStateLoading = true
       getOrderResult(paramsData).then(res => {
+        this.paymentStateLoading = false
         this.paymentState = echarts.init(this.$refs.paymentState)
         if (!res.data || res.data.length <= 0) {
           paymentStateOption.series[0].data[0].value = 0
@@ -403,7 +407,7 @@ export default {
         paymentStateOption.series[0].data[0].value = res.data[0].payCount
         paymentStateOption.series[0].data[1].value = res.data[1].payCount
         this.paymentState.setOption(paymentStateOption)
-      }).finally(() => {
+      }).catch(() => {
         this.paymentStateLoading = false
       })
     },
@@ -424,12 +428,13 @@ export default {
       paramsData.pageIndex = this.paginationInfo.pageIndex
       paramsData.pageSize = this.paginationInfo.pageSize
       getOrderReportForms(paramsData).then(res => {
+        this.orderTableLoading = false
         if (!res.data) {
           return
         }
         this.orderTableData = res.data.items
         this.paginationInfo.total = res.data.total
-      }).finally(() => {
+      }).catch(() => {
         this.orderTableLoading = false
       })
     },

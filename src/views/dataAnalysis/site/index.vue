@@ -58,6 +58,8 @@ export default {
       this.siteInfoChartsLoading = true
       this.siteInfoPercentChartsLoading = true
       getSiteEffectData(params).then(res => {
+        this.siteInfoChartsLoading = false
+        this.siteInfoPercentChartsLoading = false
         if (!res.data || res.data.length === 0) {
           return
         }
@@ -73,7 +75,7 @@ export default {
         siteInfoPercentOption.legend.data = pieEchartsData.legendData
         siteInfoPercentOption.series[0].data = pieEchartsData.seriesData
         this.siteInfoPercentCharts.setOption(siteInfoPercentOption)
-      }).finally(() => {
+      }).catch(() => {
         this.siteInfoChartsLoading = false
         this.siteInfoPercentChartsLoading = false
       })
@@ -119,6 +121,7 @@ export default {
     getSiteIncomeTrend(params) {
       this.siteEarnTrendLoading = true
       getSiteIncomeTrend(params).then(res => {
+        this.siteEarnTrendLoading = false
         if (!res.data) {
           return
         }
@@ -128,7 +131,7 @@ export default {
         siteEarnTrendOption.legend.data = echartsData.legendData
         siteEarnTrendOption.series = echartsData.seriesData
         this.siteEarnTrend.setOption(siteEarnTrendOption)
-      }).finally(() => {
+      }).catch(() => {
         this.siteEarnTrendLoading = false
       })
     },
