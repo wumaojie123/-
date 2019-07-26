@@ -10,7 +10,7 @@
         个
       </p>
     </section>
-    <section id="china" style="width: 100%;height: 2.815625rem; margin: 0 auto; margin-top: 20px;"/>
+    <section id="china" style="width: 100%;height: 3.010416666rem; margin: 0 auto; margin-top: 0.15625rem;"/>
   </section>
 </template>
 
@@ -43,44 +43,30 @@ export default {
   },
   watch: {
     dataList(val) {
+      this.localList = val
+    },
+    localList(val) {
       const arr = []
       const geoCoordMap = {}
       val.map(i => {
-        const obj = { name: i.cityName, value: i.lyyDistributorCount }
-        geoCoordMap[i.cityName] = [i.lng, i.lat]
+        const obj = { name: i.cityName, value: i.lyyDistributorCount, equipmentCount: i.equipmentCount }
+        geoCoordMap[i.cityName] = [parseFloat(i.lng), parseFloat(i.lat)]
         arr.push(obj)
       })
       this.echartData = arr
       this.geoCoordMap = geoCoordMap
-      this.localList = val
+      this.initDatas()
     }
-  },
-  mounted() {
-    this.initDatas()
   },
   methods: {
     async initDatas() {
       const myChart = echarts.init(document.getElementById('china'))
       const mapName = 'china'
-      const data = [
-        { name: '北京', value: 199 }
-      ]
+      const data = this.echartData
+      const geoCoordMap = this.geoCoordMap
+      // const toolTipData = []
 
-      const geoCoordMap = {}
-      const toolTipData = [
-        { name: '北京', value: [{ name: '科技人才总数', value: 95 }, { name: '理科', value: 82 }] }
-      ]
-
-      /* 获取地图数据*/
-      myChart.showLoading()
-      const mapFeatures = echarts.getMap(mapName).geoJson.features
-      myChart.hideLoading()
-      mapFeatures.forEach(function(v) {
-        // 地区名称
-        const name = v.properties.name
-        // 地区经纬度
-        geoCoordMap[name] = v.properties.cp
-      })
+      let globalData = []
       const convertData = function(data) {
         const res = []
         for (let i = 0; i < data.length; i++) {
@@ -88,10 +74,13 @@ export default {
           if (geoCoord) {
             res.push({
               name: data[i].name,
+              distributorCount: data[i].value,
+              equipmentCount: data[i].equipmentCount,
               value: geoCoord.concat(data[i].value)
             })
           }
         }
+        globalData = res
         return res
       }
       const option = {
@@ -103,29 +92,23 @@ export default {
             color: '#000',
             decoration: 'none'
           },
-          formatter: function(params) {
+          formatter: function(params, ticket) {
             let tipHtml = ''
-            if (!params.name) {
+            if (params.dataIndex < 0) {
               return
             }
             tipHtml =
-                  `<div style="padding:10px;background: rgba(68, 207, 217, .4);">
-                    <p style="color:#fff;font-size:12px;">
-                      ${params.name}</p>
-                    <p style="color:#fff;font-size:12px;">
-                      投放商${toolTipData.length}个
-                    <p style="color:#fff;font-size:12px;">
-                      共计投放设备${toolTipData.length}台
-                    </p>
-                  </div>`
-            setTimeout(function() {
-              if (params.name) {
-                // tooltipCharts(params.name)
-              }
-            }, 10)
+              `<div style="padding:10px;background: rgba(68, 207, 217, .4);">
+                <p style="color:#fff;font-size:12px;">
+                  ${globalData[params.dataIndex].name}${params.dataIndex}</p>
+                <p style="color:#fff;font-size:12px;">
+                  投放商${globalData[params.dataIndex].distributorCount}个
+                <p style="color:#fff;font-size:12px;">
+                  共计投放设备${globalData[params.dataIndex].equipmentCount}台
+                </p>
+              </div>`
             return tipHtml
           }
-
         },
         geo: {
           show: true,
@@ -164,97 +147,99 @@ export default {
             }
           }
         },
-        series: [{
-          name: '散点',
-          type: 'scatter',
-          coordinateSystem: 'geo',
-          data: convertData(data),
-          symbolSize: function(val) {
-            return val[2] / 10
-          },
-          label: {
-            normal: {
-              formatter: '{b}',
-              position: 'right',
-              show: true
+        series: [
+          {
+            name: '散点',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            data: convertData(data),
+            symbolSize: function(val) {
+              return val[2] / 10
             },
-            emphasis: {
-              show: true
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: '#fff'
-            }
-          }
-        },
-        {
-          type: 'map',
-          map: mapName,
-          geoIndex: 0,
-          aspectScale: 0.75, // 长宽比
-          showLegendSymbol: false, // 存在legend时显示
-          label: {
-            normal: {
-              show: true
+            label: {
+              normal: {
+                formatter: '{b}',
+                position: 'right',
+                show: true
+              },
+              emphasis: {
+                show: true
+              }
             },
-            emphasis: {
-              show: false,
-              textStyle: {
+            itemStyle: {
+              normal: {
                 color: '#fff'
               }
             }
           },
-          roam: true,
-          itemStyle: {
-            normal: {
-              areaColor: '#031525',
-              borderColor: '#3B5077'
+          {
+            type: 'map',
+            map: mapName,
+            geoIndex: 0,
+            aspectScale: 0.75, // 长宽比
+            showLegendSymbol: false, // 存在legend时显示
+            label: {
+              normal: {
+                show: true
+              },
+              emphasis: {
+                show: false,
+                textStyle: {
+                  color: '#fff'
+                }
+              }
             },
-            emphasis: {
-              areaColor: '#2B91B7'
-            }
+            roam: true,
+            itemStyle: {
+              normal: {
+                areaColor: '#031525',
+                borderColor: '#3B5077'
+              },
+              emphasis: {
+                areaColor: '#2B91B7'
+              }
+            },
+            animation: false,
+            data: data
           },
-          animation: false,
-          data: data
-        },
-        {
-          name: '点',
-          type: 'scatter',
-          coordinateSystem: 'geo',
-          zlevel: 6
-        },
-        {
-          name: 'Top 100',
-          type: 'effectScatter',
-          coordinateSystem: 'geo',
-          data: convertData(data.sort(function(a, b) {
-            return b.value - a.value
-          }).slice(0, 10)),
-          symbolSize: function(val) {
-            return val[2] / 10
+          {
+            name: '点',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            symbolSize: function(val) {
+              return 10
+            },
+            zlevel: 6
           },
-          showEffectOn: 'render',
-          rippleEffect: {
-            brushType: 'stroke'
-          },
-          hoverAnimation: true,
-          label: {
-            normal: {
-              formatter: '{b}',
-              position: 'left',
-              show: false
-            }
-          },
-          itemStyle: {
-            normal: {
-              color: '#44CFD9',
-              shadowBlur: 10,
-              shadowColor: '#44CFD9'
-            }
-          },
-          zlevel: 1
-        }
+          {
+            name: 'Top 1',
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            data: convertData(data),
+            symbolSize: function(val) {
+              return 10
+            },
+            showEffectOn: 'render',
+            rippleEffect: {
+              brushType: 'stroke'
+            },
+            hoverAnimation: true,
+            label: {
+              normal: {
+                formatter: '{b}',
+                position: 'left',
+                show: false
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: '#44CFD9',
+                shadowBlur: 10,
+                shadowColor: '#44CFD9'
+              }
+            },
+            zlevel: 1
+          }
 
         ]
       }

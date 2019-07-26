@@ -1,7 +1,7 @@
 <template>
   <div class="data-bg">
     <!-- 头部 -->
-    <header-com v-model="eType"/>
+    <header-com v-model="eType" :name="name"/>
     <section class="wrapper">
       <div class="wrapper-content">
         <section class="left">
@@ -72,7 +72,8 @@ export default {
       },
       eType: '',
       timeType: 1,
-      localTimeType: 1
+      localTimeType: 1,
+      name: ''
     }
   },
   watch: {
@@ -93,6 +94,7 @@ export default {
       const res = await getAgent({})
       if (res.result === 0) {
         this.id = res.data.agentUserId
+        this.name = res.data.agentUserName
         this.getData()
         this.getCurrentOnlineCoin()
         this.getTrendChartDatas()
@@ -103,7 +105,7 @@ export default {
       const res = await getAdConsumersConfig({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
         const data = res.data || {}
-        this.equipmentData = res.data.agentEquipmentCountDTO
+        this.equipmentData = res.data.agentEquipmentCountDTO || {}
         this.incomeYData.totalPayCount = data.agentIncomeStatisticsTotalDTO.totalPayCount || 0
         this.incomeYData.todayPayCount = data.agentIncomeStatisticsTotalDTO.todayPayCount || 0
         this.incomeData.todayOnlineIncomde = data.agentIncomeStatisticsTotalDTO.todayOnlineIncomde || 0
@@ -113,7 +115,7 @@ export default {
     async getCurrentOnlineCoin() {
       const res = await getCurrentOnlineCoins({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        this.userList = res.data
+        this.userList = res.data || []
       }
     },
     handleTime(value) {
@@ -125,15 +127,14 @@ export default {
       const res = await getTrendChartData({ agentUserId: this.id, equipmentTypeValue: this.eType, type: this.localTimeType })
       if (res.result === 0) {
         this.timeType = this.localTimeType
-        this.tendList = res.data
+        this.tendList = res.data || []
       }
     },
     // top10,城市数据
     async getCityTopByDistributor() {
       const res = await getCityTopByDistributorId({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        this.cityTopList = res.data
-        console.log(this.cityTopList.length)
+        this.cityTopList = res.data || []
       }
     }
   }

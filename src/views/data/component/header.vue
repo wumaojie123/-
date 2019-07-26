@@ -1,17 +1,18 @@
 <template>
   <div class="header-wrapper">
     <span class="time">更新时间：{{ dateFormat(now) }}</span>
-    <p class="title">运维管理平台</p>
+    <p class="title">{{ name }}运维管理平台</p>
     <img src="../images/header-bg.png" class="header-bg">
     <div class="icon-wrapper">
       <div class="logout-wrap all-equipment" @click="visible =!visible">
         <img class="logout" src="../images/all.png">
         <span>{{ value | valueFilter }}</span>
+        <img class="down" src="../images/down.png">
         <div v-show="visible" class="item-wrap">
-          <div class="item" @click="handleItem('')">全部设备</div>
-          <div class="item" @click="handleItem('XYJ')">洗衣机</div>
-          <div class="item" @click="handleItem('CDZ')">充电桩</div>
-          <div class="item" @click="handleItem('AMY')">充电桩</div>
+          <div :class="{'select': value ===''}" class="item" @click="handleItem('')">全部设备</div>
+          <div :class="{'select': value ==='XYJ'}" class="item" @click="handleItem('XYJ')">洗衣机</div>
+          <div :class="{'select': value ==='CDZ'}" class="item" @click="handleItem('CDZ')">充电桩</div>
+          <div :class="{'select': value ==='AMY'}" class="item" @click="handleItem('AMY')">充电桩</div>
         </div>
       </div>
       <div class="logout-wrap" @click="handleLogout">
@@ -32,6 +33,10 @@ export default {
   },
   props: {
     value: {
+      type: String,
+      default: ''
+    },
+    name: {
       type: String,
       default: ''
     }
@@ -137,7 +142,7 @@ export default {
   position: absolute;
   bottom: @10px;
   right: @20px;
-  width: @200px;
+  width: 300px;
   display: flex;
   justify-content: space-between;
   .logout-wrap {
@@ -151,20 +156,30 @@ export default {
   }
   .all-equipment{
     position:relative;
+    padding-right: @35px;
+    .down{
+      position: absolute;
+      right: @18px;
+      width: @12px;
+      height: @6px;
+      bottom: @4px;
+    }
     .item-wrap{
       position:absolute;
-      background: #58C4FC;
+      background: url('../images/select-bg.png');
+      background-size: contain;
       z-index: 10;
-      color: #fff;
-      border-radius: @10px;
-      top: @30px;
+      top: @40px;
+      font-size: @20px;
       left: @10px;
-      overflow: hidden;
       .item{
         min-width: @137px;
         padding: @10px @10px;
         text-align: left;
-        border-bottom:1px solid #44CFD9;
+        color: #44CFD9;
+      }
+      .select{
+        background: url('../images/select-item.png');
       }
       &::before{
         content: '';
