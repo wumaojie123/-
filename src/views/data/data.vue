@@ -96,7 +96,9 @@ export default {
         this.id = res.data.agentUserId
         this.name = res.data.agentUserName
         this.getData()
-        this.getCurrentOnlineCoin()
+        setInterval(() => {
+          this.getCurrentOnlineCoin()
+        }, 60000)
         this.getTrendChartDatas()
         this.getCityTopByDistributor()
       }
