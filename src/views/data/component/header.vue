@@ -12,7 +12,7 @@
           <div :class="{'select': value ===''}" class="item" @click="handleItem('')">全部设备</div>
           <div :class="{'select': value ==='XYJ'}" class="item" @click="handleItem('XYJ')">洗衣机</div>
           <div :class="{'select': value ==='CDZ'}" class="item" @click="handleItem('CDZ')">充电桩</div>
-          <div :class="{'select': value ==='AMY'}" class="item" @click="handleItem('AMY')">充电桩</div>
+          <div :class="{'select': value ==='AMY'}" class="item" @click="handleItem('AMY')">按摩椅</div>
         </div>
       </div>
       <div class="logout-wrap" @click="handleLogout">
