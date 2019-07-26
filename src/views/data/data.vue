@@ -1,26 +1,28 @@
 <template>
   <div class="data-bg">
     <!-- 头部 -->
-    <header-com/>
+    <header-com v-model="eType"/>
     <section class="wrapper">
-      <section class="left">
-        <!-- 订单趋势 -->
-        <tend :data="tendList" :time-type="timeType" @on-change-time="handleTime"/>
-        <!-- 设备数城市分布TOP10 -->
-        <city :list="cityTopList" style="margin-top: 18px;"/>
-      </section>
-      <section class="center">
-        <div class="flex-wrapp">
-          <!-- 收益 -->
-          <income :data="incomeData" style="margin-right: 10px;"/>
-          <income-y :data="incomeYData"/>
-        </div>
-        <china style="margin-top: 26px;"/>
-      </section>
-      <section class="right">
-        <equipment :data="equipmentData"/>
-        <order :list="userList" style="margin-top: 18px;"/>
-      </section>
+      <div class="wrapper-content">
+        <section class="left">
+          <!-- 订单趋势 -->
+          <tend :data="tendList" :time-type="timeType" @on-change-time="handleTime"/>
+          <!-- 设备数城市分布TOP10 -->
+          <city :data-list="cityTopList" style="margin-top: 0.09375rem;"/>
+        </section>
+        <section class="center">
+          <div class="flex-wrapp">
+            <!-- 收益 -->
+            <income :data="incomeData" style="margin-right: 0.052083333333333336rem;"/>
+            <income-y :data="incomeYData"/>
+          </div>
+          <china :data-list="cityTopList" style="margin-top: 26px;"/>
+        </section>
+        <section class="right">
+          <equipment :data="equipmentData"/>
+          <order :list="userList" style="margin-top: 0.09375rem;"/>
+        </section>
+      </div>
 
     </section>
   </div>
@@ -69,7 +71,18 @@ export default {
         totalOnlineIncomde: 0
       },
       eType: '',
-      timeType: 1
+      timeType: 1,
+      localTimeType: 1
+    }
+  },
+  watch: {
+    eType(val, oldValue) {
+      if (val !== oldValue) {
+        this.getData()
+        this.getCurrentOnlineCoin()
+        this.getTrendChartDatas()
+        this.getCityTopByDistributor()
+      }
     }
   },
   created() {
@@ -104,12 +117,14 @@ export default {
       }
     },
     handleTime(value) {
-      this.timeType = value
+      console.log('value', value)
+      this.localTimeType = value
       this.getTrendChartDatas()
     },
     async getTrendChartDatas() {
-      const res = await getTrendChartData({ agentUserId: this.id, equipmentTypeValue: this.eType, type: this.timeType })
+      const res = await getTrendChartData({ agentUserId: this.id, equipmentTypeValue: this.eType, type: this.localTimeType })
       if (res.result === 0) {
+        this.timeType = this.localTimeType
         this.tendList = res.data
       }
     },
@@ -133,16 +148,20 @@ export default {
   padding-bottom: 10px;
 }
 .wrapper{
-  display: flex;
-  margin: 0 20px;
-  justify-content: space-between;
-  .center{
-    flex:1;
-    margin: 0 12px;
-    .flex-wrapp{
-      display: flex;
-      justify-content: space-between;
+  margin: 0 auto;
+  .wrapper-content{
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    .center{
+      flex:1;
+      margin: 0 12px;
+      .flex-wrapp{
+        display: flex;
+        justify-content: space-between;
+      }
     }
+
   }
 }
 </style>

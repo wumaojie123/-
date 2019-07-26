@@ -10,7 +10,7 @@
       <div class="title-container">
         <div class="flex-wrapper">
           <h3 :class="{'select': type === '1'}" class="title" @click="type='1'">{{ `生产商管理平台` }}</h3>
-          <h3 :class="{'select': type === '2'}" class="title " @click="type='2'">{{ `运维管理平台` }}</h3>
+          <h3 :class="{'select': type === 'dlpt'}" class="title " @click="type='dlpt'">{{ `运维管理平台` }}</h3>
         </div>
         <!--<hr style="margin-bottom: 30px;height:1px;background-color:white;border: none;"/>-->
         <lang-select class="set-language"/>
@@ -73,7 +73,7 @@ import LangSelect from '@/components/LangSelect'
 import router from '../../router/index'
 import { routerFormat } from '@/utils/routerFormat'
 import { saveSession, getSession } from '../../utils/savaSession'
-import { getMenu } from '../../api/getMenu'
+import { getMenu, userMapRoles } from '../../api/getMenu'
 import SocialSign from './socialsignin'
 import MD5 from 'js-md5'
 
@@ -168,11 +168,31 @@ export default {
             this.loading = false
             clearInterval(self.timerId)
             saveSession('username', this.loginForm.username)
-            getMenu().then(res => {
-              saveSession('addRoute', res.data)
-              router.addRoutes(routerFormat(JSON.parse(getSession('addRoute'))))
-              this.$router.push({ path: this.redirect || '/' })
-            })
+            const params = {}
+            if (this.type === 'dlpt') {
+              params.value = 'dlpt'
+              userMapRoles({}).then(res => {
+                if (res.result === 0) {
+                  const arr = ['MC_AGENT_AGENT_SECOND', 'MC_AGENT_AGENT_FIRST']
+                  const flag = (res.data || []).some(item => {
+                    return arr.indexOf(item.value) > -1
+                  })
+                  if (flag) {
+                    saveSession('addRoute', [])
+                    router.addRoutes(routerFormat(JSON.parse(getSession('addRoute'))))
+                    this.$router.push({ path: '/data' })
+                  } else {
+                    this.$message({ message: '暂无权限', type: 'error' })
+                  }
+                }
+              })
+            } else {
+              getMenu(params).then(res => {
+                saveSession('addRoute', res.data)
+                router.addRoutes(routerFormat(JSON.parse(getSession('addRoute'))))
+                this.$router.push({ path: this.redirect || '/' })
+              })
+            }
           }, err => {
             this.loading = false
             console.log(err)

@@ -4,9 +4,9 @@
     <section class="order-total">
       <p >全国投放点位分布图</p>
       <p style="margin-top: 18px;">覆盖城市
-        <span style="color: #44CFD9;font-weight: 700;">34</span>
+        <span style="color: #44CFD9;font-weight: 700;">{{ localList.length }}</span>
         个，共计投放商
-        <span style="color: #44CFD9;font-weight: 700;">300</span>
+        <span style="color: #44CFD9;font-weight: 700;">{{ total }}</span>
         个
       </p>
     </section>
@@ -20,66 +20,55 @@ import 'echarts/map/js/china.js'
 export default {
   name: 'China',
   props: {
-    list: {
+    dataList: {
       type: Array,
       default: () => []
+    }
+  },
+  data() {
+    return {
+      localList: this.dataList,
+      echartData: [],
+      geoCoordMap: {}
+    }
+  },
+  computed: {
+    total() {
+      let num = 0
+      this.localList.map(i => {
+        num += i.lyyDistributorCount || 0
+      })
+      return num
+    }
+  },
+  watch: {
+    dataList(val) {
+      const arr = []
+      const geoCoordMap = {}
+      val.map(i => {
+        const obj = { name: i.cityName, value: i.lyyDistributorCount }
+        geoCoordMap[i.cityName] = [i.lng, i.lat]
+        arr.push(obj)
+      })
+      this.echartData = arr
+      this.geoCoordMap = geoCoordMap
+      this.localList = val
     }
   },
   mounted() {
     this.initDatas()
   },
   methods: {
-    initDatas() {
+    async initDatas() {
       const myChart = echarts.init(document.getElementById('china'))
       const mapName = 'china'
       const data = [
-        { name: '北京', value: 199 },
-        { name: '天津', value: 42 },
-        { name: '河北', value: 102 },
-        { name: '山西', value: 81 },
-        { name: '内蒙古', value: 47 },
-        { name: '武汉市', value: 47 },
-        { name: '辽宁', value: 67 },
-        { name: '吉林', value: 82 },
-        { name: '黑龙江', value: 123 },
-        { name: '上海', value: 24 }
-
+        { name: '北京', value: 199 }
       ]
 
       const geoCoordMap = {}
       const toolTipData = [
-        { name: '北京', value: [{ name: '科技人才总数', value: 95 }, { name: '理科', value: 82 }] },
-        { name: '天津', value: [{ name: '文科', value: 22 }, { name: '理科', value: 20 }] },
-        { name: '河北', value: [{ name: '文科', value: 60 }, { name: '理科', value: 42 }] },
-        { name: '山西', value: [{ name: '文科', value: 40 }, { name: '理科', value: 41 }] },
-        { name: '内蒙古', value: [{ name: '文科', value: 23 }, { name: '理科', value: 24 }] },
-        { name: '辽宁', value: [{ name: '文科', value: 39 }, { name: '理科', value: 28 }] },
-        { name: '武汉市', value: [{ name: '文科', value: 39 }, { name: '理科', value: 28 }] },
-        { name: '吉林', value: [{ name: '文科', value: 41 }, { name: '理科', value: 41 }] },
-        { name: '黑龙江', value: [{ name: '文科', value: 35 }, { name: '理科', value: 31 }] },
-        { name: '上海', value: [{ name: '文科', value: 12 }, { name: '理科', value: 12 }] },
-        { name: '江苏', value: [{ name: '文科', value: 47 }, { name: '理科', value: 45 }] },
-        { name: '浙江', value: [{ name: '文科', value: 57 }, { name: '理科', value: 57 }] },
-        { name: '安徽', value: [{ name: '文科', value: 57 }, { name: '理科', value: 52 }] },
-        { name: '福建', value: [{ name: '文科', value: 59 }, { name: '理科', value: 57 }] },
-        { name: '江西', value: [{ name: '文科', value: 49 }, { name: '理科', value: 42 }] },
-        { name: '山东', value: [{ name: '文科', value: 67 }, { name: '理科', value: 52 }] },
-        { name: '河南', value: [{ name: '文科', value: 69 }, { name: '理科', value: 68 }] },
-        { name: '湖北', value: [{ name: '文科', value: 60 }, { name: '理科', value: 56 }] },
-        { name: '湖南', value: [{ name: '文科', value: 62 }, { name: '理科', value: 52 }] },
-        { name: '重庆', value: [{ name: '文科', value: 47 }, { name: '理科', value: 44 }] },
-        { name: '四川', value: [{ name: '文科', value: 65 }, { name: '理科', value: 60 }] },
-        { name: '贵州', value: [{ name: '文科', value: 32 }, { name: '理科', value: 30 }] },
-        { name: '云南', value: [{ name: '文科', value: 42 }, { name: '理科', value: 41 }] },
-        { name: '西藏', value: [{ name: '文科', value: 5 }, { name: '理科', value: 4 }] },
-        { name: '陕西', value: [{ name: '文科', value: 38 }, { name: '理科', value: 42 }] },
-        { name: '甘肃', value: [{ name: '文科', value: 28 }, { name: '理科', value: 28 }] },
-        { name: '青海', value: [{ name: '文科', value: 5 }, { name: '理科', value: 5 }] },
-        { name: '宁夏', value: [{ name: '文科', value: 10 }, { name: '理科', value: 8 }] },
-        { name: '新疆', value: [{ name: '文科', value: 36 }, { name: '理科', value: 31 }] },
-        { name: '广东', value: [{ name: '文科', value: 63 }, { name: '理科', value: 60 }] },
-        { name: '广西', value: [{ name: '文科', value: 29 }, { name: '理科', value: 30 }] },
-        { name: '海南', value: [{ name: '文科', value: 8 }, { name: '理科', value: 6 }] }
+        { name: '北京', value: [{ name: '科技人才总数', value: 95 }, { name: '理科', value: 82 }] }
       ]
 
       /* 获取地图数据*/
@@ -92,13 +81,6 @@ export default {
         // 地区经纬度
         geoCoordMap[name] = v.properties.cp
       })
-
-      console.log(data)
-      console.log(toolTipData)
-      // const max = 480, min = 9 // todo
-      // const maxSize4Pin = 100,
-      //   minSize4Pin = 20
-
       const convertData = function(data) {
         const res = []
         for (let i = 0; i < data.length; i++) {
@@ -277,6 +259,9 @@ export default {
         ]
       }
       myChart.setOption(option)
+    },
+    async getLocationInfo(name) {
+
     }
   }
 }

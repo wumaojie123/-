@@ -7,8 +7,8 @@
         <span :class="{'select': type === '2' }" @click="handleType('2')">营业额趋势</span>
       </div>
       <div class="right">
-        <span :class="{'select': timeType === 1}" class="default" @click="handleTime(1)">近1月</span>
-        <span :class="{'select': timeType === 2}" class="default" @click="handleTime(2)">近半年</span>
+        <span :class="{'select': timeType === 1}" class="default default_left" @click="handleTime(1)">近1月</span>
+        <span :class="{'select': timeType === 2}" class="default default_right" @click="handleTime(2)">近半年</span>
       </div>
     </div>
     <section class="echart"/>
@@ -31,44 +31,53 @@ export default {
   data() {
     return {
       type: '1',
-      localData: this.data
+      localData: this.data,
+      dateList: [],
+      incomeList: [],
+      orderList: []
     }
   },
-  computed: {
-    dateList() {
+  watch: {
+    data(val) {
+      console.log('====================KKKKKK', val.length)
       const dateList = []
+      const incomeList = []
+      const orderList = []
       this.data.map(i => {
         dateList.push(i.statisticsDate)
-      })
-      return dateList
-    },
-    incomeList() {
-      const incomeList = []
-      this.data.map(i => {
         incomeList.push(i.dayPayCount)
+        orderList.push(i.dayOnlineIncomde)
       })
-      return incomeList
+      this.dateList = dateList
+      this.incomeList = incomeList
+      this.orderList = orderList
+      this.initData(this.dateList, this.orderList)
+      this.localData = val
     },
-    orderLst() {
-      const orderLst = []
-      this.data.map(i => {
-        orderLst.push(i.dayOnlineIncomde)
+    timeType(val) {
+      const dateList = []
+      const incomeList = []
+      const orderList = []
+      this.localData.map(i => {
+        dateList.push(i.statisticsDate)
+        incomeList.push(i.dayPayCount)
+        orderList.push(i.dayOnlineIncomde)
       })
-      return orderLst
+      if (this.type === '1') {
+        this.initData(dateList, orderList)
+      } else {
+        this.initData(dateList, incomeList)
+      }
     }
-  },
-  created() {
-    this.handleType(this.type)
   },
   methods: {
     handleTime(value) {
-      this.timeType = value
       this.$emit('on-change-time', value)
     },
     handleType(type) {
       this.type = type
       if (type === '1') {
-        this.initData(this.dateList, this.orderLst)
+        this.initData(this.dateList, this.orderList)
       } else {
         this.initData(this.dateList, this.incomeList)
       }
@@ -182,20 +191,20 @@ export default {
 
 .tend-wrapper{
   color: #44CFD9;
-  width: 480px;
+  width: @480px;
   height: 413px;
   background-image: url('../images/tend-bg.png');
-  background-size: 480px 413px;
+  background-size: @480px 413px;
   font-size: 0;
 }
 .title{
-  padding: 32px 30px;
+  padding: @32px @30px;
   display: flex;
   justify-content: space-between;
   .left{
     span{
       color: #fff;
-      font-size:18px;
+      font-size: @18px;
     }
     .select{
       color: #44CFD9;
@@ -205,21 +214,28 @@ export default {
     color: #fff;
     font-size: 0;
     span{
-      width: 54px;
-      font-size: 12px;
-      height: 22px;
-      line-height: 22px;
+      width: @54px;
+      font-size: @12px;
+      height: @22px;
+      line-height: @22px;
       text-align: center;
       display: inline-block;
     }
     .select{
       background:rgba(68,207,217,1);
-      border-radius:5px 0px 0px 5px!important;
     }
     .default{
-      border-radius:0px 5px 5px 0px;
       border:1px solid rgba(68,207,217,1)
     }
+    .default_left{
+      border-radius: @5px 0px 0px @5px!important;
+
+    }
+    .default_right{
+      border-radius:0px @5px @5px 0px;
+      // border-radius: @5px 0px 0px @5px!important;
+    }
+
   }
 }
 

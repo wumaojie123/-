@@ -2,7 +2,7 @@
   <div class="equipment-wrap">
     <div class="equipment-area">
       <section class="title">
-        <!-- <img class="icon-title" src="../images/equipment.png"/> -->
+        <img class="icon-title" src="../images/equipment.png">
         <span>设备监控</span>
       </section>
       <section class="total">
@@ -44,7 +44,16 @@ export default {
   },
   computed: {
     totalStr() {
-      const str = this.data.totalQuipmentCount.toString().split('')
+      let str = this.data.totalQuipmentCount.toString().split('')
+      const len = str.length
+      if (str.length < 5) {
+        const lenTemp = 5 - len
+        const arr = []
+        for (let i = 0; i < lenTemp; i++) {
+          arr.push(0)
+        }
+        str = arr.concat(str)
+      }
       return str
     }
   }
@@ -52,52 +61,53 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import '../images/constant.less';
 .equipment-wrap{
-    width: 480px;
-    height: 280px;
+    width: @480px;
+    height: @280px;
     background-image: url('../images/epuipment-bg.png');
-    background-size: 480px 280px;
+    background-size: @480px @280px;
     color: #44CFD9;
 }
 .title{
-  font-size:20px;
+  font-size: @20px;
   font-family:SourceHanSansCN-Medium;
   font-weight:500;
   color:rgba(68,207,217,1);
-  padding-top: 20px;
+  padding-top: @20px;
   position: relative;
-  padding-left: 70px;
+  padding-left: @30px;
 }
 
 .total{
-    margin-top: 20px;
+    margin-top: @10px;
     text-align: center;
-    margin-bottom: 18px;
+    margin-bottom: @18px;
     display: flex;
     align-items: center;
     justify-content: center;
     color:rgba(88,196,252,1);
-    font-size: 18px;
+    font-size: @18px;
 }
 .num{
     text-align: center;
-    margin-bottom: 18px;
+    margin-bottom: @18px;
     margin: 0 auto;
 }
 
 .num-item {
-    width:57px;
-    height:70px;
+    width: @57px;
+    height: @70px;
     background:linear-gradient(0deg,rgba(3,36,51,1) 0%,rgba(2,10,17,1) 100%);
     box-shadow:inset 0px 1px 6px 0px rgba(135, 190, 195, 0.7);
-    border-radius:10px;
+    border-radius: @10px;
     text-align: center;
     display: inline-block;
-    line-height: 70px;
-    font-size:46px;
+    line-height: @70px;
+    font-size: @46px;
     font-family:SourceHanSansCN-Bold;
     font-weight:bold;
-    margin-right: 8px;
+    margin-right: @8px;
 }
 .num-item:last {
     margin-right: 0;
@@ -105,7 +115,12 @@ export default {
 
 .num-status {
     display: flex;
-    margin-top: 30px;
+    margin-top: @30px;
+}
+.icon-title{
+  width: @30px;
+  height: @30px;
+  vertical-align: text-bottom;
 }
 
 .status-item {
@@ -114,19 +129,19 @@ export default {
     text-align: center;
     align-items: center;
     .item-title{
-        font-size:18px;
+        font-size: @18px;
         font-family:SourceHanSansCN-Regular;
         font-weight:400;
         color:rgba(88,196,252,1);
     }
     .staus-num {
-        width:161px;
-        height:32px;
-        line-height: 32px;
-        margin-top: 13px;
+        width: @161px;
+        height: @32px;
+        line-height: @32px;
+        margin-top: @13px;
         display: inline-block;
         color: #52C3FF;
-        font-size: 40px;
+        font-size: @40px;
         display: flex;
         align-items: center;
         justify-content: center;

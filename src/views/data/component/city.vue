@@ -39,17 +39,17 @@
 <script>
 export default {
   props: {
-    list: {
+    dataList: {
       type: Array,
       default: () => []
     }
   },
   computed: {
     localList() {
-      if (this.list.length <= 10) {
-        return this.list
+      if (this.dataList.length <= 10) {
+        return this.dataList
       } else {
-        return this.list.slice(0, 9)
+        return this.dataList.slice(0, 9)
       }
     }
   }
@@ -60,10 +60,10 @@ export default {
 @import '../images/constant.less';
 
 .equipment-wrap{
-  width: 480px;
-  height: 500px;
+  width: @480px;
+  height: @500px;
   background-image: url('../images/city-bg.png');
-  background-size: 480px 500px;
+  background-size: @480px @500px;
 }
 .equipment-area{
   height: @70px;
@@ -88,7 +88,7 @@ export default {
 
 .city-wrap{
   display: flex;
-  height: 420px;
+  height: @420px;
   flex-direction: column;
   .city-list{
     flex:1;

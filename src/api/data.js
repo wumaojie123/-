@@ -39,4 +39,3 @@ export function getCityTopByDistributorId(data) {
     params: data
   })
 }
-
