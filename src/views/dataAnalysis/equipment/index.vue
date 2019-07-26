@@ -116,6 +116,7 @@ export default {
     getEquipmentStatusData(params) {
       this.onlineScaleLoading = true
       getEquipmentStatusData(params).then(res => {
+        this.onlineScaleLoading = false
         if (!res.data) {
           this.typeInfoList[0].count = 0
           this.typeInfoList[1].count = 0
@@ -137,13 +138,14 @@ export default {
           value: res.data.offLine || 0
         }
         this.onlineScale.setOption(onlineScaleOption)
-      }).finally(() => {
+      }).catch(() => {
         this.onlineScaleLoading = false
       })
     },
     getEquipmentTypeData(params) {
       this.equipmentTypeScaleLoading = true
       getEquipmentTypeData(params).then(res => {
+        this.equipmentTypeScaleLoading = false
         if (!res.data || res.data.length === 0) {
           return
         }
@@ -152,7 +154,7 @@ export default {
         equipmentTypeScaleOption.legend.data = echartsData.legendData
         equipmentTypeScaleOption.series[0].data = echartsData.seriesData
         this.equipmentTypeScale.setOption(equipmentTypeScaleOption)
-      }).finally(() => {
+      }).catch(() => {
         this.equipmentTypeScaleLoading = false
       })
     },
@@ -178,13 +180,14 @@ export default {
     getShipmentData(params) {
       this.shipmentLoading = true
       getEquipmentStorageData(params).then(res => {
+        this.shipmentLoading = false
         const echartsData = this._shipmentDataTube(res.data)
         this.shipment = echarts.init(this.$refs.shipment)
         shipmentOption.xAxis.data = echartsData.xaxisData
         shipmentOption.series[0].data = echartsData.seriesData1
         shipmentOption.series[1].data = echartsData.seriesData2
         this.shipment.setOption(shipmentOption)
-      }).finally(() => {
+      }).catch(() => {
         this.shipmentLoading = false
       })
     },
