@@ -7,7 +7,7 @@
     <div class="content-wrapper">
       <div v-for="(item, index) in list" :key="index" class="item">
         <img :src="item.headImg" class="header-img">
-        <p class="order-info">{{ item.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;{{ item.userName }}启动 &nbsp;&nbsp;&nbsp;{{ item.equipmentTypeName }}</p>
+        <p class="order-info">{{ item.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;<span class="user-name">{{ item.userName }}</span> &nbsp;&nbsp;&nbsp;启动{{ item.equipmentTypeName }}</p>
       </div>
     </div>
   </section>
@@ -78,6 +78,16 @@ export default {
         color:rgba(68,207,217,1);
         background: linear-gradient(0deg, #032433 0%, #4171BF 100%);
         border-radius:@15px;
+        .user-name{
+          display: inline-block;
+          max-width: @107px;
+          height: @30px;
+          line-height: @30px;
+          white-space: nowrap;
+          text-overflow:ellipsis;
+          overflow:hidden;
+          vertical-align: bottom;
+        }
       }
     }
   }

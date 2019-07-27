@@ -1,6 +1,7 @@
 /* eslint-disable */
 <template>
-  <section >
+  <section class="china-wrap">
+    <!-- <img src="../images/top.png" class="top-right"/> -->
     <section class="order-total">
       <p >全国投放点位分布图</p>
       <p style="margin-top: 18px;">覆盖城市
@@ -98,7 +99,7 @@ export default {
               return
             }
             tipHtml =
-              `<div style="padding:10px;background: rgba(68, 207, 217, .4);">
+              `<div class="hover-bg" >
                 <p style="color:#fff;font-size:12px;">
                   ${globalData[params.dataIndex].name}${params.dataIndex}</p>
                 <p style="color:#fff;font-size:12px;">
@@ -252,8 +253,26 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
+<style  lang="less">
 @import '../images/constant.less';
+
+.china-wrap{
+  position: relative;
+  .top-right{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 85px;
+    height: 82px;
+  }
+}
+.hover-bg{
+  font-size: 0;
+  background: url('../images/hover-bg.png');
+  background-size:100% 100%;
+  padding: 12px;
+  background-repeat: no-repeat;
+}
 
 .order-total{
     font-size: @30px;
