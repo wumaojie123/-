@@ -64,6 +64,7 @@ export default {
   height: @500px;
   background-image: url('../images/city-bg.png');
   background-size: @480px @500px;
+  background-size: 100% 100%;
 }
 .equipment-area{
   height: @70px;

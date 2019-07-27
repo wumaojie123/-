@@ -36,7 +36,8 @@ export default {
   text-align: center;
   position: relative;
   background-image: url('../images/income-bg.png');
-  background-size: contain;
+  background-size: 100% 100%;
+  // background-size: contain;
   &::after{
     content: '';
     display: inline-block;

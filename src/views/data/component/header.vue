@@ -135,7 +135,7 @@ export default {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 580px;
+  width: 600px;
   height: @137px;
 }
 .icon-wrapper{
@@ -168,6 +168,7 @@ export default {
       position:absolute;
       background: url('../images/select-bg.png');
       background-size: contain;
+      background-size: 100% 100%;
       z-index: 10;
       top: @40px;
       font-size: @20px;

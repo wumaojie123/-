@@ -6,7 +6,7 @@
         <span>设备监控</span>
       </section>
       <section class="total">
-        <span style="margin: 0 5px;">设备总数</span>
+        <span >设备总数</span>
       </section>
       <section class="num">
         <div class="num-wrap">
@@ -80,9 +80,9 @@ export default {
 }
 
 .total{
-    margin-top: @10px;
+    margin-top: @4px;
     text-align: center;
-    margin-bottom: @18px;
+    margin-bottom: @14px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,7 +115,7 @@ export default {
 
 .num-status {
     display: flex;
-    margin-top: @30px;
+    margin-top: @20px;
 }
 .icon-title{
   width: @30px;
