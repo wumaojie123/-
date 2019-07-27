@@ -120,10 +120,11 @@ export default {
       if (res.result === 0) {
         const data = res.data || {}
         this.equipmentData = res.data.agentEquipmentCountDTO || {}
-        this.incomeYData.totalPayCount = data.agentIncomeStatisticsTotalDTO.totalPayCount || 0
-        this.incomeYData.todayPayCount = data.agentIncomeStatisticsTotalDTO.todayPayCount || 0
-        this.incomeData.todayOnlineIncomde = data.agentIncomeStatisticsTotalDTO.todayOnlineIncomde || 0
-        this.incomeData.totalOnlineIncomde = data.agentIncomeStatisticsTotalDTO.totalOnlineIncomde || 0
+        const agentIncomeStatisticsTotalDTO = data.agentIncomeStatisticsTotalDTO || {}
+        this.incomeYData.totalPayCount = agentIncomeStatisticsTotalDTO.totalPayCount || 0
+        this.incomeYData.todayPayCount = agentIncomeStatisticsTotalDTO.todayPayCount || 0
+        this.incomeData.todayOnlineIncomde = agentIncomeStatisticsTotalDTO.todayOnlineIncomde || 0
+        this.incomeData.totalOnlineIncomde = agentIncomeStatisticsTotalDTO.totalOnlineIncomde || 0
       }
     },
     async getCurrentOnlineCoin() {
