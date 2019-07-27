@@ -7,7 +7,7 @@
     <div class="content-wrapper">
       <div v-for="(item, index) in list" :key="index" class="item">
         <img :src="item.headImg" class="header-img">
-        <p class="order-info">{{ item.createTime }}         {{ item.userName }}启动{{ item.equipmentTypeName }}</p>
+        <p class="order-info">{{ item.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;{{ item.userName }}启动 &nbsp;&nbsp;&nbsp;{{ item.equipmentTypeName }}</p>
       </div>
     </div>
   </section>

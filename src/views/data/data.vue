@@ -73,12 +73,20 @@ export default {
       eType: '',
       timeType: 1,
       localTimeType: 1,
-      name: ''
+      name: '',
+      timer: null
     }
   },
   watch: {
     eType(val, oldValue) {
       if (val !== oldValue) {
+        this.userList = []
+        this.cityTopList = []
+        this.tendList = []
+        clearInterval(this.timer)
+        this.timer = setInterval(() => {
+          this.getCurrentOnlineCoin()
+        }, 3000)
         this.getData()
         this.getCurrentOnlineCoin()
         this.getTrendChartDatas()
@@ -89,6 +97,10 @@ export default {
   created() {
     this.init()
   },
+  beforeDestroy() {
+    clearInterval(this.timer)
+    this.timer = null
+  },
   methods: {
     async init() {
       const res = await getAgent({})
@@ -96,9 +108,9 @@ export default {
         this.id = res.data.agentUserId
         this.name = res.data.agentUserName
         this.getData()
-        setInterval(() => {
+        this.timer = setInterval(() => {
           this.getCurrentOnlineCoin()
-        }, 60000)
+        }, 3000)
         this.getTrendChartDatas()
         this.getCityTopByDistributor()
       }
