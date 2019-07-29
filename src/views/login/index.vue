@@ -173,9 +173,9 @@ export default {
               params.value = 'dlpt'
               userMapRoles({}).then(res => {
                 if (res.result === 0) {
-                  const arr = ['MC_AGENT_AGENT_SECOND', 'MC_AGENT_AGENT_FIRST']
+                  const arr = ['MC_AGENT_AGENT_SECOND', 'MC_AGENT_AGENT_FIRST', 'MC_AGENT_AGENT_FIRST_DEFAULT']
                   const flag = (res.data || []).some(item => {
-                    return arr.indexOf(item.value) > -1
+                    return arr.indexOf(item.value) > -1 || item.name.indexOf('Role_Agent_First') > -1 || item.name.indexOf('Role_Agent_Second') > -1
                   })
                   if (flag) {
                     saveSession('addRoute', [])
