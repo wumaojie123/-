@@ -6,13 +6,13 @@
     <div class="icon-wrapper">
       <div class="logout-wrap all-equipment" @click="visible =!visible">
         <img class="logout" src="../images/all.png">
-        <span>{{ value | valueFilter }}</span>
+        <span>{{ eTypeName }}</span>
         <img class="down" src="../images/down.png">
         <div v-show="visible" class="item-wrap">
-          <div :class="{'select': value ===''}" class="item" @click="handleItem('')">全部设备</div>
-          <div :class="{'select': value ==='XYJ'}" class="item" @click="handleItem('XYJ')">洗衣机</div>
-          <div :class="{'select': value ==='CDZ'}" class="item" @click="handleItem('CDZ')">充电桩</div>
-          <div :class="{'select': value ==='AMY'}" class="item" @click="handleItem('AMY')">按摩椅</div>
+          <div class="bg-mask"/>
+          <div class="item-content-wrap">
+            <div v-for="(item, index) in localEquipmentList" :class="{'select': value ===item.code }" :key="index" class="item" @click="handleItem(item)">{{ item.name }}</div>
+          </div>
         </div>
       </div>
       <div class="logout-wrap" @click="handleLogout">
@@ -25,26 +25,33 @@
 
 <script>
 export default {
-  filters: {
-    valueFilter(val) {
-      const valueMap = { 'XYJ': '洗衣机', 'CDZ': '充电桩', 'AMY': '按摩椅' }
-      return valueMap[val] || '全部设备'
-    }
-  },
   props: {
     value: {
+      type: String,
+      default: ''
+    },
+    eTypeName: {
       type: String,
       default: ''
     },
     name: {
       type: String,
       default: ''
+    },
+    equipmentList: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
       visible: false,
       now: Date.now()
+    }
+  },
+  computed: {
+    localEquipmentList() {
+      return [{ name: '全部设备', code: '' }].concat(this.equipmentList)
     }
   },
   methods: {
@@ -56,7 +63,7 @@ export default {
       })
     },
     handleItem(item) {
-      this.$emit('input', item)
+      this.$emit('on-OK', item)
     },
     /**
      * 格式化时间
@@ -135,14 +142,14 @@ export default {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 600px;
+  width: 4.25rem;
   height: @137px;
 }
 .icon-wrapper{
   position: absolute;
   bottom: @10px;
   right: @20px;
-  width: 300px;
+  width: @300px;
   display: flex;
   justify-content: space-between;
   .logout-wrap {
@@ -166,13 +173,27 @@ export default {
     }
     .item-wrap{
       position:absolute;
-      background: url('../images/select-bg.png');
-      background-size: contain;
-      background-size: 100% 100%;
+
       z-index: 10;
       top: @40px;
       font-size: @20px;
       left: @10px;
+      .bg-mask{
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        top: 0;
+      }
+      .item-content-wrap{
+        z-index: 1;
+        position: absolute;
+        max-height: @200px;
+        overflow: auto;
+        background: url('../images/select-bg.png');
+        background-size: contain;
+        background-size: 100% 100%;
+      }
       .item{
         min-width: @137px;
         padding: @10px @10px;

@@ -1,7 +1,7 @@
 <template>
   <div class="data-bg">
     <!-- 头部 -->
-    <header-com v-model="eType" :name="name"/>
+    <header-com v-model="eType" :e-type-name="eTypeName" :name="name" :equipment-list="equipmentList" @on-OK="selectEtype"/>
     <section class="wrapper">
       <div class="wrapper-content">
         <section class="left">
@@ -38,7 +38,7 @@ import income from './component/income'
 import incomeY from './component/incomeY'
 import order from './component/order'
 import china from './component/china'
-import { getAgent, getAdConsumersConfig, getCurrentOnlineCoins, getTrendChartData, getCityTopByDistributorId } from '@/api/data'
+import { getAgent, getAdConsumersConfig, getCurrentOnlineCoins, getTrendChartData, getCityTopByDistributorId, querySHL } from '@/api/data'
 
 export default {
   components: {
@@ -73,13 +73,25 @@ export default {
       eType: '',
       timeType: 1,
       localTimeType: 1,
+      eTypeName: '全部设备',
       name: '',
-      timer: null
+      timer: null,
+      equipmentList: []
     }
   },
-  watch: {
-    eType(val, oldValue) {
-      if (val !== oldValue) {
+  created() {
+    this.init()
+    this.getSHL()
+  },
+  beforeDestroy() {
+    clearInterval(this.timer)
+    this.timer = null
+  },
+  methods: {
+    selectEtype(data) {
+      if (this.eType !== data.code) {
+        this.eType = data.code
+        this.eTypeName = data.name
         this.userList = []
         this.cityTopList = []
         this.tendList = []
@@ -92,16 +104,7 @@ export default {
         this.getTrendChartDatas()
         this.getCityTopByDistributor()
       }
-    }
-  },
-  created() {
-    this.init()
-  },
-  beforeDestroy() {
-    clearInterval(this.timer)
-    this.timer = null
-  },
-  methods: {
+    },
     async init() {
       const res = await getAgent({})
       if (res.result === 0) {
@@ -113,6 +116,12 @@ export default {
         }, 3000)
         this.getTrendChartDatas()
         this.getCityTopByDistributor()
+      }
+    },
+    async getSHL() {
+      const res = await querySHL({})
+      if (res.result === 0) {
+        this.equipmentList = res.data
       }
     },
     async getData() {

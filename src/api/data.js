@@ -39,3 +39,9 @@ export function getCityTopByDistributorId(data) {
     params: data
   })
 }
+export function querySHL() {
+  return request({
+    url: '/rest/equipment/equipmentType/querySHL', // 假地址 自行替换
+    method: 'get'
+  })
+}

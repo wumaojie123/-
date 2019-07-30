@@ -192,9 +192,9 @@ export default {
 .tend-wrapper{
   color: #44CFD9;
   width: @480px;
-  height: 413px;
+  height: @413px;
   background-image: url('../images/tend-bg.png');
-  background-size: @480px 413px;
+  background-size: 100% 100%;
   font-size: 0;
 }
 .title{
@@ -241,7 +241,7 @@ export default {
 
 .echart{
   width: 100%;
-  height: 329px;
+  height: @329px;
 }
 </style>
 

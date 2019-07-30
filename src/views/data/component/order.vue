@@ -49,7 +49,7 @@ export default {
 }
 .order-wrapper{
   width: @480px;
-  height: 630px;
+  height: @630px;
   background-image: url('../images/order-bg.png');
   background-size: 100% 100%;
   // background-size: @480px 630px;
