@@ -39,18 +39,18 @@ export default {
   },
   watch: {
     data(val) {
-      console.log('====================KKKKKK', val.length)
       const dateList = []
       const incomeList = []
       const orderList = []
       this.data.map(i => {
         dateList.push(i.statisticsDate)
-        incomeList.push(i.dayPayCount)
-        orderList.push(i.dayOnlineIncomde)
+        orderList.push(i.dayPayCount)
+        incomeList.push(i.dayOnlineIncomde)
       })
       this.dateList = dateList
       this.incomeList = incomeList
       this.orderList = orderList
+      console.log('watch', JSON.stringify(this.orderList))
       this.initData(this.dateList, this.orderList)
       this.localData = val
     },
@@ -60,8 +60,8 @@ export default {
       const orderList = []
       this.localData.map(i => {
         dateList.push(i.statisticsDate)
-        incomeList.push(i.dayPayCount)
-        orderList.push(i.dayOnlineIncomde)
+        orderList.push(i.dayPayCount)
+        incomeList.push(i.dayOnlineIncomde)
       })
       if (this.type === '1') {
         this.initData(dateList, orderList)
@@ -83,8 +83,14 @@ export default {
       }
     },
     initData(dateList, dataList) {
-      console.log(dateList)
+      console.log(JSON.stringify(dataList))
       const initData = echarts.init(document.querySelector('.echart'))
+      let name = ''
+      if (this.type === '1') {
+        name = '订单数(笔)'
+      } else {
+        name = '营业额(元)'
+      }
       const options = {
         grid: {
           top: '5%',
@@ -92,6 +98,9 @@ export default {
           right: '10%',
           bottom: '43',
           containLabel: true
+        },
+        tooltip: {
+          trigger: 'axis'
         },
         xAxis: [
           {
@@ -152,7 +161,7 @@ export default {
         ],
         series: [
           {
-            name: '邮件营销',
+            name: name,
             type: 'line',
             stack: '总量',
             data: dataList,

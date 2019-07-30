@@ -4,6 +4,7 @@
     <header-com v-model="eType" :e-type-name="eTypeName" :name="name" :equipment-list="equipmentList" @on-OK="selectEtype"/>
     <section class="wrapper">
       <div class="wrapper-content">
+        <section class="margin-left"/>
         <section class="left">
           <!-- 订单趋势 -->
           <tend :data="tendList" :time-type="timeType" @on-change-time="handleTime"/>
@@ -22,6 +23,7 @@
           <equipment :data="equipmentData"/>
           <order :list="userList" style="margin-top: 0.09375rem;"/>
         </section>
+        <section class="margin-left"/>
       </div>
 
     </section>
@@ -96,9 +98,9 @@ export default {
         this.cityTopList = []
         this.tendList = []
         clearInterval(this.timer)
-        this.timer = setInterval(() => {
-          this.getCurrentOnlineCoin()
-        }, 3000)
+        // this.timer = setInterval(() => {
+        //   this.getCurrentOnlineCoin()
+        // }, 3000)
         this.getData()
         this.getCurrentOnlineCoin()
         this.getTrendChartDatas()
@@ -111,9 +113,9 @@ export default {
         this.id = res.data.agentUserId
         this.name = res.data.agentUserName
         this.getData()
-        this.timer = setInterval(() => {
-          this.getCurrentOnlineCoin()
-        }, 3000)
+        // this.timer = setInterval(() => {
+        //   this.getCurrentOnlineCoin()
+        // }, 3000)
         this.getTrendChartDatas()
         this.getCityTopByDistributor()
       }
@@ -139,7 +141,10 @@ export default {
     async getCurrentOnlineCoin() {
       const res = await getCurrentOnlineCoins({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        this.userList = res.data || []
+        let list = res.data
+        list = list.concat(list).concat(list).concat(list).concat(list).concat(list)
+        this.userList = list
+        // this.userList = res.data || []
       }
     },
     handleTime(value) {
@@ -166,6 +171,10 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import './images/constant.less';
+.margin-left{
+  width: @40px;
+}
 .data-bg{
   background: rgba(2,2,32, 1);
   height: 100%;;
