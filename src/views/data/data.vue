@@ -97,10 +97,11 @@ export default {
         this.userList = []
         this.cityTopList = []
         this.tendList = []
+        this.getCurrentOnlineCoin()
         clearInterval(this.timer)
         this.timer = setInterval(() => {
           this.getCurrentOnlineCoin()
-        }, 3000)
+        }, 30000)
         this.getData()
         this.getCurrentOnlineCoin()
         this.getTrendChartDatas()
@@ -113,9 +114,10 @@ export default {
         this.id = res.data.agentUserId
         this.name = res.data.agentUserName
         this.getData()
+        this.getCurrentOnlineCoin()
         this.timer = setInterval(() => {
           this.getCurrentOnlineCoin()
-        }, 3000)
+        }, 30000)
         this.getTrendChartDatas()
         this.getCityTopByDistributor()
       }

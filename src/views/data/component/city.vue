@@ -121,13 +121,14 @@ export default {
   color: #FFFFFF;
 }
 .city-list{
+  font-size: @16px;
   display: flex;
   flex-direction: column;
 }
 
 .city-list-wrap{
   display:flex;
-  font-size: @12px;
+  font-size: @16px;
   height: @40px;
   line-height: @40px;
   span{

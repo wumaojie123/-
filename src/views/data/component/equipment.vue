@@ -118,9 +118,9 @@ export default {
     margin-top: @20px;
 }
 .icon-title{
-  width: @30px;
-  height: @30px;
-  vertical-align: text-bottom;
+  width: @20px;
+  height: @20px;
+  vertical-align: bottom;
 }
 
 .status-item {

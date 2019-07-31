@@ -6,7 +6,7 @@
     </div>
     <div class="content-wrapper">
       <div v-for="(item, index) in list" :key="index" class="item">
-        <img v-if="item.headImg" :src="item.headImg" class="header-img">
+        <img :src="(item.headImg || defaultImg)" class="header-img">
         <p class="order-info">{{ item.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;<span class="user-name">{{ item.userName }}</span> &nbsp;&nbsp;&nbsp;启动{{ item.equipmentTypeName }}</p>
       </div>
     </div>
@@ -20,6 +20,11 @@ export default {
     list: {
       type: Array,
       default: () => []
+    }
+  },
+  data() {
+    return {
+      defaultImg: 'https://b.leyaoyao.com/static/img/logo.b72ea3b9.png'
     }
   }
 }
@@ -67,6 +72,7 @@ export default {
         position: absolute;
         top: @4px;
         z-index: 10;
+        background: #fff
       }
       .order-info{
         position: relative;
