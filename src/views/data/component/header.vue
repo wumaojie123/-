@@ -149,7 +149,7 @@ export default {
   position: absolute;
   bottom: @10px;
   right: @20px;
-  width: @300px;
+  width: @280px;
   display: flex;
   justify-content: space-between;
   .logout-wrap {
@@ -169,14 +169,14 @@ export default {
       right: @18px;
       width: @12px;
       height: @6px;
-      bottom: @4px;
+      bottom: @6px;
     }
     .item-wrap{
       position:absolute;
 
       z-index: 10;
       top: @40px;
-      font-size: @20px;
+      font-size: @16px;
       left: @10px;
       .bg-mask{
         position: fixed;

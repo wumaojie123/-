@@ -100,6 +100,7 @@ export default {
         this.getCurrentOnlineCoin()
         clearInterval(this.timer)
         this.timer = setInterval(() => {
+          this.getData()
           this.getCurrentOnlineCoin()
         }, 30000)
         this.getData()
@@ -116,6 +117,7 @@ export default {
         this.getData()
         this.getCurrentOnlineCoin()
         this.timer = setInterval(() => {
+          this.getData()
           this.getCurrentOnlineCoin()
         }, 30000)
         this.getTrendChartDatas()
@@ -175,6 +177,10 @@ export default {
 
 <style scoped lang="less">
 @import './images/constant.less';
+// @font-face {
+//   font-family: "DINNextW1G-Bold";
+//   src: url('./images/DINNextW1G-Bold.otf')；
+// }
 .margin-left{
   width: @40px;
 }

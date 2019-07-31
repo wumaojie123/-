@@ -112,7 +112,7 @@ export default {
 }
 
 .spec-num span{
-  background:  #7AD0FF;
+  background:  #47E5F1;
   width: @20px;
   height: @20px;
   line-height: @20px;

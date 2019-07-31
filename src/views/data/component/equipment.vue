@@ -104,7 +104,7 @@ export default {
     text-align: center;
     display: inline-block;
     line-height: @70px;
-    font-size: @46px;
+    font-size: @40px;
     font-family:SourceHanSansCN-Bold;
     font-weight:bold;
     margin-right: @8px;

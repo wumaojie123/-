@@ -1,7 +1,7 @@
 <template>
   <section class="order-wrapper">
     <div class="title-wrapper">
-      <img class="order-icon" src="../images/icon.png">
+      <img class="order-icon" src="../images/icon2.png">
       <p class="order-title">实时启动信息</p>
     </div>
     <div class="content-wrapper">
@@ -65,6 +65,7 @@ export default {
       height: @54px;
       line-height: @54px;
       position: relative;
+
       .header-img {
         width: @40px;
         height: @40px;
@@ -85,6 +86,8 @@ export default {
         font-weight:300;
         color:rgba(68,207,217,1);
         background: linear-gradient(0deg, #032433 0%, #4171BF 100%);
+        background: url('../images/order-item-bg.png');
+        background-size: 100% 100%;
         border-radius:@15px;
         .user-name{
           display: inline-block;
