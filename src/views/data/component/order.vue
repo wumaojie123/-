@@ -52,6 +52,7 @@ export default {
   height: @630px;
   background-image: url('../images/order-bg.png');
   background-size: 100% 100%;
+  overflow: hidden;
   // background-size: @480px 630px;
   .content-wrapper{
     padding: @10px @30px;
