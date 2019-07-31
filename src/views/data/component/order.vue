@@ -2,7 +2,7 @@
   <section class="order-wrapper">
     <div class="title-wrapper">
       <img class="order-icon" src="../images/icon.png">
-      <p class="order-title">实时订单信息</p>
+      <p class="order-title">实时启动信息</p>
     </div>
     <div class="content-wrapper">
       <div v-for="(item, index) in list" :key="index" class="item">
