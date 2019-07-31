@@ -147,10 +147,10 @@ export default {
     async getCurrentOnlineCoin() {
       const res = await getCurrentOnlineCoins({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        // let list = res.data
-        // list = list.concat(list).concat(list).concat(list).concat(list).concat(list)
-        // this.userList = list
-        this.userList = res.data || []
+        const list = res.data || []
+        if (list.length > 0) {
+          this.userList = list
+        }
       }
     },
     handleTime(value) {
@@ -170,10 +170,7 @@ export default {
       // this.cityTopList = []
       const res = await getCityTopByDistributorId({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        const list = res.data || []
-        if (list.length > 0) {
-          this.cityTopList = list
-        }
+        this.cityTopList = res.data || []
       }
     }
   }
