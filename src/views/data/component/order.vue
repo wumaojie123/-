@@ -6,7 +6,7 @@
     </div>
     <div class="content-wrapper">
       <div v-for="(item, index) in list" :key="index" class="item">
-        <img :src="item.headImg" class="header-img">
+        <img v-if="item.headImg" :src="item.headImg" class="header-img">
         <p class="order-info">{{ item.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;<span class="user-name">{{ item.userName }}</span> &nbsp;&nbsp;&nbsp;启动{{ item.equipmentTypeName }}</p>
       </div>
     </div>

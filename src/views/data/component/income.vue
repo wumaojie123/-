@@ -6,7 +6,7 @@
     </section>
     <section class="right">
       <p class="title">今日收益(元）</p>
-      <p class="price">{{ data.todayOnlineIncomde | numFormatFilter }}</p>
+      <p class="price">{{ data.todayOnlineIncomde.toFixed(2) | numFormatFilter }}</p>
     </section>
   </div>
 </template>

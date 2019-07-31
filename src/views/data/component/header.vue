@@ -11,7 +11,7 @@
         <div v-show="visible" class="item-wrap">
           <div class="bg-mask"/>
           <div class="item-content-wrap">
-            <div v-for="(item, index) in localEquipmentList" :class="{'select': value ===item.code }" :key="index" class="item" @click="handleItem(item)">{{ item.name }}</div>
+            <div v-for="(item, index) in localEquipmentList" :class="{'select': value ===item.code }" :key="index" class="item" @click="handleItem(item)">{{ item.equipmenttypename }}</div>
           </div>
         </div>
       </div>
@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     localEquipmentList() {
-      return [{ name: '全部设备', code: '' }].concat(this.equipmentList)
+      return [{ equipmenttypename: '全部设备', code: '' }].concat(this.equipmentList)
     }
   },
   methods: {
@@ -195,7 +195,7 @@ export default {
         background-size: 100% 100%;
       }
       .item{
-        min-width: @137px;
+        min-width: @142px;
         padding: @10px @10px;
         text-align: left;
         color: #44CFD9;

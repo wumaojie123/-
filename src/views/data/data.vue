@@ -93,7 +93,7 @@ export default {
     selectEtype(data) {
       if (this.eType !== data.code) {
         this.eType = data.code
-        this.eTypeName = data.name
+        this.eTypeName = data.equipmenttypename
         this.userList = []
         this.cityTopList = []
         this.tendList = []
@@ -161,6 +161,7 @@ export default {
     },
     // top10,城市数据
     async getCityTopByDistributor() {
+      // this.cityTopList = []
       const res = await getCityTopByDistributorId({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
         this.cityTopList = res.data || []

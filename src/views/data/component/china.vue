@@ -11,7 +11,7 @@
         个
       </p>
     </section>
-    <section id="china" style="width: 100%;height: 3.010416666rem; margin: 0 auto; margin-top: 0.15625rem;"/>
+    <section id="china" style="width: 100%;height: 3.200416666rem; margin: 0 auto; margin-top: 0.15625rem;"/>
   </section>
 </template>
 
@@ -93,6 +93,9 @@ export default {
             color: '#000',
             decoration: 'none'
           },
+          grid: {
+            bottom: '6%'
+          },
           formatter: function(params, ticket) {
             let tipHtml = ''
             if (params.dataIndex < 0) {
@@ -101,7 +104,7 @@ export default {
             tipHtml =
               `<div class="hover-bg" >
                 <p style="color:#fff;font-size:12px;">
-                  ${globalData[params.dataIndex].name}${params.dataIndex}</p>
+                  ${globalData[params.dataIndex].name}</p>
                 <p style="color:#fff;font-size:12px;">
                   投放商${globalData[params.dataIndex].distributorCount}个
                 <p style="color:#fff;font-size:12px;">
@@ -258,6 +261,9 @@ export default {
 
 .china-wrap{
   position: relative;
+  height: @750px;
+  background: url('../images/china.png');
+  background-size: 100% 100%;
   .top-right{
     position: absolute;
     right: 0;
@@ -280,6 +286,7 @@ export default {
     font-weight:400;
     color:rgba(255,255,255,1);
     text-align:center;
+    padding-top: @30px;
 }
 .total {
     padding-top: @23px;
