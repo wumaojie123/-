@@ -63,8 +63,6 @@ service.interceptors.response.use(
           duration: 5 * 1000
         })
       }
-      console.log(Promise.reject('error'))
-      console.log('kkkkk')
       return Promise.reject('error').catch(e => { console.log(e) })
     } else {
       return response.data
