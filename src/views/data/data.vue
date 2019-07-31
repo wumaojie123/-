@@ -170,7 +170,10 @@ export default {
       // this.cityTopList = []
       const res = await getCityTopByDistributorId({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        this.cityTopList = res.data || []
+        const list = res.data || []
+        if (list.length > 0) {
+          this.cityTopList = list
+        }
       }
     }
   }
