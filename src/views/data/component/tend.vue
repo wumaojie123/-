@@ -165,6 +165,7 @@ export default {
             type: 'line',
             stack: '总量',
             data: dataList,
+            smooth: true,
             areaStyle: {
               normal: {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
