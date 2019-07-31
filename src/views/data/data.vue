@@ -17,7 +17,7 @@
             <income :data="incomeData" style="margin-right: 0.052083333333333336rem;"/>
             <income-y :data="incomeYData"/>
           </div>
-          <china :data-list="cityTopList" style="margin-top: 26px;"/>
+          <china :data-list="cityTopList" :total-agent="totalAgent" style="margin-top: 26px;"/>
         </section>
         <section class="right">
           <equipment :data="equipmentData"/>
@@ -78,7 +78,8 @@ export default {
       eTypeName: '全部设备',
       name: '',
       timer: null,
-      equipmentList: []
+      equipmentList: [],
+      totalAgent: 0
     }
   },
   created() {
@@ -140,6 +141,7 @@ export default {
         this.incomeYData.todayPayCount = agentIncomeStatisticsTotalDTO.todayPayCount || 0
         this.incomeData.todayOnlineIncomde = agentIncomeStatisticsTotalDTO.todayOnlineIncomde || 0
         this.incomeData.totalOnlineIncomde = agentIncomeStatisticsTotalDTO.totalOnlineIncomde || 0
+        this.totalAgent = res.data.adOrgCount
       }
     },
     async getCurrentOnlineCoin() {

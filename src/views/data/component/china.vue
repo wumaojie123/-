@@ -7,7 +7,7 @@
       <p style="margin-top: 18px;">覆盖城市
         <span style="color: #44CFD9;font-weight: 700;">{{ localList.length }}</span>
         个，共计投放商
-        <span style="color: #44CFD9;font-weight: 700;">{{ total }}</span>
+        <span style="color: #44CFD9;font-weight: 700;">{{ totalAgent }}</span>
         个
       </p>
     </section>
@@ -24,6 +24,10 @@ export default {
     dataList: {
       type: Array,
       default: () => []
+    },
+    totalAgent: {
+      type: Number,
+      default: 0
     }
   },
   data() {
