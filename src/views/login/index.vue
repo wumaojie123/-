@@ -169,6 +169,9 @@ export default {
             clearInterval(self.timerId)
             saveSession('username', this.loginForm.username)
             const params = {}
+            if (data.result !== 0) {
+              return
+            }
             if (this.type === 'dlpt') {
               params.value = 'dlpt'
               userMapRoles({}).then(res => {
