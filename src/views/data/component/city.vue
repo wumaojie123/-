@@ -17,7 +17,7 @@
       <div class="city-list">
         <div v-for="(item, index) in localList" :key="index" class="city-list-wrap" >
           <template v-if="index < 3">
-            <span class="spec-num"><span>{{ index + 1 }}</span></span>
+            <span class="spec-num"><span style="color: #000000;">{{ index + 1 }}</span></span>
             <span class="list-num list-num-top">{{ item.cityName }}</span>
             <span class="list-num list-num-top">{{ item.equipmentCount }}</span>
             <span class="list-num list-num-top">{{ item.payCount }}</span>
@@ -118,7 +118,8 @@ export default {
   line-height: @20px;
   display: inline-block;
   border-radius: 50%;
-  color: #FFFFFF;
+  // color: #FFFFFF;
+
 }
 .city-list{
   font-size: @16px;
