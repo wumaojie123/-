@@ -101,7 +101,7 @@ export default {
         this.getCurrentOnlineCoin()
         clearInterval(this.timer)
         this.timer = setInterval(() => {
-          this.getData()
+          // this.getData()
           this.getCurrentOnlineCoin()
         }, 30000)
         this.getData()
@@ -115,7 +115,7 @@ export default {
       if (res.result === 0) {
         this.id = res.data.agentUserId
         this.name = res.data.agentUserName
-        this.getData()
+        // this.getData()
         this.getCurrentOnlineCoin()
         this.timer = setInterval(() => {
           this.getData()
