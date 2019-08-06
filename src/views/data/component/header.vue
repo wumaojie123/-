@@ -1,8 +1,12 @@
 <template>
   <div class="header-wrapper">
     <span class="time">更新时间：{{ dateFormat(now) }}</span>
-    <p class="title">{{ name }}运维管理平台</p>
-    <img src="../images/header-bg.png" class="header-bg">
+    <p class="title">
+      <span class="title-wrap">
+        <span class="title-desc" style="">{{ name | nameFilter }}运维管理平台</span>
+      </span>
+    </p>
+    <!-- <img src="../images/header-bg.png" class="header-bg"> -->
     <div class="icon-wrapper">
       <div class="logout-wrap all-equipment" @click="visible =!visible">
         <img class="logout" src="../images/all.png">
@@ -25,6 +29,11 @@
 
 <script>
 export default {
+  filters: {
+    nameFilter(val) {
+      return val.replace(/有限公司/g, '')
+    }
+  },
   props: {
     value: {
       type: String,
@@ -124,11 +133,11 @@ export default {
   left: @20px;
 }
 .title {
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  // display: inline-block;
+  // position: absolute;
+  // top: 0;
+  // left: 50%;
+  // transform: translateX(-50%);
   text-align: center;
   font-size: @40px;
   font-family:PingFangSC-Semibold;
@@ -136,6 +145,17 @@ export default {
   color:rgba(68,207,217,1);
   height: @87px;
   line-height: @87px;
+  .title-wrap{
+    height: 100%;
+    height: @137px;
+    display: inline-block;
+    background:url('../images/header-bg.png');
+    background-size: 100% 100%;
+    .title-desc{
+      display:inline-block;
+      padding: 0 @107px;
+    }
+  }
 }
 .header-bg{
   position: absolute;

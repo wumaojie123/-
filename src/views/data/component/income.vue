@@ -2,7 +2,7 @@
   <div class="income-wrap">
     <section class="left">
       <p class="title">累积总收益(元)</p>
-      <p class="price">{{ data.totalOnlineIncomde | numFormatFilter }}</p>
+      <p :class="{'small-price': data.totalOnlineIncomde > 100000 }" class="price">{{ data.totalOnlineIncomde | numFormatFilter }}</p>
     </section>
     <section class="right">
       <p class="title">今日收益(元）</p>
@@ -61,9 +61,14 @@ export default {
   .price{
     font-size: @46px;
     margin-top: @10px;
+    height: @46px;
+    line-height: @46px;
     font-family:DINNextW1G-Bold;
     font-weight:bold;
     color:rgba(68,207,217,1);
+  }
+  .small-price{
+    font-size: @24px;
   }
   .desc{
     margin-top: @10px;
