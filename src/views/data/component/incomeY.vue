@@ -60,6 +60,8 @@ export default {
   .price{
     font-size: @46px;
     margin-top: @10px;
+    height: @46px;
+    line-height: @46px;
     font-family:DINNextW1G-Bold;
     font-weight:bold;
     color:rgba(68,207,217,1);
