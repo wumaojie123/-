@@ -2,11 +2,11 @@
   <div class="income-wrap">
     <section class="right">
       <p class="title">累积订单</p>
-      <p class="price">{{ data.totalPayCount | numFormatFilter }}</p>
+      <p :class="{'small-price': data.totalOnlineIncomde > 100000 }" class="price">{{ data.totalPayCount | numFormatFilter }}</p>
     </section>
     <section class="left">
       <p class="title">今日订单</p>
-      <p class="price">{{ data.todayPayCount | numFormatFilter }}</p>
+      <p :class="{'small-price': data.totalOnlineIncomde > 100000 }" class="price">{{ data.todayPayCount | numFormatFilter }}</p>
     </section>
   </div>
 </template>
@@ -45,7 +45,7 @@ export default {
     position: absolute;
     top: @45px;
     left: 50%;
-    background: #47E5F1;
+    background: rgba(71, 229, 241, .4);
   }
   .left, .right{
     flex:1;
@@ -63,6 +63,9 @@ export default {
     font-family:DINNextW1G-Bold;
     font-weight:bold;
     color:rgba(68,207,217,1);
+  }
+  .small-price{
+    font-size: @24px;
   }
   .desc{
     margin-top: @10px;

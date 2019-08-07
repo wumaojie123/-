@@ -63,7 +63,8 @@ export default {
       },
       incomeYData: {
         totalPayCount: 0,
-        todayPayCount: 0
+        todayPayCount: 0,
+        totalOnlineIncomde: 0
       },
       userList: [],
       cityTopList: [],
@@ -139,6 +140,7 @@ export default {
         const agentIncomeStatisticsTotalDTO = data.agentIncomeStatisticsTotalDTO || {}
         this.incomeYData.totalPayCount = agentIncomeStatisticsTotalDTO.totalPayCount || 0
         this.incomeYData.todayPayCount = agentIncomeStatisticsTotalDTO.todayPayCount || 0
+        this.incomeYData.totalOnlineIncomde = agentIncomeStatisticsTotalDTO.totalOnlineIncomde || 0
         this.incomeData.todayOnlineIncomde = agentIncomeStatisticsTotalDTO.todayOnlineIncomde || 0
         this.incomeData.totalOnlineIncomde = agentIncomeStatisticsTotalDTO.totalOnlineIncomde || 0
         this.totalAgent = res.data.adOrgCount

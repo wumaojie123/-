@@ -6,7 +6,7 @@
     </section>
     <section class="right">
       <p class="title">今日收益(元）</p>
-      <p class="price">{{ data.todayOnlineIncomde.toFixed(2) | numFormatFilter }}</p>
+      <p :class="{'small-price': data.totalOnlineIncomde > 100000 }" class="price">{{ data.todayOnlineIncomde.toFixed(2) | numFormatFilter }}</p>
     </section>
   </div>
 </template>
@@ -46,7 +46,7 @@ export default {
     position: absolute;
     top: @45px;
     left: 50%;
-    background: #47E5F1;
+    background: rgba(71, 229, 241, .4);
   }
   .left, .right{
     flex:1;
