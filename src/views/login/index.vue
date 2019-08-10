@@ -90,6 +90,7 @@
             <el-button
               :disabled="canGetCode"
               :loading="loading_code"
+              class="reset-codeBtn"
               type="primary"
               @click="getCode"
             >{{ code_time?code_time+'s':'获取短信验证码' }}</el-button>
@@ -596,8 +597,11 @@ $light_gray: #eee;
   color: #1890FF;
 }
 .reset-codeInput {
-  width: 195px;
+  width: 180px;
   margin-right: 20px;
+}
+.reset-codeBtn{
+  float: right;
 }
 .reset-footer {
   text-align: center;
