@@ -29,3 +29,24 @@ export function getUserInfo(token) {
     params: { token }
   })
 }
+export function getVerifyCode(params) {
+  return request({
+    url: '/userlogin/password/verifyCode',
+    method: 'get',
+    params: params
+  })
+}
+export function postVerifyCode(params) {
+  return request({
+    url: '/userlogin/password/verifyCode/validate',
+    method: 'post',
+    data: params
+  })
+}
+export function savePassword(params) {
+  return request({
+    url: '/userlogin/password/reset',
+    method: 'post',
+    data: params
+  })
+}

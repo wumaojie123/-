@@ -1,4 +1,4 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
+import { loginByUsername, logout, getUserInfo, getVerifyCode, postVerifyCode, savePassword } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 // import Cookies from 'js-cookie'
 
@@ -59,7 +59,34 @@ const user = {
         })
       })
     },
-
+    // 重置密码获取验证码
+    getVerifyCode({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        getVerifyCode(params).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    postVerifyCode({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        postVerifyCode(params).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    savePassword({ commit }, params) {
+      return new Promise((resolve, reject) => {
+        savePassword(params).then(response => {
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
     // 获取用户信息
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
