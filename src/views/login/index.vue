@@ -81,7 +81,7 @@
     </div>
     <el-dialog :close-on-click-modal="false" :visible.sync="vis_reset" width="500px" title="重设密码" @close="hideReset">
       <div v-show="!vis_confirmPassword">
-        <el-form ref="ruleForm" :model="reset" :rules="reset_rules">
+        <el-form ref="ruleForm" :model="reset" :rules="reset_rules" label-position="left">
           <el-form-item :label-width="'100px'" prop="phone" label="手机号码">
             <el-input v-model.trim="reset.phone" autocomplete="off"/>
           </el-form-item>
@@ -106,7 +106,7 @@
         </div>
       </div>
       <div v-show="vis_confirmPassword">
-        <el-form ref="passwordForm" :model="password" :rules="password_rules">
+        <el-form ref="passwordForm" :model="password" :rules="password_rules" label-position="left">
           <el-form-item :label-width="'100px'" prop="password" label="新密码">
             <el-input v-model.trim="password.password" autocomplete="off"/>
           </el-form-item>
@@ -137,7 +137,6 @@ import { getMenu, userMapRoles } from '../../api/getMenu'
 import SocialSign from './socialsignin'
 import MD5 from 'js-md5'
 import { Message } from 'element-ui'
-import { telCheck } from '@/utils/rules'
 import { validateTel } from '@/utils/validate'
 export default {
   name: 'Login',
@@ -280,7 +279,7 @@ export default {
               newPassword: self.password.password
             })
             .then(data => {
-              if (data.result == 0) {
+              if (data.result === 0) {
                 Message({
                   message: '修改密码成功！',
                   type: 'success'
@@ -305,7 +304,7 @@ export default {
               verifyCode: self.reset.code
             })
             .then(data => {
-              if (data.result == 0) {
+              if (data.result === 0) {
                 self.vis_confirmPassword = true
               }
             })
@@ -326,7 +325,7 @@ export default {
           phoneNumber: self.reset.phone
         })
         .then(data => {
-          if (data.result == 0) {
+          if (data.result === 0) {
             self.code_time = 60
             const code_interval = setInterval(() => {
               if (self.code_time <= 0) {
@@ -597,7 +596,7 @@ $light_gray: #eee;
   color: #1890FF;
 }
 .reset-codeInput {
-  width: 150px;
+  width: 195px;
   margin-right: 20px;
 }
 .reset-footer {

@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["zZdu"],{zZdu:function(e,n,t){"use strict";t.r(n);var i={},u=t("KHd+"),s=Object(u.a)(i,function(){var e=this.$createElement;return(this._self._c||e)("div")},[],!1,null,null,null);s.options.__file="coinOrderList.vue";n.default=s.exports}}]);

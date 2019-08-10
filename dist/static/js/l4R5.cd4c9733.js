@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([["l4R5"],{l4R5:function(t,e,n){"use strict";n.r(e);var l={},s=n("KHd+"),i=Object(s.a)(l,function(){var t=this.$createElement;return(this._self._c||t)("div")},[],!1,null,null,null);i.options.__file="startOrderList.vue";e.default=i.exports}}]);
