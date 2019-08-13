@@ -277,7 +277,7 @@ export default {
             .dispatch('savePassword', {
               phoneNumber: self.reset.phone,
               verifyCode: self.reset.code,
-              newPassword: self.password.password
+              newPassword: MD5(self.password.password)
             })
             .then(data => {
               if (data.result === 0) {
