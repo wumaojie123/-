@@ -50,6 +50,9 @@ export default {
         { key: 'linkName', label: '联系人' },
         { key: 'phone', label: '手机号码' },
         { key: 'createDate', label: '创建日期' },
+        { key: 'equipmentTypes', label: '设备类型' },
+        { key: 'unregistered', label: '待注册设备' },
+        { key: 'registered', label: '已注册设备' },
         { key: 'equipmentCount', label: '当前设备总量' },
         { key: 'equipmentOnlineCount', label: '昨日在线设备量' },
         { key: 'description', label: '备注信息' }
