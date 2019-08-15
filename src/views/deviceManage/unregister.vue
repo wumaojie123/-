@@ -1,6 +1,6 @@
 <template>
   <div class="content-area">
-    <div class="text-info">设备编号： {{ lyyEquipmentId }}</div>
+    <div class="text-info">设备编号： 充电桩{{ lyyEquipmentId }}</div>
     <p class="text-info">解绑原因：</p>
     <el-checkbox-group v-model="checkList" class="text-info">
       <el-checkbox v-for="(item, index) in list" :label="item" :key="index" v-model="others" size="medium"/>
@@ -35,11 +35,13 @@ export default {
       list: mapInfo,
       others: '',
       lyyEquipmentId: '',
+      equipmentType: '',
       checkList: []
     }
   },
   created() {
-    this.lyyEquipmentId = this.$route.params.lyyEquipmentId
+    this.lyyEquipmentId = this.$route.query.lyyEquipmentId
+    this.equipmentType = this.$route.query.equipmentType
   },
   methods: {
     async handleUnbind() {
@@ -53,7 +55,7 @@ export default {
       }
       const res = await unbundling(params)
       if (res.result === 0) {
-        this.$message({ message: '解绑成功', type: 'success' })
+        this.$message({ message: '设备解绑成功', type: 'success' })
       } else {
         this.$message({ message: '解绑失败', type: 'error' })
       }

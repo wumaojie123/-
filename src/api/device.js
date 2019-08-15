@@ -33,6 +33,13 @@ export function batchRegisteredEquipment(data) {
   })
 }
 // 批量注册设备
+export function merchants() {
+  return request({
+    url: '/query/merchants',
+    method: 'get'
+  })
+}
+// 批量注册设备
 export function dateleEquipmentService(data) {
   return request({
     url: '/rest/factory/dateleEquipmentService',

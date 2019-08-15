@@ -206,17 +206,17 @@ export let constantRouterMap = [
         hidden: true
       },
       {
-        path: '/deviceService',
-        component: () => import('@/views/deviceManage/deviceService'),
-        name: 'deviceService',
-        meta: { title: '服务套餐' },
-        hidden: true
-      },
-      {
         path: '/registerRecord',
         component: () => import('@/views/deviceManage/registerRecord'),
         name: 'registerRecord',
         meta: { title: '未注册设备>设备注册记录' },
+        hidden: true
+      },
+      {
+        path: '/deviceServiceEdit',
+        component: () => import('@/views/deviceManage/deviceServiceEdit'),
+        name: 'deviceServiceEdit',
+        meta: { title: '设置服务套餐' },
         hidden: true
       },
       {

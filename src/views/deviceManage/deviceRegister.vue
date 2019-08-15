@@ -1,12 +1,22 @@
 <template>
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
-      <el-form-item>
-        <el-input v-model="queryParams.userName" placeholder="请输入代理账号" class="input-300" maxlength="11" clearable />
+      <el-form-item label="设备类型">
+        <el-select v-model="queryParams.equipmentType" placeholder="请选择">
+          <el-option
+            v-for="item in equipmentTypesArr"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="设备编号">
+        <el-input v-model="queryParams.equipmentValue" placeholder="输入多台设备时用,隔开" class="input-300" maxlength="100" clearable />
         <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
-        <el-button type="primary" icon="el-icon-search" @click="handlePage('1')">设备参数设置</el-button>
-        <el-button type="primary" icon="el-icon-search" @click="handlePage('2')">设备服务套餐</el-button>
-        <el-button type="primary" icon="el-icon-search" @click="handlePage('3')">解绑设备</el-button>
+        <el-button type="primary" @click="handlePage(1)">设备参数设置</el-button>
+        <el-button type="primary" @click="handlePage(2)">设备服务套餐</el-button>
+        <el-button type="primary" @click="handlePage(3)">解绑设备</el-button>
       </el-form-item>
     </el-form>
     <!-- 列表 -->
@@ -37,13 +47,14 @@ import { deviceMap, deviceMapInfo } from './constant'
 export default {
   data() {
     return {
+      check: -1,
       queryParams: { equipmentType: 'CDZ', equipmentValue: '', registered: 1 },
       list: [],
       deviceMapInfo: deviceMap,
       colums: [
         { key: 'value', label: '设备编号' },
         { key: 'equipmentTypeText', label: '设备类型' },
-        { key: 'subordinateCount', label: '通信方式' },
+        { key: 'communicationText', label: '通信方式' },
         { key: 'equipmentParam', label: '设备参数' },
         { key: 'groupNumber', label: '机台号' },
         { key: 'signal', label: '信号' },
@@ -55,7 +66,8 @@ export default {
         { key: 'registerDate', label: '注册时间' }
       ],
       pageInfo: { total: 0, pageSize: 10, currPage: 1 },
-      selectItems: []
+      selectItems: [],
+      equipmentTypesArr: deviceMap
     }
   },
   created() {
@@ -82,7 +94,7 @@ export default {
             item.equipmentTypeText = equipmentTypeMap[item.equipmentType]
             const onlineMap = { 0: '不在线', 1: '在线' }
             item.onlineText = onlineMap[item.online]
-            const statusMap = { disabled: '禁用', Normal: '启用' }
+            const statusMap = { disabled: '禁用', '1Normal': '启用' }
             item.statusText = statusMap[item.status]
             return item
           })
@@ -111,11 +123,17 @@ export default {
     },
     handlePage(type) {
       if (this.selectItems.length === 1) {
-        console.log('info')
+        if (type === 1) {
+          this.$router.push({ path: '/unregister', query: { lyyEquipmentId: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType }})
+        } else if (type === 2) {
+          this.$router.push({ path: '/deviceServiceEdit', query: { lyyEquipmentId: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType, communication: this.selectItems[0].communication }})
+        } else if (type === 3) {
+          this.$router.push({ path: '/unregister', query: { lyyEquipmentId: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType }})
+        }
       } else if (this.selectItems.length > 1) {
-        this.$message({ message: '只能编辑一条代理商信息', type: 'error' })
+        this.$message({ message: '请选择设备', type: 'error' })
       } else {
-        this.$message({ message: '只能选择一台设备设置服务套餐', type: 'error' })
+        this.$message({ message: '请选择设备', type: 'error' })
       }
     }
   }

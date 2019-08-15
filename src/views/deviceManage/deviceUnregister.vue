@@ -3,19 +3,14 @@
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
       <el-form-item label="设备类型">
         <el-select v-model="queryParams.equipmentType" placeholder="请选择">
-          <el-option
-            v-for="item in equipmentTypesArr"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in equipmentTypesArr" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
       <el-form-item label="设备编号">
         <el-input v-model="queryParams.equipmentValue" placeholder="输入多台设备时用,隔开" class="input-300" maxlength="100" clearable />
         <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
         <el-button type="primary" style="margin-left: 20px;" icon="el-icon-plus" @click="handleRegister">设备注册</el-button>
-        <router-link :to="{path: '/registerRecord'}"><el-button type="primary" style="margin-left: 20px;" icon="el-icon-plus">设置注册记录</el-button></router-link>
+        <router-link :to="{path: '/registerRecord'}"><el-button type="primary" style="margin-left: 20px;">设备注册记录</el-button></router-link>
       </el-form-item>
     </el-form>
     <!-- 列表 -->
@@ -37,7 +32,7 @@
 
 <script>
 import { registeredList } from '@/api/device'
-import { deviceMap, deviceMapInfo } from './constant'
+import { deviceMap, deviceMapInfo, communicationMap } from './constant'
 
 export default {
   data() {
@@ -75,7 +70,6 @@ export default {
           let list = res.data.items || []
           list = list.map(item => {
             item.sourceText = item.source === 1 ? '商家解绑' : (item.source === 0 ? '平台导入' : '')
-            const communicationMap = { 0: '无', 1: '脉冲', 2: '串口' }
             item.communicationText = communicationMap[item.communication]
             const equipmentTypeMap = deviceMapInfo
             item.equipmentTypeText = equipmentTypeMap[item.equipmentType]
@@ -133,14 +127,7 @@ export default {
         this.$message({ message: '请选择要注册的设备', type: 'error' })
         return
       } else {
-        this.$router.push({
-          path: '/register',
-          query: {
-            deviceType: this.queryParams.equipmentType,
-            equipmentArr: equipmentArr,
-            equipmentType: equipmentType[0]
-          }
-        })
+        this.$router.push({ path: '/register', query: { deviceType: this.queryParams.equipmentType, equipmentArr: equipmentArr, communication: equipmentType[0] }})
       }
     }
   }

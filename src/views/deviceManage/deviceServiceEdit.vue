@@ -1,32 +1,27 @@
 <template>
   <div class="content-area">
-    <h1 style="margin: 10px 0px;">注册设备：已选{{ equipmentArr.length }}台；设备类型：{{ deviceType | deviceFilter }}；通信方式：{{ communication | communicationFilter }}</h1>
-    <el-form :inline="true" label-width="90px" label-position="left">
-      <el-form-item label="绑定商家">
-        <el-select v-model="lyyDistributorId" placeholder="请选择">
-          <el-option v-for="item in merchantList" :key="item.value" :label="item.name" :value="item.adOrgId"/>
-        </el-select>
-      </el-form-item>
-    </el-form>
-    <!-- 列表 -->
     <div class="table-title-info">
-      <span>服务套餐</span>
-      <el-button type="primary" @click="handleSaveModal">添加其他套餐</el-button>
+      <span>设备编号:{{ lyyEquipmentId }}</span>
+      <el-button type="primary" @click="handleSaveModal">添加套餐套餐</el-button>
     </div>
     <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" height="500" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55"/>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+      <el-table-column align="center" label="操作" >
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="handleSelectionChange(scope.row)">编辑</el-button>
+          <el-button type="text" size="small" @click="delService(scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="pageInfo.pageSize"
       :total="pageInfo.total"
       :current-page="pageInfo.currPage"
       background
-      layout="total, pager"
-    />
-    <div style="text-align:center;">
-      <el-button @click="history.go();">取消</el-button>
-      <el-button style="margin-left: 100px;" type="primary" @click="handleBatchSave">完成</el-button>
-    </div>
+      layout="total, prev, pager, next, sizes, jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"/>
     <!--  -->
     <el-dialog :visible.sync="dialogFormVisible" title="编辑套餐服务" style="width: 1000px;">
       <el-form ref="baseInfoRules" :model="modalData" :rules="baseInfoRules" label-width="120px" label-position="right" style="margin-top: 20px;">
@@ -34,14 +29,16 @@
           <el-input v-model="modalData.description" placeholder="请输入套餐名称" class="input-300" maxlength="10"/>
         </el-form-item>
         <el-form-item label="价格(元)" prop="price">
-          <el-input v-model="modalData.price" placeholder="请输入价格" type="number" class="input-300" maxlength="16" clearable />
+          <el-input v-model="modalData.price" placeholder="请输入价格" type="number" class="input-300" maxlength="7" clearable />
         </el-form-item>
-        <el-form-item label="时长(分钟)" prop="serviceTime">
-          <el-input v-model="modalData.serviceTime" placeholder="请输入时长" type="tel" class="input-300" maxlength="6" clearable />
-        </el-form-item>
-        <template v-if="communication !== '1' ">
+        <template v-if="communication == 1">
+          <el-form-item label="时长(分钟)" prop="serviceTime">
+            <el-input v-model="modalData.serviceTime" placeholder="请输入时长" type="tel" class="input-300" maxlength="4" clearable />
+          </el-form-item>
+        </template>
+        <template >
           <el-form-item label="模拟投币数" prop="coins">
-            <el-input v-model="modalData.coins" placeholder="请输入模拟投币数" type="number" class="input-300" maxlength="11" clearable />
+            <el-input v-model="modalData.coins" placeholder="请输入模拟投币数" type="number" class="input-300" maxlength="5" clearable />
           </el-form-item>
         </template>
       </el-form>
@@ -54,19 +51,10 @@
 </template>
 
 <script>
-import { agentGroupServiceList, batchRegisteredEquipment, merchants } from '@/api/device'
+import { saveEquipmentService, groupServiceList, dateleEquipmentService, updateEquipmentService, batchRegisteredEquipment } from '@/api/device'
 import { priceCheck, serviceTimeCheck, conisCheck } from '@/utils/rules'
-import { deviceMapInfo, communicationMap } from './constant'
 
 export default {
-  filters: {
-    deviceFilter(val) {
-      return deviceMapInfo[val]
-    },
-    communicationFilter(val) {
-      return communicationMap[val]
-    }
-  },
   data() {
     return {
       lyyDistributorId: '',
@@ -77,40 +65,38 @@ export default {
         { key: 'serviceTime', label: '时长(分钟)' },
         { key: 'coins', label: '模拟投币数' }
       ],
-      pageInfo: { total: 0 },
+      pageInfo: { total: 0, pageSize: 10, pageIndex: 1 },
       selectList: [],
       dialogFormVisible: false,
-      deviceType: '',
-      equipmentArr: [],
-      communication: '',
+      lyyEquipmentId: '',
       modalData: { description: '', price: '', coins: '', serviceTime: '' },
-      merchantList: [],
+      lyyDistributorList: [],
       baseInfoRules: {
         description: [{ required: true, message: '请输入套餐名称', trigger: 'blur' }],
         serviceTime: [{ required: true, validator: serviceTimeCheck, trigger: 'blur' }],
         coins: [{ required: true, validator: conisCheck, trigger: 'blur' }],
         price: [{ required: true, validator: priceCheck, trigger: 'blur' }]
-      }
+      },
+      type: '',
+      communication: ''
     }
   },
   created() {
-    this.deviceType = this.$route.query.deviceType
-    this.equipmentArr = this.$route.query.equipmentArr
+    // this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.communication = this.$route.query.communication
+    this.lyyEquipmentId = '1017430'
     this.queryList()
-    this.getMerchantList()
   },
   methods: {
     // 查询服务套餐
     async queryList() {
       this.list = []
       const postData = {
-        communication: this.communication,
-        equipmentType: this.deviceType,
-        pageSize: 400,
-        pageIndex: 1
+        lyyEquipmentId: this.lyyEquipmentId,
+        pageSize: this.pageInfo.pageSize,
+        pageIndex: this.pageInfo.pageIndex
       }
-      const res = await agentGroupServiceList(postData)
+      const res = await groupServiceList(postData)
       if (res.result === 0) {
         this.listLoading = false
         if (res.data) {
@@ -121,60 +107,74 @@ export default {
         }
       }
     },
-    async getMerchantList() {
-      const res = await merchants()
-      if (res.result === 0) {
-        this.merchantList = res.data
-        console.log(JSON.stringify(this.merchantList))
-      }
-    },
     handleSelectionChange(value) {
-      this.selectList = value
-      console.log(JSON.stringify(this.selectList))
+      this.type = 'modify'
+      this.modalData = value
+      this.dialogFormVisible = true
     },
     handleSaveModal() {
+      this.type = 'add'
       this.dialogFormVisible = true
       this.modalData = { description: '', price: '', coins: '', serviceTime: '' }
     },
-    handleSave() {
-      this.$refs['baseInfoRules'].validate((valid) => {
-        if (valid) {
-          const flag = this.list.some(item => item.coins === this.modalData.coins || item.serviceTime === this.modalData.serviceTime)
-          if (flag) {
-            this.$message({ message: '套餐不能重复', type: 'error' })
-            return
-          }
-          this.list = [this.modalData].concat(this.list)
-          this.selectList.push(this.modalData)
+    async handleSave() {
+      if (this.type === 'add') {
+        const params = this.modalData
+        params.lyyEquipmentId = this.lyyEquipmentId
+        const res = await saveEquipmentService(params)
+        if (res.result === 0) {
+          this.$message({ message: '添加服务套餐成功', type: 'success' })
+          this.queryList(1)
           this.dialogFormVisible = false
         } else {
-          return false
+          this.$message({ message: '添加服务套餐失败', type: 'error' })
         }
-      })
+      } else if (this.type === 'modify') {
+        const params = this.modalData
+        params.lyyEquipmentId = this.lyyEquipmentId
+        const res = await updateEquipmentService(params)
+        if (res.result === 0) {
+          this.$message({ message: '更新服务套餐成功', type: 'success' })
+          this.queryList(1)
+          this.dialogFormVisible = false
+        }
+      }
     },
     async handleBatchSave() {
       if (this.selectList.length === 0) {
         this.$message({ message: '请至少选择一个服务套餐', type: 'error' })
         return
       }
-      if (!this.lyyDistributorId) {
-        this.$message({ message: '请选择要绑定的商家', type: 'error' })
-        return
-      }
       const params = {
         communication: this.communication,
         equipmentType: this.deviceType,
         values: this.equipmentArr,
-        lyyDistributorId: this.lyyDistributorId,
-        lyyGroupServices: this.selectList
-      }
-      if (!Array.isArray(this.equipmentArr)) {
-        params.values = [this.equipmentArr]
+        lyyDistributorId: this.lyyDistributorId
       }
       const res = await batchRegisteredEquipment(params)
       if (res.result === 0) {
         this.$message({ message: '请至少选择一个服务套餐', type: 'error' })
       }
+    },
+    // 删除服务套餐
+    delService(item) {
+      this.$confirm('确定要删除该服务套餐吗？', '删除服务套餐').then(async() => {
+        const res = await dateleEquipmentService({ lyyGroupServiceId: item.lyyGroupServiceId })
+        if (res.result === 0) {
+          this.$message({ message: '删除套餐成功', type: 'success' })
+          this.queryList(1)
+        } else {
+          this.$message({ message: '删除套餐失败', type: 'error' })
+        }
+      })
+    },
+    handleSizeChange(pageSize) {
+      this.pageInfo.pageSize = pageSize
+      this.pageInfo.total = 0
+      this.queryList(1)
+    },
+    handleCurrentChange(page) {
+      this.queryList(page)
     }
   }
 }

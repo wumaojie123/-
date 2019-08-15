@@ -38,3 +38,25 @@ export const passwordCheck = (rule, value, callback) => {
     callback()
   }
 }
+
+export const priceCheck = (rule, value, callback) => {
+  if (!/^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/.test(value) || value > 10000) {
+    return callback(new Error('价格必须为大于0的正数,价格需小于10000,最多保留2位小数'))
+  } else {
+    callback()
+  }
+}
+export const serviceTimeCheck = (rule, value, callback) => {
+  if (!/^([1-9][0-9]*)$/.test(value) || value > 1440) {
+    return callback(new Error('服务时间必须为大于0的小于等于1440(24小时)正整数'))
+  } else {
+    callback()
+  }
+}
+export const conisCheck = (rule, value, callback) => {
+  if (!/^([1-9][0-9]*)$/.test(value) || value === 0) {
+    return callback(new Error('模拟投币数必须为大于0的整数'))
+  } else {
+    callback()
+  }
+}
