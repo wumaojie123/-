@@ -139,9 +139,9 @@ export default {
     handleSave() {
       this.$refs['baseInfoRules'].validate((valid) => {
         if (valid) {
-          const flag = this.list.some(item => item.coins === this.modalData.coins || item.serviceTime === this.modalData.serviceTime)
+          const flag = this.list.some(item => parseInt(item.coins, 10) === parseInt(this.modalData.coins, 10) || parseInt(item.serviceTime, 10) === parseInt(this.modalData.serviceTime, 10))
           if (flag) {
-            this.$message({ message: '套餐不能重复', type: 'error' })
+            this.$message({ message: '套餐不能重复, 模拟投币数或时长均不可重复', type: 'error' })
             return
           }
           this.list = [this.modalData].concat(this.list)
@@ -173,7 +173,7 @@ export default {
       }
       const res = await batchRegisteredEquipment(params)
       if (res.result === 0) {
-        this.$message({ message: '请至少选择一个服务套餐', type: 'error' })
+        this.$message({ message: '设备注册成功', type: 'success' })
       }
     }
   }
