@@ -8,10 +8,17 @@ export function fetchList(query) {
   })
 }
 
-export function childMerchants(query) {
+export function postService(query) {
   return request({
-    url: '/merchant/childMerchants/query',
-    method: 'get',
-    params: query
+    url: '/rest/factory/savaGroupService',
+    method: 'post',
+    data: query
+  })
+}
+export function putService(query) {
+  return request({
+    url: '/rest/factory/updateGroupService',
+    method: 'post',
+    data: query
   })
 }

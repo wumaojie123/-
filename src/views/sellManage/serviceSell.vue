@@ -3,16 +3,20 @@
     <!-- 列表 -->
     <el-button class="creat-btn" type="primary" icon="el-icon-edit" @click="()=>handleEdit('add')">添加服务套餐</el-button>
     <el-table v-loading="listLoading" :data="list" :height="550" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
-      <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+      <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center">
+        <template slot-scope="scope">
+          {{ item.render?item.render(scope.row[item.key]):scope.row[item.key] }}
+        </template>
+      </el-table-column>
       <el-table-column width="150px" label="操作" align="center">
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit('edit',scope.row)">编辑</el-button>
+            @click="()=>handleEdit('edit',scope.row)">编辑</el-button>
           <el-button
             size="mini"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            @click="()=>handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -25,12 +29,19 @@
       layout="total, prev, pager, next, sizes, jumper"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"/>
-    <edit-dialog :visible="vis_edit" :handle-close="handleClose" :action-row="actionRow" :action-type="actionType" />
+    <edit-dialog :query-list="queryList" :visible="vis_edit" :handle-close="handleClose" :action-row="actionRow" :action-type="actionType" />
   </div>
 </template>
 
 <script>
-import { fetchList } from '@/api/sellManage'
+const deviceTypeMap = {
+  XYJ: '洗衣机', CDZ: '充电桩', AMY: '按摩椅', ZLJ: '足疗机', AMD: '按摩垫'
+}
+const communicationMap = ['无', '脉冲', '串口']
+const billingMap = ['无', '按时长计费']
+import { fetchList, putService } from '@/api/sellManage'
+import { parseTime } from '@/utils/index'
+import { Message } from 'element-ui'
 import editDialog from './serviceSellDialog'
 export default {
   components: { editDialog },
@@ -39,14 +50,14 @@ export default {
       listLoading: true,
       list: [],
       colums: [
-        { key: 'merchantName', label: '设备类型' },
-        { key: 'userName', label: '通信方式' },
-        { key: 'linkName', label: '计费方式' },
-        { key: 'phone', label: '套餐名称' },
-        { key: 'createDate', label: '价格' },
-        { key: 'equipmentTypes', label: '时长' },
-        { key: 'unregistered', label: '模拟投币数' },
-        { key: 'registered', label: '最新编辑时间' }
+        { key: 'equipmentType', label: '设备类型', render: (text) => deviceTypeMap[text] },
+        { key: 'communication', label: '通信方式', render: (text) => communicationMap[text] },
+        { key: 'billing', label: '计费方式', render: (text) => billingMap[text] },
+        { key: 'description', label: '套餐名称' },
+        { key: 'price', label: '价格', render: (text) => text + '元' },
+        { key: 'serviceTime', label: '时长', render: (text) => text + '分钟' },
+        { key: 'coins', label: '模拟投币数', render: (text) => text ? text + '币' : '-' },
+        { key: 'updated', label: '最新编辑时间', render: (text) => parseTime(text) }
       ],
       pageInfo: { total: 0, pageSize: 10, currPage: 1 },
       actionType: '',
@@ -58,19 +69,28 @@ export default {
     this.queryList()
   },
   methods: {
-    handleDelete() {
-      this.$confirm('删除后，相关信息和数据将会彻底删除，且无法恢复。确定要删除吗？', '提示', {
-        confirmButtonText: '确定',
+    handleDelete(row) {
+      const self = this
+      self.$confirm('确定要删除该服务套餐吗？', '删除服务套餐', {
+        confirmButtonText: '保存',
         cancelButtonText: '取消',
         type: 'warning',
         closeOnClickModal: false
       }).then(() => {
-        this.deleteMerchant()
+        self.listLoading = true
+        putService({
+          agentGroupServiceId: row.agentGroupServiceId,
+          deleted: 1
+        }).then(res => {
+          if (res.result === 0) {
+            Message({
+              message: '删除成功！',
+              type: 'success'
+            })
+            self.queryList()
+          }
+        }).finally(() => { self.listLoading = false })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
       })
     },
     handleEdit(actionType, actionRow) {
@@ -82,34 +102,18 @@ export default {
       this.vis_edit = false
     },
     queryList(page = 1) {
-      this.list = []
+      this.listLoading = true
       this.pageInfo.currPage = page
       const postData = { pageSize: this.pageInfo.pageSize, pageIndex: page }
       fetchList(postData).then(res => {
-        this.listLoading = false
         if (res.data) {
           this.list = res.data.items || []
           this.pageInfo.total = res.data.total || 0
         } else {
           this.pageInfo.total = 0
         }
-      })
+      }).finally(() => { this.listLoading = false })
     },
-    deleteMerchant() {
-      // const params = {
-      //   adOrgIds: [this.angentInfo[0].adOrgId]
-      // }
-      // this.listLoading = true
-      // deleteMerchant(params).then(res => {
-      //   this.listLoading = false
-      //   this.queryList()
-      //   this.$message({
-      //     type: 'success',
-      //     message: '删除成功!'
-      //   })
-      // })
-    },
-
     // 翻页
     handleSizeChange(pageSize) {
       this.pageInfo.pageSize = pageSize
