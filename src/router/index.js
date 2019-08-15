@@ -187,6 +187,47 @@ export let constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/deviceManage',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'deviceManage',
+    hidden: true,
+    meta: {
+      title: '设备管理',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: '/register',
+        component: () => import('@/views/deviceManage/register'),
+        name: 'register',
+        meta: { title: '未设备注册' },
+        hidden: true
+      },
+      {
+        path: '/deviceService',
+        component: () => import('@/views/deviceManage/deviceService'),
+        name: 'deviceService',
+        meta: { title: '服务套餐' },
+        hidden: true
+      },
+      {
+        path: '/registerRecord',
+        component: () => import('@/views/deviceManage/registerRecord'),
+        name: 'registerRecord',
+        meta: { title: '未注册设备>设备注册记录' },
+        hidden: true
+      },
+      {
+        path: '/unregister',
+        component: () => import('@/views/deviceManage/unregister'),
+        name: 'unregister',
+        meta: { title: '设备解绑' },
+        hidden: true
+      }
+    ]
+  },
   // {
   //   path: '/brand',
   //   component: Layout,

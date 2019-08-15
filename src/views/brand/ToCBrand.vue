@@ -114,10 +114,10 @@ export default {
     },
     handleAngentInfo() {
       const postData = this.baseInfo
-      if (!postData.title && !postData.bannerImg && !postData.businessName) {
-        this.$message({ message: '配置信息不能全部为空', type: 'error' })
-        return
-      }
+      // if (!postData.title && !postData.bannerImg && !postData.businessName) {
+      //   this.$message({ message: '配置信息不能全部为空', type: 'error' })
+      //   return
+      // }
       editAdConsumersConfig(postData).then(res => {
         if (res.result === 0) {
           this.$message({ message: res.data || '配置信息成功', type: 'success' })
