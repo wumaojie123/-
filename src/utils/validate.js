@@ -36,7 +36,15 @@ export function validateAlphabets(str) {
 export function validateTel(value) {
   return /^1[34578]\d{9}$/.test(value)
 }
-
+/**
+ * 判断是否是大于0的整数
+ * @param {any} value 待检验的数据
+ * @return {boolean} 大于0正整数返回为true，否则为false
+ */
+export function isPosInt(value) {
+  const reg = /^([1-9][0-9]*)$/
+  return reg.test(value)
+}
 /**
  * validate email
  * @param email
