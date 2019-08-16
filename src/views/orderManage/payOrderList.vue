@@ -131,7 +131,7 @@ export default {
           'device',
           'groupName',
           'communicateTypeName',
-          'packageName',
+          'packageName1',
           'stateName',
           'startTime',
           'endTime',
@@ -210,27 +210,35 @@ export default {
 
         var groupNumber = item.groupNumber
         if (groupNumber) {
-          item.device = `${groupNumber}-${item.deviceType}${item.deviceNo}`
+          item.device = `${groupNumber}号机-${item.deviceType}${item.deviceNo}`
         } else {
           item.device = `${item.deviceType}${item.deviceNo}`
         }
         if (item.communicateType === 'CK') {
-          item.device += `-${item.passageWay}`
+          item.device += `-${item.passageWay}号插座`
           item.communicateTypeName = '串口'
         } else {
           item.communicateTypeName = '脉冲'
         }
-        item.stateName = getStateName(item.state)
-        // 订单类型，0为余额充值，1为支付启动
-        if (item.payType === 0) {
-          this.commDetail.prop = ['device', 'groupName', 'packageName', 'money']
-          this.commDetail.name = [
-            '交易设备',
-            '交易场地',
-            '充值套餐',
-            '套餐金额(元)'
-          ]
+
+        item.packageName1 = item.packageName
+        if (
+          item.continuousPackageNames &&
+          item.continuousPackageNames.length > 0
+        ) {
+          item.packageName1 += `(续充${item.continuousPackageNames.join(',')})`
         }
+        item.stateName = getStateName(item.state)
+        // // 订单类型，0为余额充值，1为支付启动
+        // if (item.payType === 0) {
+        //   this.commDetail.prop = ['device', 'groupName', 'packageName', 'money']
+        //   this.commDetail.name = [
+        //     '交易设备',
+        //     '交易场地',
+        //     '充值套餐',
+        //     '套餐金额(元)'
+        //   ]
+        // }
         this.commDetail.obj = item
         this.detailVisible = true
       }
@@ -305,7 +313,7 @@ export default {
             }
           }
           var isShowDetail = false
-          if (item.equipmentType === 'CDZ' && flag) {
+          if (item.equipmentType === 'CDZ' && flag && item.payType === '1') {
             isShowDetail = true
           }
           // isShow:false,name:'查看',type:'text',size:'small'，fn:
