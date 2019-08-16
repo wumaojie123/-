@@ -1,7 +1,6 @@
 <template>
   <div style="margin: 40px;">
     <div style="margin-bottom: 20px;font-size: 14px;">{{ params.equipmentTypeName }}: {{ params.value }}</div>
-    <div style="margin-bottom: 20px;font-size: 14px;">纸币器类型-台湾ICT串口</div>
     <el-form>
       <div >
         <el-form-item label="脉冲宽度">
@@ -76,7 +75,7 @@ export default {
         drag: 0,
         interfaceType: 0,
         interfaceBaudRate: 0,
-        noteTypes: 1
+        noteTypes: 0
       }
       const res = await szNewEquipment(params)
       if (res.result === 1) {

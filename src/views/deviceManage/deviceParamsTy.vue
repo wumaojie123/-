@@ -80,7 +80,6 @@ export default {
 <style >
 .lyy-open .el-radio+.el-radio {
     margin-left: 0;
-
     margin-top: 20px;
 
 }
