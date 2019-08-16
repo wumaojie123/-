@@ -13,7 +13,7 @@
       </el-select>设备编号
       <el-input v-model="searchParam.deviceNo" placeholder="请输入设备编号" style="width:150px;" />用户ID
       <el-input v-model="searchParam.userId" placeholder="请输入用户ID" style="width:150px;" />交易单号
-      <el-input v-model="searchParam.tradeId" placeholder="请输入交易单号" style="width:150px;" />时间
+      <el-input v-model="searchParam.outTradeNo" placeholder="请输入交易单号" style="width:150px;" />时间
       <el-date-picker
         v-model="searchParam.date"
         :picker-options="option"
@@ -120,7 +120,7 @@ export default {
         adOrgId: '',
         deviceNo: '',
         userId: '', // 用户ID
-        tradeId: '', // 交易单号
+        outTradeNo: '', // 交易单号
         date: ''
       },
       /**
@@ -254,7 +254,7 @@ export default {
         this.searchParam.adOrgId === '' &&
         this.searchParam.deviceNo === '' &&
         this.searchParam.userId === '' &&
-        this.searchParam.tradeId === ''
+        this.searchParam.outTradeNo === ''
       ) {
         this.$message({
           message: '请输入商户账号、设备编号、用户ID或交易单号进行查询',
@@ -340,7 +340,7 @@ export default {
         this.searchParam.adOrgId === '' &&
         this.searchParam.deviceNo === '' &&
         this.searchParam.userId === '' &&
-        this.searchParam.tradeId === ''
+        this.searchParam.outTradeNo === ''
       ) {
         this.$message({
           message: '请输入商户账号、设备编号、用户ID或交易单号进行导出',
@@ -355,8 +355,8 @@ export default {
         this.searchParam.deviceNo +
         '&userId=' +
         this.searchParam.userId +
-        '&tradeId=' +
-        this.searchParam.tradeId
+        '&outTradeNo=' +
+        this.searchParam.outTradeNo
       if (this.searchParam.date) {
         param += '&date=' + this.searchParam.date + ' 00:00:00'
       }
