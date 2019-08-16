@@ -244,7 +244,7 @@ export default {
         '&userId=' +
         this.searchParam.userId
       // url 待修改
-      location.href = encodeURI('/agent/export/startOrders?' + param)
+      location.href = encodeURI('/agent/export/startupOrders?' + param)
       console.log(`💗导出列表`)
     },
     getStateName(state) {

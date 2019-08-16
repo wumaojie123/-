@@ -353,7 +353,7 @@ export default {
         '&tradeId=' +
         this.searchParam.tradeId
         // url 待修改
-      location.href = encodeURI('/agent/export/payOrders?' + param)
+      location.href = encodeURI('/agent/export/paymentOrders?' + param)
       console.log(`💗导出列表`)
     }
   }
