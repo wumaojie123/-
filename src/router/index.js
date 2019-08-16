@@ -221,14 +221,14 @@ export let constantRouterMap = [
       },
       {
         path: '/deviceParams',
-        component: () => import('@/views/deviceManage/deviceParams'),
+        component: () => import('@/views/deviceManage/deviceParamsLyyOpen'),
         name: 'deviceParams',
         meta: { title: '设置服务套餐' },
         hidden: true
       },
       {
         path: '/deviceLifeParams',
-        component: () => import('@/views/deviceManage/deviceLifeParams'),
+        component: () => import('@/views/deviceManage/deviceParamsLife'),
         name: 'deviceLifeParams',
         meta: { title: '设置服务套餐' },
         hidden: true

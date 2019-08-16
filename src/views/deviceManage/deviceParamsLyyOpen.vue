@@ -47,7 +47,7 @@ export default {
     }
   },
   created() {
-    this.uniqueCode = this.$route.query.uniqueCode || '0000000000030809'
+    this.uniqueCode = this.$route.query.uniqueCode
     this.para = info.para
     this.query()
   },
@@ -62,6 +62,8 @@ export default {
       const res = await query(postData)
       if (res.result === 1) {
         this.queryConfigList()
+      } else {
+        this.$message({ message: res.description || '系统异常', type: 'error' })
       }
     },
     async queryConfigList() {

@@ -53,6 +53,9 @@ export default {
       deviceMapInfo: deviceMap,
       colums: [
         { key: 'value', label: '设备编号' },
+        { key: 'isLyyOpen', label: '开发平台' },
+        { key: 'loginFlag', label: '登录表示' },
+        { key: 'equipmentType', label: '设备类型' },
         { key: 'equipmentTypeText', label: '设备类型' },
         { key: 'communicationText', label: '通信方式' },
         { key: 'equipmentParam', label: '设备参数' },
@@ -123,8 +126,27 @@ export default {
     },
     handlePage(type) {
       if (this.selectItems.length === 1) {
+        const data = this.selectItems[0]
         if (type === 1) {
-          this.$router.push({ path: '/unregister', query: { lyyEquipmentId: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType }})
+          // if (data.online !== 0) {
+          //   this.$message({ message: '请选择设备', type: 'error' })
+          //   return
+          // }
+          if (this.selectItems[0].isLyyOpen === 1) {
+            this.$router.push({ path: '/deviceParams', query: { uniqueCode: data.uniqueCode }})
+            return
+          }
+          if (this.selectItems[0].interfaceFlag) {
+            console.log('接口板')
+          } else {
+            if (data.loginFlag === 5 || data.loginFlag === 7 || data.loginFlag === 14 || data.loginFlag === 16) {
+              console.log('device-dbj-params-params')
+            } else if (/^(AMY)|(AMD)|(ZLJ)|(XYJ)|(CDZ)$/.test(data.equipmentType)) {
+              this.$router.push({ path: '/deviceLifeParams', query: { value: data.value, typeValue: data.equipmentType, equipmentTypeName: data.equipmentTypeName }})
+            } else {
+              console.log('其他品类')
+            }
+          }
         } else if (type === 2) {
           this.$router.push({ path: '/deviceServiceEdit', query: { lyyEquipmentId: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType, communication: this.selectItems[0].communication }})
         } else if (type === 3) {
