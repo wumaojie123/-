@@ -210,9 +210,9 @@ export default {
 
         var groupNumber = item.groupNumber
         if (groupNumber) {
-          item.device = `${groupNumber}号机-${item.deviceType}${item.deviceNo}`
+          item.device = `${groupNumber}号机-充电桩${item.deviceNo}`
         } else {
-          item.device = `${item.deviceType}${item.deviceNo}`
+          item.device = `-充电桩${item.deviceNo}`
         }
         if (item.communicateType === 'CK') {
           item.device += `-${item.passageWay}号插座`
