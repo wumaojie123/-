@@ -196,7 +196,6 @@ export default {
      * 详情
      */
     showDetail(item) {
-      debugger
       this.getOrderDetail(item.outTradeNo, item.payType)
       console.log(`💗💗详情`)
     },

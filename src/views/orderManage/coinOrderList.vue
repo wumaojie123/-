@@ -169,9 +169,12 @@ export default {
           if (groupNumber) {
             item.device = `${groupNumber}号机-${item.deviceType}${
               item.deviceNo
-            }-${item.groupName}`
+            }`
           } else {
-            item.device = `${item.deviceType}${item.deviceNo}-${item.groupName}`
+            item.device = `${item.deviceType}${item.deviceNo}`
+          }
+          if (item.groupName) {
+            item.device += `-${item.groupName}`
           }
           item.curIndex = index
 
