@@ -63,10 +63,10 @@ const validateServiceTime2 = (rule, value, callback) => {
   }
 }
 const validateCoins = (rule, value, callback) => {
-  if (isPosInt(value)) {
+  if (isPosInt(value) && value <= 9999 && value > 0) {
     callback()
   } else {
-    callback(new Error('模拟投币数必须为大于0的整数'))
+    callback(new Error('模拟投币数必须为大于0小于等于9999的正整数'))
   }
 }
 export default {
@@ -115,7 +115,7 @@ export default {
         ],
         description: [
           { required: true, message: '请输入套餐名称', trigger: 'change' },
-          { max: 12, message: '套餐名称长度不能超过10', trigger: 'change' }
+          { max: 12, message: '套餐名称长度不能超过12', trigger: 'change' }
         ],
         price: [
           { required: true, message: '请输入价格', trigger: 'change' },
@@ -153,8 +153,8 @@ export default {
           billing: this.actionRow.billing,
           description: this.actionRow.description,
           price: this.actionRow.price,
-          coins: this.actionRow.coins,
-          serviceTime: this.actionRow.serviceTime
+          coins: this.actionRow.coins === null ? '' : this.actionRow.coins,
+          serviceTime: this.actionRow.serviceTime === null ? '' : this.actionRow.serviceTime
         }
       }
     },

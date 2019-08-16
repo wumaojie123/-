@@ -55,7 +55,7 @@ export default {
         { key: 'billing', label: '计费方式', render: (text) => billingMap[text] },
         { key: 'description', label: '套餐名称' },
         { key: 'price', label: '价格', render: (text) => text + '元' },
-        { key: 'serviceTime', label: '时长', render: (text) => text + '分钟' },
+        { key: 'serviceTime', label: '时长', render: (text) => text ? text + '分钟' : '-' },
         { key: 'coins', label: '模拟投币数', render: (text) => text ? text + '币' : '-' },
         { key: 'updated', label: '最新编辑时间', render: (text) => parseTime(text) }
       ],
@@ -72,7 +72,7 @@ export default {
     handleDelete(row) {
       const self = this
       self.$confirm('确定要删除该服务套餐吗？', '删除服务套餐', {
-        confirmButtonText: '保存',
+        confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         closeOnClickModal: false
