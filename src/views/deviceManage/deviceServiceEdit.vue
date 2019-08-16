@@ -82,9 +82,8 @@ export default {
     }
   },
   created() {
-    // this.lyyEquipmentId = this.$route.query.lyyEquipmentId
+    this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.communication = this.$route.query.communication
-    this.lyyEquipmentId = '1017430'
     this.queryList()
   },
   methods: {
