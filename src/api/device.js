@@ -112,3 +112,32 @@ export function query(data) {
     data
   })
 }
+
+export function ty(data) {
+  return request({
+    url: '/rest/setting/setting/ty',
+    method: 'get',
+    params: data
+  })
+}
+export function cxNewEquipment(data) {
+  return request({
+    url: '/rest/setting/cxNewEquipment',
+    method: 'get',
+    params: data
+  })
+}
+export function equipmentParamDef(data) {
+  return request({
+    url: '/rest/setting/getEquipmentParamDef',
+    method: 'get',
+    params: data
+  })
+}
+export function readNewEquipment(data) {
+  return request({
+    url: '/rest/setting/readNewEquipment',
+    method: 'get',
+    params: data
+  })
+}

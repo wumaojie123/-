@@ -16,75 +16,43 @@
       </el-form-item>
     </el-form>
     <div >
+      <el-button @click="handleValue">刷新</el-button>
       <el-button @click="handleValue">保存设置</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { query, configList } from '@/api/device'
-import { info, info2 } from './constant'
+import { ty } from '@/api/device'
+import { inter, info, info2 } from './constant'
 
 export default {
-  name: 'ParamC',
   data() {
     return {
       dataList: [],
       para: [],
-      radio: '',
-      uniqueCode: ''
-    }
-  },
-  watch: {
-    radio(val, oldValue) {
-      if (val !== oldValue) {
-        console.log(val)
-        this.dataList = []
-        setTimeout(() => {
-          this.queryList()
-        }, 1000)
-      }
+      uniqueCode: '',
+      loginFlag: ''
     }
   },
   created() {
-    this.uniqueCode = this.$route.query.uniqueCode || '0000000000030809'
+    this.uniqueCode = this.$route.query.uniqueCode
+    this.loginFlag = this.$route.query.loginFlag
     this.para = info.para
     this.query()
+    console.log(inter)
   },
   methods: {
     // 设备配置
     async query() {
       const postData = {
         uniqueCode: this.uniqueCode,
-        functionCode: 'BSYS_SAAS_QUERY_FUNCTION',
+        loginFlag: this.loginFlag,
         t: Date.now()
       }
-      const res = await query(postData)
+      const res = await ty(postData)
       if (res.result === 1) {
         this.queryConfigList()
-      }
-    },
-    async queryConfigList() {
-      const params = {
-        uniqueCode: this.uniqueCode,
-        functionCode: 'BSYS_SAAS_QUERY_FUNCTION',
-        t: Date.now()
-      }
-      const res = await configList(params)
-      if (res.result === 0) {
-        this.para = res.para
-      }
-    },
-    async query2() {
-      const postData = {
-        uniqueCode: this.uniqueCode,
-        data: { 'cmd': this.radio },
-        functionCode: 'BSYS_SAAS_QUERY_PARAM',
-        t: Date.now()
-      }
-      const res = await query(postData)
-      if (res.result === 1) {
-        this.queryList()
       }
     },
     async queryList() {
