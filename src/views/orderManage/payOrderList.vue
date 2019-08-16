@@ -147,9 +147,9 @@ export default {
           '工作状态',
           '开始充电时间',
           '结束充电时间',
-          '实际充电时长',
-          '套餐实际充电总时长',
-          '剩余时长退款（退至充电账户余额)'
+          '实际充电时长(分)',
+          '套餐实际充电总时长(分)',
+          '剩余时长退款（退至充电账户余额)(元)'
         ],
         obj: {}
       },
@@ -214,7 +214,7 @@ export default {
         } else {
           item.device = `${item.deviceType}${item.deviceNo}`
         }
-        if (item.communicateTypeName === 'CK') {
+        if (item.communicateType === 'CK') {
           item.device += `-${item.passageWay}`
           item.communicateTypeName = '串口'
         } else {
@@ -228,7 +228,7 @@ export default {
             '交易设备',
             '交易场地',
             '充值套餐',
-            '套餐金额'
+            '套餐金额(元)'
           ]
         }
         this.commDetail.obj = item

@@ -194,7 +194,7 @@ export default {
           } else {
             item.device = `充电桩${item.deviceNo}`
           }
-          if (item.communicateTypeName === 'CK') {
+          if (item.communicateType === 'CK') {
             item.device += `-${item.passageWay}插座`
             item.communicateTypeName = '串口'
           } else {
