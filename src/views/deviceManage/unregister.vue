@@ -6,11 +6,11 @@
       <el-checkbox v-for="(item, index) in list" :label="item" :key="index" v-model="others" size="medium"/>
     </el-checkbox-group>
     <p class="text-info">其他原因:</p>
-    <el-input :rows="4" style="width: 400px;" type="textarea" placeholder="请输入解绑原因" maxlength="20"/>
+    <el-input v-model="others" :rows="4" style="width: 400px;" type="textarea" placeholder="请输入解绑原因" maxlength="20"/>
     <p class="text-info">设备损坏、频繁离线、信号问题等设备问题，乐摇摇提供最优的设备升级方案，升级热线服务时间：每天9:00-21:00</p>
 
     <div style="margin-top: 20px;">
-      <el-button>取消</el-button>
+      <el-button @click="handleCancel">取消</el-button>
       <el-button type="primary" @click="handleUnbind">确定解绑</el-button>
     </div>
   </div>
@@ -63,9 +63,13 @@ export default {
       const res = await unbundling(params)
       if (res.result === 0) {
         this.$message({ message: '设备解绑成功', type: 'success' })
+        window.history.go(-1)
       } else {
         this.$message({ message: '解绑失败', type: 'error' })
       }
+    },
+    handleCancel() {
+      window.history.go(-1)
     }
   }
 }

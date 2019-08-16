@@ -13,7 +13,7 @@
       <span>服务套餐</span>
       <el-button type="primary" @click="handleSaveModal">添加其他套餐</el-button>
     </div>
-    <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" height="500" @selection-change="handleSelectionChange">
+    <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" height="400" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"/>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
@@ -24,8 +24,9 @@
       layout="total, pager"
     />
     <div style="text-align:center;">
-      <el-button @click="history.go();">取消</el-button>
+      <el-button @click="handleCancel">取消</el-button>
       <el-button style="margin-left: 100px;" type="primary" @click="handleBatchSave">完成</el-button>
+      <div style="color: red;margin-top: 20px;">注：设备注册成功后，设备绑定在商家的默认场地下。</div>
     </div>
     <!--  -->
     <el-dialog :visible.sync="dialogFormVisible" title="编辑套餐服务" style="width: 1000px;">
@@ -173,8 +174,14 @@ export default {
       }
       const res = await batchRegisteredEquipment(params)
       if (res.result === 0) {
+        this.handleCancel()
         this.$message({ message: '设备注册成功', type: 'success' })
+      } else {
+        this.$message({ message: '设备注册失败', type: 'error' })
       }
+    },
+    handleCancel() {
+      window.history.go(-1)
     }
   }
 }
