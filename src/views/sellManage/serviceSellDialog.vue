@@ -153,8 +153,8 @@ export default {
           billing: this.actionRow.billing,
           description: this.actionRow.description,
           price: this.actionRow.price,
-          coins: this.actionRow.coins,
-          serviceTime: this.actionRow.serviceTime
+          coins: this.actionRow.coins === null ? '' : this.actionRow.coins,
+          serviceTime: this.actionRow.serviceTime === null ? '' : this.actionRow.serviceTime
         }
       }
     },

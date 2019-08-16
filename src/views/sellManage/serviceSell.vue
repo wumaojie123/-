@@ -72,7 +72,7 @@ export default {
     handleDelete(row) {
       const self = this
       self.$confirm('确定要删除该服务套餐吗？', '删除服务套餐', {
-        confirmButtonText: '保存',
+        confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         closeOnClickModal: false
