@@ -117,7 +117,7 @@ export default {
       option: {
         disabledDate: time => {
           var NOW = Date.now()
-          console.log(time)
+          // console.log(time)
           const timeItem = time.getTime()
           return timeItem < NOW - 24 * 60 * 60 * 30 * 1000 || timeItem > NOW
         }
@@ -173,7 +173,7 @@ export default {
      * 订单列表
      */
     async getList() {
-      var param = this.searchParam
+      var param = JSON.parse(JSON.stringify(this.searchParam))
       param.pageIndex = this.commProps.pagination.pageIndex
       param.pageSize = this.commProps.pagination.pageSize
       if (param.date) {
@@ -259,9 +259,9 @@ export default {
       if (this.searchParam.date) {
         param += '&date=' + this.searchParam.date + ' 00:00:00'
       }
+      // console.log("💗时间:"+this.searchParam.date)
       // url 待修改
       location.href = encodeURI('/agent/export/startupOrders?1=1' + param)
-      console.log(`💗导出列表`)
     }
   }
 }

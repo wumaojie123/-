@@ -94,7 +94,7 @@ export default {
       option: {
         disabledDate: time => {
           var NOW = Date.now()
-          console.log(time)
+          // console.log(time)
           const timeItem = time.getTime()
           return timeItem < NOW - 24 * 60 * 60 * 30 * 1000 || timeItem > NOW
         }
@@ -139,7 +139,7 @@ export default {
       this.getList()
     },
     async getList() {
-      var param = this.searchParam
+      var param = JSON.parse(JSON.stringify(this.searchParam))
       param.pageIndex = this.commProps.pagination.pageIndex
       param.pageSize = this.commProps.pagination.pageSize
       if (param.date) {
@@ -169,9 +169,12 @@ export default {
           if (groupNumber) {
             item.device = `${groupNumber}号机-${item.deviceType}${
               item.deviceNo
-            }-${item.groupName}`
+            }`
           } else {
-            item.device = `${item.deviceType}${item.deviceNo}-${item.groupName}`
+            item.device = `${item.deviceType}${item.deviceNo}`
+          }
+          if (item.groupName) {
+            item.device += `-${item.groupName}`
           }
           item.curIndex = index
 
@@ -201,8 +204,8 @@ export default {
       if (this.searchParam.date) {
         param += '&date=' + this.searchParam.date + ' 00:00:00'
       }
+      // console.log("💗时间:"+this.searchParam.date)
       location.href = encodeURI('/agent/export/coinOrders?1=1&' + param)
-      console.log(`💗导出列表`)
     }
   }
 }
