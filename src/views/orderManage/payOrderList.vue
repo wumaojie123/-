@@ -340,11 +340,8 @@ export default {
         })
         return false
       }
-      if (this.searchParam.date) {
-        param = 'date=' + this.searchParam.date + ' 00:00:00'
-      }
       param +=
-        'adOrgId=' +
+        '&adOrgId=' +
         this.searchParam.adOrgId +
         '&deviceNo=' +
         this.searchParam.deviceNo +
@@ -352,8 +349,11 @@ export default {
         this.searchParam.userId +
         '&tradeId=' +
         this.searchParam.tradeId
-        // url 待修改
-      location.href = encodeURI('/agent/export/paymentOrders?' + param)
+      if (this.searchParam.date) {
+        param = '&date=' + this.searchParam.date + ' 00:00:00'
+      }
+      // url 待修改
+      location.href = encodeURI('/agent/export/paymentOrders?1=1' + param)
       console.log(`💗导出列表`)
     }
   }

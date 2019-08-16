@@ -35,7 +35,11 @@
 
 <script>
 import OrderList from './components/orderList'
-import { queryOrder, getMerchantList, getStateName } from '../../api/orderManage'
+import {
+  queryOrder,
+  getMerchantList,
+  getStateName
+} from '../../api/orderManage'
 export default {
   components: {
     'order-list': OrderList
@@ -190,7 +194,6 @@ export default {
           } else {
             item.device = `充电桩${item.deviceNo}`
           }
-          // -${item.passageWay}
           if (item.communicateTypeName === 'CK') {
             item.device += `-${item.passageWay}插座`
             item.communicateTypeName = '串口'
@@ -233,43 +236,19 @@ export default {
         })
         return false
       }
-      if (this.searchParam.date) {
-        param = 'date=' + this.searchParam.date + ' 00:00:00'
-      }
       param +=
-        'adOrgId=' +
+        '&adOrgId=' +
         this.searchParam.adOrgId +
         '&deviceNo=' +
         this.searchParam.deviceNo +
         '&userId=' +
         this.searchParam.userId
-      // url 待修改
-      location.href = encodeURI('/agent/export/startupOrders?' + param)
-      console.log(`💗导出列表`)
-    },
-    getStateName(state) {
-      var str = ''
-      switch (state) {
-        case -3:
-          str = '启动超时'
-          break
-        case -2:
-          str = '启动结束'
-          break
-        case -1:
-          str = '已结束'
-          break
-        case 0:
-          str = '启动中'
-          break
-        case 1:
-          str = '工作中'
-          break
-        case 2:
-          str = '已终止'
-          break
+      if (this.searchParam.date) {
+        param = '&date=' + this.searchParam.date + ' 00:00:00'
       }
-      return str
+      // url 待修改
+      location.href = encodeURI('/agent/export/startupOrders?1=1' + param)
+      console.log(`💗导出列表`)
     }
   }
 }
