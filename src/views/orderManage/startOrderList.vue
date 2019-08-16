@@ -35,7 +35,11 @@
 
 <script>
 import OrderList from './components/orderList'
-import { queryOrder, getMerchantList, getStateName } from '../../api/orderManage'
+import {
+  queryOrder,
+  getMerchantList,
+  getStateName
+} from '../../api/orderManage'
 export default {
   components: {
     'order-list': OrderList
@@ -72,9 +76,9 @@ export default {
             'merchant', // merchantName merchantAccount
             'user', // lyyUserId lyyUserName
             'startType', // outTradeNo 启动方式（0和1为余额启动，其他为支付启动）
-            'packageName',
-            'money',
-            'serviceDurings',
+            'packageName1',
+            'money1',
+            'serviceDurings1',
             'stateName', // state  订单状态（启动超时-3，启动失败-2，已结束-1，启动中0，工作中1，已终止2
             'startTime',
             'endTime',
@@ -190,8 +194,7 @@ export default {
           } else {
             item.device = `充电桩${item.deviceNo}`
           }
-          // -${item.passageWay}
-          if (item.communicateTypeName === 'CK') {
+          if (item.communicateType === 'CK') {
             item.device += `-${item.passageWay}插座`
             item.communicateTypeName = '串口'
           } else {
@@ -207,6 +210,19 @@ export default {
             item.user = `${item.lyyUserId}-${item.username}`
           } else {
             item.user = `${item.lyyUserId}`
+          }
+          item.packageName1 = item.packageName
+          item.money1 = item.money
+          item.serviceDurings1 = item.serviceDurings
+          if (
+            item.continuousPackageNames &&
+            item.continuousPackageNames.length > 0
+          ) {
+            item.packageName1 += `(续充${item.continuousPackageNames.join(
+              ','
+            )})`
+            item.money1 += `(续充${item.continuousMoney}元)`
+            item.serviceDurings1 += `(续充${item.continuousDurings}分)`
           }
 
           item.stateName = getStateName(item.state)
@@ -233,43 +249,19 @@ export default {
         })
         return false
       }
-      if (this.searchParam.date) {
-        param = 'date=' + this.searchParam.date + ' 00:00:00'
-      }
       param +=
-        'adOrgId=' +
+        '&adOrgId=' +
         this.searchParam.adOrgId +
         '&deviceNo=' +
         this.searchParam.deviceNo +
         '&userId=' +
         this.searchParam.userId
-      // url 待修改
-      location.href = encodeURI('/agent/export/startupOrders?' + param)
-      console.log(`💗导出列表`)
-    },
-    getStateName(state) {
-      var str = ''
-      switch (state) {
-        case -3:
-          str = '启动超时'
-          break
-        case -2:
-          str = '启动结束'
-          break
-        case -1:
-          str = '已结束'
-          break
-        case 0:
-          str = '启动中'
-          break
-        case 1:
-          str = '工作中'
-          break
-        case 2:
-          str = '已终止'
-          break
+      if (this.searchParam.date) {
+        param += '&date=' + this.searchParam.date + ' 00:00:00'
       }
-      return str
+      // url 待修改
+      location.href = encodeURI('/agent/export/startupOrders?1=1' + param)
+      console.log(`💗导出列表`)
     }
   }
 }

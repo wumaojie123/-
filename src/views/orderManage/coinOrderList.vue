@@ -193,15 +193,15 @@ export default {
         })
         return false
       }
-      if (this.searchParam.date) {
-        param = 'date=' + this.searchParam.date + ' 00:00:00'
-      }
       param +=
-        'adOrgId=' +
+        '&adOrgId=' +
         this.searchParam.adOrgId +
         '&deviceNo=' +
         this.searchParam.deviceNo
-      location.href = encodeURI('/agent/export/coinOrders?' + param)
+      if (this.searchParam.date) {
+        param += '&date=' + this.searchParam.date + ' 00:00:00'
+      }
+      location.href = encodeURI('/agent/export/coinOrders?1=1&' + param)
       console.log(`💗导出列表`)
     }
   }
