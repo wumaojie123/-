@@ -1,29 +1,35 @@
 <template>
-  <div>
+  <div class="lyy-open">
     <div style="margin: 20px;">
-      <el-radio v-for="(item, index) in para" v-model="radio" :label="item.cmd" :key="index">{{ item.name }}</el-radio>
+      <el-radio v-for="(item, index) in para" v-model="radio" :label="item.cmd" :key="index" :value="index">{{ item.name }}</el-radio>
     </div>
     <el-form ref="ruleForm" :inline="true" style="margin-bottom: 20px;" label-width="190px" label-position="center">
       <el-form-item v-for="(item, index) in dataList" :label="item.name" :key="index" style="width: 400px;">
         <template v-if="item.componentType === 'inputFloat' || item.componentType==='inputInt'">
-          <el-input v-model="item.componentValue" type="number" style="width: 200px;" maxlength="16" clearable>
+          <el-input v-model="item.componentValue" :disabled="disabled" type="number" style="width: 200px;" maxlength="16" clearable>
             <template slot="append">{{ item.componentValueUnit }}</template>
           </el-input>
         </template>
         <template v-else-if="item.componentType=== 'switch'">
-          <el-switch v-model="item.componentValue" :active-value="item.componentValueSwitch.open" :inactive-value="item.componentValueSwitch.close" active-color="#13ce66"/>
+          <el-switch v-model="item.componentValue" :active-value="item.componentValueSwitch.open" :inactive-value="item.componentValueSwitch.close" :disabled="disabled" active-color="#13ce66"/>
+        </template>
+        <template v-else-if="item.componentType=== 'select'">
+          <el-select v-model="item.componentValue" placeholder="请选择">
+            <el-option v-for="(item, index) in item.componentValueArray" :key="index" :label="item.text" :value="item.value" :disabled="disabled"/>
+          </el-select>
         </template>
       </el-form-item>
     </el-form>
-    <div >
-      <el-button @click="handleValue">保存设置</el-button>
+    <div style="text-align:center;margin-top:80px;">
+      <el-button v-if="!disabled" @click="handleValue">刷新</el-button>
+      <el-button v-if="!disabled" style="margin-left: 200px;" type="primary" @click="handleValue">保存设置</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import { query, configList } from '@/api/device'
-import { info, info2 } from './constant'
+// import { info2 } from './constant'
 
 export default {
   name: 'ParamC',
@@ -32,23 +38,20 @@ export default {
       dataList: [],
       para: [],
       radio: '',
-      uniqueCode: ''
+      uniqueCode: '',
+      disabled: false
     }
   },
   watch: {
     radio(val, oldValue) {
       if (val !== oldValue) {
-        console.log(val)
         this.dataList = []
-        setTimeout(() => {
-          this.queryList()
-        }, 1000)
+        this.queryList()
       }
     }
   },
   created() {
     this.uniqueCode = this.$route.query.uniqueCode
-    this.para = info.para
     this.query()
   },
   methods: {
@@ -73,14 +76,13 @@ export default {
         t: Date.now()
       }
       const res = await configList(params)
-      if (res.result === 0) {
+      if (res.result === 1) {
         this.para = res.para
       }
     },
     async query2() {
       const postData = {
         uniqueCode: this.uniqueCode,
-        data: { 'cmd': this.radio },
         functionCode: 'BSYS_SAAS_QUERY_PARAM',
         t: Date.now()
       }
@@ -91,20 +93,24 @@ export default {
     },
     async queryList() {
       let list = []
-      // const params = {
-      //   uniqueCode: this.uniqueCode,
-      //   functionCode: 'BSYS_SAAS_QUERY_PARAM',
-      //   t: Date.now()
-      // }
-      list = JSON.parse(info2.para.params)
-      // const res = await configList(params)
-      // if (res.result === 0) {
-      //   this.para = res.para
-      // }
+      console.log(this.radio)
+      const params = {
+        uniqueCode: this.uniqueCode,
+        functionCode: 'BSYS_SAAS_QUERY_PARAM',
+        data: JSON.stringify({ 'cmd': this.radio }),
+        t: Date.now()
+      }
+      const res = await configList(params)
+      if (res.result === 1) {
+        list = JSON.parse(res.para.params)
+        this.disabled = res.para.settingCmd === ''
+        console.log(this.disabled, 'this.disabled')
+        // console.log(JSON.stringify(list))
+      }
 
       for (const key in list) {
         for (const innerKey in list[key]) {
-          if (innerKey === 'componentValueRange' || innerKey === 'componentValueSwitch') {
+          if (innerKey === 'componentValueRange' || innerKey === 'componentValueSwitch' || innerKey === 'componentValueArray') {
             const check = JSON.parse(list[key][innerKey])
             list[key][innerKey] = check
           }
@@ -126,3 +132,12 @@ export default {
   }
 }
 </script>
+
+<style >
+.lyy-open .el-radio+.el-radio {
+    margin-left: 0;
+    margin-right: 30px;
+    margin-top: 20px;
+
+}
+</style>
