@@ -49,9 +49,16 @@ export default {
         this.$message({ message: '请选择或输入解绑原因', type: 'error' })
         return
       }
-      let params = [this.others]
+      let reasons = []
+      if (this.others) {
+        reasons = [this.others]
+      }
       if (this.checkList.length) {
-        params = params.concat(this.checkList)
+        reasons = reasons.concat(this.checkList)
+      }
+      const params = {
+        lyyEquipmentId: this.lyyEquipmentId,
+        reasons
       }
       const res = await unbundling(params)
       if (res.result === 0) {

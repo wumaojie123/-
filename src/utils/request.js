@@ -37,7 +37,9 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    if (res.result !== 0) {
+    if (res.result === 1) {
+      return response.data
+    } else if (res.result !== 0) {
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
       if (res.result === 401 || res.result === 402 || res.result === 403) {
         // 请自行在引入 MessageBox

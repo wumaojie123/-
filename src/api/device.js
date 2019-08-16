@@ -96,3 +96,19 @@ export function agentGroupServiceList(data) {
     params: data
   })
 }
+// 获取服务套餐列表
+export function configList(data) {
+  return request({
+    url: '/rest/setting/lyyopen/load',
+    method: 'get',
+    params: data
+  })
+}
+
+export function query(data) {
+  return request({
+    url: '/rest/setting/lyyopen/query',
+    method: 'post',
+    data
+  })
+}

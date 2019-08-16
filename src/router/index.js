@@ -220,6 +220,13 @@ export let constantRouterMap = [
         hidden: true
       },
       {
+        path: '/deviceParams',
+        component: () => import('@/views/deviceManage/deviceParams'),
+        name: 'deviceParams',
+        meta: { title: '设置服务套餐' },
+        hidden: true
+      },
+      {
         path: '/unregister',
         component: () => import('@/views/deviceManage/unregister'),
         name: 'unregister',
