@@ -54,6 +54,7 @@ export default {
       colums: [
         { key: 'value', label: '设备编号' },
         { key: 'isLyyOpen', label: '开发平台' },
+        { key: 'interfaceFlag', label: '接口板' },
         { key: 'loginFlag', label: '登录表示' },
         { key: 'equipmentType', label: '设备类型' },
         { key: 'equipmentTypeText', label: '设备类型' },
@@ -137,7 +138,7 @@ export default {
             return
           }
           if (this.selectItems[0].interfaceFlag) {
-            console.log('接口板')
+            this.$router.push({ path: '/deviceParamsTy', query: { uniqueCode: data.uniqueCode, loginFlag: data.loginFlag }})
           } else {
             if (data.loginFlag === 5 || data.loginFlag === 7 || data.loginFlag === 14 || data.loginFlag === 16) {
               console.log('device-dbj-params-params')

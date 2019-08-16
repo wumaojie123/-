@@ -227,6 +227,13 @@ export let constantRouterMap = [
         hidden: true
       },
       {
+        path: '/deviceParamsTy',
+        component: () => import('@/views/deviceManage/deviceParamsTy'),
+        name: 'deviceParamsTy',
+        meta: { title: '设置服务套餐' },
+        hidden: true
+      },
+      {
         path: '/deviceLifeParams',
         component: () => import('@/views/deviceManage/deviceParamsLife'),
         name: 'deviceLifeParams',

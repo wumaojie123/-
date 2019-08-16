@@ -1,6 +1,6 @@
 <template>
   <div style="margin: 40px;">
-    <div class="">{{ params.equipmentTypeName }} {{ params.value }}</div>
+    <div style="margin-bottom: 20px;font-size: 14px;">{{ params.equipmentTypeName }}: {{ params.value }}<span style="color: #888;margin-left: 10px;">(脉冲宽度 / 间隔范围为10-1000)</span></div>
     <el-form>
       <el-form-item label="脉冲设置">
         <el-select v-model="index" placeholder="请选择">
@@ -20,7 +20,11 @@
         <el-radio v-model="saveData.battery" label="1">常闭</el-radio>
       </el-form-item>
     </el-form>
-    <p style="font-size: 14px;color: red;"> 脉冲设置： 脉冲宽度{{ saveData.pulseWidth }}, 脉冲间隔 {{ saveData.pulseInterval }}</p>
+    <p style="font-size: 14px;color: #888;"> 脉冲设置： 脉冲宽度{{ saveData.pulseWidth }}, 脉冲间隔 {{ saveData.pulseInterval }} </p>
+    <div style="text-align:left;margin-top:80px;">
+      <el-button @click="query()">刷新</el-button>
+      <el-button style="margin-left: 100px;" type="primary" @click="saveNewEquipment">保存设置</el-button>
+    </div>
   </div>
 </template>
 
@@ -94,6 +98,10 @@ export default {
             return
           }
         })
+        if (this.index === this.list.length - 1) {
+          this.modalData.pulseWidth = this.dataInfo.pulseWidth
+          this.modalData.pulseInterval = this.dataInfo.pulseInterval
+        }
       }
     },
     async saveNewEquipment() {
@@ -115,8 +123,11 @@ export default {
         noteTypes: 0
       }
       const res = await szNewEquipment(params)
-      if (res.result === 0) {
-        this.$message({ message: '设置成功', type: 'error' })
+      if (res.result === 1) {
+        this.$message({ message: '设置成功', type: 'success' })
+        setTimeout(() => {
+          this.query()
+        }, 1500)
       }
     }
   }

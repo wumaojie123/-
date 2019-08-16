@@ -141,3 +141,17 @@ export function readNewEquipment(data) {
     params: data
   })
 }
+export function szNewEquipment(data) {
+  return request({
+    url: '/rest/setting/szNewEquipment',
+    method: 'get',
+    params: data
+  })
+}
+export function setEquipment(data) {
+  return request({
+    url: '/rest/setting/setEquipment',
+    method: 'post',
+    data
+  })
+}

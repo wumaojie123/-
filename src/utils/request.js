@@ -37,7 +37,9 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    if (res.result === 1) {
+    if (res.result === 4) {
+      return response.data
+    } else if (res.result === 1) {
       return response.data
     } else if (res.result !== 0) {
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
