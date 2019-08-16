@@ -350,7 +350,7 @@ export default {
         '&tradeId=' +
         this.searchParam.tradeId
       if (this.searchParam.date) {
-        param = '&date=' + this.searchParam.date + ' 00:00:00'
+        param += '&date=' + this.searchParam.date + ' 00:00:00'
       }
       // url 待修改
       location.href = encodeURI('/agent/export/paymentOrders?1=1' + param)

@@ -199,7 +199,7 @@ export default {
         '&deviceNo=' +
         this.searchParam.deviceNo
       if (this.searchParam.date) {
-        param = '&date=' + this.searchParam.date + ' 00:00:00'
+        param += '&date=' + this.searchParam.date + ' 00:00:00'
       }
       location.href = encodeURI('/agent/export/coinOrders?1=1&' + param)
       console.log(`💗导出列表`)

@@ -76,9 +76,9 @@ export default {
             'merchant', // merchantName merchantAccount
             'user', // lyyUserId lyyUserName
             'startType', // outTradeNo 启动方式（0和1为余额启动，其他为支付启动）
-            'packageName',
-            'money',
-            'serviceDurings',
+            'packageName1',
+            'money1',
+            'serviceDurings1',
             'stateName', // state  订单状态（启动超时-3，启动失败-2，已结束-1，启动中0，工作中1，已终止2
             'startTime',
             'endTime',
@@ -211,6 +211,19 @@ export default {
           } else {
             item.user = `${item.lyyUserId}`
           }
+          item.packageName1 = item.packageName
+          item.money1 = item.money
+          item.serviceDurings1 = item.serviceDurings
+          if (
+            item.continuousPackageNames &&
+            item.continuousPackageNames.length > 0
+          ) {
+            item.packageName1 += `(续充${item.continuousPackageNames.join(
+              ','
+            )})`
+            item.money1 += `(续充${item.continuousMoney}元)`
+            item.serviceDurings1 += `(续充${item.continuousDurings}分)`
+          }
 
           item.stateName = getStateName(item.state)
           item.curIndex = index
@@ -244,7 +257,7 @@ export default {
         '&userId=' +
         this.searchParam.userId
       if (this.searchParam.date) {
-        param = '&date=' + this.searchParam.date + ' 00:00:00'
+        param += '&date=' + this.searchParam.date + ' 00:00:00'
       }
       // url 待修改
       location.href = encodeURI('/agent/export/startupOrders?1=1' + param)
