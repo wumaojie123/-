@@ -160,7 +160,7 @@ export default {
         this.commProps.summary.total = obj.totalCoins
         this.commProps.summary.showFlag = true
         this.commProps.pagination.totalCount = list.totalCount
-        this.commProps.pagination.pageIndex = list.page
+        // this.commProps.pagination.pageIndex = list.page
         this.commProps.cell.list = []
         var items = list.items || []
         var index = 0
@@ -185,7 +185,7 @@ export default {
       下载
      */
     download() {
-      var param = this.searchParam
+      var param = ''
       if (this.searchParam.adOrgId === '' && this.searchParam.deviceNo === '') {
         this.$message({
           message: '请输入商户账号或设备编号进行导出',
@@ -194,9 +194,14 @@ export default {
         return false
       }
       if (this.searchParam.date) {
-        param.date = this.searchParam.date + ' 00:00:00'
+        param = 'date=' + this.searchParam.date + ' 00:00:00'
       }
-      location.href = encodeURI('/export/coinOrders?' + param)
+      param +=
+        'adOrgId=' +
+        this.searchParam.adOrgId +
+        '&deviceNo=' +
+        this.searchParam.deviceNo
+      location.href = encodeURI('/agent/export/coinOrders?' + param)
       console.log(`💗导出列表`)
     }
   }

@@ -2,12 +2,13 @@
   <el-container>
     <el-header style="margin-top:10px">
       商户账号:
-      <el-select v-model="searchParam.adOrgId" filterable placeholder="请选择">
+      <el-select v-model="searchParam.adOrgId" filterable placeholder="请选择" clearable>
         <el-option
           v-for="item in merchantList"
           :key="item.adOrgId"
           :label="item.label"
           :value="item.adOrgId"
+          style="width:200px;"
         />
       </el-select>设备编号
       <el-input v-model="searchParam.deviceNo" placeholder="请输入设备编号" style="width:200px;" />用户ID
@@ -34,7 +35,7 @@
 
 <script>
 import OrderList from './components/orderList'
-import { queryOrder, getMerchantList } from '../../api/orderManage'
+import { queryOrder, getMerchantList, getStateName } from '../../api/orderManage'
 export default {
   components: {
     'order-list': OrderList
@@ -179,7 +180,7 @@ export default {
         this.commProps.cell.list = []
         var data = result.data
         this.commProps.pagination.totalCount = data.total
-        this.commProps.pagination.pageIndex = data.page
+        // this.commProps.pagination.pageIndex = data.page
         var list = data.items || []
         var index = 0
         list.forEach(item => {
@@ -196,7 +197,7 @@ export default {
           } else {
             item.communicateTypeName = '脉冲'
           }
-          if (item.outTradeNo === 0 || item.outTradeNo === 1) {
+          if (item.outTradeNo === '0' || item.outTradeNo === '1') {
             item.startType = '余额启动'
           } else {
             item.startType = '支付启动'
@@ -208,7 +209,7 @@ export default {
             item.user = `${item.lyyUserId}`
           }
 
-          item.stateName = this.getStateName(item.state)
+          item.stateName = getStateName(item.state)
           item.curIndex = index
           this.commProps.cell.list.push(item)
           index++
@@ -220,7 +221,31 @@ export default {
      * 导出
      */
     download() {
-      console.log('💗')
+      var param = ''
+      if (
+        this.searchParam.adOrgId === '' &&
+        this.searchParam.deviceNo === '' &&
+        this.searchParam.userId === ''
+      ) {
+        this.$message({
+          message: '请输入商户账号、设备编号、用户ID进行导出',
+          type: 'error'
+        })
+        return false
+      }
+      if (this.searchParam.date) {
+        param = 'date=' + this.searchParam.date + ' 00:00:00'
+      }
+      param +=
+        'adOrgId=' +
+        this.searchParam.adOrgId +
+        '&deviceNo=' +
+        this.searchParam.deviceNo +
+        '&userId=' +
+        this.searchParam.userId
+      // url 待修改
+      location.href = encodeURI('/agent/export/startOrders?' + param)
+      console.log(`💗导出列表`)
     },
     getStateName(state) {
       var str = ''

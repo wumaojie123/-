@@ -196,6 +196,7 @@ export default {
      * 详情
      */
     showDetail(item) {
+      debugger
       this.getOrderDetail(item.outTradeNo, item.payType)
       console.log(`💗💗详情`)
     },
@@ -223,8 +224,13 @@ export default {
         // 订单类型，0为余额充值，1为支付启动
         if (item.payType === 0) {
           this.commDetail.prop = ['device', 'groupName', 'packageName', 'money']
+          this.commDetail.name = [
+            '交易设备',
+            '交易场地',
+            '充值套餐',
+            '套餐金额'
+          ]
         }
-        this.commDetail.name = ['交易设备', '交易场地', '充值套餐', '套餐金额']
         this.commDetail.obj = item
         this.detailVisible = true
       }
@@ -265,12 +271,17 @@ export default {
         this.commProps.handler.list = []
         var data = result.data
         this.commProps.pagination.totalCount = data.total
-        this.commProps.pagination.pageIndex = data.page
+        // this.commProps.pagination.pageIndex = data.page
         var list = data.items || []
         list.forEach(item => {
           item.device = item.equipmentTypeName + item.value
           item.merchant = item.merchantName + item.merchantAccount
-          item.user = `${item.lyyUserId}-${item.userName}`
+          // item.user = `${item.lyyUserId}-${item.userName}`
+          if (item.username) {
+            item.user = `${item.lyyUserId}-${item.username}`
+          } else {
+            item.user = `${item.lyyUserId}`
+          }
           if (item.couponFe) {
             item.activity = '现金券金额' + item.couponFe + '元,'
           }
@@ -316,7 +327,34 @@ export default {
      * 导出
      */
     download() {
-      console.log('💗')
+      var param = ''
+      if (
+        this.searchParam.adOrgId === '' &&
+        this.searchParam.deviceNo === '' &&
+        this.searchParam.userId === '' &&
+        this.searchParam.tradeId === ''
+      ) {
+        this.$message({
+          message: '请输入商户账号、设备编号、用户ID或交易单号进行导出',
+          type: 'error'
+        })
+        return false
+      }
+      if (this.searchParam.date) {
+        param = 'date=' + this.searchParam.date + ' 00:00:00'
+      }
+      param +=
+        'adOrgId=' +
+        this.searchParam.adOrgId +
+        '&deviceNo=' +
+        this.searchParam.deviceNo +
+        '&userId=' +
+        this.searchParam.userId +
+        '&tradeId=' +
+        this.searchParam.tradeId
+        // url 待修改
+      location.href = encodeURI('/agent/export/payOrders?' + param)
+      console.log(`💗导出列表`)
     }
   }
 }
