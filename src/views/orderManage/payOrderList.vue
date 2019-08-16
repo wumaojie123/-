@@ -313,7 +313,7 @@ export default {
             }
           }
           var isShowDetail = false
-          if (item.equipmentType === 'CDZ' && flag && item.payType === '2') {
+          if (item.equipmentType === 'CDZ' && flag && item.payType === 2) {
             isShowDetail = true
           }
           // isShow:false,name:'查看',type:'text',size:'small'，fn:
