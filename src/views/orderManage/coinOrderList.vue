@@ -159,7 +159,7 @@ export default {
         }
         this.commProps.summary.total = obj.totalCoins
         this.commProps.summary.showFlag = true
-        this.commProps.pagination.totalCount = list.totalCount
+        this.commProps.pagination.totalCount = list.total
         // this.commProps.pagination.pageIndex = list.page
         this.commProps.cell.list = []
         var items = list.items || []
