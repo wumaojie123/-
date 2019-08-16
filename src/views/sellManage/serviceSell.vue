@@ -55,7 +55,7 @@ export default {
         { key: 'billing', label: '计费方式', render: (text) => billingMap[text] },
         { key: 'description', label: '套餐名称' },
         { key: 'price', label: '价格', render: (text) => text + '元' },
-        { key: 'serviceTime', label: '时长', render: (text) => text + '分钟' },
+        { key: 'serviceTime', label: '时长', render: (text) => text ? text + '分钟' : '-' },
         { key: 'coins', label: '模拟投币数', render: (text) => text ? text + '币' : '-' },
         { key: 'updated', label: '最新编辑时间', render: (text) => parseTime(text) }
       ],
