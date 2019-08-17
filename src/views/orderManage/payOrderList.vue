@@ -289,6 +289,7 @@ export default {
           } else {
             item.user = `${item.lyyUserId}`
           }
+          item.activity = ''
           if (item.couponFe) {
             item.activity = '现金券金额' + item.couponFe + '元,'
           }
