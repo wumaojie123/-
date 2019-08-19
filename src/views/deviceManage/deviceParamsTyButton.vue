@@ -6,7 +6,7 @@
     <el-form ref="ruleForm" :inline="true" style="margin-bottom: 20px;" label-width="100px" label-position="center">
       <el-form-item v-for="(item, index) in dataList" :label="item.name" :key="index" :class="{'display-none-key': !item.visible}">
         <template v-if="(item.componentType === 'inputFloat' || item.componentType==='inputInt') ">
-          <el-input v-model="item.componentValue" :disabled="disabled" type="number" maxlength="16" clearable style="width: 300px;">
+          <el-input v-model="item.componentValue" :disabled="disabled" type="number" maxlength="16" clearable style="width: 320px;">
             <template slot="append">
               {{ item.componentValueUnit }}
               <span style="color:red;">【取值范围{{ item.componentValueRange.min }}-{{ item.componentValueRange.max }}】</span>
@@ -14,19 +14,19 @@
           </el-input>
         </template>
         <template v-else-if="item.componentType=== 'switch' ">
-          <el-switch v-model="item.componentValue" :active-value="item.componentValueSwitch.open" :inactive-value="item.componentValueSwitch.close" :disabled="disabled" style="width: 300px;" active-color="#13ce66"/>
+          <el-switch v-model="item.componentValue" :active-value="item.componentValueSwitch.open" :inactive-value="item.componentValueSwitch.close" :disabled="disabled" style="width: 320px;" active-color="#13ce66"/>
         </template>
         <template v-else-if="item.componentType=== 'select' ">
-          <el-select v-model="item.componentValue" placeholder="请选择" style="width: 300px;">
+          <el-select v-model="item.componentValue" placeholder="请选择" style="width: 320px;">
             <el-option v-for="(item, index) in item.componentValueArray" :key="index" :label="item.text" :value="item.value" :disabled="disabled"/>
           </el-select>
         </template>
       </el-form-item>
     </el-form>
-    <div style="text-align:left;margin-top:80px;margin-left: 80px;">
+    <div style="text-align:left;margin-top:60px;margin-left: 20px;">
       <el-button type="success" @click="back">返回上一页</el-button>
-      <el-button v-if="!disabled" style="margin-left: 100px;" @click="queryList">刷新</el-button>
-      <el-button v-if="!disabled" style="margin-left: 100px;" type="primary" @click="handleSave">保存设置</el-button>
+      <el-button v-if="!disabled" style="margin-left: 40px;" @click="queryList">刷新</el-button>
+      <el-button v-if="!disabled" style="margin-left: 40px;" type="primary" @click="handleSave">保存设置</el-button>
     </div>
   </div>
 </template>
@@ -82,7 +82,7 @@ export default {
       for (const key in this.dataList) {
         if (this.dataList[key].componentType === 'inputInt' || this.dataList[key].componentType === 'inputFloat') {
           const check = this.dataList[key].componentValueRange
-          if (this.dataList[key].componentValue < check.min || this.dataList[key].componentValue > check.max) {
+          if (this.dataList[key].componentValue < parseFloat(check.min) || this.dataList[key].componentValue > parseFloat(check.max)) {
             console.log(this.dataList[key].componentValue, check.min, check.max)
             this.$message({ message: `${this.dataList[key].name}超出取值范围`, type: 'error' })
             return

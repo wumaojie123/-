@@ -3,9 +3,9 @@
     <el-row style="margin: 20px;">
       <el-button v-for="(item, index) in dataList" :key="index" type="primary" @click="handleClick(index, item)">{{ item.name }}</el-button>
     </el-row>
-    <div style="text-align:left;margin-top:80px;">
-      <el-button @click="query()">刷新</el-button>
-      <el-button style="margin-left: 100px;" type="primary" @click="handleSave">保存设置</el-button>
+    <div style="text-align:left;margin-top:60px;">
+      <el-button style="margin-left: 20px;" @click="query()">刷新</el-button>
+      <el-button style="margin-left: 60px;" type="primary" @click="handleSave">保存设置</el-button>
     </div>
   </div>
 </template>

@@ -23,7 +23,7 @@
     </el-form>
     <p style="font-size: 14px;color: #888;"> 脉冲设置： 脉冲宽度{{ saveData.pulseWidth }}, 脉冲间隔 {{ saveData.pulseInterval }} </p>
     <div style="text-align:left;margin-top:80px;">
-      <el-button @click="query()">刷新</el-button>
+      <el-button @click="goBack">返回</el-button>
       <el-button style="margin-left: 100px;" type="primary" @click="saveNewEquipment">保存设置</el-button>
     </div>
   </div>
@@ -55,6 +55,8 @@ export default {
       } else {
         this.saveData.pulseWidth = info.pulseWidth
         this.saveData.pulseInterval = info.pulseInterval
+        this.modalData.pulseWidth = info.pulseWidth
+        this.modalData.pulseInterval = info.pulseInterval
         this.flag = false
       }
     }
@@ -117,11 +119,29 @@ export default {
           this.modalData.pulseInterval = this.dataInfo.pulseInterval
         }
       }
+      this.$nextTick(() => {
+        if (res.para.pulsePatternName === '自定义') {
+          this.modalData.pulseWidth = this.dataInfo.pulseWidth1
+          this.modalData.pulseInterval = this.dataInfo.pulseInterval1
+        }
+      })
     },
     async saveNewEquipment() {
       if (this.index === this.list.length - 1) {
         this.saveData.pulseWidth = this.modalData.pulseWidth
         this.saveData.pulseInterval = this.modalData.pulseInterval
+      }
+      if (!this.saveData.pulseWidth || !this.saveData.pulseInterval) {
+        this.$message({ message: '脉冲设置或脉冲间隔不能为空', type: 'error' })
+        return
+      }
+      if (this.modalData.pulseWidth < 10 || this.modalData.pulseWidth > 1000) {
+        this.$message({ message: '脉冲宽度为10~1000整数', type: 'error' })
+        return
+      }
+      if (this.modalData.pulseInterval < 10 || this.modalData.pulseInterval > 1000) {
+        this.$message({ message: '"脉冲间隔为10~1000整数', type: 'error' })
+        return
       }
       const params = {
         value: this.params.value,
@@ -139,10 +159,10 @@ export default {
       const res = await szNewEquipment(params)
       if (res.result === 1) {
         this.$message({ message: '设置成功', type: 'success' })
-        setTimeout(() => {
-          window.history.go(-1)
-        }, 1000)
       }
+    },
+    goBack() {
+      window.history.go(-1)
     }
   }
 }

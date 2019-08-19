@@ -41,7 +41,8 @@ export default {
       para: [],
       radio: '',
       uniqueCode: '',
-      disabled: false
+      disabled: false,
+      cmd: ''
     }
   },
   watch: {
@@ -105,6 +106,7 @@ export default {
       }
       const res = await configList(params)
       if (res.result === 1) {
+        this.cmd = res.para.settingCmd
         list = JSON.parse(res.para.params)
         this.disabled = res.para.settingCmd === ''
       }
@@ -130,11 +132,16 @@ export default {
           }
         }
       }
+      console.log(JSON.stringify(this.dataList))
       const postData = {
-        data: JSON.stringify({ params: JSON.stringify(this.dataList) }),
+        data: JSON.stringify({ params: JSON.stringify(this.dataList), cmd: this.cmd }),
         functionCode: 'BSYS_SAAS_SETTING',
         uniqueCode: this.uniqueCode
       }
+      console.log(postData.data)
+      postData.data = JSON.stringify({ 'params': '[{"key":"MAX_POWER","name":"最大输出限制功率","length":2,"componentType":"inputInt","componentValueType":"int","componentValue":"123","componentValueUnit":"W","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"10000\\"}"},{"key":"IC_MONEY","name":"每次刷IC卡的消耗金额","length":1,"componentType":"inputFloat","componentValueType":"float_0.1","componentValue":"1.9","componentValueUnit":"元","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"25.5\\"}"},{"key":"TIME1","name":"第一个币的充电时间","length":2,"componentType":"inputInt","componentValueType":"int","componentValue":"12","componentValueUnit":"分","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"999\\"}"},{"key":"TIME2","name":"第二个币的充电时间","length":2,"componentType":"inputInt","componentValueType":"int","componentValue":"34","componentValueUnit":"分","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"999\\"}"},{"key":"TIME3","name":"第三个币的充电时间","length":2,"componentType":"inputInt","componentValueType":"int","componentValue":"56","componentValueUnit":"分","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"999\\"}"}]', 'cmd': 'ee08' })
+      console.log(postData.data)
+
       const res = await query(postData)
       if (res.result === 1) {
         this.$message({ message: '修改成功', type: 'success' })

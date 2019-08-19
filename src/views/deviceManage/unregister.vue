@@ -37,7 +37,8 @@ export default {
       lyyEquipmentId: '',
       equipmentType: '',
       checkList: [],
-      eqValue: ''
+      eqValue: '',
+      disable: false
     }
   },
   created() {
@@ -51,6 +52,9 @@ export default {
         this.$message({ message: '请选择或输入解绑原因', type: 'error' })
         return
       }
+      if (this.disable) {
+        return
+      }
       let reasons = []
       if (this.others) {
         reasons = [this.others]
@@ -62,7 +66,10 @@ export default {
         lyyEquipmentId: this.lyyEquipmentId,
         reasons
       }
+      this.disable = true
+      setTimeout(() => { this.disable = false }, 2000)
       const res = await unbundling(params)
+      this.disable = false
       if (res.result === 0) {
         this.$message({ message: '设备解绑成功', type: 'success' })
         window.history.go(-1)

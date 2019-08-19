@@ -3,8 +3,8 @@
     <h1 style="margin: 10px 0px;">注册设备：已选{{ equipmentArr.length }}台；设备类型：{{ deviceType | deviceFilter }}；通信方式：{{ communication | communicationFilter }}</h1>
     <el-form :inline="true" label-width="90px" label-position="left">
       <el-form-item label="绑定商家">
-        <el-select v-model="lyyDistributorId" placeholder="请选择">
-          <el-option v-for="item in merchantList" :key="item.value" :label="item.name" :value="item.adOrgId"/>
+        <el-select v-model="lyyDistributorId" placeholder="请选择" style="width: 300px;" filterable>
+          <el-option v-for="item in merchantList" :key="item.value" :label="item.label" :value="item.adOrgId"/>
         </el-select>
       </el-form-item>
     </el-form>
@@ -91,7 +91,8 @@ export default {
         serviceTime: [{ required: true, validator: serviceTimeCheck, trigger: 'blur' }],
         coins: [{ required: true, validator: conisCheck, trigger: 'blur' }],
         price: [{ required: true, validator: priceCheck, trigger: 'blur' }]
-      }
+      },
+      clickDisabled: false
     }
   },
   created() {
@@ -133,7 +134,12 @@ export default {
     async getMerchantList() {
       const res = await merchants()
       if (res.result === 0) {
-        this.merchantList = res.data
+        let list = res.data || []
+        list = list.map(item => {
+          item.label = `${item.account} ${item.name}`
+          return item
+        })
+        this.merchantList = list
         console.log(JSON.stringify(this.merchantList))
       }
     },
@@ -170,6 +176,9 @@ export default {
         this.$message({ message: '请选择要绑定的商家', type: 'error' })
         return
       }
+      if (this.clickDisabled) {
+        return
+      }
       const params = {
         communication: this.communication,
         equipmentType: this.deviceType,
@@ -180,6 +189,8 @@ export default {
       if (!Array.isArray(this.equipmentArr)) {
         params.values = [this.equipmentArr]
       }
+      this.clickDisabled = true
+      setTimeout(() => { this.clickDisabled = false }, 3000)
       const res = await batchRegisteredEquipment(params)
       if (res.result === 0) {
         this.$message({ message: '设备注册记录可查看设备注册进度', type: 'success' })

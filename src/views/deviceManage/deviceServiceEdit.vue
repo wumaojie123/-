@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { saveEquipmentService, groupServiceList, dateleEquipmentService, updateEquipmentService, batchRegisteredEquipment, equipmentServiceRepeat } from '@/api/device'
+import { saveEquipmentService, groupServiceList, dateleEquipmentService, updateEquipmentService, batchRegisteredEquipment } from '@/api/device'
 import { priceCheck, serviceTimeCheck, conisCheck } from '@/utils/rules'
 
 export default {
@@ -132,34 +132,29 @@ export default {
           if (this.communication === 1) {
             postData.coins = this.modalData.coins
           }
-          const result = await equipmentServiceRepeat(postData)
-          if (result.result === 0 && result.data === 0) {
-            if (this.type === 'add') {
-              const params = this.modalData
-              if (this.communication === 2) {
-                delete params.coins
-              }
-              params.lyyEquipmentId = this.lyyEquipmentId
-              const res = await saveEquipmentService(params)
-              if (res.result === 0) {
-                this.$message({ message: '添加服务套餐成功', type: 'success' })
-                this.queryList(1)
-                this.dialogFormVisible = false
-              } else {
-                this.$message({ message: '添加服务套餐失败', type: 'error' })
-              }
-            } else if (this.type === 'modify') {
-              const params = this.modalData
-              params.lyyEquipmentId = this.lyyEquipmentId
-              const res = await updateEquipmentService(params)
-              if (res.result === 0) {
-                this.$message({ message: '更新服务套餐成功', type: 'success' })
-                this.queryList(1)
-                this.dialogFormVisible = false
-              }
+          if (this.type === 'add') {
+            const params = this.modalData
+            if (this.communication === 2) {
+              delete params.coins
             }
-          } else {
-            this.$message({ message: '套餐重复', type: 'error' })
+            params.lyyEquipmentId = this.lyyEquipmentId
+            const res = await saveEquipmentService(params)
+            if (res.result === 0) {
+              this.$message({ message: '添加服务套餐成功', type: 'success' })
+              this.queryList(1)
+              this.dialogFormVisible = false
+            } else {
+              this.$message({ message: '添加服务套餐失败', type: 'error' })
+            }
+          } else if (this.type === 'modify') {
+            const params = this.modalData
+            params.lyyEquipmentId = this.lyyEquipmentId
+            const res = await updateEquipmentService(params)
+            if (res.result === 0) {
+              this.$message({ message: '更新服务套餐成功', type: 'success' })
+              this.queryList(1)
+              this.dialogFormVisible = false
+            }
           }
         } else {
           return false
