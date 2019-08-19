@@ -80,7 +80,7 @@ export default {
           ],
           prop: [
             'wechatTrxid',
-            'swiftpassTrxid',
+            'outTradeNo',
             'device', //  equipmentTypeName+value
             'name',
             'merchant', // merchantName+merchantAccount
