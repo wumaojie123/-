@@ -16,6 +16,7 @@
       </el-form-item>
     </el-form>
     <div style="text-align:left;margin-top:80px;">
+      <el-button @click="query">重新加载</el-button>
       <el-button style="margin-left: 100px;" type="primary" @click="saveNewEquipment">保存设置</el-button>
     </div>
   </div>

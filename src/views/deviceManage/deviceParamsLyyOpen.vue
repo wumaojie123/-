@@ -23,9 +23,10 @@
         </template>
       </el-form-item>
     </el-form>
-    <div style="text-align:center;margin-top:80px;">
-      <el-button v-if="!disabled" @click="query2()">刷新</el-button>
-      <el-button v-if="!disabled" style="margin-left: 200px;" type="primary" @click="handleSave">保存设置</el-button>
+    <div style="text-align:left;margin-top:80px;">
+      <el-button type="success" style="margin-left: 20px;" @click="query">重新加载服务套餐列表</el-button>
+      <el-button v-if="!disabled" style="margin-left: 20px;" @click="query2()">刷新套餐信息</el-button>
+      <el-button v-if="!disabled" style="margin-left: 20px;" type="primary" @click="handleSave">保存设置</el-button>
     </div>
   </div>
 </template>
@@ -132,20 +133,25 @@ export default {
           }
         }
       }
-      console.log(JSON.stringify(this.dataList))
+      const dataInfo = JSON.parse(JSON.stringify(this.dataList))
+      for (const key in dataInfo) {
+        if (dataInfo[key].componentType === 'inputInt' || dataInfo[key].componentType === 'inputFloat') {
+          dataInfo[key].componentValueRange = JSON.stringify(dataInfo[key].componentValueRange)
+        } else if (dataInfo[key].componentType === 'switch') {
+          dataInfo[key].componentValueSwitch = JSON.stringify(dataInfo[key].componentValueSwitch)
+        } else if (dataInfo[key].componentType === 'select') {
+          dataInfo[key].componentValueArray = JSON.stringify(dataInfo[key].componentValueArray)
+        }
+      }
       const postData = {
-        data: JSON.stringify({ params: JSON.stringify(this.dataList), cmd: this.cmd }),
+        data: JSON.stringify({ params: JSON.stringify(dataInfo), cmd: this.cmd }),
         functionCode: 'BSYS_SAAS_SETTING',
         uniqueCode: this.uniqueCode
       }
-      console.log(postData.data)
-      postData.data = JSON.stringify({ 'params': '[{"key":"MAX_POWER","name":"最大输出限制功率","length":2,"componentType":"inputInt","componentValueType":"int","componentValue":"123","componentValueUnit":"W","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"10000\\"}"},{"key":"IC_MONEY","name":"每次刷IC卡的消耗金额","length":1,"componentType":"inputFloat","componentValueType":"float_0.1","componentValue":"1.9","componentValueUnit":"元","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"25.5\\"}"},{"key":"TIME1","name":"第一个币的充电时间","length":2,"componentType":"inputInt","componentValueType":"int","componentValue":"12","componentValueUnit":"分","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"999\\"}"},{"key":"TIME2","name":"第二个币的充电时间","length":2,"componentType":"inputInt","componentValueType":"int","componentValue":"34","componentValueUnit":"分","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"999\\"}"},{"key":"TIME3","name":"第三个币的充电时间","length":2,"componentType":"inputInt","componentValueType":"int","componentValue":"56","componentValueUnit":"分","componentValueRange":"{\\"min\\":\\"0\\",\\"max\\":\\"999\\"}"}]', 'cmd': 'ee08' })
-      console.log(postData.data)
-
       const res = await query(postData)
       if (res.result === 1) {
         this.$message({ message: '修改成功', type: 'success' })
-        this.query2()
+        // this.query2()
       }
     }
   }
