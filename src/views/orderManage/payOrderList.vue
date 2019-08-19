@@ -93,7 +93,13 @@ export default {
             'refundFee',
             'created'
           ],
-          list: []
+          list: [],
+          style: [
+            { width: '255' },
+            { width: '255' },
+            { width: '190' },
+            { width: '150' }
+          ]
         },
         handler: {
           isShow: true,
@@ -282,6 +288,9 @@ export default {
         var list = data.items || []
         list.forEach(item => {
           item.device = item.equipmentTypeName + item.value
+          if (item.communicationType === 'CK' && item.equipmentType === 'CDZ') {
+            item.device += `-${item.passageWay}号插座`
+          }
           item.merchant = item.merchantName + item.merchantAccount
           // item.user = `${item.lyyUserId}-${item.userName}`
           if (item.username) {
