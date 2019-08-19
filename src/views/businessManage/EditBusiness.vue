@@ -21,6 +21,7 @@
           <el-checkbox label="禁用设备/启用设备"/>
           <span class="input-anno">（取消勾选后，该商家在B端后台则无权限 “禁用设备” 和 “启用设备”，此功能仅对与代理关联的设备生效）</span>
         </el-checkbox-group>
+        <p style="color: #606266;">注意：“禁用设备”功能，目前只适用于  按摩椅、足疗机、按摩垫、洗衣机、充电桩、扭蛋机。</p>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleAngentInfo">保存</el-button>
