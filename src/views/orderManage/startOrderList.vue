@@ -87,7 +87,13 @@ export default {
             'refundMoney',
             'createTime'
           ],
-          list: []
+          list: [],
+          style: [
+            { width: '240' },
+            { width: '' },
+            { width: '150' },
+            { width: '170' }
+          ]
         },
         pagination: {
           totalCount: 0,

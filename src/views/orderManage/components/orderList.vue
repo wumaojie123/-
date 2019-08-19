@@ -5,11 +5,25 @@
       <el-table :data="cell.list" border>
         <!-- 1、表格 -->
         <template v-for="(item,index) in cell.name">
-          <el-table-column :label="item" :prop="cell.prop[index]" :key="index" />
+          <el-table-column
+            v-if="!cell.style||cell.style.length==0||index>cell.style.length"
+            :label="item"
+            :prop="cell.prop[index]"
+            :key="index"
+            align="center"
+          />
+          <el-table-column
+            v-else-if="cell.style&&cell.style.length>0&&index<=cell.style.length-1"
+            :width="cell.style[index].width"
+            :label="item"
+            :prop="cell.prop[index]"
+            :key="index"
+            align="center"
+          />
         </template>
 
         <!-- 2、操作 -->
-        <el-table-column v-if="handler.isShow" :label="handler.text">
+        <el-table-column v-if="handler.isShow" :label="handler.text" fixed="right">
           <template slot-scope="scope">
             <el-button
               v-if="curHandler(scope,'isShow')"
@@ -49,6 +63,7 @@ export default {
      * name:表头
      * prop属性
      * list:数据
+     * style:样式
      */
     cell: {
       type: Object,
@@ -56,7 +71,8 @@ export default {
         return {
           name: [],
           prop: [],
-          list: []
+          list: [],
+          style: []
         }
       }
     },
