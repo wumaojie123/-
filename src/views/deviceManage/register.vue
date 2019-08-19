@@ -40,7 +40,7 @@
         <el-form-item label="时长(分钟)" prop="serviceTime">
           <el-input v-model="modalData.serviceTime" placeholder="请输入时长" type="tel" class="input-300" maxlength="6" clearable />
         </el-form-item>
-        <template v-if="communication != '2' ">
+        <template v-if="communication == '1' ">
           <el-form-item label="模拟投币数" prop="coins">
             <el-input v-model="modalData.coins" placeholder="请输入模拟投币数" type="number" class="input-300" maxlength="11" clearable />
           </el-form-item>
@@ -98,6 +98,14 @@ export default {
     this.deviceType = this.$route.query.deviceType
     this.equipmentArr = this.$route.query.equipmentArr
     this.communication = this.$route.query.communication
+    /* eslint-disable-next-line */
+    if (this.communication == 2) {
+      this.colums = [
+        { key: 'description', label: '套餐名称' },
+        { key: 'price', label: '价格(元)' },
+        { key: 'serviceTime', label: '时长(分钟)' }
+      ]
+    }
     this.queryList()
     this.getMerchantList()
   },

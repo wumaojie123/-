@@ -23,9 +23,10 @@
         </template>
       </el-form-item>
     </el-form>
-    <div style="text-align:center;margin-top:80px;">
-      <el-button v-if="!disabled" @click="queryList()">刷新</el-button>
-      <el-button v-if="!disabled" style="margin-left: 200px;" type="primary" @click="handleSave">保存设置</el-button>
+    <div style="text-align:left;margin-top:80px;margin-left: 80px;">
+      <el-button type="success" @click="back">返回上一页</el-button>
+      <el-button v-if="!disabled" style="margin-left: 100px;" @click="reload">刷新</el-button>
+      <el-button v-if="!disabled" style="margin-left: 100px;" type="primary" @click="handleSave">保存设置</el-button>
     </div>
   </div>
 </template>
@@ -65,6 +66,9 @@ export default {
         })
       }
       for (const key in list) {
+        if (list[key].componentType === 'select') {
+          list[key].componentValue = parseInt(list[key].componentValue)
+        }
         for (const innerKey in list[key]) {
           if (innerKey === 'componentValueRange' || innerKey === 'componentValueSwitch' || innerKey === 'componentValueArray') {
             const check = list[key][innerKey]
@@ -96,9 +100,17 @@ export default {
       console.log(JSON.stringify(params))
       const res = await setting(params)
       if (res.result === 1) {
-        this.$message({ message: '修改成功', type: 'error' })
+        this.$message({ message: '修改成功', type: 'success' })
         this.queryList()
+      } else {
+        this.$message({ message: res.description, type: 'error' })
       }
+    },
+    reload() {
+      window.location.reload()
+    },
+    back() {
+      window.history.go(-1)
     }
   }
 }

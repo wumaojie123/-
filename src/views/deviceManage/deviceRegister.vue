@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="设备编号">
-        <el-input v-model="queryParams.equipmentValue" placeholder="输入多台设备时用,隔开" class="input-300" maxlength="100" clearable />
+        <el-input v-model="queryParams.equipmentValue" placeholder="输入设备编号" class="input-300" maxlength="100" clearable />
         <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
         <el-button type="primary" @click="handlePage(1)">设备参数设置</el-button>
         <el-button type="primary" @click="handlePage(2)">设备服务套餐</el-button>
@@ -54,15 +54,15 @@ export default {
       deviceMapInfo: deviceMap,
       colums: [
         { key: 'value', label: '设备编号' },
-        { key: 'isLyyOpen', label: '开发平台' },
-        { key: 'interfaceFlag', label: '接口板' },
-        { key: 'loginFlag', label: '登录表示' },
-        { key: 'equipmentType', label: '设备类型' },
+        // { key: 'isLyyOpen', label: '开发平台' },
+        // { key: 'interfaceFlag', label: '接口板' },
+        // { key: 'loginFlag', label: '登录表示' },
+        // { key: 'equipmentType', label: '设备类型' },
         { key: 'equipmentTypeText', label: '设备类型' },
         { key: 'communicationText', label: '通信方式' },
         { key: 'equipmentParam', label: '设备参数' },
         { key: 'groupNumber', label: '机台号' },
-        { key: 'signal', label: '信号' },
+        { key: 'signalText', label: '信号' },
         { key: 'onlineText', label: '在线状态' },
         { key: 'statusText', label: '禁用状态' },
         { key: 'account', label: '账号' },
@@ -101,6 +101,8 @@ export default {
             item.onlineText = onlineMap[item.online]
             const statusMap = { disabled: '禁用', '1Normal': '启用' }
             item.statusText = statusMap[item.status]
+            const signalMap = { 1: '弱', 2: '中', 3: '强', 4: '很强' }
+            item.signalText = signalMap[item.signal] || '中'
             return item
           })
           this.list = list

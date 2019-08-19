@@ -10,7 +10,7 @@
         <el-input v-model="queryParams.equipmentValue" placeholder="输入多台设备时用,隔开" class="input-300" maxlength="100" clearable />
         <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
         <el-button type="primary" style="margin-left: 20px;" icon="el-icon-plus" @click="handleRegister">设备注册</el-button>
-        <router-link :to="{path: '/registerRecord'}"><el-button type="primary" style="margin-left: 20px;">设备注册记录</el-button></router-link>
+        <router-link :to="{path: '/registerRecord'}"><el-button type="success" style="margin-left: 20px;">设备注册记录</el-button></router-link>
       </el-form-item>
     </el-form>
     <!-- 列表 -->

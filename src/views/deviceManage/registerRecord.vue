@@ -43,7 +43,7 @@
 
 <script>
 import { registeredLogList, registeredDetailList } from '@/api/device'
-import { communicationMap, statusMap } from './constant'
+import { communicationMap } from './constant'
 export default {
   data() {
     return {
@@ -63,8 +63,8 @@ export default {
       colums2: [
         { key: 'equipmentType', label: '设备类型' },
         { key: 'value', label: '设备编号' },
-        { key: 'status', label: '注册状态' },
-        { key: 'reason', label: '原因' }
+        { key: 'statusText', label: '注册状态' },
+        { key: 'reasonText', label: '原因' }
       ],
       pageInfo2: { total: 0, pageSize: 10, currPage: 1 },
       dialogFormVisible: false,
@@ -106,7 +106,10 @@ export default {
           let list = res.data.items || []
           list = list.map(item => {
             item.equipmentType = this.selectItem.equipmentType
+            const statusMap = { 0: '待注册', 1: '成功', 2: '失败' }
             item.statusText = statusMap[item.status]
+            const reasonMap = { 0: '未找到设备', 1: '已绑定', 2: '失败' }
+            item.reasonText = reasonMap[item.reason]
             return item
           })
           this.list2 = list

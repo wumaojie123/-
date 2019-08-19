@@ -82,6 +82,14 @@ export default {
   created() {
     this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.communication = this.$route.query.communication
+    /* eslint-disable-next-line */
+    if (this.communication == 2) {
+      this.colums = [
+        { key: 'description', label: '套餐名称' },
+        { key: 'price', label: '价格(元)' },
+        { key: 'serviceTime', label: '时长(分钟)' }
+      ]
+    }
     this.queryList()
   },
   methods: {
