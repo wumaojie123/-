@@ -18,6 +18,7 @@
       <el-table-column type="selection" width="55"/>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
+    <div style="padding-bottom: 10px;font-size: 16px;">合计设备数：{{ pageInfo.total }}台</div>
     <el-pagination
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pageInfo.pageSize"
@@ -124,7 +125,7 @@ export default {
       })
       const flag = equipmentType.some(item => item !== equipmentType[0])
       if (flag) {
-        this.$message({ message: '请选择要注册的设备', type: 'error' })
+        this.$message({ message: '只能选择同一种通信方式的设备进行注册', type: 'error' })
         return
       } else {
         this.$router.push({ path: '/register', query: { deviceType: this.queryParams.equipmentType, equipmentArr: equipmentArr, communication: equipmentType[0] }})

@@ -44,7 +44,7 @@ export default {
     },
     handleClick(index, item) {
       if (item.params) {
-        console.log('ifno')
+        this.$router.push({ path: '/deviceParamsTyButton', query: { uniqueCode: this.uniqueCode, functionCode: item.functionCode, loginFlag: this.loginFlag, queryFunctionCode: item.queryFunctionCode }})
       } else {
         this.$confirm(`确定${item.name}?`, '温馨提示').then(() => {
           this.handleInfo(item)
@@ -70,7 +70,9 @@ export default {
       const res = await ty(postData)
       if (res.result === 1) {
         this.$message({ message: '修改成功', type: 'error' })
-        this.query2()
+        this.query()
+      } else {
+        this.$message({ message: res.description, type: 'error' })
       }
     }
   }

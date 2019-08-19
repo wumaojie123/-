@@ -28,6 +28,7 @@
       </el-table-column>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
+    <div style="padding-bottom: 10px;font-size: 16px;">合计设备数：{{ pageInfo.total }}台</div>
     <el-pagination
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pageInfo.pageSize"

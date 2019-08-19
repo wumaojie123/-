@@ -120,6 +120,23 @@ export function ty(data) {
     params: data
   })
 }
+
+export function tyBtn(data) {
+  return request({
+    url: '/rest/setting/queryEquipment/ty',
+    method: 'get',
+    params: data
+  })
+}
+
+export function setting(data) {
+  return request({
+    url: '/rest/setting/button/setting',
+    method: 'get',
+    params: data
+  })
+}
+
 export function cxNewEquipment(data) {
   return request({
     url: '/rest/setting/cxNewEquipment',
@@ -127,6 +144,7 @@ export function cxNewEquipment(data) {
     params: data
   })
 }
+
 export function equipmentParamDef(data) {
   return request({
     url: '/rest/setting/getEquipmentParamDef',
@@ -134,6 +152,7 @@ export function equipmentParamDef(data) {
     params: data
   })
 }
+
 export function readNewEquipment(data) {
   return request({
     url: '/rest/setting/readNewEquipment',
@@ -141,6 +160,7 @@ export function readNewEquipment(data) {
     params: data
   })
 }
+
 export function szNewEquipment(data) {
   return request({
     url: '/rest/setting/szNewEquipment',
@@ -148,6 +168,7 @@ export function szNewEquipment(data) {
     params: data
   })
 }
+
 export function setEquipment(data) {
   return request({
     url: '/rest/setting/setEquipment',

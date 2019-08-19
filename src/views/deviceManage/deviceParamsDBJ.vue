@@ -65,6 +65,14 @@ export default {
       }
     },
     async saveNewEquipment() {
+      if (this.saveData.pulseWidth < 10 || this.saveData.pulseWidth > 1000) {
+        this.$message({ message: '脉冲宽度为10~1000整数', type: 'error' })
+        return
+      }
+      if (this.saveData.pulseInterval < 10 || this.saveData.pulseInterval > 1000) {
+        this.$message({ message: '"脉冲间隔为10~1000整数', type: 'error' })
+        return
+      }
       const params = {
         value: this.params.value,
         pulseWidth1: this.saveData.pulseWidth,

@@ -220,9 +220,16 @@ export let constantRouterMap = [
         hidden: true
       },
       {
-        path: '/deviceParams',
+        path: '/deviceParamsLyyOpen',
         component: () => import('@/views/deviceManage/deviceParamsLyyOpen'),
-        name: 'deviceParams',
+        name: 'deviceParamsLyyOpen',
+        meta: { title: '设置服务套餐' },
+        hidden: true
+      },
+      {
+        path: '/deviceParamsTyButton',
+        component: () => import('@/views/deviceManage/deviceParamsTyButton'),
+        name: 'deviceParamsTyButton',
         meta: { title: '设置服务套餐' },
         hidden: true
       },
@@ -230,6 +237,13 @@ export let constantRouterMap = [
         path: '/deviceParamsTy',
         component: () => import('@/views/deviceManage/deviceParamsTy'),
         name: 'deviceParamsTy',
+        meta: { title: '设置服务套餐' },
+        hidden: true
+      },
+      {
+        path: '/deviceParamsOthers',
+        component: () => import('@/views/deviceManage/deviceParamsOthers'),
+        name: 'deviceParamsOthers',
         meta: { title: '设置服务套餐' },
         hidden: true
       },

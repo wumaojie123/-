@@ -14,6 +14,7 @@
         <el-form-item label="脉冲间隔">
           <el-input v-model="modalData.pulseInterval" placeholder="请输入10~1000之间整数" type="number" class="input-300" maxlength="4" clearable />
         </el-form-item>
+        <el-button type="primary" @click="saveTemp">使用自定义脉冲设置</el-button>
       </div>
       <el-form-item label="待机电平">
         <el-radio v-model="saveData.battery" label="0">常开</el-radio>
@@ -50,8 +51,7 @@ export default {
       const info = this.list[val]
       if (info.pulsePatternName === '自定义') {
         this.flag = true
-        this.saveData.pulseWidth = ''
-        this.saveData.pulseInterval = ''
+        this.modalData = { pulseWidth: '', pulseInterval: '' }
       } else {
         this.saveData.pulseWidth = info.pulseWidth
         this.saveData.pulseInterval = info.pulseInterval
@@ -64,6 +64,18 @@ export default {
     this.query()
   },
   methods: {
+    saveTemp() {
+      if (this.modalData.pulseWidth < 10 || this.modalData.pulseWidth > 1000) {
+        this.$message({ message: '脉冲宽度为10~1000整数', type: 'error' })
+        return
+      }
+      if (this.modalData.pulseInterval < 10 || this.modalData.pulseInterval > 1000) {
+        this.$message({ message: '"脉冲间隔为10~1000整数', type: 'error' })
+        return
+      }
+      this.saveData.pulseWidth = this.modalData.pulseWidth
+      this.saveData.pulseInterval = this.modalData.pulseInterval
+    },
     async query() {
       const postData = {
         value: this.params.value,

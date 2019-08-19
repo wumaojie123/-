@@ -40,7 +40,7 @@
         <el-form-item label="时长(分钟)" prop="serviceTime">
           <el-input v-model="modalData.serviceTime" placeholder="请输入时长" type="tel" class="input-300" maxlength="6" clearable />
         </el-form-item>
-        <template v-if="communication !== '1' ">
+        <template v-if="communication != '2' ">
           <el-form-item label="模拟投币数" prop="coins">
             <el-input v-model="modalData.coins" placeholder="请输入模拟投币数" type="number" class="input-300" maxlength="11" clearable />
           </el-form-item>

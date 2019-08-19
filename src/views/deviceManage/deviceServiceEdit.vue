@@ -31,12 +31,10 @@
         <el-form-item label="价格(元)" prop="price">
           <el-input v-model="modalData.price" placeholder="请输入价格" type="number" class="input-300" maxlength="7" clearable />
         </el-form-item>
-        <template v-if="communication == 1">
-          <el-form-item label="时长(分钟)" prop="serviceTime">
-            <el-input v-model="modalData.serviceTime" placeholder="请输入时长" type="tel" class="input-300" maxlength="4" clearable />
-          </el-form-item>
-        </template>
-        <template >
+        <el-form-item label="时长(分钟)" prop="serviceTime">
+          <el-input v-model="modalData.serviceTime" placeholder="请输入时长" type="tel" class="input-300" maxlength="4" clearable />
+        </el-form-item>
+        <template v-if="communication != '2' ">
           <el-form-item label="模拟投币数" prop="coins">
             <el-input v-model="modalData.coins" placeholder="请输入模拟投币数" type="number" class="input-300" maxlength="5" clearable />
           </el-form-item>
@@ -119,6 +117,9 @@ export default {
     async handleSave() {
       if (this.type === 'add') {
         const params = this.modalData
+        if (this.communication === 2) {
+          delete params.coins
+        }
         params.lyyEquipmentId = this.lyyEquipmentId
         const res = await saveEquipmentService(params)
         if (res.result === 0) {
