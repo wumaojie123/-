@@ -43,7 +43,8 @@ export default {
       radio: '',
       uniqueCode: '',
       disabled: false,
-      cmd: ''
+      cmd: '',
+      count: 5
     }
   },
   watch: {
@@ -89,6 +90,7 @@ export default {
       const postData = {
         uniqueCode: this.uniqueCode,
         functionCode: 'BSYS_SAAS_QUERY_PARAM',
+        data: JSON.stringify({ 'cmd': this.radio }),
         t: Date.now()
       }
       const res = await query(postData)
@@ -98,7 +100,6 @@ export default {
     },
     async queryList() {
       let list = []
-      console.log(this.radio)
       const params = {
         uniqueCode: this.uniqueCode,
         functionCode: 'BSYS_SAAS_QUERY_PARAM',
@@ -106,10 +107,20 @@ export default {
         t: Date.now()
       }
       const res = await configList(params)
-      if (res.result === 1) {
+      if (res.result === 1 && res.para) {
         this.cmd = res.para.settingCmd
         list = JSON.parse(res.para.params)
         this.disabled = res.para.settingCmd === ''
+      } else {
+        setTimeout(() => {
+          if (this.count > 0) {
+            this.count--
+            this.queryList()
+          } else {
+            this.count = 5
+            this.$message({ message: `查询失败`, type: 'error' })
+          }
+        }, 3000)
       }
 
       for (const key in list) {
@@ -151,7 +162,7 @@ export default {
       const res = await query(postData)
       if (res.result === 1) {
         this.$message({ message: '修改成功', type: 'success' })
-        // this.query2()
+        this.query2()
       }
     }
   }
