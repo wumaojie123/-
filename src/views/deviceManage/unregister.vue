@@ -36,11 +36,13 @@ export default {
       others: '',
       lyyEquipmentId: '',
       equipmentType: '',
-      checkList: []
+      checkList: [],
+      eqValue: ''
     }
   },
   created() {
     this.lyyEquipmentId = this.$route.query.lyyEquipmentId
+    this.eqValue = this.$route.query.value
     this.equipmentType = this.$route.query.equipmentType
   },
   methods: {

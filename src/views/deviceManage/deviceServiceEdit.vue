@@ -36,7 +36,7 @@
         </el-form-item>
         <template v-if="communication != '2' ">
           <el-form-item label="模拟投币数" prop="coins">
-            <el-input v-model="modalData.coins" placeholder="请输入模拟投币数" type="number" class="input-300" maxlength="5" clearable />
+            <el-input v-model="modalData.coins" placeholder="请输入模拟投币数" type="number" class="input-300" maxlength="4" clearable />
           </el-form-item>
         </template>
       </el-form>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { saveEquipmentService, groupServiceList, dateleEquipmentService, updateEquipmentService, batchRegisteredEquipment } from '@/api/device'
+import { saveEquipmentService, groupServiceList, dateleEquipmentService, updateEquipmentService, batchRegisteredEquipment, equipmentServiceRepeat } from '@/api/device'
 import { priceCheck, serviceTimeCheck, conisCheck } from '@/utils/rules'
 
 export default {
@@ -122,31 +122,49 @@ export default {
       this.dialogFormVisible = true
       this.modalData = { description: '', price: '', coins: '', serviceTime: '' }
     },
-    async handleSave() {
-      if (this.type === 'add') {
-        const params = this.modalData
-        if (this.communication === 2) {
-          delete params.coins
-        }
-        params.lyyEquipmentId = this.lyyEquipmentId
-        const res = await saveEquipmentService(params)
-        if (res.result === 0) {
-          this.$message({ message: '添加服务套餐成功', type: 'success' })
-          this.queryList(1)
-          this.dialogFormVisible = false
+    handleSave() {
+      this.$refs['baseInfoRules'].validate(async(valid) => {
+        if (valid) {
+          const postData = {
+            serviceTime: this.modalData.serviceTime,
+            lyyEquipmentId: this.lyyEquipmentId
+          }
+          if (this.communication === 1) {
+            postData.coins = this.modalData.coins
+          }
+          const result = await equipmentServiceRepeat(postData)
+          if (result.result === 0 && result.data === 0) {
+            if (this.type === 'add') {
+              const params = this.modalData
+              if (this.communication === 2) {
+                delete params.coins
+              }
+              params.lyyEquipmentId = this.lyyEquipmentId
+              const res = await saveEquipmentService(params)
+              if (res.result === 0) {
+                this.$message({ message: '添加服务套餐成功', type: 'success' })
+                this.queryList(1)
+                this.dialogFormVisible = false
+              } else {
+                this.$message({ message: '添加服务套餐失败', type: 'error' })
+              }
+            } else if (this.type === 'modify') {
+              const params = this.modalData
+              params.lyyEquipmentId = this.lyyEquipmentId
+              const res = await updateEquipmentService(params)
+              if (res.result === 0) {
+                this.$message({ message: '更新服务套餐成功', type: 'success' })
+                this.queryList(1)
+                this.dialogFormVisible = false
+              }
+            }
+          } else {
+            this.$message({ message: '套餐重复', type: 'error' })
+          }
         } else {
-          this.$message({ message: '添加服务套餐失败', type: 'error' })
+          return false
         }
-      } else if (this.type === 'modify') {
-        const params = this.modalData
-        params.lyyEquipmentId = this.lyyEquipmentId
-        const res = await updateEquipmentService(params)
-        if (res.result === 0) {
-          this.$message({ message: '更新服务套餐成功', type: 'success' })
-          this.queryList(1)
-          this.dialogFormVisible = false
-        }
-      }
+      })
     },
     async handleBatchSave() {
       if (this.selectList.length === 0) {

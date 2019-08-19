@@ -54,7 +54,7 @@ export const serviceTimeCheck = (rule, value, callback) => {
   }
 }
 export const conisCheck = (rule, value, callback) => {
-  if (!/^([1-9][0-9]*)$/.test(value) || value === 0) {
+  if (!/^([1-9][0-9]*)$/.test(value) || value === 0 || value > 10000) {
     return callback(new Error('模拟投币数必须为大于0的整数'))
   } else {
     callback()

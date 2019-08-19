@@ -103,6 +103,7 @@ export default {
             item.statusText = statusMap[item.status]
             const signalMap = { 1: '弱', 2: '中', 3: '强', 4: '很强' }
             item.signalText = signalMap[item.signal] || '中'
+            item.groupNumber = item.groupNumber ? `${item.groupNumber}号机` : '未设置'
             return item
           })
           this.list = list
@@ -153,9 +154,9 @@ export default {
             }
           }
         } else if (type === 2) {
-          this.$router.push({ path: '/deviceServiceEdit', query: { lyyEquipmentId: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType, communication: this.selectItems[0].communication }})
+          this.$router.push({ path: '/deviceServiceEdit', query: { lyyEquipmentId: this.selectItems[0].lyyEquipmentId, equipmentType: this.queryParams.equipmentType, communication: this.selectItems[0].communication }})
         } else if (type === 3) {
-          this.$router.push({ path: '/unregister', query: { lyyEquipmentId: this.selectItems[0].lyyEquipmentId, equipmentType: this.queryParams.equipmentType }})
+          this.$router.push({ path: '/unregister', query: { lyyEquipmentId: this.selectItems[0].lyyEquipmentId, value: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType }})
         }
       } else if (this.selectItems.length > 1) {
         this.$message({ message: '请选择设备', type: 'error' })

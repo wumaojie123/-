@@ -42,7 +42,7 @@
         </el-form-item>
         <template v-if="communication == '1' ">
           <el-form-item label="模拟投币数" prop="coins">
-            <el-input v-model="modalData.coins" placeholder="请输入模拟投币数" type="number" class="input-300" maxlength="11" clearable />
+            <el-input v-model="modalData.coins" placeholder="请输入模拟投币数" type="number" class="input-300" maxlength="4" clearable />
           </el-form-item>
         </template>
       </el-form>
@@ -182,10 +182,10 @@ export default {
       }
       const res = await batchRegisteredEquipment(params)
       if (res.result === 0) {
+        this.$message({ message: '设备注册记录可查看设备注册进度', type: 'success' })
         this.handleCancel()
-        this.$message({ message: '设备注册成功', type: 'success' })
       } else {
-        this.$message({ message: '设备注册失败', type: 'error' })
+        this.$message({ message: '设备注册失败，请重新选择设备', type: 'error' })
       }
     },
     handleCancel() {
