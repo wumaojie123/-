@@ -87,7 +87,9 @@ export default {
       }
       const res = await cxNewEquipment(postData)
       if (res.result === 1) {
-        this.getEquipmentParamDef()
+        setTimeout(() => {
+          this.getEquipmentParamDef()
+        }, 2500)
       } else {
         this.$message({ message: '参数读取失败,不能设置', type: 'error' })
       }
@@ -98,9 +100,9 @@ export default {
         value: this.params.value,
         t: Date.now()
       }
-      const res = await readNewEquipment(params)
       const postData = { equipmentId: this.params.value }
       const res2 = await equipmentParamDef(postData)
+      const res = await readNewEquipment(params)
       if (res.result === 1) {
         this.dataInfo = res.para
         this.saveData.pulseWidth = this.dataInfo.pulseWidth1
