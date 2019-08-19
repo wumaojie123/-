@@ -381,3 +381,33 @@ export function exportFile(url) {
   elink.click()
   document.body.removeChild(elink)
 }
+
+/**
+ * hasOwnProperty() 方法会返回一个布尔值，指示对象自身属性中是否具有指定的属性
+ * `该方法会忽略掉那些从原型链上继承到的属性`
+ * @param {any} obj  待检测的对象
+ * @param {string} property 属性
+ * @return {boolean} 对象有指定的属性，返回 `true`
+ */
+function hasOwnPorpery(obj, property) {
+  return Object.prototype.hasOwnProperty.call(obj, property)
+}
+
+/**
+ *将对象转换成字符串
+ *
+ * @param {Object} data
+ * @return {String}
+ */
+export function stringParse(data = {}) {
+  const arr = []
+  for (const key in data) {
+    if (hasOwnPorpery(data, key)) {
+      arr.push(`${key}=${encodeURIComponent(data[key])}`)
+    }
+  }
+  if (arr.length) {
+    return `?${arr.join('&')}`
+  }
+  return ''
+}

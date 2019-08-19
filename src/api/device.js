@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { stringParse } from '@/utils/index'
 
 // 解绑设备
 export function unbundling(data) {
@@ -121,11 +122,29 @@ export function ty(data) {
   })
 }
 
+export function tyPost(data) {
+  const url = `/rest/setting/setting/ty${stringParse(data)}`
+  return request({
+    url: url,
+    method: 'post',
+    data
+  })
+}
+
 export function tyBtn(data) {
   return request({
-    url: '/rest/setting/queryEquipment/ty',
+    url: '/rest/setting/setting/ty',
     method: 'get',
     params: data
+  })
+}
+
+export function tyBtnsetting(data) {
+  // const url = `/rest/setting/setting/ty${stringParse(data)}`
+  return request({
+    url: '/rest/setting/setting/ty',
+    method: 'post',
+    data
   })
 }
 
@@ -170,9 +189,12 @@ export function szNewEquipment(data) {
 }
 
 export function setEquipment(data) {
+  const url = `/rest/setting/setEquipment${stringParse(data)}`
   return request({
-    url: '/rest/setting/setEquipment',
-    method: 'post',
-    data
+    url: url,
+    method: 'post'
+    // headers : {
+    //   "Content-Type":'application/x-www-form-urlencoded; charset=UTF-8'
+    // }
   })
 }

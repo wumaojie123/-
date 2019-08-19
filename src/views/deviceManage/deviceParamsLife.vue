@@ -79,7 +79,8 @@ export default {
     async query() {
       const postData = {
         value: this.params.value,
-        data: 1
+        data: 1,
+        t: Date.now()
       }
       const res = await cxNewEquipment(postData)
       if (res.result === 1) {
@@ -91,7 +92,8 @@ export default {
     async getEquipmentParamDef() {
       const params = {
         typeValue: this.params.typeValue,
-        value: this.params.value
+        value: this.params.value,
+        t: Date.now()
       }
       const res = await readNewEquipment(params)
       const postData = { equipmentId: this.params.value }
@@ -138,8 +140,8 @@ export default {
       if (res.result === 1) {
         this.$message({ message: '设置成功', type: 'success' })
         setTimeout(() => {
-          this.query()
-        }, 1500)
+          window.history.go(-1)
+        }, 1000)
       }
     }
   }

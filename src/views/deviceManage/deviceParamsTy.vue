@@ -3,15 +3,15 @@
     <el-row style="margin: 20px;">
       <el-button v-for="(item, index) in dataList" :key="index" type="primary" @click="handleClick(index, item)">{{ item.name }}</el-button>
     </el-row>
-    <div style="text-align:center;margin-top:80px;">
+    <div style="text-align:left;margin-top:80px;">
       <el-button @click="query()">刷新</el-button>
-      <el-button style="margin-left: 200px;" type="primary" @click="handleSave">保存设置</el-button>
+      <el-button style="margin-left: 100px;" type="primary" @click="handleSave">保存设置</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { ty, setEquipment } from '@/api/device'
+import { ty, setEquipment, tyPost } from '@/api/device'
 
 export default {
   name: 'ParamC',
@@ -67,9 +67,9 @@ export default {
       const postData = {
         uniqueCode: this.uniqueCode
       }
-      const res = await ty(postData)
+      const res = await tyPost(postData)
       if (res.result === 1) {
-        this.$message({ message: '修改成功', type: 'error' })
+        this.$message({ message: '修改成功', type: 'success' })
         this.query()
       } else {
         this.$message({ message: res.description, type: 'error' })

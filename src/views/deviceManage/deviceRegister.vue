@@ -57,7 +57,6 @@ export default {
         // { key: 'isLyyOpen', label: '开发平台' },
         // { key: 'interfaceFlag', label: '接口板' },
         // { key: 'loginFlag', label: '登录表示' },
-        // { key: 'equipmentType', label: '设备类型' },
         { key: 'equipmentTypeText', label: '设备类型' },
         { key: 'communicationText', label: '通信方式' },
         { key: 'equipmentParam', label: '设备参数' },

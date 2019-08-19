@@ -123,7 +123,7 @@ export default {
       for (const key in this.dataList) {
         if (this.dataList[key].componentType === 'inputInt' || this.dataList[key].componentType === 'inputFloat') {
           const check = this.dataList[key].componentValueRange
-          if (this.dataList[key].componentValue < check.min || this.dataList[key].componentValue > check.max) {
+          if (this.dataList[key].componentValue < parseFloat(check.min) || this.dataList[key].componentValue > parseFloat(check.max)) {
             console.log(this.dataList[key].componentValue, check.min, check.max)
             this.$message({ message: `${this.dataList[key].name}超出取值范围`, type: 'error' })
             return
@@ -131,13 +131,13 @@ export default {
         }
       }
       const postData = {
-        data: JSON.stringify(this.dataList),
+        data: JSON.stringify({ params: JSON.stringify(this.dataList) }),
         functionCode: 'BSYS_SAAS_SETTING',
         uniqueCode: this.uniqueCode
       }
       const res = await query(postData)
       if (res.result === 1) {
-        this.$message({ message: '修改成功', type: 'error' })
+        this.$message({ message: '修改成功', type: 'success' })
         this.query2()
       }
     }

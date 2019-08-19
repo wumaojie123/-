@@ -25,14 +25,14 @@
     </el-form>
     <div style="text-align:left;margin-top:80px;margin-left: 80px;">
       <el-button type="success" @click="back">返回上一页</el-button>
-      <el-button v-if="!disabled" style="margin-left: 100px;" @click="reload">刷新</el-button>
+      <el-button v-if="!disabled" style="margin-left: 100px;" @click="queryList">刷新</el-button>
       <el-button v-if="!disabled" style="margin-left: 100px;" type="primary" @click="handleSave">保存设置</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import { tyBtn, setting } from '@/api/device'
+import { tyBtn, tyBtnsetting } from '@/api/device'
 // import { tybtns } from './constant'
 
 export default {
@@ -98,7 +98,7 @@ export default {
       params.functionCode = this.queryParams.functionCode
       params.uniqueCode = this.queryParams.uniqueCode
       console.log(JSON.stringify(params))
-      const res = await setting(params)
+      const res = await tyBtnsetting(params)
       if (res.result === 1) {
         this.$message({ message: '修改成功', type: 'success' })
         this.queryList()

@@ -13,6 +13,7 @@ src/router2.js
 src/routerlist.js
 src/sec2.js
 src/sec.js
+config/index.js
 
 # Editor directories and files
 .idea
