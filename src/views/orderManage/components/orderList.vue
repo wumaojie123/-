@@ -23,7 +23,7 @@
         </template>
 
         <!-- 2、操作 -->
-        <el-table-column v-if="handler.isShow" :label="handler.text" fixed="right">
+        <el-table-column v-if="handler.isShow" :label="handler.text">
           <template slot-scope="scope">
             <el-button
               v-if="curHandler(scope,'isShow')"
