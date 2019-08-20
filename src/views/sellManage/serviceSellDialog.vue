@@ -20,7 +20,7 @@
       <el-form-item label="套餐名称" prop="description">
         <el-input v-model="ruleForm.description"/>
       </el-form-item>
-      <el-form-item label="价格" prop="price">
+      <el-form-item label="价格(元)" prop="price">
         <el-input v-model="ruleForm.price"/>
       </el-form-item>
       <el-form-item label="时长(分钟)" prop="serviceTime">
@@ -55,13 +55,13 @@ const validateServiceTime = (rule, value, callback) => {
     callback(new Error('服务时间必须为大于0的小于等于1440(24小时)正整数'))
   }
 }
-const validateServiceTime2 = (rule, value, callback) => {
-  if (value === '' || (isPosInt(value) && value <= 1440)) {
-    callback()
-  } else {
-    callback(new Error('服务时间必须为大于0的小于等于1440(24小时)正整数'))
-  }
-}
+// const validateServiceTime2 = (rule, value, callback) => {
+//   if (value === '' || (isPosInt(value) && value <= 1440)) {
+//     callback()
+//   } else {
+//     callback(new Error('服务时间必须为大于0的小于等于1440(24小时)正整数'))
+//   }
+// }
 const validateCoins = (rule, value, callback) => {
   if (isPosInt(value) && value <= 9999 && value > 0) {
     callback()
@@ -126,8 +126,8 @@ export default {
           { validator: validateCoins }
         ],
         serviceTime: [
-          { required: false, message: '请输入时长', trigger: 'change' },
-          { validator: validateServiceTime2 }
+          { required: true, message: '请输入时长', trigger: 'change' },
+          { validator: validateServiceTime }
         ]
       },
       loading_submit: false
@@ -172,7 +172,7 @@ export default {
             serviceTime: Number(self.ruleForm.serviceTime)
           }
           if (self.ruleForm.communication === 2) {
-            delete postData.coins
+            postData.coins = Number(self.ruleForm.serviceTime)
           }
           if (self.ruleForm.communication === 1 && self.ruleForm.serviceTime === '') {
             delete postData.serviceTime
@@ -210,13 +210,13 @@ export default {
       })
     },
     changeCommunication(value) {
-      if (value === 1) {
-        this.rules.serviceTime[0].required = false
-        this.rules.serviceTime[1].validator = validateServiceTime2
-      } else {
-        this.rules.serviceTime[0].required = true
-        this.rules.serviceTime[1].validator = validateServiceTime
-      }
+      // if (value === 1) {
+      //   this.rules.serviceTime[0].required = false
+      //   this.rules.serviceTime[1].validator = validateServiceTime2
+      // } else {
+      //   this.rules.serviceTime[0].required = true
+      //   this.rules.serviceTime[1].validator = validateServiceTime
+      // }
     }
   }
 }
