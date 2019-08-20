@@ -6,7 +6,7 @@
         <!-- 1、表格 -->
         <template v-for="(item,index) in cell.name">
           <el-table-column
-            v-if="!cell.style||cell.style.length==0||index>cell.style.length"
+            v-if="!cell.style||cell.style.length==0||index>cell.style.length-1"
             :label="item"
             :prop="cell.prop[index]"
             :key="index"
@@ -23,7 +23,7 @@
         </template>
 
         <!-- 2、操作 -->
-        <el-table-column v-if="handler.isShow" :label="handler.text" fixed="right">
+        <el-table-column v-if="handler.isShow" :label="handler.text">
           <template slot-scope="scope">
             <el-button
               v-if="curHandler(scope,'isShow')"
