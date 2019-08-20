@@ -105,6 +105,7 @@ export default {
         { key: 'description', label: '套餐名称' },
         { key: 'price', label: '价格(元)' },
         { key: 'serviceTime', label: '时长(分钟)' }
+        // { key: 'coins', label: '模拟投币数' }
       ]
     }
     this.queryList()
@@ -154,10 +155,19 @@ export default {
     handleSave() {
       this.$refs['baseInfoRules'].validate((valid) => {
         if (valid) {
-          const flag = this.list.some(item => parseInt(item.coins, 10) === parseInt(this.modalData.coins, 10) || parseInt(item.serviceTime, 10) === parseInt(this.modalData.serviceTime, 10))
+          const flag = this.list.some(item => this.communication === 1 && parseInt(item.coins, 10) === parseInt(this.modalData.coins, 10) || this.communication === 2 && parseInt(item.serviceTime, 10) === parseInt(this.modalData.serviceTime, 10))
           if (flag) {
-            this.$message({ message: '套餐不能重复, 模拟投币数或时长均不可重复', type: 'error' })
+            let msg = ''
+            if (this.communication === 1) {
+              msg = '模拟投币数不可重复'
+            } else if (this.communication === 2) {
+              msg = '时长不能重复'
+            }
+            this.$message({ message: msg, type: 'error' })
             return
+          }
+          if (this.communication === 2) {
+            this.modalData.coins = this.modalData.serviceTime
           }
           this.list = [this.modalData].concat(this.list)
           this.selectList.push(this.modalData)
@@ -167,6 +177,21 @@ export default {
         }
       })
     },
+    isRepeat() {
+      const arr = []
+      this.selectList.forEach(item => {
+        if (this.communication === 2) {
+          arr.push(item.serviceTime)
+        } else if (this.communication === 1) {
+          arr.push(item.coins)
+        }
+      })
+      if (arr.length === Array.from(new Set(arr))) {
+        return true
+      } else {
+        return false
+      }
+    },
     async handleBatchSave() {
       if (this.selectList.length === 0) {
         this.$message({ message: '请至少选择一个服务套餐', type: 'error' })
@@ -174,6 +199,10 @@ export default {
       }
       if (!this.lyyDistributorId) {
         this.$message({ message: '请选择要绑定的商家', type: 'error' })
+        return
+      }
+      if (!this.isRepeat()) {
+        this.$message({ message: '服务套餐不可重复', type: 'error' })
         return
       }
       if (this.clickDisabled) {

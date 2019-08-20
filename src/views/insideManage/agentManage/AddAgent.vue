@@ -102,6 +102,7 @@
         </div>
       </div>
       <el-form-item label="权限设置" class="checkbox-group-form">
+        <div style="color:red;">设备管理-未注册设备，设备管理-已注册设备，订单管理-启动订单，套餐管理-服务套餐，以上菜单目前只支持充电桩设备</div>
         <el-tree
           ref="tree"
           :data="authSettingList"

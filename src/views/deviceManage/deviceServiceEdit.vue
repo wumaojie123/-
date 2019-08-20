@@ -135,7 +135,7 @@ export default {
           if (this.type === 'add') {
             const params = this.modalData
             if (this.communication === 2) {
-              delete params.coins
+              params.coins = params.serviceTime
             }
             params.lyyEquipmentId = this.lyyEquipmentId
             const res = await saveEquipmentService(params)
