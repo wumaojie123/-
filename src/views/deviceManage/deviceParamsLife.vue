@@ -7,6 +7,7 @@
           <el-option v-for="(item, index) in list" :key="item.value" :label="item.pulsePatternName" :value="index"/>
         </el-select>
       </el-form-item>
+      <p style="font-size: 14px;color: #888;margin-top: 20px;margin-bottom: 20px;"> 脉冲设置： 脉冲宽度{{ saveData.pulseWidth }}, 脉冲间隔 {{ saveData.pulseInterval }} </p>
       <div v-if="flag">
         <el-form-item label="脉冲宽度">
           <el-input v-model="modalData.pulseWidth" placeholder="请输入10~1000之间整数" type="number" class="input-300" maxlength="4" clearable />
@@ -14,18 +15,18 @@
         <el-form-item label="脉冲间隔">
           <el-input v-model="modalData.pulseInterval" placeholder="请输入10~1000之间整数" type="number" class="input-300" maxlength="4" clearable />
         </el-form-item>
-        <el-button type="primary" @click="saveTemp">使用自定义脉冲设置</el-button>
+        <!-- <el-button type="primary" @click="saveTemp">使用自定义脉冲设置</el-button> -->
       </div>
       <el-form-item label="待机电平">
         <el-radio v-model="saveData.battery" label="0">常开</el-radio>
         <el-radio v-model="saveData.battery" label="1">常闭</el-radio>
       </el-form-item>
     </el-form>
-    <p style="font-size: 14px;color: #888;"> 脉冲设置： 脉冲宽度{{ saveData.pulseWidth }}, 脉冲间隔 {{ saveData.pulseInterval }} </p>
+
     <div style="text-align:left;margin-top:80px;">
-      <el-button @click="goBack">返回</el-button>
-      <el-button @click="query">重新加载</el-button>
-      <el-button style="margin-left: 100px;" type="primary" @click="saveNewEquipment">保存设置</el-button>
+      <el-button @click="goBack">返回上一页</el-button>
+      <el-button @click="query">重新加载页面</el-button>
+      <el-button style="margin-left: 20px;" type="primary" @click="saveNewEquipment">保存设置</el-button>
     </div>
   </div>
 </template>
@@ -52,6 +53,8 @@ export default {
       const info = this.list[val]
       if (info.pulsePatternName === '自定义') {
         this.flag = true
+        this.saveData.pulseWidth = ''
+        this.saveData.pulseInterval = ''
         this.modalData = { pulseWidth: '', pulseInterval: '' }
       } else {
         this.saveData.pulseWidth = info.pulseWidth
@@ -105,9 +108,11 @@ export default {
       const res = await readNewEquipment(params)
       if (res.result === 1) {
         this.dataInfo = res.para
-        this.saveData.pulseWidth = this.dataInfo.pulseWidth1
-        this.saveData.pulseInterval = this.dataInfo.pulseInterval1
-        this.saveData.battery = this.dataInfo.battery
+        this.$nextTick(() => {
+          this.saveData.pulseWidth = this.dataInfo.pulseWidth1
+          this.saveData.pulseInterval = this.dataInfo.pulseInterval1
+          this.saveData.battery = this.dataInfo.battery
+        })
       }
       if (res2.result === 0) {
         this.list = (res2.data || []).concat([{ pulsePatternName: '自定义' }])
@@ -120,6 +125,11 @@ export default {
         if (this.index === this.list.length - 1) {
           this.modalData.pulseWidth = this.dataInfo.pulseWidth
           this.modalData.pulseInterval = this.dataInfo.pulseInterval
+          setTimeout(() => {
+            this.saveData.pulseWidth = this.dataInfo.pulseWidth1
+            this.saveData.pulseInterval = this.dataInfo.pulseInterval1
+            this.saveData.battery = this.dataInfo.battery
+          }, 500)
         }
       }
       this.$nextTick(() => {
