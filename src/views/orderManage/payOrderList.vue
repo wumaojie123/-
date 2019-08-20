@@ -288,7 +288,7 @@ export default {
         var list = data.items || []
         list.forEach(item => {
           item.device = item.equipmentTypeName + item.value
-          if (item.communicationType === 'CK' && item.equipmentType === 'CDZ') {
+          if (item.communicationType === 'CK' && item.equipmentType === 'CDZ' && item.passageWay) {
             item.device += `-${item.passageWay}号插座`
           }
           item.merchant = item.merchantName + item.merchantAccount
@@ -299,8 +299,8 @@ export default {
             item.user = `${item.lyyUserId}`
           }
           item.activity = ''
-          if (item.couponFe) {
-            item.activity = '现金券金额' + item.couponFe + '元,'
+          if (item.couponFee) {
+            item.activity = '现金券金额' + item.couponFee + '元,'
           }
           if (item.discountFee) {
             item.activity += '随机立减金额' + item.discountFee + '元'

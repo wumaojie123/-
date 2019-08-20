@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["UoiV"],{UoiV:function(e,n,t){"use strict";t.r(n);var o={name:"BrandLayout"},i=t("ZrdR"),r=Object(i.a)(o,function(){var e=this.$createElement,n=this._self._c||e;return n("div",[n("router-view")],1)},[],!1,null,null,null);r.options.__file="BrandLayout.vue";n.default=r.exports}}]);
