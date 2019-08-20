@@ -21,7 +21,11 @@
           <el-radio :label="scope.$index" v-model="check" @change.native="getTemplateRow(scope.$index)">&nbsp;</el-radio>
         </template>
       </el-table-column>
-      <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+      <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center">
+        <template slot-scope="scope">
+          {{ item.render?item.render(scope.row[item.key]):scope.row[item.key] }}
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       :page-sizes="[10, 20, 30, 40]"
@@ -50,7 +54,7 @@ export default {
         { key: 'linkName', label: '联系人' },
         { key: 'phone', label: '手机号码' },
         { key: 'createDate', label: '创建日期' },
-        { key: 'equipmentTypes', label: '设备类型' },
+        { key: 'equipmentTypes', label: '设备类型', render: (text) => text.length > 0 ? text.toString() : '-' },
         { key: 'unregistered', label: '待注册设备' },
         { key: 'registered', label: '已注册设备' },
         { key: 'equipmentCount', label: '当前设备总量' },
