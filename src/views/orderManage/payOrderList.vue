@@ -288,7 +288,11 @@ export default {
         var list = data.items || []
         list.forEach(item => {
           item.device = item.equipmentTypeName + item.value
-          if (item.communicationType === 'CK' && item.equipmentType === 'CDZ' && item.passageWay) {
+          if (
+            item.communicationType === 'CK' &&
+            item.equipmentType === 'CDZ' &&
+            item.passageWay
+          ) {
             item.device += `-${item.passageWay}号插座`
           }
           item.merchant = item.merchantName + item.merchantAccount
@@ -300,9 +304,12 @@ export default {
           }
           item.activity = ''
           if (item.couponFee) {
-            item.activity = '现金券金额' + item.couponFee + '元,'
+            item.activity = '现金券金额' + item.couponFee + '元'
           }
           if (item.discountFee) {
+            if (item.activity.length > 0) {
+              item.activity += ','
+            }
             item.activity += '随机立减金额' + item.discountFee + '元'
           }
           var flag = false
