@@ -23,7 +23,7 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"/>
     <!--  -->
-    <el-dialog :visible.sync="dialogFormVisible" title="编辑套餐服务" style="width: 1000px;">
+    <el-dialog :visible.sync="dialogFormVisible" title="编辑套餐服务" width="30%">
       <el-form ref="baseInfoRules" :model="modalData" :rules="baseInfoRules" label-width="120px" label-position="right" style="margin-top: 20px;">
         <el-form-item label="套餐名称" prop="description">
           <el-input v-model="modalData.description" placeholder="请输入套餐名称" class="input-300" maxlength="10"/>
