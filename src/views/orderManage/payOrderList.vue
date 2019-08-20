@@ -66,14 +66,14 @@ export default {
           name: [
             '交易单号',
             '商户单号',
-            '交易设备',
-            '交易场地',
             '商户账号',
-            '用户ID',
             '商品金额(元)',
             '平台广告补贴(元)',
             '商家活动',
             '银行卡实收金额(元)',
+            '交易设备',
+            '交易场地',
+            '用户ID',
             '交易状态',
             '退款金额(元)',
             '创建时间'
@@ -81,14 +81,14 @@ export default {
           prop: [
             'wechatTrxid',
             'outTradeNo',
-            'device', //  equipmentTypeName+value
-            'name',
             'merchant', // merchantName+merchantAccount
-            'user', // lyyUserId - userName
             'originalFee',
             'platformFee',
             'activity', //  现金券金额couponFee  随机立减金额discountFee
             'totalFee',
+            'device', //  equipmentTypeName+value
+            'name',
+            'user', // lyyUserId - userName
             'statusName', // status (description)
             'refundFee',
             'created'
@@ -97,8 +97,7 @@ export default {
           style: [
             { width: '255' },
             { width: '255' },
-            { width: '190' },
-            { width: '150' }
+            { width: '190' }
           ]
         },
         handler: {
