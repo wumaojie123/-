@@ -52,7 +52,7 @@ export default {
         { key: 'equipmentType', label: '设备类型' },
         { key: 'communicationText', label: '通信方式' },
         { key: 'equipmentCount', label: '注册设备总数(台)' },
-        { key: 'equipmentCount', label: '待注册设备数(台)' },
+        { key: 'waitingCount', label: '待注册设备数(台)' },
         { key: 'registeredCount', label: '注册成功设备(台)' },
         { key: 'unregisteredCount', label: '注册失败设备(台)' },
         { key: 'distributor', label: '绑定商家' },

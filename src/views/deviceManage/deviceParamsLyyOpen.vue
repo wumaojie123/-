@@ -1,8 +1,12 @@
 <template>
   <div class="lyy-open">
     <div style="margin: 20px;">
+      <el-button type="success" style="margin-left: 20px;" @click="query">刷新页面</el-button>
+    </div>
+    <div style="margin: 20px;">
       <el-radio v-for="(item, index) in para" v-model="radio" :label="item.cmd" :key="index" :value="index" style=" margin-right: 30px;">{{ item.name }}</el-radio>
     </div>
+
     <el-form ref="ruleForm" :inline="true" style="margin-bottom: 20px;" label-width="100px" label-position="center">
       <el-form-item v-for="(item, index) in dataList" :label="item.name" :key="index" >
         <template v-if="item.componentType === 'inputFloat' || item.componentType==='inputInt'">
@@ -24,7 +28,6 @@
       </el-form-item>
     </el-form>
     <div style="text-align:left;margin-top:80px;">
-      <el-button type="success" style="margin-left: 20px;" @click="query">重新加载服务套餐列表</el-button>
       <el-button v-if="!disabled" style="margin-left: 20px;" @click="query2()">刷新套餐信息</el-button>
       <el-button v-if="!disabled" style="margin-left: 20px;" type="primary" @click="handleSave">保存设置</el-button>
     </div>
@@ -49,7 +52,7 @@ export default {
   },
   watch: {
     radio(val, oldValue) {
-      if (val !== oldValue) {
+      if (val !== oldValue && val) {
         this.dataList = []
         this.query2()
         // this.queryList()
@@ -63,6 +66,8 @@ export default {
   methods: {
     // 设备配置
     async query() {
+      this.para = []
+      this.radio = ''
       const postData = {
         uniqueCode: this.uniqueCode,
         functionCode: 'BSYS_SAAS_QUERY_FUNCTION',
