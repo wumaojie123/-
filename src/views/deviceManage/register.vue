@@ -1,8 +1,8 @@
 <template>
   <div class="content-area">
     <h1 style="margin: 10px 0px;">注册设备：已选{{ equipmentArr.length }}台；设备类型：{{ deviceType | deviceFilter }}；通信方式：{{ communication | communicationFilter }}</h1>
-    <el-form :inline="true" label-width="90px" label-position="left">
-      <el-form-item label="绑定商家">
+    <el-form :inline="true" label-width="100px" label-position="left">
+      <el-form-item label="选择绑定商家">
         <el-select v-model="lyyDistributorId" placeholder="请选择" style="width: 300px;" filterable>
           <el-option v-for="item in merchantList" :key="item.value" :label="item.label" :value="item.adOrgId"/>
         </el-select>
@@ -10,7 +10,7 @@
     </el-form>
     <!-- 列表 -->
     <div class="table-title-info">
-      <span>服务套餐</span>
+      <span>选择服务套餐</span>
       <el-button type="primary" @click="handleSaveModal">添加其他套餐</el-button>
     </div>
     <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" height="400" @selection-change="handleSelectionChange">
@@ -24,9 +24,9 @@
       layout="total, pager"
     />
     <div style="text-align:center;">
-      <el-button @click="handleCancel">取消</el-button>
-      <el-button style="margin-left: 100px;" type="primary" @click="handleBatchSave">完成</el-button>
       <div style="color: red;margin-top: 20px;">注：设备注册成功后，设备绑定在商家的默认场地下。</div>
+      <el-button @click="handleCancel">取消</el-button>
+      <el-button style="margin-left: 20px;" type="primary" @click="handleBatchSave">完成</el-button>
     </div>
     <!--  -->
     <el-dialog :visible.sync="dialogFormVisible" title="编辑套餐服务" width="30%">
@@ -186,7 +186,8 @@ export default {
           arr.push(item.coins)
         }
       })
-      if (arr.length === Array.from(new Set(arr))) {
+      console.log()
+      if (arr.length === Array.from(new Set(arr)).length) {
         return true
       } else {
         return false
