@@ -24,7 +24,7 @@
       layout="total, pager"
     />
     <div style="text-align:center;">
-      <div style="color: red;margin-top: 20px;">注：设备注册成功后，设备绑定在商家的默认场地下。</div>
+      <div style="color: red;margin-bottom: 20px;">注：设备注册成功后，设备绑定在商家的默认场地下。</div>
       <el-button @click="handleCancel">取消</el-button>
       <el-button style="margin-left: 20px;" type="primary" @click="handleBatchSave">完成</el-button>
     </div>
