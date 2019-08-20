@@ -107,7 +107,7 @@ export default {
           let list = res.data.items || []
           list = list.map(item => {
             item.equipmentType = this.selectItem.equipmentType
-            const statusMap = { 1: '待注册', 2: '成功', 0: '失败' }
+            const statusMap = { 1: '待注册', 0: '注册成功', 2: '注册失败' }
             item.statusText = statusMap[item.status]
             const reasonMap = { 0: '未找到设备', 1: '已绑定', 2: '失败' }
             item.reasonText = reasonMap[item.reason]
