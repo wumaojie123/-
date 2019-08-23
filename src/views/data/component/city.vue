@@ -61,7 +61,7 @@ export default {
 
 .equipment-wrap{
   width: @480px;
-  height: @500px;
+  height: @365px;
   background-image: url('../images/city-bg.png');
   background-size: @480px @500px;
   background-size: 100% 100%;
@@ -73,11 +73,11 @@ export default {
     width: @20px;
     height: @20px;
     position: absolute;
-    top: @30px;
+    top: @20px;
     left: @30px;
   }
   .order-title{
-    top: @30px;
+    top: @20px;
     left: @60px;
     position: absolute;
     font-size: @20px;

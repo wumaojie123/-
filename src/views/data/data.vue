@@ -7,7 +7,8 @@
         <section class="margin-left"/>
         <section class="left">
           <!-- 订单趋势 -->
-          <tend :data="tendList" :time-type="timeType" @on-change-time="handleTime"/>
+          <equipment :data="equipmentData"/>
+          <pay-tend :data="tendList" style="margin-top: 0.09375rem;"/>
           <!-- 设备数城市分布TOP10 -->
           <city :data-list="cityTopList" style="margin-top: 0.09375rem;"/>
         </section>
@@ -20,8 +21,10 @@
           <china :data-list="cityTopList" :total-agent="totalAgent" style="margin-top: 26px;"/>
         </section>
         <section class="right">
-          <equipment :data="equipmentData"/>
-          <order :list="userList" style="margin-top: 0.09375rem;"/>
+          <tend :data="tendList" :time-type="timeType" @on-change-time="handleTime"/>
+          <pay-type style="margin-top: 0.09375rem;" />
+          <place-and-income :data="groupList" style="margin-top: 0.09375rem;"/>
+          <!-- <order :list="userList" style="margin-top: 0.09375rem;"/> -->
         </section>
         <section class="margin-left"/>
       </div>
@@ -34,19 +37,25 @@
 
 import headerCom from './component/header'
 import tend from './component/tend'
+import payTend from './component/payTend'
+import payType from './component/payType'
+import placeAndIncome from './component/placeAndIncome'
 import city from './component/city'
 import equipment from './component/equipment'
 import income from './component/income'
 import incomeY from './component/incomeY'
 import order from './component/order'
 import china from './component/china'
-import { getAgent, getAdConsumersConfig, getCurrentOnlineCoins, getTrendChartData, getCityTopByDistributorId, querySHL } from '@/api/data'
+import { getAgent, getAdConsumersConfig, getCurrentOnlineCoins, getTrendChartData, getCityTopByDistributorId, querySHL, getTradeTypeCount, getGroupTypeByDistributorId, storage } from '@/api/data'
 
 export default {
   components: {
     headerCom,
+    placeAndIncome,
     tend,
     city,
+    payTend,
+    payType,
     equipment,
     income,
     incomeY,
@@ -80,7 +89,8 @@ export default {
       name: '',
       timer: null,
       equipmentList: [],
-      totalAgent: 0
+      totalAgent: 0,
+      groupList: []
     }
   },
   created() {
@@ -102,13 +112,15 @@ export default {
         this.getCurrentOnlineCoin()
         clearInterval(this.timer)
         this.timer = setInterval(() => {
-          // this.getData()
           this.getCurrentOnlineCoin()
         }, 30000)
         this.getData()
         this.getCurrentOnlineCoin()
         this.getTrendChartDatas()
         this.getCityTopByDistributor()
+        this.getTradeTypeCountInfo()
+        this.getGroupType()
+        this.getStorage()
       }
     },
     async init() {
@@ -124,6 +136,9 @@ export default {
         }, 30000)
         this.getTrendChartDatas()
         this.getCityTopByDistributor()
+        this.getTradeTypeCountInfo()
+        this.getGroupType()
+        this.getStorage()
       }
     },
     async getSHL() {
@@ -144,6 +159,28 @@ export default {
         this.incomeData.todayOnlineIncomde = agentIncomeStatisticsTotalDTO.todayOnlineIncomde || 0
         this.incomeData.totalOnlineIncomde = agentIncomeStatisticsTotalDTO.totalOnlineIncomde || 0
         this.totalAgent = res.data.adOrgCount
+      }
+    },
+    // 支付笔数
+    async getTradeTypeCountInfo() {
+      const res = await getTradeTypeCount({ agentUserId: this.id, equipmentTypeValue: this.eType })
+      if (res.result === 0) {
+        console.log(res)
+      }
+    },
+    // 支付笔数
+    async getGroupType() {
+      const res = await getGroupTypeByDistributorId({ agentUserId: this.id, equipmentTypeValue: this.eType })
+      if (res.result === 0) {
+        console.log('数据', res.data)
+        this.groupList = res.data
+      }
+    },
+    // 支付笔数
+    async getStorage() {
+      const res = await storage({ agentUserId: this.id, equipmentTypeValue: this.eType })
+      if (res.result === 0) {
+        console.log(res)
       }
     },
     async getCurrentOnlineCoin() {

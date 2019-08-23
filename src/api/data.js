@@ -45,3 +45,24 @@ export function querySHL() {
     method: 'get'
   })
 }
+export function getTradeTypeCount(data) {
+  return request({
+    url: '/rest/agentTitalReport/getTradeTypeCount', // 假地址 自行替换
+    method: 'get',
+    params: data
+  })
+}
+export function getGroupTypeByDistributorId(data) {
+  return request({
+    url: '/rest/agentTitalReport/getGroupTypeByDistributorId', // 假地址 自行替换
+    method: 'get',
+    params: data
+  })
+}
+export function storage(data) {
+  return request({
+    url: '/rest/agentTitalReport/storage', // 假地址 自行替换
+    method: 'get',
+    params: data
+  })
+}

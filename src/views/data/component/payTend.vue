@@ -2,16 +2,10 @@
   <section class="tend-wrapper">
     <div class="title">
       <div class="left">
-        <span :class="{'select': type === '1' }" @click="handleType('1')">订单趋势</span>
-        <span style="padding: 0 6px;">|</span>
-        <span :class="{'select': type === '2' }" @click="handleType('2')">营业额趋势</span>
-      </div>
-      <div class="right">
-        <span :class="{'select': timeType === 1}" class="default default_left" @click="handleTime(1)">近1月</span>
-        <span :class="{'select': timeType === 2}" class="default default_right" @click="handleTime(2)">近半年</span>
+        <span>设备进出货趋势</span>
       </div>
     </div>
-    <section class="echart"/>
+    <section class="echart2"/>
   </section>
 </template>
 
@@ -84,7 +78,7 @@ export default {
     },
     initData(dateList, dataList) {
       console.log(JSON.stringify(dataList))
-      const initData = echarts.init(document.querySelector('.echart'))
+      const initData = echarts.init(document.querySelector('.echart2'))
       let name = ''
       if (this.type === '1') {
         name = '订单数(笔)'
@@ -106,7 +100,7 @@ export default {
           {
             type: 'category',
             boundaryGap: false,
-            data: dateList,
+            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
             axisTick: {
               alignWithLabel: true,
               show: false
@@ -164,21 +158,22 @@ export default {
             name: name,
             type: 'line',
             stack: '总量',
-            data: dataList,
-            smooth: true,
-            areaStyle: {
+            data: [120, 132, 101, 134, 90, 230, 210],
+            smooth: false,
+            itemStyle: {
               normal: {
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                  offset: 0,
-                  color: 'rgba(22,236,236,0.1)'
-                }, {
-                  offset: 0.8,
-                  color: 'rgba(22,236,236,0.08)'
-                }], false),
-                shadowColor: '#44CFD9',
-                shadowBlur: 10
+                color: '#16ECEC',
+                borderColor: '#16ECEC',
+                borderWidth: 4
               }
-            },
+            }
+          },
+          {
+            name: '联盟广告',
+            type: 'line',
+            stack: '总量2',
+            data: [220, 182, 191, 234, 290, 330, 310],
+            smooth: false,
             itemStyle: {
               normal: {
                 color: '#16ECEC',
@@ -202,13 +197,13 @@ export default {
 .tend-wrapper{
   color: #44CFD9;
   width: @480px;
-  height: @323px;
+  height: @303px;
   background-image: url('../images/tend-bg.png');
   background-size: 100% 100%;
   font-size: 0;
 }
 .title{
-  padding: @32px @30px;
+  padding: @20px @30px;
   display: flex;
   justify-content: space-between;
   .left{
@@ -249,7 +244,7 @@ export default {
   }
 }
 
-.echart{
+.echart2{
   width: 100%;
   height: @200px;
 }

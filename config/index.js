@@ -11,8 +11,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/agent': {
-          target: 'https://sag.leyaoyao.com',
-        // target: 'http://192.168.21.96:8041',
+          target: 'https://dag.leyaoyao.com',
+        // target: 'http://192.168.10.29:8041',
         // target: 'http://192.168.20.20:8041',
         // target: 'http:// jpeb74.natappfree.cc',
         changeOrigin: true, //开启代理
@@ -32,7 +32,8 @@ module.exports = {
 
     // can be overwritten by process.env.HOST
     // if you want dev by ip, please set host: '0.0.0.0'
-    host: 'localhost',
+    // host: 'localhost',
+    host: '192.168.20.40',
     //host: '0.0.0.0',
     port: 3300, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
