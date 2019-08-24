@@ -120,7 +120,7 @@ export default {
         },
         geo: {
           show: true,
-          zoom: 1.2,
+          zoom: 1.1,
           map: mapName,
           label: {
             normal: {
@@ -265,7 +265,7 @@ export default {
 
 .china-wrap{
   position: relative;
-  height: @750px;
+  height: @806px;
   background: url('../images/china.png');
   background-size: 100% 100%;
   .top-right{

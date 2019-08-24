@@ -8,23 +8,24 @@
         <section class="left">
           <!-- 订单趋势 -->
           <equipment :data="equipmentData"/>
-          <pay-tend :data="tendList" style="margin-top: 0.09375rem;"/>
+          <pay-tend :data="tendData" style="margin-top: 0.09375rem;"/>
           <!-- 设备数城市分布TOP10 -->
           <city :data-list="cityTopList" style="margin-top: 0.09375rem;"/>
         </section>
-        <section class="center">
-          <div class="flex-wrapp">
+        <section class="center" style="position:relative;">
+          <div class="flex-wrapp" >
             <!-- 收益 -->
             <income :data="incomeData" style="margin-right: 0.052083333333333336rem;"/>
             <income-y :data="incomeYData"/>
           </div>
           <china :data-list="cityTopList" :total-agent="totalAgent" style="margin-top: 26px;"/>
+          <order :list="userList" style="margin-top: 0.09375rem;position:absolute;left: 10px; bottom: 10px;" />
         </section>
         <section class="right">
           <tend :data="tendList" :time-type="timeType" @on-change-time="handleTime"/>
-          <pay-type style="margin-top: 0.09375rem;" />
+          <pay-type :data="payTypeData" style="margin-top: 0.09375rem;" />
           <place-and-income :data="groupList" style="margin-top: 0.09375rem;"/>
-          <!-- <order :list="userList" style="margin-top: 0.09375rem;"/> -->
+          <!-- -->
         </section>
         <section class="margin-left"/>
       </div>
@@ -90,7 +91,9 @@ export default {
       timer: null,
       equipmentList: [],
       totalAgent: 0,
-      groupList: []
+      groupList: [],
+      tendData: [],
+      payTypeData: []
     }
   },
   created() {
@@ -165,14 +168,13 @@ export default {
     async getTradeTypeCountInfo() {
       const res = await getTradeTypeCount({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        console.log(res)
+        this.payTypeData = res.data
       }
     },
     // 支付笔数
     async getGroupType() {
       const res = await getGroupTypeByDistributorId({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        console.log('数据', res.data)
         this.groupList = res.data
       }
     },
@@ -180,14 +182,19 @@ export default {
     async getStorage() {
       const res = await storage({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        console.log(res)
+        this.tendData = res.data
       }
     },
     async getCurrentOnlineCoin() {
       const res = await getCurrentOnlineCoins({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        const list = res.data || []
-        if (list.length > 0) {
+        let list = res.data || []
+        if (list.length >= 0) {
+          list = [
+            { userName: '李岑', equipmentTypeName: '洗衣机', createTime: '2018-90-93' },
+            { userName: '李岑1', equipmentTypeName: '洗衣机', createTime: '2018-90-93' },
+            { userName: '李岑2', equipmentTypeName: '洗衣机', createTime: '2018-90-93' }
+          ]
           this.userList = list
         }
       }

@@ -2,7 +2,7 @@
   <section class="tend-wrapper">
     <div class="title">
       <div class="left">
-        <span>昨日投放地址类型与收益分析</span>
+        <span style="color:rgba(68,207,217,1);">昨日投放地址类型与收益分析</span>
       </div>
     </div>
     <section class="echart5"/>
@@ -140,6 +140,7 @@ export default {
 .title{
   padding: @20px @30px;
   display: flex;
+  color:rgba(68,207,217,1);
   justify-content: space-between;
   .left{
     span{

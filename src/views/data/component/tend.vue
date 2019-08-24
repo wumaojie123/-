@@ -50,7 +50,6 @@ export default {
       this.dateList = dateList
       this.incomeList = incomeList
       this.orderList = orderList
-      console.log('watch', JSON.stringify(this.orderList))
       this.initData(this.dateList, this.orderList)
       this.localData = val
     },
@@ -83,7 +82,7 @@ export default {
       }
     },
     initData(dateList, dataList) {
-      console.log(JSON.stringify(dataList))
+      // console.log(JSON.stringify(dataList))
       const initData = echarts.init(document.querySelector('.echart'))
       let name = ''
       if (this.type === '1') {
@@ -239,19 +238,16 @@ export default {
     }
     .default_left{
       border-radius: @5px 0px 0px @5px!important;
-
     }
     .default_right{
       border-radius:0px @5px @5px 0px;
-      // border-radius: @5px 0px 0px @5px!important;
     }
-
   }
 }
 
 .echart{
   width: 100%;
-  height: @200px;
+  height: @210px;
 }
 </style>
 

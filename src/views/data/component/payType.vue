@@ -2,7 +2,7 @@
   <section class="tend-wrapper">
     <div class="title">
       <div class="left">
-        <span>设备进出货趋势</span>
+        <span style="color:rgba(68,207,217,1);">支付方式分析</span>
       </div>
     </div>
     <section class="echart3"/>
@@ -41,9 +41,9 @@ export default {
         },
         legend: {
           orient: 'vertical',
-          x: 'right',
+          x: '60%',
           y: 'center',
-          right: '30%',
+          right: '0',
           textStyle: {
             color: '#7ED1FD'
           },
@@ -53,7 +53,7 @@ export default {
           {
             name: '访问来源',
             type: 'pie',
-            center: ['30%', '50%'],
+            center: ['25%', '50%'],
             radius: ['50%', '70%'],
             avoidLabelOverlap: false,
             label: {
@@ -101,7 +101,7 @@ export default {
   font-size: 0;
 }
 .title{
-  padding: @32px @30px;
+  padding: @20px @30px;
   display: flex;
   justify-content: space-between;
   .left{

@@ -2,7 +2,7 @@
   <section class="tend-wrapper">
     <div class="title">
       <div class="left">
-        <span>设备进出货趋势</span>
+        <span style="color:rgba(68,207,217,1);">设备进出货趋势</span>
       </div>
     </div>
     <section class="echart2"/>
@@ -33,64 +33,34 @@ export default {
   },
   watch: {
     data(val) {
-      const dateList = []
-      const incomeList = []
-      const orderList = []
+      const xData = []
+      const yData1 = []
+      const yData2 = []
       this.data.map(i => {
-        dateList.push(i.statisticsDate)
-        orderList.push(i.dayPayCount)
-        incomeList.push(i.dayOnlineIncomde)
+        xData.push(i.statisticsDate)
+        yData1.push(i.stock)
+        yData2.push(i.outCount)
       })
-      this.dateList = dateList
-      this.incomeList = incomeList
-      this.orderList = orderList
-      console.log('watch', JSON.stringify(this.orderList))
-      this.initData(this.dateList, this.orderList)
-      this.localData = val
-    },
-    timeType(val) {
-      const dateList = []
-      const incomeList = []
-      const orderList = []
-      this.localData.map(i => {
-        dateList.push(i.statisticsDate)
-        orderList.push(i.dayPayCount)
-        incomeList.push(i.dayOnlineIncomde)
-      })
-      if (this.type === '1') {
-        this.initData(dateList, orderList)
-      } else {
-        this.initData(dateList, incomeList)
-      }
+      this.initData(xData, yData1, yData2)
     }
   },
   methods: {
-    handleTime(value) {
-      this.$emit('on-change-time', value)
-    },
-    handleType(type) {
-      this.type = type
-      if (type === '1') {
-        this.initData(this.dateList, this.orderList)
-      } else {
-        this.initData(this.dateList, this.incomeList)
-      }
-    },
-    initData(dateList, dataList) {
-      console.log(JSON.stringify(dataList))
+    initData(xData, yData1, yData2) {
       const initData = echarts.init(document.querySelector('.echart2'))
-      let name = ''
-      if (this.type === '1') {
-        name = '订单数(笔)'
-      } else {
-        name = '营业额(元)'
-      }
       const options = {
+        legend: {
+          data: ['进货量', '出货量'],
+          textStyle: {
+            color: '#7ED1FD'
+          },
+          top: '0',
+          right: '10%'
+        },
         grid: {
           top: '5%',
-          left: '10%',
+          left: '5%',
           right: '10%',
-          bottom: '43',
+          bottom: '23',
           containLabel: true
         },
         tooltip: {
@@ -100,7 +70,7 @@ export default {
           {
             type: 'category',
             boundaryGap: false,
-            data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+            data: xData,
             axisTick: {
               alignWithLabel: true,
               show: false
@@ -155,24 +125,24 @@ export default {
         ],
         series: [
           {
-            name: name,
+            name: '进货量',
             type: 'line',
             stack: '总量',
-            data: [120, 132, 101, 134, 90, 230, 210],
+            data: yData1,
             smooth: false,
             itemStyle: {
               normal: {
-                color: '#16ECEC',
-                borderColor: '#16ECEC',
+                color: '#4060B9',
+                borderColor: '#4060B9',
                 borderWidth: 4
               }
             }
           },
           {
-            name: '联盟广告',
+            name: '出货量',
             type: 'line',
             stack: '总量2',
-            data: [220, 182, 191, 234, 290, 330, 310],
+            data: yData2,
             smooth: false,
             itemStyle: {
               normal: {
@@ -246,7 +216,7 @@ export default {
 
 .echart2{
   width: 100%;
-  height: @200px;
+  height: @243px;
 }
 </style>
 

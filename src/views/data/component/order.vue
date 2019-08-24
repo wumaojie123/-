@@ -1,9 +1,9 @@
 <template>
   <section class="order-wrapper">
-    <div class="title-wrapper">
+    <!-- <div class="title-wrapper">
       <img class="order-icon" src="../images/icon2.png">
       <p class="order-title">实时启动信息</p>
-    </div>
+    </div> -->
     <div class="content-wrapper">
       <div v-for="(item, index) in list" :key="index" class="item">
         <img :src="(item.headImg || defaultImg)" class="header-img">
@@ -53,9 +53,10 @@ export default {
   }
 }
 .order-wrapper{
-  width: @480px;
-  height: @630px;
-  background-image: url('../images/order-bg.png');
+  width: @400px;
+  height: @70px;
+  height: 180px;
+  // background-image: url('../images/order-bg.png');
   background-size: 100% 100%;
   overflow: hidden;
   // background-size: @480px 630px;

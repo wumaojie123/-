@@ -64,9 +64,9 @@ export default {
 @import '../images/constant.less';
 .equipment-wrap{
     width: @480px;
-    height: @280px;
+    height: @241px;
     background-image: url('../images/epuipment-bg.png');
-    background-size: @480px @280px;
+    background-size: @480px @241px;
     color: #44CFD9;
 }
 .title{
@@ -96,15 +96,15 @@ export default {
 }
 
 .num-item {
-    width: @57px;
-    height: @70px;
+    width: @47px;
+    height: @50px;
     background:linear-gradient(0deg,rgba(3,36,51,1) 0%,rgba(2,10,17,1) 100%);
     box-shadow:inset 0px 1px 6px 0px rgba(135, 190, 195, 0.7);
     border-radius: @10px;
     text-align: center;
     display: inline-block;
-    line-height: @70px;
-    font-size: @40px;
+    line-height: @50px;
+    font-size: @34px;
     font-family:SourceHanSansCN-Bold;
     font-weight:bold;
     margin-right: @8px;
@@ -129,7 +129,7 @@ export default {
     text-align: center;
     align-items: center;
     .item-title{
-        font-size: @18px;
+        font-size: @16px;
         font-family:SourceHanSansCN-Regular;
         font-weight:400;
         color:rgba(88,196,252,1);
@@ -141,7 +141,7 @@ export default {
         margin-top: @13px;
         display: inline-block;
         color: #52C3FF;
-        font-size: @40px;
+        font-size: @34px;
         display: flex;
         align-items: center;
         justify-content: center;

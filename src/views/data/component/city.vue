@@ -47,7 +47,21 @@ export default {
   computed: {
     localList() {
       if (this.dataList.length <= 10) {
+        // let list = [
+        //   {"cityName":"杭州市","equipmentCount":1,"payCount":0,"onlineIncomde":0,"lyyDistributorCount":1,"lng":"120.21201","lat":"30.2084"},
+        //   {"cityName":"杭州市","equipmentCount":1,"payCount":0,"onlineIncomde":0,"lyyDistributorCount":1,"lng":"120.21201","lat":"30.2084"},
+        //   {"cityName":"杭州市","equipmentCount":1,"payCount":0,"onlineIncomde":0,"lyyDistributorCount":1,"lng":"120.21201","lat":"30.2084"},
+        //   {"cityName":"杭州市","equipmentCount":1,"payCount":0,"onlineIncomde":0,"lyyDistributorCount":1,"lng":"120.21201","lat":"30.2084"},
+        //   {"cityName":"杭州市","equipmentCount":1,"payCount":0,"onlineIncomde":0,"lyyDistributorCount":1,"lng":"120.21201","lat":"30.2084"},
+        //   {"cityName":"杭州市","equipmentCount":1,"payCount":0,"onlineIncomde":0,"lyyDistributorCount":1,"lng":"120.21201","lat":"30.2084"},
+        //   {"cityName":"杭州市","equipmentCount":1,"payCount":0,"onlineIncomde":0,"lyyDistributorCount":1,"lng":"120.21201","lat":"30.2084"},
+        //   {"cityName":"杭州市","equipmentCount":1,"payCount":0,"onlineIncomde":0,"lyyDistributorCount":1,"lng":"120.21201","lat":"30.2084"},
+        //   {"cityName":"杭州市","equipmentCount":1,"payCount":0,"onlineIncomde":0,"lyyDistributorCount":1,"lng":"120.21201","lat":"30.2084"}
+        // ]
+        // console.log(JSON.stringify(this.dataList))
+        // let result = this.dataList.concat(list)
         return this.dataList
+        // return result
       } else {
         return this.dataList.slice(0, 9)
       }
@@ -67,7 +81,7 @@ export default {
   background-size: 100% 100%;
 }
 .equipment-area{
-  height: @70px;
+  height: @50px;
   position: relative;
   .icon-title{
     width: @20px;
@@ -89,7 +103,7 @@ export default {
 
 .city-wrap{
   display: flex;
-  height: @420px;
+  height: @300px;
   flex-direction: column;
   .city-list{
     flex:1;
@@ -98,7 +112,7 @@ export default {
 .city-header {
   display: flex;
   font-size: @14px;
-  margin-bottom: @10px;
+  margin-bottom: @8px;
   font-size: @16px;
   span{
     flex: 1;
@@ -113,25 +127,25 @@ export default {
 
 .spec-num span{
   background:  #47E5F1;
-  width: @20px;
-  height: @20px;
-  line-height: @20px;
+  width: @15px;
+  height: @15px;
+  line-height: @15px;
   display: inline-block;
   border-radius: 50%;
   // color: #FFFFFF;
 
 }
 .city-list{
-  font-size: @16px;
+  font-size: @14px;
   display: flex;
   flex-direction: column;
 }
 
 .city-list-wrap{
   display:flex;
-  font-size: @16px;
-  height: @40px;
-  line-height: @40px;
+  font-size: @14px;
+  height: @28px;
+  line-height: @28px;
   span{
     flex: 1;
     text-align: center;

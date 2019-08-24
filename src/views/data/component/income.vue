@@ -31,7 +31,7 @@ export default {
 @import '../images/constant.less';
 .income-wrap{
   width: @457px;
-  height: @150px;
+  height: @130px;
   display: flex;
   text-align: center;
   position: relative;
