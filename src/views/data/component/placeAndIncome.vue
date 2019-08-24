@@ -38,8 +38,8 @@ export default {
       const seriesData2 = []
       this.localData.forEach(item => {
         yData.push(item.groupTypeName)
-        seriesData1.push(item.onlineIncomde)
-        seriesData2.push(item.lyyDistributorCount)
+        seriesData1.push(item.equipmentCount)
+        seriesData2.push(item.onlineIncomde)
       })
       this.initData(yData, seriesData1, seriesData2)
     }
@@ -84,7 +84,6 @@ export default {
           data: yData
         },
         series: [
-
           {
             name: '投放设备数',
             type: 'bar',
@@ -174,7 +173,6 @@ export default {
     }
     .default_right{
       border-radius:0px @5px @5px 0px;
-      // border-radius: @5px 0px 0px @5px!important;
     }
 
   }
@@ -182,7 +180,7 @@ export default {
 
 .echart5{
   width: 100%;
-  height: @200px;
+  height: @270px;
 }
 </style>
 

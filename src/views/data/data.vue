@@ -188,13 +188,13 @@ export default {
     async getCurrentOnlineCoin() {
       const res = await getCurrentOnlineCoins({ agentUserId: this.id, equipmentTypeValue: this.eType })
       if (res.result === 0) {
-        let list = res.data || []
+        const list = (res.data || []).slice(0, 3)
         if (list.length >= 0) {
-          list = [
-            { userName: '李岑', equipmentTypeName: '洗衣机', createTime: '2018-90-93' },
-            { userName: '李岑1', equipmentTypeName: '洗衣机', createTime: '2018-90-93' },
-            { userName: '李岑2', equipmentTypeName: '洗衣机', createTime: '2018-90-93' }
-          ]
+          // list = [
+          //   { userName: '李岑', equipmentTypeName: '洗衣机', createTime: '2018-90-93' },
+          //   { userName: '李岑1', equipmentTypeName: '洗衣机', createTime: '2018-90-93' },
+          //   { userName: '李岑2', equipmentTypeName: '洗衣机', createTime: '2018-90-93' }
+          // ]
           this.userList = list
         }
       }

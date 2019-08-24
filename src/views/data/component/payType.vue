@@ -16,29 +16,37 @@ export default {
     data: {
       type: Array,
       default: () => []
-    },
-    timeType: {
-      type: Number,
-      default: 1
     }
   },
   data() {
     return {
       localData: this.data,
+      payTypeMap: { aliPay: '支付宝支付', JSAPI: '微信支付', unionPay: '云闪付' },
       dateList: []
     }
   },
-  mounted() {
-    this.initData()
+  watch: {
+    data(val) {
+      const yData1 = []
+      val.map(i => {
+        const obj = {
+          name: this.payTypeMap[i.tradeType],
+          value: i.payCount
+        }
+        yData1.push(obj)
+      })
+      this.initData(yData1)
+    }
   },
   methods: {
-    initData(dateList, dataList) {
+    initData(yData1) {
       const initData = echarts.init(document.querySelector('.echart3'))
       const option = {
         tooltip: {
           trigger: 'item',
           formatter: '{b}: {c} ({d}%)'
         },
+        color: ['#FFFD37', '#4060B9', '#49DDFA'],
         legend: {
           orient: 'vertical',
           x: '60%',
@@ -47,7 +55,7 @@ export default {
           textStyle: {
             color: '#7ED1FD'
           },
-          data: ['余额启动', '会员卡启动', '投币启动', 'IC卡启动']
+          data: ['微信支付', '支付宝支付', '云闪付']
         },
         series: [
           {
@@ -74,12 +82,7 @@ export default {
                 show: false
               }
             },
-            data: [
-              { value: 335, name: '余额启动' },
-              { value: 310, name: '会员卡启动' },
-              { value: 234, name: '投币启动' },
-              { value: 135, name: 'IC卡启动' }
-            ]
+            data: yData1
           }
         ]
       }

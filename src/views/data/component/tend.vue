@@ -247,7 +247,7 @@ export default {
 
 .echart{
   width: 100%;
-  height: @210px;
+  height: @241px;
 }
 </style>
 

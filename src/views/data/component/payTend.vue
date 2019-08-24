@@ -3,6 +3,9 @@
     <div class="title">
       <div class="left">
         <span style="color:rgba(68,207,217,1);">设备进出货趋势</span>
+        <el-popover class="lyy-tend-wrapper" placement="top-start" width="200" trigger="hover" content="进货量指由乐摇摇购进的设备总数进货量=待转移设备+已转移设备出货量即已转移设备">
+          <i slot="reference" class="el-icon-question" style="font-size: 20px;color: #44cfd9;"/>
+        </el-popover>
       </div>
     </div>
     <section class="echart2"/>

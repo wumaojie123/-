@@ -1,9 +1,13 @@
 <template>
-  <div class="equipment-wrap">
+  <div class="equipment-wrap equipment-info-wrap-wrap">
     <div class="equipment-area">
       <section class="title">
         <img class="icon-title" src="../images/equipment.png">
-        <span>设备监控</span>
+        <span>设备监控
+        </span>
+        <el-popover placement="top-start" width="200" trigger="hover" content="仅限已注册设备，未注册设备不计在内">
+          <i slot="reference" class="el-icon-question" style="font-size: 20px;"/>
+        </el-popover>
       </section>
       <section class="total">
         <span >设备总数</span>
@@ -60,7 +64,7 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
 @import '../images/constant.less';
 .equipment-wrap{
     width: @480px;
@@ -68,88 +72,93 @@ export default {
     background-image: url('../images/epuipment-bg.png');
     background-size: @480px @241px;
     color: #44CFD9;
-}
-.title{
-  font-size: @20px;
-  font-family:SourceHanSansCN-Medium;
-  font-weight:500;
-  color:rgba(68,207,217,1);
-  padding-top: @20px;
-  position: relative;
-  padding-left: @30px;
-}
-
-.total{
-    margin-top: @4px;
-    text-align: center;
-    margin-bottom: @14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color:rgba(88,196,252,1);
-    font-size: @18px;
-}
-.num{
-    text-align: center;
-    margin-bottom: @18px;
-    margin: 0 auto;
-}
-
-.num-item {
-    width: @47px;
-    height: @50px;
-    background:linear-gradient(0deg,rgba(3,36,51,1) 0%,rgba(2,10,17,1) 100%);
-    box-shadow:inset 0px 1px 6px 0px rgba(135, 190, 195, 0.7);
-    border-radius: @10px;
-    text-align: center;
-    display: inline-block;
-    line-height: @50px;
-    font-size: @34px;
-    font-family:SourceHanSansCN-Bold;
-    font-weight:bold;
-    margin-right: @8px;
-}
-.num-item:last {
-    margin-right: 0;
-}
-
-.num-status {
-    display: flex;
-    margin-top: @20px;
-}
-.icon-title{
-  width: @20px;
-  height: @20px;
-  vertical-align: bottom;
-}
-
-.status-item {
-  flex:1;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-    .item-title{
-        font-size: @16px;
-        font-family:SourceHanSansCN-Regular;
-        font-weight:400;
-        color:rgba(88,196,252,1);
+    .title{
+      font-size: @20px;
+      font-family:SourceHanSansCN-Medium;
+      font-weight:500;
+      color:rgba(68,207,217,1);
+      padding-top: @20px;
+      position: relative;
+      padding-left: @30px;
     }
-    .staus-num {
-        width: @161px;
-        height: @32px;
-        line-height: @32px;
-        margin-top: @13px;
-        display: inline-block;
-        color: #52C3FF;
-        font-size: @34px;
+
+    .total{
+        margin-top: @4px;
+        text-align: center;
+        margin-bottom: @14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-left: 50%;
-        transform: translateX(-50%);
-        font-weight:bold;
-        color:rgba(68,207,217,1);
+        color:rgba(88,196,252,1);
+        font-size: @18px;
     }
+    .num{
+        text-align: center;
+        margin-bottom: @18px;
+        margin: 0 auto;
+    }
+
+    .num-item {
+        width: @47px;
+        height: @50px;
+        background:linear-gradient(0deg,rgba(3,36,51,1) 0%,rgba(2,10,17,1) 100%);
+        box-shadow:inset 0px 1px 6px 0px rgba(135, 190, 195, 0.7);
+        border-radius: @10px;
+        text-align: center;
+        display: inline-block;
+        line-height: @50px;
+        font-size: @34px;
+        font-family:SourceHanSansCN-Bold;
+        font-weight:bold;
+        margin-right: @8px;
+    }
+    .num-item:last {
+        margin-right: 0;
+    }
+
+    .num-status {
+        display: flex;
+        margin-top: @20px;
+    }
+    .icon-title{
+      width: @20px;
+      height: @20px;
+      vertical-align: bottom;
+    }
+
+    .status-item {
+      flex:1;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        .item-title{
+            font-size: @16px;
+            font-family:SourceHanSansCN-Regular;
+            font-weight:400;
+            color:rgba(88,196,252,1);
+        }
+        .staus-num {
+            width: @161px;
+            height: @32px;
+            line-height: @32px;
+            margin-top: @13px;
+            display: inline-block;
+            color: #52C3FF;
+            font-size: @34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 50%;
+            transform: translateX(-50%);
+            font-weight:bold;
+            color:rgba(68,207,217,1);
+        }
+    }
+}
+.equipment-info-wrap-wrap{
+  .el-popover{
+    background: red;
+  }
 }
 
 </style>
