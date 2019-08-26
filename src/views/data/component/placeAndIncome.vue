@@ -41,7 +41,7 @@ export default {
         seriesData1.push(item.equipmentCount)
         seriesData2.push(item.onlineIncomde)
       })
-      this.initData(yData, seriesData1, seriesData2)
+      this.initData(yData.reverse(), seriesData1.reverse(), seriesData2.reverse())
     }
   },
   methods: {
