@@ -188,6 +188,26 @@ export let constantRouterMap = [
     ]
   },
   {
+    path: '/officialAccount',
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'officialAccount',
+    hidden: true,
+    meta: {
+      title: '公众号配置',
+      icon: 'component'
+    },
+    children: [
+      {
+        path: '/EditOfficialAccount',
+        component: () => import('@/views/officialAccount/EditOfficialAccount'),
+        name: 'agentList',
+        meta: { title: '工作号配置' },
+        hidden: true
+      }
+    ]
+  },
+  {
     path: '/deviceManage',
     component: Layout,
     redirect: 'noredirect',

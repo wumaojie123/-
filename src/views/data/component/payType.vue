@@ -52,6 +52,10 @@ export default {
           x: '60%',
           y: 'center',
           right: '0',
+          icon: 'circle',
+          itemWidth: 10,
+          itemHeight: 10,
+          borderRadius: 10,
           textStyle: {
             color: '#7ED1FD'
           },

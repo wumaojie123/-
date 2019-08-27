@@ -37,7 +37,11 @@ export default {
       const seriesData1 = []
       const seriesData2 = []
       this.localData.forEach(item => {
-        yData.push(item.groupTypeName)
+        if (item.groupTypeName.length > 5) {
+          yData.push(`${item.groupTypeName.slice(0, 5)}...`)
+        } else {
+          yData.push(item.groupTypeName)
+        }
         seriesData1.push(item.equipmentCount)
         seriesData2.push(item.onlineIncomde)
       })
