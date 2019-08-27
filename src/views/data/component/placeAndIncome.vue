@@ -57,13 +57,16 @@ export default {
           textStyle: {
             color: '#7ED1FD'
           },
-          top: '1%'
+          top: '1%',
+          itemWidth: 20,
+          itemHeight: 8
         },
         barGap: '1%',
         grid: {
+          top: '10%',
           left: '10%',
           right: '10%',
-          bottom: '3%',
+          bottom: '10',
           containLabel: true
         },
         xAxis: {
@@ -184,7 +187,7 @@ export default {
 
 .echart5{
   width: 100%;
-  height: @270px;
+  height: @280px;
 }
 </style>
 
