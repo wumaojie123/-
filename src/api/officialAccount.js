@@ -19,3 +19,9 @@ export function getAllResult() {
     method: 'get'
   })
 }
+export function getConfig() {
+  return request({
+    url: '/rest/charging/wechatThirdConfig/getConfig',
+    method: 'get'
+  })
+}
