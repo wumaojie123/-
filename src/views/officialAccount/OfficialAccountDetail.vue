@@ -18,13 +18,15 @@
     <template v-if="!allVisible">
       <p class="title" style="margin-top: 20px;">
         <span>服务消息通知</span>
-        <el-switch v-model="value" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
+        <el-switch v-model="configValue" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;" disabled/>
       </p>
       <div>客户扫码消费后可在公众号接收服务开始、服务结束消息通知，查看充电桩示例>；</div>
-      <p class="title" style="margin-top: 20px;">
-        <span>公众号菜单配置</span>
-        <el-switch v-model="value" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
-      </p>
+      <template v-if="dataInfo.isMenuAuth === 'Y' && dataInfo.menuSuccess =='Y'">
+        <p class="title" style="margin-top: 20px;">
+          <span>公众号菜单配置</span>
+          <el-switch v-model="value" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;" disabled/>
+        </p>
+      </template>
       <!-- 公众号菜单 -->
       <div v-show="dataInfo.isMenuAuth == 'Y' && dataInfo.menuSuccess =='Y'">
         <edit-dialog v-if="dataInfo.isMenuAuth !='N'" :device-type="dataInfo.eType" :action-type="actionType" :menu-list="menuList"/>
@@ -64,9 +66,6 @@ export default {
     this.getConfigInfo()
   },
   methods: {
-    /**
-     * 查询公众号主体信息
-     */
     async getConfigInfo() {
       const res = await getConfig({ appId: this.appId })
       if (res.result === 0) {

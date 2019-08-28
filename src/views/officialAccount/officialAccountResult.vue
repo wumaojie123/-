@@ -64,9 +64,9 @@ export default {
     if (this.msg === 1 || this.msg === 7) {
       if (this.isMenuAuth || this.isTemplateAuth) {
         if (this.msg === 7) {
-          this.$router.push({ name: 'publicAccount', query: { typeId: 2, appId: this.appId }})
+          this.$router.push({ path: '/OfficialAccountDetail', query: { typeId: 2, appId: this.appId }})
         } else {
-          this.$router.push({ name: 'publicAccount', query: { typeId: 2, appId: this.appId, isFirstAuth: 'Y' }})
+          this.$router.push({ path: '/OfficialAccountDetail', query: { typeId: 2, appId: this.appId, isFirstAuth: 'Y' }})
         }
       }
     }
