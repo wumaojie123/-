@@ -26,7 +26,7 @@
 
 <script>
 import { descList, deviceMap } from './constant'
-import { getAuthUrl, getAllResult } from '@/api/officialAccount'
+import { getAllResult } from '@/api/officialAccount'
 export default {
   data() {
     return {
@@ -47,11 +47,13 @@ export default {
       }
     },
     async queryResult() {
-      const res = await getAuthUrl({ eType: 'CDZ' })
-      if (res.result === 0) {
-        debugger
-        window.location.href = res.data.anthUrl
-      }
+      // const res = await getAuthUrl({ eType: 'CDZ' })
+      window.location.href = '/agent/rest/officialAccounts/getAuthUrl?eType=CDZ'
+      // debugger
+      // console.log(res)
+      // if (res.result === 0) {
+      //   // window.location.href = res.data.anthUrl
+      // }
     }
   }
 }
