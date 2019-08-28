@@ -11,7 +11,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/agent': {
-          target: 'https://sag.leyaoyao.com',
+          target: 'https://dag.leyaoyao.com',
         // target: 'http://192.168.10.29:8041',
         // target: 'http://192.168.20.20:8041',
         // target: 'http:// jpeb74.natappfree.cc',

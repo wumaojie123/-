@@ -204,6 +204,13 @@ export let constantRouterMap = [
         name: 'agentList',
         meta: { title: '工作号配置' },
         hidden: true
+      },
+      {
+        path: '/officialAccountResult',
+        component: () => import('@/views/officialAccount/officialAccountResult'),
+        name: 'agentList',
+        meta: { title: '工作号配置' },
+        hidden: true
       }
     ]
   },

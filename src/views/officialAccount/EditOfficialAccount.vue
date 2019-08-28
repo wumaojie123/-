@@ -24,17 +24,52 @@
       <span>公众号菜单配置</span>
       <el-switch v-model="value" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
     </p>
+    <!-- 公众号菜单 -->
+    <div v-show="dataInfo.isMenuAuth == 'Y' && dataInfo.menuSuccess =='Y'">
+      <edit-dialog v-show="dialogVisible" :device-type="dataInfo.eType" :app-id="appId" :action-type="actionType" :menu-list="menuList"/>
+    </div>
   </div>
 </template>
 
 <script>
+import editDialog from './component/edit'
+import { res } from './data'
+
 export default {
+  components: {
+    editDialog
+  },
   data() {
     return {
+      queryParams: { appId: '', deviceType: '' },
       deviceType: '',
       type: '',
-      value: true
+      value: true,
+      dialogVisible: true,
+      actionType: 'add',
+      dataInfo: {},
+      menuList: [],
+      appId: '121212121'
     }
+  },
+  created() {
+    this.queryParams = this.$route.query
+    // this.deviceType = this.$route.query.deviceType
+    setTimeout(() => {
+      this.queryData(res)
+    }, 1000)
+  },
+  methods: {
+    queryData(res) {
+      this.dataInfo = res.data
+      this.menuList = []
+      // this.menuList = res.data.menuConfig && res.data.menuConfig.button || []
+    },
+    // 点击对话框的报错按钮
+    handleSaveDialog(data) {
+      this.dialogVisible = false
+    }
+
   }
 }
 </script>

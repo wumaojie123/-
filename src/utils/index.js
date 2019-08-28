@@ -411,3 +411,9 @@ export function stringParse(data = {}) {
   }
   return ''
 }
+
+export function flatten(arr) {
+  return arr.reduce(function(prev, next) {
+    return prev.concat(Array.isArray(next) ? flatten(next) : next)
+  }, [])
+}
