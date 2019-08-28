@@ -7,10 +7,11 @@ export function getDeviceList() {
     method: 'get'
   })
 }
-export function getAuthUrl() {
+export function getAuthUrl(param) {
   return request({
     url: '/rest/officialAccounts/getAuthUrl',
-    method: 'get'
+    method: 'get',
+    params: param
   })
 }
 export function getAllResult() {
@@ -19,9 +20,10 @@ export function getAllResult() {
     method: 'get'
   })
 }
-export function getConfig() {
+export function getConfig(param) {
   return request({
     url: '/rest/charging/wechatThirdConfig/getConfig',
-    method: 'get'
+    method: 'get',
+    params: param
   })
 }

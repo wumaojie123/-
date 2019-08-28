@@ -47,7 +47,7 @@ export default {
       }
     },
     async queryResult() {
-      const res = await getAuthUrl()
+      const res = await getAuthUrl({ eType: 'CDZ' })
       if (res.result === 0) {
         window.location.href = res.data.para
       }
