@@ -29,10 +29,10 @@
       <edit-dialog v-show="value" ref="datepicker" :device-type="dataInfo.eType" :app-id="appId" :action-type="actionType" :menu-list="menuList" @on-OK="update"/>
     </template>
     <div style="margin: 20px 40px 0 80px;">
-      <el-button type="success" @click="updateConfig(true)">公众号菜单预览</el-button>
+      <el-button type="success" @click="handlePreview">公众号菜单预览</el-button>
       <el-button type="primary" @click="updateConfig">保存</el-button>
     </div>
-    <preview v-model="previewVisible"/>
+    <preview v-model="previewVisible" :menu="params.menus"/>
   </div>
 </template>
 
@@ -114,12 +114,12 @@ export default {
       params.menus = data
       this.params = params
     },
+    handlePreview() {
+      this.$refs.datepicker.handleDataInfo()
+      this.previewVisible = true
+    },
     updateConfig(flag = false) {
       this.$refs.datepicker.handleDataInfo()
-      if (flag) {
-        this.previewVisible = true
-        return
-      }
       this.updateConfigAction()
     },
     async updateConfigAction() {
@@ -152,7 +152,7 @@ export default {
       }
       const res = await updateConfig(this.params)
       if (res.result === 0) {
-        this.$message({ message: '更新成功', type: 'success' })
+        this.$message({ message: '公众号配置成功', type: 'success' })
         this.$router.push({ path: 'OfficialAccountDetail', query: { id: this.appId }})
       }
     }

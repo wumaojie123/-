@@ -1,7 +1,7 @@
 <template>
   <div>
     <section v-for="(item, index) in meanListLocal" :key="index" style="font-size: 18px; width: 1000px; margin-top: 60px;border:1px solid #f0f0f0;position:relative;">
-      <div class="title-info">菜单{{ index }}</div>
+      <div class="title-info">菜单{{ index + 1 }}</div>
       <div class="flex-wrap border-bottom" style="">
         <span class="flex-item">菜单类型</span>
         <span class="flex-item">菜单名称</span>
@@ -13,7 +13,7 @@
           <span class="flex-item" style="font-weight: 700;">{{ item.name }}</span>
         </template>
         <template v-else>
-          <span class="flex-item" style="font-weight: 700;">--{{ item.name }}</span>
+          <span class="flex-item" style="font-weight: 700;">{{ item.name }}</span>
           <!-- <span class="flex-item" style="font-weight: 700;">菜单{{ numMap[index] }}</span> -->
         </template>
         <template v-if="actionType !== 'detail'">
@@ -50,7 +50,11 @@
     </el-dialog>
 
     <el-dialog :visible.sync="editParentVisible" title="一级菜单名称编辑" width="35%">
-      <el-input v-model="parentMenuInfo.name" maxlength="6" />
+      <el-form label-width="120px" label-position="right">
+        <el-form-item label="菜单名称" prop="description">
+          <el-input v-model="parentMenuInfo.name" maxlength="6" />
+        </el-form-item>
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="editParentVisible=false">取 消</el-button>
         <el-button type="primary" @click="handelParentMenuName">确定</el-button>

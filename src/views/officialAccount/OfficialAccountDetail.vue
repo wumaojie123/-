@@ -71,6 +71,8 @@ export default {
     async getConfigInfo() {
       const res = await getConfig({ appId: this.appId })
       if (res.result === 0) {
+        this.tempLead1 = res.data.lead
+        this.tempLead2 = res.data.lead
         this.dataInfo = res.data
         this.subscribeMode = (res.data.subscribeMode || 0) + ''
         this.menuList = res.data.menuConfig && res.data.menuConfig.button || []

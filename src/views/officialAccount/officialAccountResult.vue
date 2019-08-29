@@ -3,7 +3,7 @@
     <div class="auth-info">{{ authInfo }}</div>
     <el-button style="width: 200px;" type="primary" @click="handleBack">返回</el-button>
     <div style="margin-top: 40px;">
-      <img src="" style="width: 100px;height: 100px;">
+      <img src="./images/qr-code.png" style="width: 200px;height: 200px;">
       <p style="margin-top: 30px;">如有疑问，请联系客服中心</p>
     </div>
   </div>

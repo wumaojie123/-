@@ -1,21 +1,12 @@
 <template>
-  <el-dialog :visible.sync="value" title="公众号菜单预览" width="35%">
+  <el-dialog :visible.sync="localValue" title="公众号菜单预览" width="35%">
     <div class="preview-wrap">
       <div class="preview-footer">
         <div style="width: 45px;text-align:center;border: 1px solid #f0f0f0;">
           <i class="el-icon-copy-document" style="font-size: 26px;height: 50px;line-height: 50px;" />
         </div>
-        <div class="footer-item">
-          <span >扫码冲抵</span>
-          <span class="item-item">扫码冲抵2</span>
-          <span class="item-item">扫码冲抵3</span>
-        </div>
-        <div class="footer-item">
-          <span>商户管理平台</span>
-          <span>商户管理平台2</span>
-        </div>
-        <div class="footer-item">
-          <span>附近充电桩</span>
+        <div v-for="(item, index) in localMeau" :key="index" class="footer-item">
+          <span v-for="(item, index2) in item" :key="index2" class="item-item">{{ item }}</span>
         </div>
       </div>
     </div>
@@ -34,6 +25,38 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  data() {
+    return {
+      localValue: this.value
+    }
+  },
+  computed: {
+    localMeau() {
+      const arr = []
+      this.menu.forEach(item => {
+        const arr2 = []
+        if (item.sub_button.length > 0) {
+          item.sub_button.map(item2 => {
+            arr2.push(item2.name)
+          })
+          arr2.push(item.name)
+          arr.push(arr2.reverse())
+        } else {
+          arr2.push(item.name)
+          arr.push(arr2)
+        }
+      })
+      return arr
+    }
+  },
+  watch: {
+    value(val) {
+      this.localValue = val
+    },
+    localValue(val) {
+      this.$emit('input', val)
+    }
   }
 }
 </script>
@@ -42,7 +65,7 @@ export default {
 .preview-wrap{
   position: relative;
   width: 375px;
-  height: 600px;
+  height: 450px;
   background: #f0f0f0;
 }
 .preview-footer{

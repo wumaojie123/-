@@ -8,13 +8,13 @@
       </el-form-item>
     </el-form >
     <p class="title" style="margin-top: 100px;">对接后您的公众号可实现以下能力</p>
-    <section class="flex-wrap" style="text-align:center; margin-right: 500px;">
+    <section class="flex-wrap" style="text-align:center;">
       <div v-for="(item, index) in descList" :key="index" class="flex-item">
-        <section style="padding: 20px;">
-          <img style="width: 80px;height: 80px;" src="https://img13.360buyimg.com/n2/s270x270_jfs/t1/43057/24/9377/288999/5d2c262bE701d8781/ed6aee9459f22bd7.jpg">
+        <section style="padding-bottom: 20px;">
+          <img :src="item.url" style="width: 303px;height: 448px;">
         </section>
         <p>{{ item.title }}</p>
-        <p style="text-align:left;padding: 10px;">{{ item.desc }}</p>
+        <p style="text-align:left;padding-top: 20px; color: #888;">{{ item.desc }}</p>
       </div>
     </section>
     <section style="margin-top: 40px; text-align:center; width: 800px;" >
@@ -34,6 +34,9 @@ export default {
       list: [],
       descList: descList
     }
+  },
+  created() {
+    this.queryList()
   },
   methods: {
     async queryList() {

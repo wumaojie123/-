@@ -1,3 +1,7 @@
+import a from './images/1.png'
+import b from './images/2.png'
+import c from './images/3.png'
+import d from './images/4.png'
 export const mapInfo = {
   XYJ: [
     [
@@ -54,22 +58,22 @@ export const mapInfo = {
 
 export const descList = [
   {
-    url: '',
+    url: a,
     title: '沉淀粉丝',
     desc: '引导顾客关注公众号，帮助您沉淀、运营粉丝'
   },
   {
-    url: '',
+    url: b,
     title: '服务消息通知',
     desc: '客户可在公众号接收服务开始、服务结束消息通知，升级服务能力，提升用户体验，增强您的品牌影响力'
   },
   {
-    url: '',
+    url: c,
     title: '服务菜单配置',
     desc: '可配置扫码消费、我的消费订单、附近的设备菜单，同时支持自主插入链接，为顾客提供消费前、消费中、消费后服务，实现用户体验闭环，彰显品牌影响力'
   },
   {
-    url: '',
+    url: d,
     title: '私有化管理平台',
     desc: '可在公众号菜单配置私有化管理后台，实现管理后台品牌化，彰显品牌影响力'
   }
