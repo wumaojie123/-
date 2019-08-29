@@ -1,7 +1,11 @@
 <template>
   <div class="content-area">
     <div class="auth-info">{{ authInfo }}</div>
-    <router-link :to="{ path: '/officialAccount/OfficialAccountDocker'}">返回</router-link>
+    <el-button style="width: 200px;" type="primary" @click="handleBack">返回</el-button>
+    <div style="margin-top: 40px;">
+      <img src="" style="width: 100px;height: 100px;">
+      <p style="margin-top: 30px;">如有疑问，请联系客服中心</p>
+    </div>
   </div>
 </template>
 
@@ -31,7 +35,7 @@ export default {
         this.authCode = item[1]
       }
       if (i === 2) {
-        this.msg = item[1]
+        this.msg = parseInt(item[1], 10)
       }
       if (i === 3) {
         this.isMenuAuth = item[1] === 'Y'
@@ -70,6 +74,32 @@ export default {
         }
       }
     }
+  },
+  methods: {
+    handleBack() {
+      this.$router.push({
+        path: '/officialAccount/OfficialAccountDocker'
+      })
+    }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.content-area{
+  font-size: 14px;
+  width: 600px;
+  text-align: center;
+  .auth-info{
+    color: #fff;
+    background: #409EFF;
+    padding: 20px 0;
+    width: 400px;
+    display: inline-block;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 30px;
+  }
+}
+</style>

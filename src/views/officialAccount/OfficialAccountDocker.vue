@@ -46,14 +46,8 @@ export default {
         })
       }
     },
-    async queryResult() {
-      // const res = await getAuthUrl({ eType: 'CDZ' })
+    queryResult() {
       window.location.href = '/agent/rest/officialAccounts/getAuthUrl?eType=CDZ'
-      // debugger
-      // console.log(res)
-      // if (res.result === 0) {
-      //   // window.location.href = res.data.anthUrl
-      // }
     }
   }
 }

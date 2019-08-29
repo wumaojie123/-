@@ -5,7 +5,7 @@
       <div class="flex-wrap border-bottom" style="">
         <span class="flex-item">菜单类型</span>
         <span class="flex-item">菜单名称</span>
-        <span class="flex-item">操作</span>
+        <span v-if="actionType !== 'detail'" class="flex-item">操作</span>
       </div>
       <section class="flex-wrap border-bottom">
         <span class="flex-item">一级菜单</span>
@@ -79,7 +79,7 @@
             <el-input v-model="menuInfo.name" placeholder="请输入菜单名称" class="input-300" maxlength="6" />
           </el-form-item>
           <el-form-item label="菜单链接" prop="price">
-            <el-input v-model="menuInfo.url" :rows="4" placeholder="请输入以https://为开头的菜单链接" type="textarea" class="input-300" clearable />
+            <el-input v-model="menuInfo.url" :rows="4" placeholder="请输入以https://为开头的菜单链接" type="textarea" class="input-300" clearable maxlength="100"/>
           </el-form-item>
         </el-form>
       </div>
@@ -224,7 +224,7 @@ export default {
 
       // 二级菜单最多为5个
       if (this.meanListLocal[index].sub_button.length >= 5 && type === 'add') {
-        this.$toast('二级菜单最多添加5个')
+        this.$message({ message: '二级菜单最多添加5个', type: 'error' })
         return
       }
 

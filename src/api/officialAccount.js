@@ -27,3 +27,10 @@ export function getConfig(param) {
     params: param
   })
 }
+export function updateConfig(data) {
+  return request({
+    url: '/rest/charging/wechatThirdConfig/updateConfig',
+    method: 'post',
+    data
+  })
+}

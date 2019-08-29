@@ -1,18 +1,18 @@
 <template>
   <div class="official-account-edit" style="margin: 20px;">
     <p class="title">关注公众号方式</p>
-    <el-radio v-model="type" label="1">
-      <span class="">支付后引导关注<span class="">（顾客扫码支付后页面会引导顾客关注公众号)</span></span>
+    <el-radio v-if="subscribeMode ==='0'" v-model="subscribeMode" label="0">
+      <span>支付后引导关注<span style="color: #888;">（顾客扫码支付后页面会引导顾客关注公众号)</span></span>
       <div class="radio-wrap">
         <span class="title-desc">引导关注语</span>
-        <el-input placeholder="关注公众号，可接收充电消息通知" class="input-300" maxlength="64"/>
+        <el-input v-model="tempLead1" placeholder="关注公众号，可接收充电消息通知" class="input-500" maxlength="30" readonly/>
       </div>
     </el-radio><br>
-    <el-radio v-model="type" label="2">
-      <span class="">先关注后支付<span class="">（顾客扫码必须先关注公众号才可进行消费）</span></span>
+    <el-radio v-if="subscribeMode ==='1'" v-model="subscribeMode" label="1">
+      <span>先关注后支付<span style="color: #888;">（顾客扫码必须先关注公众号才可进行消费）</span></span>
       <div class="radio-wrap">
         <span class="title-desc">引导关注语</span>
-        <el-input placeholder="请先关注后使用" class="input-300" maxlength="64"/>
+        <el-input v-model="tempLead2" placeholder="请先关注后使用" class="input-500" maxlength="30" readonly/>
       </div>
     </el-radio>
     <template v-if="!allVisible">
@@ -49,6 +49,8 @@ export default {
   data() {
     return {
       dataInfo: {},
+      tempLead1: '关注公众号，可接收充电消息通知',
+      tempLead2: '请先关注后使用',
       appId: '',
       value: true,
       configValue: true,
@@ -70,7 +72,7 @@ export default {
       const res = await getConfig({ appId: this.appId })
       if (res.result === 0) {
         this.dataInfo = res.data
-        this.subscribeMode = res.data.subscribeMode || 0
+        this.subscribeMode = (res.data.subscribeMode || 0) + ''
         this.menuList = res.data.menuConfig && res.data.menuConfig.button || []
         this.allVisible = (res.data.isMenuAuth === 'N' && res.data.isTemplateAuth === 'N') ||
             ((res.data.isMenuAuth === 'Y' && res.data.menuSuccess === 'N') && res.data.isTemplateAuth === 'Y' && res.data.templateSuccess === 'N')

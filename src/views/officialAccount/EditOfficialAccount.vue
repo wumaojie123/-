@@ -1,47 +1,56 @@
 <template>
   <div class="official-account-edit" style="margin: 20px;">
     <p class="title">关注公众号方式</p>
-    <el-radio v-model="type" label="1">
-      <span class="">支付后引导关注<span class="">（顾客扫码支付后页面会引导顾客关注公众号)</span></span>
+    <el-radio v-model="subscribeMode" label="0">
+      <span>支付后引导关注<span style="color: #888;">（顾客扫码支付后页面会引导顾客关注公众号)</span></span>
       <div class="radio-wrap">
         <span class="title-desc">引导关注语</span>
-        <el-input placeholder="关注公众号，可接收充电消息通知" class="input-300" maxlength="64"/>
+        <el-input v-model="tempLead1" placeholder="关注公众号，可接收充电消息通知" class="input-500" maxlength="30"/>
       </div>
     </el-radio><br>
-    <el-radio v-model="type" label="2">
-      <span class="">先关注后支付<span class="">（顾客扫码必须先关注公众号才可进行消费）</span></span>
+    <el-radio v-model="subscribeMode" label="1">
+      <span>先关注后支付<span style="color: #888;">（顾客扫码必须先关注公众号才可进行消费）</span></span>
       <div class="radio-wrap">
         <span class="title-desc">引导关注语</span>
-        <el-input placeholder="请先关注后使用" class="input-300" maxlength="64"/>
+        <el-input v-model="tempLead2" placeholder="请先关注后使用" class="input-500" maxlength="30"/>
       </div>
     </el-radio>
     <p class="title" style="margin-top: 20px;">
       <span>服务消息通知</span>
-      <el-switch v-model="configValue" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
+      <el-switch v-model="configValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
     </p>
-    <div>客户扫码消费后可在公众号接收服务开始、服务结束消息通知，查看充电桩示例>；</div>
+    <div>客户扫码消费后可在公众号接收服务开始、服务结束消息通知，查看充电桩示例></div>
     <p class="title" style="margin-top: 20px;">
       <span>公众号菜单配置</span>
       <el-switch v-model="value" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
     </p>
     <!-- 公众号菜单 -->
-    <div v-show="dataInfo.isMenuAuth == 'Y' && dataInfo.menuSuccess =='Y'">
-      <edit-dialog v-show="dialogVisible" :device-type="dataInfo.eType" :app-id="appId" :action-type="actionType" :menu-list="menuList"/>
+    <template v-show="dataInfo.isMenuAuth === 'Y'">
+      <edit-dialog v-show="value" ref="datepicker" :device-type="dataInfo.eType" :app-id="appId" :action-type="actionType" :menu-list="menuList" @on-OK="update"/>
+    </template>
+    <div style="margin: 20px 40px 0 80px;">
+      <el-button type="success" @click="updateConfig(true)">公众号菜单预览</el-button>
+      <el-button type="primary" @click="updateConfig">保存</el-button>
     </div>
+    <preview v-model="previewVisible"/>
   </div>
 </template>
 
 <script>
 import editDialog from './component/edit'
-// import { res } from './data'
-import { getConfig } from '@/api/officialAccount'
+import preview from './component/preview'
+import { getConfig, updateConfig } from '@/api/officialAccount'
 
 export default {
   components: {
-    editDialog
+    editDialog,
+    preview
   },
   data() {
     return {
+      tempLead1: '关注公众号，可接收充电消息通知',
+      tempLead2: '请先关注后使用',
+      previewVisible: false,
       dataInfo: {},
       appId: '',
       value: true,
@@ -65,13 +74,13 @@ export default {
   },
   methods: {
     /**
-       * 查询公众号主体信息
-       */
+     * 查询公众号主体信息
+     */
     async getConfigInfo() {
       const res = await getConfig({ appId: this.appId })
       if (res.result === 0) {
         this.dataInfo = res.data
-        this.subscribeMode = res.data.subscribeMode
+        this.subscribeMode = res.data.subscribeMode + ''
         this.menuList = res.data.menuConfig && res.data.menuConfig.button || []
         this.configValue = res.data.templateSuccess === 'Y' && res.data.isTemplateAuth === 'Y'
         this.value = res.data.menuSuccess === 'Y' && res.data.isMenuAuth === 'Y'
@@ -105,27 +114,33 @@ export default {
       params.menus = data
       this.params = params
     },
-    updateConfig() {
+    updateConfig(flag = false) {
       this.$refs.datepicker.handleDataInfo()
+      if (flag) {
+        this.previewVisible = true
+        return
+      }
       this.updateConfigAction()
     },
     async updateConfigAction() {
-      // this.publicTypeVisible = true
       const result = this.params.menus.some(item => {
         if (item.sub_button.length > 0) {
           if (item.name.length >= 6) {
-            console.log(item.name)
             return true
           }
         }
       })
-      console.log('result:', result)
       if (result) {
-        this.$toast('多个子菜单，一级菜单名称不能超过5个汉字')
+        this.$message({ message: '二级菜单超过一个，一级菜单名称不能超过5个汉字', type: 'error' })
         return
       }
       // 关注公众号方式
       this.params.subscribeMode = this.subscribeMode
+      if (this.subscribeMode === '0') {
+        this.params.lead = this.tempLead1
+      } else {
+        this.params.lead = this.tempLead2
+      }
       // 更新数据
       if (this.industry === this.dataInfo.primaryIndustrySecond) {
         this.params.industryId1 = this.dataInfo.forceIndustryCode
@@ -135,11 +150,10 @@ export default {
         this.params.industryId1 = this.dataInfo.primaryIndustryCode
         this.params.industryId2 = this.dataInfo.forceIndustryCode
       }
-      console.log(JSON.stringify(this.params.menus))
-      const res = await getConfig(this.params)
+      const res = await updateConfig(this.params)
       if (res.result === 0) {
-        this.$toast('更新成功')
-        this.$router.push({ path: 'publicSuccess', query: { id: this.appId }})
+        this.$message({ message: '更新成功', type: 'success' })
+        this.$router.push({ path: 'OfficialAccountDetail', query: { id: this.appId }})
       }
     }
   }
@@ -164,5 +178,7 @@ export default {
     margin-right: 20px;
   }
 }
-
+.input-500{
+  width: 500px;
+}
 </style>
