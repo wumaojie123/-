@@ -11,13 +11,15 @@
 
     <div style="margin-top: 20px;">
       <el-button @click="handleCancel">取消</el-button>
-      <el-button type="primary" @click="handleUnbind">确定解绑</el-button>
+      <el-button type="primary" @click="handleUnbindBefore">确定解绑</el-button>
     </div>
+    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="handleUnbind"/>
   </div>
 </template>
 
 <script>
 import { unbundling } from '@/api/device'
+import verfyCode from './component/verfyCode'
 const mapInfo = {
   1: '更换4G版本',
   2: '频繁离线',
@@ -30,6 +32,9 @@ const mapInfo = {
   9: '测试设备'
 }
 export default {
+  components: {
+    verfyCode
+  },
   data() {
     return {
       list: mapInfo,
@@ -38,20 +43,28 @@ export default {
       equipmentType: '',
       checkList: [],
       eqValue: '',
-      disable: false
+      disable: false,
+      verfyCodeVisible: false,
+      phoneNumber: '',
+      name: ''
     }
   },
   created() {
     this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.eqValue = this.$route.query.value
     this.equipmentType = this.$route.query.equipmentType
+    this.phoneNumber = this.$route.query.phoneNumber
+    this.name = this.$route.query.name
   },
   methods: {
-    async handleUnbind() {
+    handleUnbindBefore() {
       if (this.others === '' && this.checkList.length === 0) {
         this.$message({ message: '请选择或输入解绑原因', type: 'error' })
         return
       }
+      this.verfyCodeVisible = true
+    },
+    async handleUnbind() {
       if (this.disable) {
         return
       }
@@ -71,6 +84,7 @@ export default {
       const res = await unbundling(params)
       this.disable = false
       if (res.result === 0) {
+        this.verfyCodeVisible = false
         this.$message({ message: '设备解绑成功', type: 'success' })
         window.history.go(-1)
       } else {

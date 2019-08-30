@@ -159,7 +159,7 @@ export default {
           }
           this.$router.push({ path: '/deviceServiceEdit', query: { lyyEquipmentId: this.selectItems[0].lyyEquipmentId, equipmentType: this.queryParams.equipmentType, communication: this.selectItems[0].communication }})
         } else if (type === 3) {
-          this.$router.push({ path: '/unregister', query: { lyyEquipmentId: this.selectItems[0].lyyEquipmentId, value: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType }})
+          this.$router.push({ path: '/unregister', query: { lyyEquipmentId: this.selectItems[0].lyyEquipmentId, value: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType, name: data.distributor, phoneNumber: data.account }})
         }
       } else if (this.selectItems.length > 1) {
         this.$message({ message: '请选择设备', type: 'error' })

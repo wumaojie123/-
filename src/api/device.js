@@ -187,6 +187,20 @@ export function szNewEquipment(data) {
     params: data
   })
 }
+export function verifyCode(data) {
+  return request({
+    url: '/userlogin/merchant/verifyCode',
+    method: 'get',
+    params: data
+  })
+}
+export function validate(data) {
+  return request({
+    url: '/userlogin/password/verifyCode/validate',
+    method: 'post',
+    data
+  })
+}
 
 export function setEquipment(data) {
   const url = `/rest/setting/setEquipment${stringParse(data)}`
