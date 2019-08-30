@@ -26,7 +26,7 @@
 
 <script>
 import { descList, deviceMap } from './constant'
-import { getAllResult } from '@/api/officialAccount'
+import { authTypes } from '@/api/officialAccount'
 export default {
   data() {
     return {
@@ -40,9 +40,9 @@ export default {
   },
   methods: {
     async queryList() {
-      const res = await getAllResult()
+      const res = await authTypes()
       if (res.result === 0) {
-        const list = res.data
+        const list = res.data || []
         this.list = list.map(item => {
           item.deviceName = deviceMap[item.name]
           return item

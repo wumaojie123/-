@@ -34,3 +34,9 @@ export function updateConfig(data) {
     data
   })
 }
+export function authTypes() {
+  return request({
+    url: '/rest/charging/wechatThirdConfig/authTypes',
+    method: 'get'
+  })
+}

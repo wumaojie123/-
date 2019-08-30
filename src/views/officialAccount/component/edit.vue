@@ -150,7 +150,11 @@ export default {
       list = flatten(list)
       list = list.map(item => {
         item.checked = false
-        item.url = `${item.url}?appId=${this.appId}&ut=2`
+        if (item.url === 'https://b.leyaoyao.com/group/index.html') {
+          item.url = item.url
+        } else {
+          item.url = `${item.url}?appId=${this.appId}&ut=2`
+        }
         return item
       })
       this.mapInfoList = list

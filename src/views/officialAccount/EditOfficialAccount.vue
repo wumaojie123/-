@@ -81,6 +81,11 @@ export default {
       if (res.result === 0) {
         this.dataInfo = res.data
         this.subscribeMode = res.data.subscribeMode + ''
+        if (this.subscribeMode === '0') {
+          this.tempLead1 = res.data.lead
+        } else if (this.subscribeMode === '1') {
+          this.tempLead2 = res.data.lead
+        }
         this.menuList = res.data.menuConfig && res.data.menuConfig.button || []
         this.configValue = res.data.templateSuccess === 'Y' && res.data.isTemplateAuth === 'Y'
         this.value = res.data.menuSuccess === 'Y' && res.data.isMenuAuth === 'Y'
@@ -101,6 +106,7 @@ export default {
        * 跟新配置信息
        */
     update(data) {
+      console.log('data')
       const params = {
         appId: this.appId
       }
@@ -115,12 +121,18 @@ export default {
       this.params = params
     },
     handlePreview() {
+      if (!this.value) {
+        this.$message({ message: '公众号菜单未开启', type: 'success' })
+        return
+      }
       this.$refs.datepicker.handleDataInfo()
       this.previewVisible = true
     },
     updateConfig(flag = false) {
       this.$refs.datepicker.handleDataInfo()
-      this.updateConfigAction()
+      this.$nextTick(() => {
+        this.updateConfigAction()
+      })
     },
     async updateConfigAction() {
       const result = this.params.menus.some(item => {
@@ -134,6 +146,7 @@ export default {
         this.$message({ message: '二级菜单超过一个，一级菜单名称不能超过5个汉字', type: 'error' })
         return
       }
+      console.log(JSON.stringify(this.params))
       // 关注公众号方式
       this.params.subscribeMode = this.subscribeMode
       if (this.subscribeMode === '0') {
@@ -150,6 +163,7 @@ export default {
         this.params.industryId1 = this.dataInfo.primaryIndustryCode
         this.params.industryId2 = this.dataInfo.forceIndustryCode
       }
+      console.log(this.params.type)
       const res = await updateConfig(this.params)
       if (res.result === 0) {
         this.$message({ message: '公众号配置成功', type: 'success' })
