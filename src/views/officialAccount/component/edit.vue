@@ -34,7 +34,7 @@
       </section>
     </section>
 
-    <el-dialog :visible.sync="editVisible" title="菜单编辑" width="35%">
+    <el-dialog :visible.sync="editVisible" title="菜单编辑" width="45%">
       <el-form :model="menuInfo" :rules="baseInfoRules" label-width="120px" label-position="right" style="margin-top: 20px;" >
         <el-form-item label="菜单名称" prop="description">
           <el-input v-model="menuInfo.name" placeholder="请输入菜单名称" class="input-300" maxlength="6" />
@@ -49,7 +49,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="editParentVisible" title="一级菜单名称编辑" width="35%">
+    <el-dialog :visible.sync="editParentVisible" title="一级菜单名称编辑" width="45%">
       <el-form label-width="120px" label-position="right">
         <el-form-item label="菜单名称" prop="description">
           <el-input v-model="parentMenuInfo.name" maxlength="6" />
@@ -78,7 +78,7 @@
           <section class="desc-title">自定义菜单</section>
           <section class="desc-content">商家可配置菜单名称和菜单跳转链接。</section>
         </section>
-        <el-form ref="baseInfoRules" :model="menuInfo" :rules="baseInfoRules" label-width="120px" label-position="right" style="margin-top: 20px;" >
+        <el-form ref="baseInfoRules" :class="{'is-block': selfMenu}" :model="menuInfo" :rules="baseInfoRules" label-width="120px" label-position="right" style="margin-top: 20px;display:none;" >
           <el-form-item label="菜单名称" prop="description">
             <el-input v-model="menuInfo.name" placeholder="请输入菜单名称" class="input-300" maxlength="6" />
           </el-form-item>
@@ -272,8 +272,14 @@ export default {
       }
       const result = this.meanListLocal[this.modifyMeauIndex.parentIndex].sub_button.some(item => item.name === this.menuInfo.name || item.url.indexOf(this.menuInfo.url) > -1)
       if (result) {
-        this.$message({ message: '二级菜单已添加，访问链接和菜单名称均不可重复', type: 'error' })
+        this.$message({ message: '该菜单已添加，请勿重复添加菜单', type: 'error' })
         return
+      }
+      if (this.selfMenu) {
+        if (this.menuInfo.url.indexOf('https://') === 0) {
+          this.$message({ message: '请输入以https://为开头的自定义菜单链接', type: 'error' })
+          return
+        }
       }
       this.meanListLocal[this.modifyMeauIndex.parentIndex].sub_button.push(this.menuInfo)
       this.visible = false
@@ -388,6 +394,9 @@ export default {
         color: #CCC;
       }
     }
+  }
+  .is-block{
+    display: block !important;
   }
 
   .border-bottom {

@@ -58,7 +58,7 @@ export default {
       }
     },
     handleNewAuth(item) {
-      window.location.href = `/agent/rest/officialAccounts/getAuthUrl?eType=${item.equipmentType}`
+      window.location.href = `/agent/rest/officialAccounts/againAuthUrl?eType=${item.equipmentType}`
     },
     handleConfig(item) {
       this.$router.push({
