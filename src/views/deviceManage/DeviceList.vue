@@ -448,8 +448,9 @@ export default {
         return
       }
       if (type === 'disable') {
-        this.$confirm('禁用设备后，用户将无法付款启动该设备。你可以通过“解除禁用”来恢复使用。\n 确定要禁用设备吗？', '温馨提示', {
+        this.$confirm('<p>禁用设备后，用户将无法付款启动该设备。你可以通过“解除禁用”来恢复使用。确定要禁用设备吗？</p><p class="tips" style="color: red;">（注意：“禁用设备 / 解除禁用”功能，目前只适用于  按摩椅、足疗机、按摩垫、洗衣机、充电桩、扭蛋机）</p>', '温馨提示', {
           distinguishCancelAndClose: true,
+          dangerouslyUseHTMLString: true,
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         })
