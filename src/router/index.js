@@ -213,6 +213,13 @@ export let constantRouterMap = [
         hidden: true
       },
       {
+        path: '/OfficialAccountError',
+        component: () => import('@/views/officialAccount/OfficialAccountError'),
+        name: 'OfficialAccountError',
+        meta: { title: '公众号授权结果' },
+        hidden: true
+      },
+      {
         path: '/OfficialAccountDetail',
         component: () => import('@/views/officialAccount/OfficialAccountDetail'),
         name: 'OfficialAccountDetail',
