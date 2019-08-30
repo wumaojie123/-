@@ -9,7 +9,7 @@
       <el-table-column align="center" label="操作" >
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="handleSelectionChange(scope.row)">编辑</el-button>
-          <el-button type="text" size="small" @click="delService(scope.row)">删除</el-button>
+          <el-button type="text" size="small" @click="delServiceBefore(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,18 +41,23 @@
         </template>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleSave">保存并使用</el-button>
+        <el-button @click="dialogFormVisible = false;verfyCodeVisible=false;">取 消</el-button>
+        <el-button type="primary" @click="handleSaveBefore">保存并使用</el-button>
       </div>
     </el-dialog>
+    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="handleCheck"/>
   </div>
 </template>
 
 <script>
 import { saveEquipmentService, groupServiceList, dateleEquipmentService, updateEquipmentService, batchRegisteredEquipment } from '@/api/device'
 import { priceCheck, serviceTimeCheck, conisCheck } from '@/utils/rules'
+import verfyCode from './component/verfyCode'
 
 export default {
+  components: {
+    verfyCode
+  },
   data() {
     return {
       lyyDistributorId: '',
@@ -76,12 +81,19 @@ export default {
         price: [{ required: true, validator: priceCheck, trigger: 'blur' }]
       },
       type: '',
-      communication: ''
+      communication: '',
+      verfyCodeVisible: false,
+      phoneNumber: '',
+      name: '',
+      actionType: '',
+      handleItemData: {}
     }
   },
   created() {
     this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.communication = this.$route.query.communication
+    this.phoneNumber = this.$route.query.phoneNumber
+    this.name = this.$route.query.name
     /* eslint-disable-next-line */
     if (this.communication == 2) {
       this.colums = [
@@ -113,14 +125,32 @@ export default {
       }
     },
     handleSelectionChange(value) {
+      this.actionType = 'add'
+      this.verfyCodeVisible = false
       this.type = 'modify'
       this.modalData = value
       this.dialogFormVisible = true
     },
     handleSaveModal() {
       this.type = 'add'
+      this.actionType = 'add'
       this.dialogFormVisible = true
       this.modalData = { description: '', price: '', coins: '', serviceTime: '' }
+    },
+    handleSaveBefore() {
+      this.$refs['baseInfoRules'].validate(async(valid) => {
+        if (valid) {
+          this.verfyCodeVisible = true
+        }
+      })
+    },
+    handleCheck() {
+      if (this.actionType === 'add') {
+        this.handleSave()
+      } else {
+        this.verfyCodeVisible = false
+        this.delService()
+      }
     },
     handleSave() {
       this.$refs['baseInfoRules'].validate(async(valid) => {
@@ -140,6 +170,7 @@ export default {
             params.lyyEquipmentId = this.lyyEquipmentId
             const res = await saveEquipmentService(params)
             if (res.result === 0) {
+              this.verfyCodeVisible = false
               this.$message({ message: '添加服务套餐成功', type: 'success' })
               this.queryList(1)
               this.dialogFormVisible = false
@@ -151,6 +182,7 @@ export default {
             params.lyyEquipmentId = this.lyyEquipmentId
             const res = await updateEquipmentService(params)
             if (res.result === 0) {
+              this.verfyCodeVisible = false
               this.$message({ message: '更新服务套餐成功', type: 'success' })
               this.queryList(1)
               this.dialogFormVisible = false
@@ -177,10 +209,15 @@ export default {
         this.$message({ message: '请至少选择一个服务套餐', type: 'error' })
       }
     },
+    delServiceBefore(item) {
+      this.verfyCodeVisible = true
+      this.actionType = 'del'
+      this.handleItemData = item
+    },
     // 删除服务套餐
-    delService(item) {
+    delService() {
       this.$confirm('确定要删除该服务套餐吗？', '删除服务套餐').then(async() => {
-        const res = await dateleEquipmentService({ lyyGroupServiceId: item.lyyGroupServiceId })
+        const res = await dateleEquipmentService({ lyyGroupServiceId: this.handleItemData.lyyGroupServiceId })
         if (res.result === 0) {
           this.$message({ message: '删除套餐成功', type: 'success' })
           this.queryList(1)

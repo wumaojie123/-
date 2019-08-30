@@ -157,7 +157,7 @@ export default {
             this.$message({ message: '设备离线', type: 'error' })
             return
           }
-          this.$router.push({ path: '/deviceServiceEdit', query: { lyyEquipmentId: this.selectItems[0].lyyEquipmentId, equipmentType: this.queryParams.equipmentType, communication: this.selectItems[0].communication }})
+          this.$router.push({ path: '/deviceServiceEdit', query: { lyyEquipmentId: this.selectItems[0].lyyEquipmentId, equipmentType: this.queryParams.equipmentType, communication: this.selectItems[0].communication, name: data.distributor, phoneNumber: data.account }})
         } else if (type === 3) {
           this.$router.push({ path: '/unregister', query: { lyyEquipmentId: this.selectItems[0].lyyEquipmentId, value: this.selectItems[0].value, equipmentType: this.queryParams.equipmentType, name: data.distributor, phoneNumber: data.account }})
         }

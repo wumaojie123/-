@@ -26,7 +26,7 @@
     <div style="text-align:center;">
       <div style="color: red;margin-bottom: 20px;">注：设备注册成功后，设备绑定在商家的默认场地下。</div>
       <el-button @click="handleCancel">取消</el-button>
-      <el-button style="margin-left: 20px;" type="primary" @click="handleBatchSaveBefore">完成</el-button>
+      <el-button style="margin-left: 20px;" type="primary" @click="handleBatchSave">完成</el-button>
     </div>
     <!--  -->
     <el-dialog :visible.sync="dialogFormVisible" title="编辑套餐服务" width="35%">
