@@ -285,7 +285,7 @@ export default {
         return
       }
       if (this.selfMenu) {
-        if (this.menuInfo.url.indexOf('https://') === 0) {
+        if (this.menuInfo.url.indexOf('https://') !== 0) {
           this.$message({ message: '请输入以https://为开头的自定义菜单链接', type: 'error' })
           return
         }
