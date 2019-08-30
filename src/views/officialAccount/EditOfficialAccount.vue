@@ -167,7 +167,7 @@ export default {
       const res = await updateConfig(this.params)
       if (res.result === 0) {
         this.$message({ message: '公众号配置成功', type: 'success' })
-        this.$router.push({ path: 'OfficialAccountDetail', query: { id: this.appId }})
+        this.$router.push({ path: 'OfficialAccountDetail', query: { appId: this.appId }})
       }
     }
   }

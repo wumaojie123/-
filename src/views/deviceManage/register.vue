@@ -26,7 +26,7 @@
     <div style="text-align:center;">
       <div style="color: red;margin-bottom: 20px;">注：设备注册成功后，设备绑定在商家的默认场地下。</div>
       <el-button @click="handleCancel">取消</el-button>
-      <el-button style="margin-left: 20px;" type="primary" @click="handleBatchSave">完成</el-button>
+      <el-button style="margin-left: 20px;" type="primary" @click="handleBatchSaveBefore">完成</el-button>
     </div>
     <!--  -->
     <el-dialog :visible.sync="dialogFormVisible" title="编辑套餐服务" width="35%">
@@ -51,6 +51,7 @@
         <el-button type="primary" @click="handleSave">保存并使用</el-button>
       </div>
     </el-dialog>
+    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="handleBatchSave"/>
   </div>
 </template>
 
@@ -58,8 +59,12 @@
 import { agentGroupServiceList, batchRegisteredEquipment, merchants } from '@/api/device'
 import { priceCheck, serviceTimeCheck, conisCheck } from '@/utils/rules'
 import { deviceMapInfo, communicationMap } from './constant'
+import verfyCode from './component/verfyCode'
 
 export default {
+  components: {
+    verfyCode
+  },
   filters: {
     deviceFilter(val) {
       return deviceMapInfo[val]
@@ -92,20 +97,24 @@ export default {
         coins: [{ required: true, validator: conisCheck, trigger: 'blur' }],
         price: [{ required: true, validator: priceCheck, trigger: 'blur' }]
       },
-      clickDisabled: false
+      clickDisabled: false,
+      verfyCodeVisible: false,
+      phoneNumber: '',
+      name: ''
     }
   },
   created() {
     this.deviceType = this.$route.query.deviceType
     this.equipmentArr = this.$route.query.equipmentArr
     this.communication = this.$route.query.communication
+    this.phoneNumber = this.$route.query.phoneNumber
+    this.name = this.$route.query.name
     /* eslint-disable-next-line */
     if (this.communication == 2) {
       this.colums = [
         { key: 'description', label: '套餐名称' },
         { key: 'price', label: '价格(元)' },
         { key: 'serviceTime', label: '时长(分钟)' }
-        // { key: 'coins', label: '模拟投币数' }
       ]
     }
     this.queryList()
@@ -141,7 +150,6 @@ export default {
           return item
         })
         this.merchantList = list
-        console.log(JSON.stringify(this.merchantList))
       }
     },
     handleSelectionChange(value) {
@@ -193,7 +201,7 @@ export default {
         return false
       }
     },
-    async handleBatchSave() {
+    handleBatchSaveBefore() {
       if (this.selectList.length === 0) {
         this.$message({ message: '请至少选择一个服务套餐', type: 'error' })
         return
@@ -206,6 +214,13 @@ export default {
         this.$message({ message: '服务套餐不可重复', type: 'error' })
         return
       }
+      const selectInfo = this.merchantList.filter(item => item.adOrgId === this.lyyDistributorId)[0]
+      console.log(selectInfo)
+      this.phoneNumber = selectInfo.account
+      this.name = selectInfo.name
+      this.verfyCodeVisible = true
+    },
+    async handleBatchSave() {
       if (this.clickDisabled) {
         return
       }
@@ -223,6 +238,7 @@ export default {
       setTimeout(() => { this.clickDisabled = false }, 3000)
       const res = await batchRegisteredEquipment(params)
       if (res.result === 0) {
+        this.verfyCodeVisible = false
         this.$message({ message: '设备注册记录可查看设备注册进度', type: 'success' })
         this.handleCancel()
       } else {

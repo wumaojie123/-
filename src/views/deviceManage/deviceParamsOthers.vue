@@ -17,25 +17,35 @@
     </el-form>
     <div style="text-align:left;margin-top:80px;">
       <el-button @click="query">重新加载</el-button>
-      <el-button style="margin-left: 100px;" type="primary" @click="saveNewEquipment">保存设置</el-button>
+      <el-button style="margin-left: 100px;" type="primary" @click="saveNewEquipmentBefore">保存设置</el-button>
     </div>
+    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="saveNewEquipment"/>
   </div>
 </template>
 
 <script>
 import { cxNewEquipment, readNewEquipment, szNewEquipment } from '@/api/device'
+import verfyCode from './component/verfyCode'
 
 export default {
   name: 'DBJ',
+  components: {
+    verfyCode
+  },
   data() {
     return {
       params: {},
       dataInfo: {},
-      saveData: { pulseWidth: '', pulseInterval: '', battery: '' }
+      saveData: { pulseWidth: '', pulseInterval: '', battery: '' },
+      verfyCodeVisible: false,
+      phoneNumber: '',
+      name: ''
     }
   },
   created() {
     this.params = this.$route.query
+    this.phoneNumber = this.$route.query.phoneNumber
+    this.name = this.$route.query.name
     this.query()
   },
   methods: {
@@ -64,6 +74,17 @@ export default {
         this.saveData.battery = this.dataInfo.battery
       }
     },
+    saveNewEquipmentBefore() {
+      if (this.saveData.pulseWidth < 10 || this.saveData.pulseWidth > 1000) {
+        this.$message({ message: '脉冲宽度为10~1000整数', type: 'error' })
+        return
+      }
+      if (this.saveData.pulseInterval < 10 || this.saveData.pulseInterval > 1000) {
+        this.$message({ message: '"脉冲间隔为10~1000整数', type: 'error' })
+        return
+      }
+      this.verfyCodeVisible = true
+    },
     async saveNewEquipment() {
       if (this.saveData.pulseWidth < 10 || this.saveData.pulseWidth > 1000) {
         this.$message({ message: '脉冲宽度为10~1000整数', type: 'error' })
@@ -88,6 +109,7 @@ export default {
       }
       const res = await szNewEquipment(params)
       if (res.result === 1) {
+        this.verfyCodeVisible = false
         this.$message({ message: '设置成功', type: 'success' })
         setTimeout(() => {
           this.query()

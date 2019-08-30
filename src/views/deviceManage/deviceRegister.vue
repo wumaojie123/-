@@ -137,13 +137,13 @@ export default {
             return
           }
           if (this.selectItems[0].isLyyOpen === 1) {
-            this.$router.push({ path: '/deviceParamsLyyOpen', query: { uniqueCode: data.uniqueCode }})
+            this.$router.push({ path: '/deviceParamsLyyOpen', query: { uniqueCode: data.uniqueCode, name: data.distributor, phoneNumber: data.account }})
             return
           }
           if (this.selectItems[0].interfaceFlag) {
-            this.$router.push({ path: '/deviceParamsTy', query: { uniqueCode: data.uniqueCode, loginFlag: data.loginFlag }})
+            this.$router.push({ path: '/deviceParamsTy', query: { uniqueCode: data.uniqueCode, loginFlag: data.loginFlag, name: data.distributor, phoneNumber: data.account }})
           } else {
-            const query = { value: data.value, typeValue: data.equipmentType, equipmentTypeName: data.equipmentTypeName }
+            const query = { value: data.value, typeValue: data.equipmentType, equipmentTypeName: data.equipmentTypeName, name: data.distributor, phoneNumber: data.account }
             if (data.loginFlag === 5 || data.loginFlag === 7 || data.loginFlag === 14 || data.loginFlag === 16) {
               this.$router.push({ path: '/deviceParamsDBJ', query: query })
             } else if (/^(AMY)|(AMD)|(ZLJ)|(XYJ)|(CDZ)$/.test(data.equipmentType)) {

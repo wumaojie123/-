@@ -29,16 +29,21 @@
     </el-form>
     <div style="text-align:left;margin-top:80px;">
       <el-button v-if="!disabled" style="margin-left: 20px;" @click="query2()">刷新套餐信息</el-button>
-      <el-button v-if="!disabled" style="margin-left: 20px;" type="primary" @click="handleSave">保存设置</el-button>
+      <el-button v-if="!disabled" style="margin-left: 20px;" type="primary" @click="handleSaveBefore">保存设置</el-button>
     </div>
+    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="handleSave"/>
   </div>
 </template>
 
 <script>
 import { query, configList } from '@/api/device'
+import verfyCode from './component/verfyCode'
 
 export default {
   name: 'ParamC',
+  components: {
+    verfyCode
+  },
   data() {
     return {
       dataList: [],
@@ -47,7 +52,10 @@ export default {
       uniqueCode: '',
       disabled: false,
       cmd: '',
-      count: 5
+      count: 5,
+      verfyCodeVisible: false,
+      phoneNumber: '',
+      name: ''
     }
   },
   watch: {
@@ -61,6 +69,8 @@ export default {
   },
   created() {
     this.uniqueCode = this.$route.query.uniqueCode
+    this.phoneNumber = this.$route.query.phoneNumber
+    this.name = this.$route.query.name
     this.query()
   },
   methods: {
@@ -138,6 +148,19 @@ export default {
       }
       this.dataList = list
     },
+    handleSaveBefore() {
+      for (const key in this.dataList) {
+        if (this.dataList[key].componentType === 'inputInt' || this.dataList[key].componentType === 'inputFloat') {
+          const check = this.dataList[key].componentValueRange
+          if (this.dataList[key].componentValue < parseFloat(check.min) || this.dataList[key].componentValue > parseFloat(check.max)) {
+            console.log(this.dataList[key].componentValue, check.min, check.max)
+            this.$message({ message: `${this.dataList[key].name}超出取值范围`, type: 'error' })
+            return
+          }
+        }
+      }
+      this.verfyCodeVisible = true
+    },
     async handleSave() {
       for (const key in this.dataList) {
         if (this.dataList[key].componentType === 'inputInt' || this.dataList[key].componentType === 'inputFloat') {
@@ -166,6 +189,7 @@ export default {
       }
       const res = await query(postData)
       if (res.result === 1) {
+        this.verfyCodeVisible = false
         this.$message({ message: '修改成功', type: 'success' })
         this.query2()
       }

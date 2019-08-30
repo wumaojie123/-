@@ -64,7 +64,7 @@ export default {
     }
   },
   created() {
-    this.appId = this.$route.query.id
+    this.appId = this.$route.query.appId
     this.getConfigInfo()
   },
   methods: {

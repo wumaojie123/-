@@ -7,24 +7,34 @@
       <el-button style="margin-left: 20px;" @click="query()">刷新</el-button>
       <el-button style="margin-left: 60px;" type="primary" @click="handleSave">保存设置</el-button>
     </div>
+    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="handleSave"/>
   </div>
 </template>
 
 <script>
 import { ty, setEquipment, tyPost } from '@/api/device'
+import verfyCode from './component/verfyCode'
 
 export default {
   name: 'ParamC',
+  components: {
+    verfyCode
+  },
   data() {
     return {
       dataList: [],
       loginFlag: '',
-      uniqueCode: ''
+      uniqueCode: '',
+      verfyCodeVisible: false,
+      phoneNumber: '',
+      name: ''
     }
   },
   created() {
     this.uniqueCode = this.$route.query.uniqueCode
     this.loginFlag = this.$route.query.loginFlag
+    this.phoneNumber = this.$route.query.phoneNumber
+    this.name = this.$route.query.name
     this.query()
   },
   methods: {
@@ -63,12 +73,16 @@ export default {
         this.$message({ message: res.description || '系统繁忙', type: 'error' })
       }
     },
+    handleSaveBefore() {
+      this.verfyCodeVisible = true
+    },
     async handleSave() {
       const postData = {
         uniqueCode: this.uniqueCode
       }
       const res = await tyPost(postData)
       if (res.result === 1) {
+        this.verfyCodeVisible = false
         this.$message({ message: '修改成功', type: 'success' })
         this.query()
       } else {
