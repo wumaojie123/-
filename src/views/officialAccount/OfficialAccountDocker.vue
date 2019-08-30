@@ -3,7 +3,7 @@
     <el-form style="margin-top: 40px;">
       <el-form-item label="请选择需要绑定的设备类型:">
         <el-select v-model="deviceType" placeholder="请选择" style="width: 200px;" filterable>
-          <el-option v-for="item in list" :key="item.value" :label="item.label" :value="item.adOrgId"/>
+          <el-option v-for="item in list" :key="item.value" :label="item.label" :value="item.typeValue" :disabled="item.disabled"/>
         </el-select>
       </el-form-item>
     </el-form >
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { descList, deviceMap } from './constant'
+import { descList } from './constant'
 import { authTypes } from '@/api/officialAccount'
 export default {
   data() {
@@ -44,13 +44,23 @@ export default {
       if (res.result === 0) {
         const list = res.data || []
         this.list = list.map(item => {
-          item.deviceName = deviceMap[item.name]
+          if (item.hasAuth === 'Y') {
+            item.label = `${item.typeName} (已绑定)`
+            item.disabled = true
+          } else {
+            item.label = `${item.typeName}`
+            item.disabled = false
+          }
           return item
         })
       }
     },
     queryResult() {
-      window.location.href = '/agent/rest/officialAccounts/getAuthUrl?eType=CDZ'
+      if (!this.deviceType) {
+        this.$message({ message: '请选择设备类型', type: 'error' })
+        return
+      }
+      window.location.href = '/agent/rest/officialAccounts/getAuthUrl?eType=' + this.deviceType
     }
   }
 }

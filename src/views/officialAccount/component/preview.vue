@@ -1,9 +1,9 @@
 <template>
-  <el-dialog :visible.sync="localValue" title="公众号菜单预览" width="35%">
+  <el-dialog :visible.sync="localValue" title="公众号菜单预览" width="45%">
     <div class="preview-wrap">
       <div class="preview-footer">
         <div style="width: 45px;text-align:center;border: 1px solid #f0f0f0;">
-          <i class="el-icon-copy-document" style="font-size: 26px;height: 50px;line-height: 50px;" />
+          <i class="el-icon-copy-document" style="font-size: 26px;height: 48px;line-height: 48px;" />
         </div>
         <div v-for="(item, index) in localMeau" :key="index" class="footer-item">
           <span v-for="(item, index2) in item" :key="index2" class="item-item">{{ item }}</span>
@@ -77,7 +77,8 @@ export default {
   justify-content: space-around;
   font-size: 0;
   .footer-item{
-    width: 110px;
+    // width: 110px;
+    flex: 1;
     text-align: center;
     height: 50px;
     border: 1px solid #f0f0f0;
@@ -86,7 +87,7 @@ export default {
     display: flex;
     flex-direction: column-reverse;
     .item-item{
-      width: 110px;
+      // width: 110px;
       background: #fff;
       height: 50px;
       line-height: 50px;
