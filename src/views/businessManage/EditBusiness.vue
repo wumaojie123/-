@@ -35,7 +35,7 @@ import { update } from '@/api/businessManage'
 export default {
   data() {
     return {
-      baseInfo: { userName: '', linkName: '', merchantName: '', adOrgId: '', merchantAuthority: '', description: '' },
+      baseInfo: { userName: '', linkName: '', merchantName: '', adOrgId: '', merchantAuthority: 1, description: '' },
       check: false,
       baseInfoRules: {
         userName: [{ required: true, message: '请输入商家账号', trigger: 'blur' }]
