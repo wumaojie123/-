@@ -86,6 +86,9 @@ export default {
         this.subscribeMode = res.data.subscribeMode + ''
         if (this.subscribeMode === '0') {
           this.tempLead1 = res.data.lead
+          if (this.isFirstAuth === 'Y') {
+            this.tempLead1 = '关注公众号，可接收充电消息通知'
+          }
         } else if (this.subscribeMode === '1') {
           this.tempLead2 = res.data.lead
         }
