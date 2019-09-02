@@ -62,7 +62,7 @@ export default {
       },
       state: '',
       disableFlag: false,
-      check: false
+      check: true
     }
   },
   async created() {
