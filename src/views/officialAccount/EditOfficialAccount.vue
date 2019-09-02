@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      tempLead1: '关注公众号，可接收充电消息通知',
+      tempLead1: '关注公众号，可接收消息通知',
       tempLead2: '请先关注后使用',
       previewVisible: false,
       dataInfo: {},
@@ -85,12 +85,9 @@ export default {
         this.dataInfo = res.data
         this.subscribeMode = res.data.subscribeMode + ''
         if (this.subscribeMode === '0') {
-          this.tempLead1 = res.data.lead
-          if (this.isFirstAuth === 'Y') {
-            this.tempLead1 = '关注公众号，可接收充电消息通知'
-          }
+          this.tempLead1 = res.data.lead || '关注公众号，可接收消息通知'
         } else if (this.subscribeMode === '1') {
-          this.tempLead2 = res.data.lead
+          this.tempLead2 = res.data.lead || '请先关注后使用'
         }
         this.menuList = res.data.menuConfig && res.data.menuConfig.button || []
         this.configValue = res.data.templateSuccess === 'Y' && res.data.isTemplateAuth === 'Y'
