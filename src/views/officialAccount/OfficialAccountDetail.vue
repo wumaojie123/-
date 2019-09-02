@@ -16,11 +16,16 @@
       </div>
     </el-radio>
     <template v-if="!allVisible">
-      <p class="title" style="margin-top: 20px;">
-        <span>服务消息通知</span>
-        <el-switch v-model="configValue" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;" disabled/>
-      </p>
-      <div>客户扫码消费后可在公众号接收服务开始、服务结束消息通知，查看充电桩示例>；</div>
+      <div v-if="dataInfo.isTemplateAuth === 'Y' && dataInfo.templateSuccess=== 'Y'">
+        <p class="title" style="margin-top: 20px;" >
+          <span>服务消息通知</span>
+          <el-switch v-model="configValue" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;" disabled/>
+        </p>
+        <div>客户扫码消费后可在公众号接收服务开始、服务结束消息通知，  <el-popover placement="top-start" trigger="hover">
+          <img src="@/assets/img/b-title.png" class="popver-img" style="width: 255px;height: 290px;">
+          <span slot="reference" style="color: #409EFF;">查看示例></span>
+        </el-popover></div>
+      </div>
       <template v-if="dataInfo.isMenuAuth === 'Y' && dataInfo.menuSuccess =='Y'">
         <p class="title" style="margin-top: 20px;">
           <span>公众号菜单配置</span>
@@ -78,6 +83,7 @@ export default {
         this.menuList = res.data.menuConfig && res.data.menuConfig.button || []
         this.allVisible = (res.data.isMenuAuth === 'N' && res.data.isTemplateAuth === 'N') ||
             ((res.data.isMenuAuth === 'Y' && res.data.menuSuccess === 'N') && res.data.isTemplateAuth === 'Y' && res.data.templateSuccess === 'N')
+        console.log(this.allVisible)
       }
     }
   }
