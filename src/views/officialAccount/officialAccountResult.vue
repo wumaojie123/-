@@ -6,6 +6,7 @@
       <img src="./images/qr-code.png" style="width: 200px;height: 200px;">
       <p style="margin-top: 30px;">如有疑问，请联系客服中心</p>
     </div>
+    <el-button v-if="(msg == 1 || msg == 7) && (isMenuAuth || isTemplateAuth) " style="width: 200px;margin-top: 20px;" type="primary" @click="toEdit">前往功能配置</el-button>
   </div>
 </template>
 
@@ -65,21 +66,23 @@ export default {
     } else if (this.msg === 8) {
       this.authInfo = '授权成功，您已绑定公众号'
     }
-    if (this.msg === 1 || this.msg === 7) {
-      if (this.isMenuAuth || this.isTemplateAuth) {
-        if (this.msg === 7) {
-          this.$router.push({ path: '/EditOfficialAccount', query: { typeId: 2, appId: this.appId }})
-        } else {
-          this.$router.push({ path: '/EditOfficialAccount', query: { typeId: 2, appId: this.appId, isFirstAuth: 'Y' }})
-        }
-      }
-    }
   },
   methods: {
     handleBack() {
       this.$router.push({
         path: '/officialAccount/OfficialAccountDocker'
       })
+    },
+    toEdit() {
+      if (this.msg === 1 || this.msg === 7) {
+        if (this.isMenuAuth || this.isTemplateAuth) {
+          if (this.msg === 7) {
+            this.$router.push({ path: '/EditOfficialAccount', query: { typeId: 2, appId: this.appId }})
+          } else {
+            this.$router.push({ path: '/EditOfficialAccount', query: { typeId: 2, appId: this.appId, isFirstAuth: 'Y' }})
+          }
+        }
+      }
     }
   }
 }
