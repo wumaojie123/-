@@ -1,6 +1,6 @@
 <template>
   <div class="content-area">
-    <div class="text-info">设备编号： 充电桩{{ lyyEquipmentId }}</div>
+    <div class="text-info">设备编号： 充电桩{{ lyyEquipmentValue }}</div>
     <p class="text-info">解绑原因：</p>
     <el-checkbox-group v-model="checkList" class="text-info">
       <el-checkbox v-for="(item, index) in list" :label="item" :key="index" v-model="others" size="medium"/>
@@ -46,11 +46,13 @@ export default {
       disable: false,
       verfyCodeVisible: false,
       phoneNumber: '',
-      name: ''
+      name: '',
+      lyyEquipmentValue: ''
     }
   },
   created() {
     this.lyyEquipmentId = this.$route.query.lyyEquipmentId
+    this.lyyEquipmentValue = this.$route.query.value
     this.eqValue = this.$route.query.value
     this.equipmentType = this.$route.query.equipmentType
     this.phoneNumber = this.$route.query.phoneNumber

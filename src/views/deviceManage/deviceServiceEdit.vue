@@ -1,7 +1,7 @@
 <template>
   <div class="content-area">
     <div class="table-title-info">
-      <span>设备编号:{{ lyyEquipmentId }}</span>
+      <span>设备编号:{{ lyyEquipmentValue }}</span>
       <el-button type="primary" @click="handleSaveModal">添加套餐套餐</el-button>
     </div>
     <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" height="500" @selection-change="handleSelectionChange">
@@ -86,11 +86,13 @@ export default {
       phoneNumber: '',
       name: '',
       actionType: '',
-      handleItemData: {}
+      handleItemData: {},
+      lyyEquipmentValue: ''
     }
   },
   created() {
     this.lyyEquipmentId = this.$route.query.lyyEquipmentId
+    this.lyyEquipmentValue = this.$route.query.value
     this.communication = this.$route.query.communication
     this.phoneNumber = this.$route.query.phoneNumber
     this.name = this.$route.query.name
