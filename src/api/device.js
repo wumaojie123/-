@@ -212,3 +212,25 @@ export function setEquipment(data) {
     // }
   })
 }
+/**
+ * add by lss 20190903
+ * 更新计费模式
+ */
+export async function updateChargePattern(data) {
+  return request({
+    url: '/lyy/rest/equipment/editProtocolFunctionType',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 获取计费模式
+ */
+export async function getChargePattern(params) {
+  return request({
+    url: '/lyy/rest/equipment/getProtocolFunction',
+    method: 'get',
+    params
+  })
+}

@@ -41,10 +41,10 @@
         <el-input v-model="ruleForm.price" />
       </el-form-item>
       <!-- modify by lss 20190831 -->
-      <el-form-item v-show="ruleForm.billing=='ELEC'" label="电量(度)" prop="electric">
+      <el-form-item v-if="ruleForm.billing==2" key="2" label="电量(度)" prop="electric">
         <el-input v-model="ruleForm.electric" />
       </el-form-item>
-      <el-form-item v-show="ruleForm.billing!=='ELEC'" label="时长(分钟)" prop="serviceTime">
+      <el-form-item v-if="ruleForm.billing!==2" key="1" label="时长(分钟)" prop="serviceTime">
         <el-input v-model="ruleForm.serviceTime" />
       </el-form-item>
       <el-form-item v-if="ruleForm.communication!==2" label="模拟投币数" prop="coins">
@@ -125,11 +125,12 @@ export default {
       ruleForm: {
         equipmentType: 'CDZ',
         communication: 1,
-        billing: 'TIME',
+        billing: 1,
         description: '',
         price: '',
         coins: '',
-        serviceTime: ''
+        serviceTime: '',
+        electric: ''
       },
       rules: {
         equipmentType: [
@@ -164,8 +165,8 @@ export default {
       },
       loading_submit: false,
       arrBilling: [
-        { value: 'TIME', label: '按时长计费' },
-        { value: 'ELEC', label: '按电量计费' }
+        { value: 1, label: '按时长计费' },
+        { value: 2, label: '按电量计费' }
       ]
     }
   },
@@ -178,6 +179,9 @@ export default {
   methods: {
     onClose() {
       this.$refs['ruleForm'].resetFields()
+      this.ruleForm.coins = ''
+      this.ruleForm.serviceTime = ''
+      this.ruleForm.electric = ''
       this.handleClose()
     },
     onOpen() {
@@ -188,13 +192,21 @@ export default {
           billing: this.actionRow.billing,
           description: this.actionRow.description,
           price: this.actionRow.price,
-          coins: this.actionRow.coins === null ? '' : this.actionRow.coins,
-          serviceTime:
+          coins: this.actionRow.coins === null ? '' : this.actionRow.coins
+          // serviceTime:
+          //   this.actionRow.serviceTime === null
+          //     ? ''
+          //     : this.actionRow.serviceTime,
+          // // modify by lss 20190831
+          // electric: this.actionRow.electric
+        }
+        if (this.actionRow.billing === 2) {
+          this.ruleForm['electric'] = this.actionRow.electric
+        } else {
+          this.ruleForm['serviceTime'] =
             this.actionRow.serviceTime === null
               ? ''
-              : this.actionRow.serviceTime,
-          // modify by lss 20190831
-          electric: this.actionRow.electric
+              : this.actionRow.serviceTime
         }
       }
     },
@@ -209,14 +221,16 @@ export default {
             description: self.ruleForm.description,
             price: Number(self.ruleForm.price),
             coins: Number(self.ruleForm.coins),
-            serviceTime: Number(self.ruleForm.serviceTime),
-            // modify by lss 20190831
-            electric: Number(self.ruleForm.electric)
+            serviceTime: Number(self.ruleForm.serviceTime)
           }
           if (self.ruleForm.communication === 2) {
             // modify by lss 20190831
-            if (self.ruleForm.billing !== 'ELEC') {
+            if (self.ruleForm.billing !== 2) {
               postData.coins = Number(self.ruleForm.serviceTime)
+            } else {
+              // modify by lss 20190831
+              postData.electric = Number(self.ruleForm.electric)
+              postData.serviceTime = parseInt(postData.electric * 100)
             }
           }
           if (

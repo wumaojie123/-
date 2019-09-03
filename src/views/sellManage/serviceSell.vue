@@ -90,9 +90,9 @@ export default {
         { key: 'description', label: '套餐名称' },
         { key: 'price', label: '价格', render: text => text + '元' },
         {
-          key: 'serviceTime',
-          label: '时长/电量',
-          render: text => (text ? text + '分钟' : '-')
+          key: 'val',
+          label: '时长/电量'
+          // render: text => (text ? text + '分钟' : '-')
         },
         {
           key: 'coins',
@@ -162,6 +162,13 @@ export default {
           if (res.data) {
             this.list = res.data.items || []
             this.pageInfo.total = res.data.total || 0
+            this.list.forEach(i => {
+              if (i.billing === 2) {
+                i.val = i.electric + '度'
+              } else {
+                i.val = i.serviceTime ? i.serviceTime + '分钟' : '-'
+              }
+            })
           } else {
             this.pageInfo.total = 0
           }
