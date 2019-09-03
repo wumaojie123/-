@@ -17,12 +17,13 @@
       <el-table-column type="selection" width="55"/>
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
     </el-table>
-    <el-pagination
+    <!-- <el-pagination
       :total="pageInfo.total"
+      :page-sizes="[400]"
       :current-page="pageInfo.currPage"
       background
       layout="total, pager"
-    />
+    /> -->
     <div style="text-align:center;">
       <div style="color: red;margin-bottom: 20px;">注：设备注册成功后，设备绑定在商家的默认场地下。</div>
       <el-button @click="handleCancel">取消</el-button>
