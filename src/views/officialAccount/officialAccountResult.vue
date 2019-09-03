@@ -1,12 +1,19 @@
 <template>
-  <div class="content-area">
-    <div class="auth-info">{{ authInfo }}</div>
-    <el-button style="width: 200px;" type="primary" @click="handleBack">返回</el-button>
-    <div style="margin-top: 40px;">
-      <img src="./images/qr-code.png" style="width: 200px;height: 200px;">
-      <p style="margin-top: 30px;">如有疑问，请联系客服中心</p>
+  <div class="content-area" style="display:flex;">
+    <div style="width: 400px;border-right: 1px;">
+      <div style="margin-top: 40px;">
+        <img src="./images/header.png" style="width: 129px;height: 148px;">
+      </div>
+      <div style="color: #333; margin-top: 10px;">{{ authInfo }}</div>
+      <el-button style="width: 200px;margin-top: 20px;" type="primary" @click="handleBack">返回</el-button>
     </div>
-    <el-button v-if="(msg == 1 || msg == 7) && (isMenuAuth || isTemplateAuth) " style="width: 200px;margin-top: 20px;" type="primary" @click="toEdit">前往功能配置</el-button>
+    <section style="margin-left: 40px;width: 400px; border-left: 1px solid #ECECEC;">
+      <div style="margin-top: 40px;">
+        <img src="./images/qr-code.png" style="width: 126px;height: 130px;">
+        <p style="margin-top: 30px;">如有疑问，请联系客服中心</p>
+      </div>
+      <el-button v-if="(msg == 1 || msg == 7) && (isMenuAuth || isTemplateAuth) " style="width: 200px;margin-top: 20px;" type="primary" @click="toEdit">前往功能配置</el-button>
+    </section>
   </div>
 </template>
 

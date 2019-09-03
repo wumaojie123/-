@@ -20,7 +20,7 @@
       <el-switch v-model="configValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
     </p>
     <div>客户扫码消费后可在公众号接收服务开始、服务结束消息通知，<el-popover placement="top-start" trigger="hover">
-      <img src="@/assets/img/b-title.png" class="popver-img" style="width: 255px;height: 290px;">
+      <img src="./images/title.png" class="popver-img" style="width: 300px;height: 448px;">
       <span slot="reference" style="color: #409EFF;">查看示例></span>
     </el-popover></div>
     <p class="title" style="margin-top: 20px;">
@@ -29,7 +29,7 @@
     </p>
     <!-- 公众号菜单 -->
     <template v-show="dataInfo.isMenuAuth === 'Y'">
-      <edit-dialog v-show="value" ref="datepicker" :device-type="dataInfo.eType" :app-id="appId" :action-type="actionType" :menu-list="menuList" @on-OK="update"/>
+      <edit-dialog v-show="value" ref="datepicker" :ag="ag" :device-type="dataInfo.eType" :app-id="appId" :action-type="actionType" :menu-list="menuList" @on-OK="update"/>
     </template>
     <div style="margin: 20px 40px 0 80px;">
       <el-button type="success" @click="handlePreview">公众号菜单预览</el-button>
@@ -43,6 +43,7 @@
 import editDialog from './component/edit'
 import preview from './component/preview'
 import { getConfig, updateConfig } from '@/api/officialAccount'
+import { getAngent } from '@/api/angentManage'
 
 export default {
   components: {
@@ -66,7 +67,8 @@ export default {
       params: {},
       isFirstAuth: 'N',
       publicTypeVisible: false,
-      subscribeMode: 0
+      subscribeMode: 0,
+      ag: ''
     }
   },
   beforeMount() {
@@ -80,8 +82,11 @@ export default {
      * 查询公众号主体信息
      */
     async getConfigInfo() {
+      const res2 = await getAngent()
+      if (res2.result === 0) {
+        this.ag = res2.data.agentUserId
+      }
       const res = await getConfig({ appId: this.appId })
-      debugger
       if (res.result === 0) {
         this.dataInfo = res.data
         this.subscribeMode = res.data.subscribeMode + ''
@@ -174,7 +179,8 @@ export default {
       const res = await updateConfig(this.params)
       if (res.result === 0) {
         this.$message({ message: '公众号配置成功', type: 'success' })
-        this.$router.push({ path: 'OfficialAccountDetail', query: { appId: this.appId }})
+        window.history.go(-1)
+        // this.$router.push({ path: 'OfficialAccountDetail', query: { appId: this.appId }})
       }
     }
   }

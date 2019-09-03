@@ -121,6 +121,10 @@ export default {
     appId: {
       type: String,
       default: ''
+    },
+    ag: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -150,8 +154,8 @@ export default {
       list = flatten(list)
       list = list.map(item => {
         item.checked = false
-        if (item.url === 'https://b.leyaoyao.com/group/index.html') {
-          item.url = item.url
+        if (item.url.indexOf('https://b.leyaoyao.com/group/index.html') > -1) {
+          item.url = `${item.url}?ag=${this.ag}`
         } else {
           item.url = `${item.url}?appId=${this.appId}&ut=2`
         }

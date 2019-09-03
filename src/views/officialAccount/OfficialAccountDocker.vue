@@ -11,10 +11,10 @@
     <section class="flex-wrap" style="text-align:center;">
       <div v-for="(item, index) in descList" :key="index" class="flex-item">
         <section style="padding-bottom: 20px;">
-          <img :src="item.url" style="width: 303px;height: 448px;">
+          <img :src="item.url" style="width: 300px;height: 448px;">
         </section>
         <p>{{ item.title }}</p>
-        <p style="text-align:left;padding: 20px; color: #888;">{{ item.desc }}</p>
+        <p style="text-align:left;padding: 20px; color: #888;line-height: 18px;">{{ item.desc }}</p>
       </div>
     </section>
     <section style="margin-top: 40px; text-align:center; width: 800px;" >

@@ -22,7 +22,7 @@
           <el-switch v-model="configValue" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;" disabled/>
         </p>
         <div>客户扫码消费后可在公众号接收服务开始、服务结束消息通知，  <el-popover placement="top-start" trigger="hover">
-          <img src="@/assets/img/b-title.png" class="popver-img" style="width: 255px;height: 290px;">
+          <img src="./images/title.png" class="popver-img" style="width: 255px;height: 290px;">
           <span slot="reference" style="color: #409EFF;">查看示例></span>
         </el-popover></div>
       </div>
