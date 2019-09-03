@@ -130,7 +130,7 @@ export default {
       this.actionType = 'add'
       this.verfyCodeVisible = false
       this.type = 'modify'
-      this.modalData = value
+      this.modalData = JSON.parse(JSON.stringify(value))
       this.dialogFormVisible = true
     },
     handleSaveModal() {
@@ -181,6 +181,9 @@ export default {
             }
           } else if (this.type === 'modify') {
             const params = this.modalData
+            if (this.communication === 2) {
+              params.coins = params.serviceTime
+            }
             params.lyyEquipmentId = this.lyyEquipmentId
             const res = await updateEquipmentService(params)
             if (res.result === 0) {
@@ -214,7 +217,7 @@ export default {
     delServiceBefore(item) {
       this.verfyCodeVisible = true
       this.actionType = 'del'
-      this.handleItemData = item
+      this.handleItemData = JSON.pase(JSON.stringify(item))
     },
     // 删除服务套餐
     delService() {
