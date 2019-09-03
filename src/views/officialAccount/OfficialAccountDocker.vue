@@ -14,7 +14,7 @@
           <img :src="item.url" style="width: 303px;height: 448px;">
         </section>
         <p>{{ item.title }}</p>
-        <p style="text-align:left;padding-top: 20px; color: #888;">{{ item.desc }}</p>
+        <p style="text-align:left;padding: 20px; color: #888;">{{ item.desc }}</p>
       </div>
     </section>
     <section style="margin-top: 40px; text-align:center; width: 800px;" >
