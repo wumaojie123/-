@@ -77,7 +77,7 @@ export default {
       if (this.msg === 1 || this.msg === 7) {
         if (this.isMenuAuth || this.isTemplateAuth) {
           if (this.msg === 7) {
-            this.$router.push({ path: '/EditOfficialAccount', query: { typeId: 2, appId: this.appId }})
+            this.$router.push({ path: '/EditOfficialAccount', query: { typeId: 2, appId: this.appId, isFirstAuth: 'NY' }})
           } else {
             this.$router.push({ path: '/EditOfficialAccount', query: { typeId: 2, appId: this.appId, isFirstAuth: 'Y' }})
           }

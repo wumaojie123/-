@@ -81,11 +81,15 @@ export default {
      */
     async getConfigInfo() {
       const res = await getConfig({ appId: this.appId })
+      debugger
       if (res.result === 0) {
         this.dataInfo = res.data
         this.subscribeMode = res.data.subscribeMode + ''
         if (this.subscribeMode === '0') {
           this.tempLead1 = res.data.lead || '关注公众号，可接收消息通知'
+          if (this.isFirstAuth === 'NY') {
+            this.tempLead1 = '关注公众号，可接收消息通知'
+          }
         } else if (this.subscribeMode === '1') {
           this.tempLead2 = res.data.lead || '请先关注后使用'
         }
