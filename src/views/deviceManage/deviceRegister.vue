@@ -141,7 +141,7 @@ export default {
             //   ELEC: '按电量计费'
             // }
             item.communicationText = communicationMap[item.communication]
-            if (item.communication === 1) {
+            if (item.communication !== 2) {
               item.chargePattern = '--'
             } else {
               item.chargePattern = this.getChargePatternText(item.billingModel)

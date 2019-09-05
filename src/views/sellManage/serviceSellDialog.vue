@@ -62,6 +62,7 @@
 import { Message } from 'element-ui'
 import { postService, putService } from '@/api/sellManage'
 import { validateMoney, isPosInt } from '@/utils/validate'
+// import { mul } from '@/utils/index'
 
 const validatePrice = (rule, value, callback) => {
   if (validateMoney(value) && value < 10000 && value > 0) {
@@ -272,7 +273,7 @@ export default {
             } else {
               // modify by lss 20190831
               postData.electric = Number(self.ruleForm.electric)
-              postData.serviceTime = parseInt(postData.electric * 100)
+              postData.serviceTime = Math.round(postData.electric * 100)
               postData.coins = Number(postData.serviceTime)
             }
           }

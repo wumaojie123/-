@@ -129,6 +129,7 @@ import {
 } from '@/api/device'
 import { priceCheck, serviceTimeCheck, conisCheck } from '@/utils/rules'
 import verfyCode from './component/verfyCode'
+
 const validateElectric = (rule, value, callback) => {
   if (/^-?\d+\.?\d{0,1}$/.test(value) && value < 50 && value > 0) {
     callback()
@@ -376,7 +377,7 @@ export default {
               if (this.billing !== 'ELEC') {
                 params.coins = params.serviceTime
               } else {
-                params.serviceTime = parseInt(params.electric * 100)
+                params.serviceTime = Math.round(params.electric * 100)
                 params.coins = params.serviceTime
               }
             }
@@ -397,7 +398,7 @@ export default {
               if (this.billing !== 'ELEC') {
                 params.coins = params.serviceTime
               } else {
-                params.serviceTime = parseInt(params.electric * 100)
+                params.serviceTime = Math.round(params.electric * 100)
                 params.coins = params.serviceTime
               }
             }

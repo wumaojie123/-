@@ -210,7 +210,7 @@ export default {
         path: '/register',
         query: {
           deviceType: this.queryParams.equipmentType,
-          equipmentArr: this.equipmentArr,
+          equipmentArr: this.tempEquipmentArr,
           communication: 2,
           chargePattern: this.tempChargePattern
         }
@@ -239,7 +239,7 @@ export default {
       // 判断计费模式
       // var tempChargePattern = ''
       // var selectedPattern = ''
-      if (equipmentType === 2) {
+      if (equipmentType[0] === 2) {
         var result = this.checkChargePattern()
         if (result.TIME !== -1 && result.ELEC !== -1) {
           this.$message({
@@ -279,6 +279,7 @@ export default {
         ELEC: -1,
         TWO: -1
       }
+      this.arrCDZChargePattern = []
       this.selectList.forEach(i => {
         if (i.billingModel.length > 1) {
           param.TWO = 0
@@ -312,8 +313,8 @@ export default {
 }
 .s-charge-pattern-box {
   position: absolute;
-  width: 6rem;
-  height: 5rem;
+  width: 250px;
+  height: 250px;
   background-color: #fff;
   left: 50%;
   top: 50%;
@@ -322,7 +323,7 @@ export default {
 .s-charge-pattern-panel .title {
   color: #000;
   text-align: center;
-  padding: 0.2rem;
+  padding: 10px;
 }
 .charge-pattern-box {
   display: -webkit-flex;
@@ -330,10 +331,10 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 0.25rem 0.1rem;
+  padding: 10px 8px;
 }
 .s-charge-pattern-panel .s-sel-charge-pattern {
-  padding: 0.15rem;
+  padding: 10px;
 }
 .s-charge-pattern-panel > div {
   /* padding: 0.1rem; */
@@ -343,14 +344,14 @@ export default {
   /* margin-left: 0.1rem; */
 }
 .s-charge-pattern-panel .icon {
-  width: 0.6rem;
-  height: 0.5rem;
+  width: 30px;
+  height: 30px;
   background-image: url('./images/noselect.png');
   background-repeat: no-repeat;
-  background-size: 0.5rem 0.5rem;
+  background-size: 25px 25px;
 }
 .s-charge-pattern-panel .line {
-  width: 6rem;
+  width: 600px;
   height: 1px;
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -359,7 +360,7 @@ export default {
   bottom: 0;
   display: -webkit-flex;
   display: flex;
-  padding: 0.3rem;
+  padding: 15px;
   width: 100%;
   justify-content: center;
   text-align: center;

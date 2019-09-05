@@ -84,6 +84,7 @@
         </el-form-item>
         <el-form-item v-if="chargePattern=='ELEC'" key="ELEC" label="电量(度)" prop="electric">
           <el-input
+            key="2"
             v-model="modalData.electric"
             placeholder="请输入电量"
             type="tel"
@@ -93,6 +94,7 @@
         </el-form-item>
         <el-form-item v-if="chargePattern!=='ELEC'" key="TIME" label="时长(分钟)" prop="serviceTime">
           <el-input
+            key="1"
             v-model="modalData.serviceTime"
             placeholder="请输入时长"
             type="tel"
@@ -137,6 +139,7 @@ import {
 import { priceCheck, serviceTimeCheck, conisCheck } from '@/utils/rules'
 import { deviceMapInfo, communicationMap } from './constant'
 import verfyCode from './component/verfyCode'
+// import { mul } from '@/utils/index'
 const validateElectric = (rule, value, callback) => {
   if (/^-?\d+\.?\d{0,1}$/.test(value) && value < 50 && value > 0) {
     callback()
@@ -172,7 +175,13 @@ export default {
       deviceType: '',
       equipmentArr: [],
       communication: '',
-      modalData: { description: '', price: '', coins: '', serviceTime: '' },
+      modalData: {
+        description: '',
+        price: '',
+        coins: '',
+        serviceTime: '',
+        electric: ''
+      },
       merchantList: [],
       baseInfoRules: {
         description: [
@@ -307,7 +316,7 @@ export default {
           }
           if (this.communication === 2) {
             if (this.chargePattern === 'ELEC') {
-              this.modalData.serviceTime = parseInt(
+              this.modalData.serviceTime = Math.round(
                 this.modalData.electric * 100
               )
               this.modalData.coins = this.modalData.serviceTime
@@ -373,7 +382,8 @@ export default {
         equipmentType: this.deviceType,
         values: this.equipmentArr,
         lyyDistributorId: this.lyyDistributorId,
-        lyyGroupServices: this.selectList
+        lyyGroupServices: this.selectList,
+        billing: this.chargePattern
       }
       if (!Array.isArray(this.equipmentArr)) {
         params.values = [this.equipmentArr]
