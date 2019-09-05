@@ -42,10 +42,10 @@
       </el-form-item>
       <!-- modify by lss 20190831 -->
       <el-form-item v-if="ruleForm.billing==2" key="2" label="电量(度)" prop="electric">
-        <el-input v-model="ruleForm.electric" />
+        <el-input key="2" v-model="ruleForm.electric" />
       </el-form-item>
       <el-form-item v-if="ruleForm.billing!==2" key="1" label="时长(分钟)" prop="serviceTime">
-        <el-input v-model="ruleForm.serviceTime" />
+        <el-input key="1" v-model="ruleForm.serviceTime" />
       </el-form-item>
       <el-form-item v-if="ruleForm.communication!==2" label="模拟投币数" prop="coins">
         <el-input v-model="ruleForm.coins" />
@@ -62,6 +62,7 @@
 import { Message } from 'element-ui'
 import { postService, putService } from '@/api/sellManage'
 import { validateMoney, isPosInt } from '@/utils/validate'
+
 const validatePrice = (rule, value, callback) => {
   if (validateMoney(value) && value < 10000 && value > 0) {
     callback()
@@ -231,6 +232,7 @@ export default {
               // modify by lss 20190831
               postData.electric = Number(self.ruleForm.electric)
               postData.serviceTime = parseInt(postData.electric * 100)
+              postData.coins = Number(postData.serviceTime)
             }
           }
           if (

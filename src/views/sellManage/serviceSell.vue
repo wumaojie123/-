@@ -95,7 +95,7 @@ export default {
           // render: text => (text ? text + '分钟' : '-')
         },
         {
-          key: 'coins',
+          key: 'resultCoins',
           label: '模拟投币数',
           render: text => (text ? text + '币' : '-')
         },
@@ -167,6 +167,11 @@ export default {
                 i.val = i.electric + '度'
               } else {
                 i.val = i.serviceTime ? i.serviceTime + '分钟' : '-'
+              }
+              if (this.communication === 2) {
+                i.resultCoins = 0
+              } else {
+                i.resultCoins = i.coins
               }
             })
           } else {
