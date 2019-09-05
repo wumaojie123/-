@@ -98,6 +98,21 @@ export default {
     this.queryList()
   },
   methods: {
+    getChargePatternText(model) {
+      const chargePatternMap = {
+        TIME: '按时长计费',
+        ELEC: '按电量计费'
+      }
+      model = model || []
+      var text = ''
+      model.forEach(i => {
+        text += chargePatternMap[i.name] + ','
+      })
+      if (text !== '') {
+        text = text.substr(0, text.length - 1)
+      }
+      return text
+    },
     queryList(page = 1) {
       this.selectItems = []
       this.list = []
@@ -121,14 +136,16 @@ export default {
                   ? '平台导入'
                   : ''
             const communicationMap = { 0: '无', 1: '脉冲', 2: '串口' }
-            const chargePatternMap = {
-              TIME: '按时长计费',
-              ELEC: '按电量计费'
-            }
+            // const chargePatternMap = {
+            //   TIME: '按时长计费',
+            //   ELEC: '按电量计费'
+            // }
             item.communicationText = communicationMap[item.communication]
-            item.chargePattern = chargePatternMap[item.billing]
             if (item.communication === 1) {
               item.chargePattern = '--'
+            } else {
+              item.chargePattern = this.getChargePatternText(item.billingModel)
+              item.billing = item.billingModel[0].name
             }
             const equipmentTypeMap = deviceMapInfo
             item.equipmentTypeText = equipmentTypeMap[item.equipmentType]

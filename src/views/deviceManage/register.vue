@@ -306,7 +306,6 @@ export default {
             return
           }
           if (this.communication === 2) {
-            debugger
             if (this.chargePattern === 'ELEC') {
               this.modalData.serviceTime = parseInt(
                 this.modalData.electric * 100

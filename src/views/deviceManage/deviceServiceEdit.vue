@@ -269,8 +269,9 @@ export default {
       }
       const res = await getChargePattern(params)
       if (res.result === 0) {
-        var obj = res.data
-        var list = obj.protocolList || []
+        var list = res.data || []
+        // var list = obj.protocolList || []
+        this.billingMap = []
         list.forEach(i => {
           this.billingMap.push({
             label: i.description,
@@ -318,20 +319,12 @@ export default {
         } else {
           this.pageInfo.total = 0
         }
-        if (this.communication === 2) {
-          // 查询协议
-          this.queryChargePattern()
-        }
       }
-      // // modify by lss 20190903
-      // if (this.communication === 2) {
-      //   if (
-      //     this.billingMap.length === 1 &&
-      //     this.billing !== this.billingMap[0].val
-      //   ) {
-      //     this.list = []
-      //   }
-      // }
+      if (this.communication === 2) {
+        // 查询协议
+        console.log('♥♥')
+        this.queryChargePattern()
+      }
     },
     handleSelectionChange(value) {
       this.actionType = 'add'
