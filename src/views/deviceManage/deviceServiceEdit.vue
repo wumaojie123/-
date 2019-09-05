@@ -90,7 +90,7 @@
             clearable
           />
         </el-form-item>
-        <template v-if="communication != '2' ">
+        <template v-if="communication != 2 ">
           <el-form-item label="模拟投币数" prop="coins">
             <el-input
               v-model="modalData.coins"
@@ -227,12 +227,13 @@ export default {
   created() {
     this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.lyyEquipmentValue = this.$route.query.value
-    this.communication = this.$route.query.communication
+    this.communication = parseInt(this.$route.query.communication, 10)
     this.phoneNumber = this.$route.query.phoneNumber
     this.name = this.$route.query.name
     // modify by lss 20190903
     this.billing = this.$route.query.billing
     this.tempBilling = this.billing
+    console.log(`bbbbb${this.billing}`)
     /* eslint-disable-next-line */
     this.queryList()
   },
@@ -253,9 +254,7 @@ export default {
       this.billing = this.tempBilling
       this.$confirm('切换计费方式后，将会清空服务套餐', '温馨提示')
         .then(() => {
-          this.billing = changedBilling
-          this.tempBilling = this.billing
-          this.updateChargePattern(this.billing)
+          this.updateChargePattern(changedBilling)
         })
         .catch(() => {
           console.log('💔')
@@ -284,7 +283,11 @@ export default {
             this.$confirm(
               '设备所支持的计费方式发生变更，请重新设置服务套餐',
               '温馨提示',
-              { showCancelButton: false }
+              {
+                showCancelButton: false,
+                showClose: false,
+                closeOnClickModal: false
+              }
             ).then(action => {
               if (action) {
                 this.updateChargePattern(this.billingMap[0].val)
@@ -295,12 +298,19 @@ export default {
       }
     },
     async updateChargePattern(groupServiceCostWay) {
-      var params = { equipmentValue: this.lyyEquipmentId, groupServiceCostWay }
+      var params = {
+        equipmentValue: this.lyyEquipmentValue,
+        groupServiceCostWay
+      }
       var res = await updateChargePattern(params)
-      if (res.result === 0) {
+      if (res.result === 0 && res.data === 0) {
         this.billing = groupServiceCostWay
         this.tempBilling = this.billing
+        // this.billing = groupServiceCostWay
+        // this.tempBilling = this.billing
         this.list = []
+      } else {
+        this.$message({ message: '更新计费模式失败', type: 'error' })
       }
     },
     // 查询服务套餐
@@ -312,6 +322,10 @@ export default {
         pageIndex: this.pageInfo.pageIndex
       }
       const res = await groupServiceList(postData)
+      if (this.communication === 2) {
+        // 查询协议
+        this.queryChargePattern()
+      }
       if (res.result === 0) {
         this.listLoading = false
         if (res.data) {
@@ -320,11 +334,6 @@ export default {
         } else {
           this.pageInfo.total = 0
         }
-      }
-      if (this.communication === 2) {
-        // 查询协议
-        console.log('♥♥')
-        this.queryChargePattern()
       }
     },
     handleSelectionChange(value) {
