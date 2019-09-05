@@ -168,7 +168,7 @@ export default {
               } else {
                 i.val = i.serviceTime ? i.serviceTime + '分钟' : '-'
               }
-              if (this.communication === 2) {
+              if (i.communication === 2 && i.billing === 2) {
                 i.resultCoins = 0
               } else {
                 i.resultCoins = i.coins

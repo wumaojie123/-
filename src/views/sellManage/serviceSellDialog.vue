@@ -42,13 +42,13 @@
       </el-form-item>
       <!-- modify by lss 20190831 -->
       <el-form-item v-if="ruleForm.billing==2" key="2" label="电量(度)" prop="electric">
-        <el-input key="2" v-model="ruleForm.electric" />
+        <el-input key="input2" v-model="ruleForm.electric" />
       </el-form-item>
       <el-form-item v-if="ruleForm.billing!==2" key="1" label="时长(分钟)" prop="serviceTime">
-        <el-input key="1" v-model="ruleForm.serviceTime" />
+        <el-input key="input1" v-model="ruleForm.serviceTime" />
       </el-form-item>
-      <el-form-item v-if="ruleForm.communication!==2" label="模拟投币数" prop="coins">
-        <el-input v-model="ruleForm.coins" />
+      <el-form-item v-if="ruleForm.communication!==2" key="coins" label="模拟投币数" prop="coins">
+        <el-input key="input3" v-model="ruleForm.coins" />
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
@@ -70,20 +70,20 @@ const validatePrice = (rule, value, callback) => {
     callback(new Error('价格必须为大于0的正数,价格需小于10000,最多保留2位小数'))
   }
 }
-const validateServiceTime = (rule, value, callback) => {
-  if (isPosInt(value) && value <= 1440) {
-    callback()
-  } else {
-    callback(new Error('服务时间必须为大于0的小于等于1440(24小时)正整数'))
-  }
-}
-const validateElectric = (rule, value, callback) => {
-  if (/^-?\d+\.?\d{0,1}$/.test(value) && value < 50 && value > 0) {
-    callback()
-  } else {
-    callback(new Error('电量必须为大于0的正数，电量需小于50，最多一位小数'))
-  }
-}
+// const validateServiceTime = (rule, value, callback) => {
+//   if (isPosInt(value) && value <= 1440) {
+//     callback()
+//   } else {
+//     callback(new Error('服务时间必须为大于0的小于等于1440(24小时)正整数'))
+//   }
+// }
+// const validateElectric = (rule, value, callback) => {
+//   if (/^-?\d+\.?\d{0,1}$/.test(value) && value < 50 && value > 0) {
+//     callback()
+//   } else {
+//     callback(new Error('电量必须为大于0的正数，电量需小于50，最多一位小数'))
+//   }
+// }
 // const validateServiceTime2 = (rule, value, callback) => {
 //   if (value === '' || (isPosInt(value) && value <= 1440)) {
 //     callback()
@@ -156,12 +156,12 @@ export default {
           { validator: validateCoins }
         ],
         serviceTime: [
-          { required: true, message: '请输入时长', trigger: 'change' },
-          { validator: validateServiceTime }
+          // { required: true, message: '请输入时长', trigger: 'change' },
+          // { validator: validateServiceTime }
         ],
         electric: [
-          { required: true, message: '请输入电量', trigger: 'change' },
-          { validator: validateElectric }
+          // { required: true, message: '请输入电量', trigger: 'change' },
+          // { validator: validateElectric }
         ]
       },
       loading_submit: false,
@@ -213,6 +213,47 @@ export default {
     },
     onSubmit() {
       const self = this
+      if (self.ruleForm.billing === 2) {
+        if (this.ruleForm.electric === '') {
+          Message({
+            type: 'warning',
+            message: '请输入电量'
+          })
+          return
+        } else if (
+          !(
+            /^-?\d+\.?\d{0,1}$/.test(this.ruleForm.electric) &&
+            this.ruleForm.electric < 50 &&
+            this.ruleForm.electric > 0
+          )
+        ) {
+          Message({
+            message: '电量必须为大于0的正数，电量需小于50，最多一位小数',
+            type: 'warning'
+          })
+          return
+        }
+      } else {
+        if (this.ruleForm.serviceTime === '') {
+          Message({
+            message: '请输入时长',
+            type: 'warning'
+          })
+          return
+        } else if (
+          !(
+            isPosInt(self.ruleForm.serviceTime) &&
+            self.ruleForm.serviceTime <= 1440
+          )
+        ) {
+          Message({
+            message: '服务时间必须为大于0的小于等于1440(24小时)正整数',
+            type: 'warning'
+          })
+          return
+        }
+      }
+
       self.$refs['ruleForm'].validate(valid => {
         if (valid) {
           const postData = {

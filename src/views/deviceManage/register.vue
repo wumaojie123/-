@@ -48,7 +48,7 @@
       :current-page="pageInfo.currPage"
       background
       layout="total, pager"
-    /> -->
+    />-->
     <div style="text-align:center;">
       <div style="color: red;margin-bottom: 20px;">注：设备注册成功后，设备绑定在商家的默认场地下。</div>
       <el-button @click="handleCancel">取消</el-button>
@@ -235,6 +235,9 @@ export default {
         equipmentType: this.deviceType,
         pageSize: 400,
         pageIndex: 1
+      }
+      if (this.communication === 2) {
+        postData.billing = this.chargePattern === 'ELEC' ? 2 : 1
       }
       const res = await agentGroupServiceList(postData)
       if (res.result === 0) {

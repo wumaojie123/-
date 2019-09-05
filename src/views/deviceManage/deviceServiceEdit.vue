@@ -190,8 +190,8 @@ export default {
         { label: '按电量计费', val: 'ELEC' }
       ],
       billingMap: [
-        { label: '按时长计费', val: 'TIME' },
-        { label: '按电量计费', val: 'ELEC' }
+        // { label: '按时长计费', val: 'TIME' },
+        // { label: '按电量计费', val: 'ELEC' }
       ],
       billing: 'TIME',
       tempBilling: ''
@@ -233,10 +233,6 @@ export default {
     this.billing = this.$route.query.billing
     this.tempBilling = this.billing
     /* eslint-disable-next-line */
-    if (this.communication === 2) {
-      // 查询协议
-      // this.queryChargePattern()
-    }
     this.queryList()
   },
   methods: {
@@ -269,14 +265,17 @@ export default {
      */
     async queryChargePattern() {
       var params = {
-        equipmentValue: this.lyyEquipmentId
+        equipmentValue: this.lyyEquipmentValue
       }
       const res = await getChargePattern(params)
       if (res.result === 0) {
         var obj = res.data
         var list = obj.protocolList || []
         list.forEach(i => {
-          this.arrCDZChargePattern.push(i.name)
+          this.billingMap.push({
+            label: i.description,
+            val: i.name
+          })
         })
         if (this.billingMap.length === 1) {
           if (this.billingMap[0].val !== this.billing) {
@@ -319,16 +318,20 @@ export default {
         } else {
           this.pageInfo.total = 0
         }
-      }
-      // modify by lss 20190903
-      if (this.communication === 2) {
-        if (
-          this.billingMap.length === 1 &&
-          this.billing !== this.billingMap[0].val
-        ) {
-          this.list = []
+        if (this.communication === 2) {
+          // 查询协议
+          this.queryChargePattern()
         }
       }
+      // // modify by lss 20190903
+      // if (this.communication === 2) {
+      //   if (
+      //     this.billingMap.length === 1 &&
+      //     this.billing !== this.billingMap[0].val
+      //   ) {
+      //     this.list = []
+      //   }
+      // }
     },
     handleSelectionChange(value) {
       this.actionType = 'add'
@@ -380,7 +383,8 @@ export default {
               if (this.billing !== 'ELEC') {
                 params.coins = params.serviceTime
               } else {
-                params.coins = parseInt(params.electric * 100)
+                params.serviceTime = parseInt(params.electric * 100)
+                params.coins = params.serviceTime
               }
             }
             params.lyyEquipmentId = this.lyyEquipmentId
@@ -397,12 +401,12 @@ export default {
             //
             const params = this.modalData
             if (this.communication === 2) {
-              params.coins = params.serviceTime
-            }
-            if (this.billing !== 'ELEC') {
-              params.coins = params.serviceTime
-            } else {
-              params.coins = parseInt(params.electric * 100)
+              if (this.billing !== 'ELEC') {
+                params.coins = params.serviceTime
+              } else {
+                params.serviceTime = parseInt(params.electric * 100)
+                params.coins = params.serviceTime
+              }
             }
             params.lyyEquipmentId = this.lyyEquipmentId
             const res = await updateEquipmentService(params)
