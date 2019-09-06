@@ -320,6 +320,7 @@ export default {
       })
     },
     changeCommunication(value) {
+      this.ruleForm.billing = 1
       // if (value === 1) {
       //   this.rules.serviceTime[0].required = false
       //   this.rules.serviceTime[1].validator = validateServiceTime2
