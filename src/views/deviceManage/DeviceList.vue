@@ -446,6 +446,7 @@ export default {
         if (res && res.result === 0) {
           this.$message.success('下载成功！')
         }
+        return
       } else if (type === 'pay') {
         this.downLoadFileName = '支付二维码下载'
         this.loadUrl = exportPayOrCode({ valueStr: equipmentIds })
