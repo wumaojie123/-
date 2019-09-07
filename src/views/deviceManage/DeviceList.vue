@@ -220,6 +220,10 @@ import { getFirstDeviceList, equipmentStatus, setEquipmentParam } from '@/api/ge
 import { getDeviceType } from '@/api/getEquiedType'
 import SetEquipmentParasForm from '@/components/SetEquipmentParas'
 import { exportPayOrCode, exportRegisterOrCode } from '@/api/qrcodeCreate'
+import {
+  outsideDeviceImportBatchExportCode
+} from '@/api/deviceImport'
+
 import { Throttle } from '@/utils/throttle'
 import waves from '@/directive/waves' // 水波纹指令
 import QRCode from 'qrcode'
@@ -420,17 +424,29 @@ export default {
       return false
     },
     // 导出二维码
-    importQrcode(type) {
+    async importQrcode(type) {
       // 如果没有选择设备或者选择了不同的设备就退出
       if (this.diffEquipmentType()) {
         return
       }
       // 设备id
       const equipmentIds = []
+      let hasThirdValue = true
       this.checkedRow.forEach((v) => {
         equipmentIds.push(v.equipmentId)
+        if (!v.thirdValue) {
+          hasThirdValue = false
+        }
       })
-      if (type === 'pay') {
+      if (hasThirdValue) {
+        const param = {
+          lyyEquipmentValues: equipmentIds.join(',')
+        }
+        const res = await outsideDeviceImportBatchExportCode(param)
+        if (res && res.result === 0) {
+          this.$message.success('下载成功！')
+        }
+      } else if (type === 'pay') {
         this.downLoadFileName = '支付二维码下载'
         this.loadUrl = exportPayOrCode({ valueStr: equipmentIds })
       } else if (type === 'register') {
