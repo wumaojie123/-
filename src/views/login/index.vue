@@ -403,31 +403,30 @@ export default {
                   })
                 } else {
                   getMenu(params).then(res => {
-                    const testObj = {
-                      'adResourcesId': 1103111,
-                      'parentId': null,
-                      'name': '外部设备导入',
-                      'value': '/outsideDeviceImport',
-                      'selected': true,
-                      'htmlTemplet': 'outsideDeviceImport',
-                      'icon': 'international',
-                      'seq': null,
-                      'menuResourcesList': [
-                        {
-                          'adResourcesId': 1103110,
-                          'parentId': 1103111,
-                          'name': '外部设备导入',
-                          'value': 'outsideDeviceImport',
-                          'selected': true,
-                          'htmlTemplet': 'outsideDeviceImport/outsideDeviceImport',
-                          'icon': null,
-                          'seq': null,
-                          'buttonResourcesList': null
-                        }
-                      ]
-                    }
-                    res.data = [...res.data, testObj]
-                    console.log('test', res.data)
+                    // const testObj = {
+                    //   'adResourcesId': 1103111,
+                    //   'parentId': null,
+                    //   'name': '外部设备导入',
+                    //   'value': '/outsideDeviceImport',
+                    //   'selected': true,
+                    //   'htmlTemplet': 'outsideDeviceImport',
+                    //   'icon': 'international',
+                    //   'seq': null,
+                    //   'menuResourcesList': [
+                    //     {
+                    //       'adResourcesId': 1103110,
+                    //       'parentId': 1103111,
+                    //       'name': '外部设备导入',
+                    //       'value': 'outsideDeviceImport',
+                    //       'selected': true,
+                    //       'htmlTemplet': 'outsideDeviceImport/outsideDeviceImport',
+                    //       'icon': null,
+                    //       'seq': null,
+                    //       'buttonResourcesList': null
+                    //     }
+                    //   ]
+                    // }
+                    // res.data = [...res.data, testObj]
                     saveSession('addRoute', res.data)
                     router.addRoutes(
                       routerFormat(JSON.parse(getSession('addRoute')))
