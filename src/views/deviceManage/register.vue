@@ -377,6 +377,24 @@ export default {
       if (this.clickDisabled) {
         return
       }
+      if (this.selectList.length === 0) {
+        this.$message({ message: '请至少选择一个服务套餐', type: 'error' })
+        return
+      }
+      if (!this.lyyDistributorId) {
+        this.$message({ message: '请选择要绑定的商家', type: 'error' })
+        return
+      }
+      if (!this.isRepeat()) {
+        this.$message({ message: '服务套餐不可重复', type: 'error' })
+        return
+      }
+      const selectInfo = this.merchantList.filter(
+        item => item.adOrgId === this.lyyDistributorId
+      )[0]
+      console.log(selectInfo)
+      this.phoneNumber = selectInfo.account
+      this.name = selectInfo.name
       const params = {
         communication: this.communication,
         equipmentType: this.deviceType,
