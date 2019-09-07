@@ -55,9 +55,9 @@
           <span>{{ scope.row.equipmentValue }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="外部编号" align="center" prop="equipmentValue">
+      <el-table-column label="外部编号" align="center" prop="thirdValue">
         <template slot-scope="scope">
-          <span>{{ scope.row.equipmentValue }}</span>
+          <span>{{ scope.row.thirdValue }}</span>
         </template>
       </el-table-column>
       <el-table-column label="设备类型" align="center">
