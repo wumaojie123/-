@@ -13,3 +13,11 @@ export function getDeviceTypeBd() {
     method: 'get'
   })
 }
+
+// 查询设备类型-新
+export function getAllEquipment() {
+  return request({
+    url: '/rest/equipment/equipmentType/getAllEquipment',
+    method: 'get'
+  })
+}
