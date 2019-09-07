@@ -232,8 +232,8 @@ export default {
         if (item.groupServiceCostWay === 'ELEC') {
           // 待修改
           // item.actualTime=item.actualTime+'度'
-          this.commDetail.prop[7] = ''
-          this.commDetail.prop[8] = ''
+          this.commDetail.prop[7] = item.actualElectric + '度'
+          this.commDetail.prop[8] = item.electric + '度'
           this.commDetail.name[7] = '实际充电电量'
           this.commDetail.name[8] = '套餐电量'
         } else {
