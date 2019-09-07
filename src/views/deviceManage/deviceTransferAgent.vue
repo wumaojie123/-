@@ -191,6 +191,10 @@ import { transfer, rebackEquipment } from '../../api/transferDevice'
 import { Throttle } from '../../utils/throttle'
 import SetEquipmentParasForm from '@/components/SetEquipmentParas'
 import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
+import {
+  outsideDeviceImportBatchExportCode
+} from '@/api/deviceImport'
+
 export default {
   name: 'DeviceTransfer',
   components: {
@@ -328,16 +332,29 @@ export default {
       })
     },
     // 导出二维码
-    importQrcode(type) {
+    async importQrcode(type) {
       if (this.diffEquipmentType()) {
         return
       }
       // 设备id
       const equipmentIds = []
+      let hasThirdValue = true
       this.willTranfers.forEach((v) => {
         equipmentIds.push(v.equipmentValue)
+        if (!v.thirdValue) {
+          hasThirdValue = false
+        }
       })
-      if (type === 'pay') {
+      if (hasThirdValue) {
+        const param = {
+          lyyEquipmentValues: equipmentIds.join(',')
+        }
+        const res = await outsideDeviceImportBatchExportCode(param)
+        if (res && res.result === 0) {
+          this.$message.success('下载成功！')
+        }
+        return
+      } else if (type === 'pay') {
         this.downLoadFileName = '支付二维码下载'
         this.loadUrl = exportPayOrCode({ valueStr: equipmentIds })
       } else if (type === 'register') {
