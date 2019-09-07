@@ -310,7 +310,7 @@ export default {
     // 获取设备类型
     getDevicesList() {
       getAllEquipment().then(res => {
-        if (res.result === 0 && res.data && res.data.length) {
+        if (res && res.result === 0 && res.data && res.data.length) {
           res.data.forEach(item => {
             if (item.name === '售货机') {
               this.equipmentTypesArr.push({
@@ -333,7 +333,7 @@ export default {
         pageSize: this.pageSize
       }
       const res = await getOutsideDeviceImportList(param)
-      if (res.result === 0) {
+      if (res && res.result === 0) {
         this.listLoading = false
         this.total = res.data.total
         this.importDataList = []
@@ -359,7 +359,7 @@ export default {
         pageSize: this.detailPageSize
       }
       const res = await outsideDeviceImportDetailList(param)
-      if (res.result === 0) {
+      if (res && res.result === 0) {
         this.detailTotal = res.data.total
         this.importDetailList = []
         res.data.items.forEach(i => {
@@ -403,7 +403,7 @@ export default {
         ids: this.selectDevices.join(',')
       }
       const res = await outsideDeviceImportExecuteRevocation(param)
-      if (res.result === 0) {
+      if (res && res.result === 0) {
         this.$message.success('撤回成功！')
         this.queryImportDetailList()
         this.queryImportDeviceList()
@@ -416,7 +416,7 @@ export default {
         return
       }
       const res = await outsideDeviceImportExecuteORM({ ids: this.selectDevices.join(',') })
-      if (res.result === 0) {
+      if (res && res.result === 0) {
         this.$message.success('映射成功！')
         this.queryImportDetailList()
         this.queryImportDeviceList()
@@ -432,7 +432,7 @@ export default {
         lyyEquipmentValues: this.lyyEquipmentValues.join(',')
       }
       const res = await outsideDeviceImportBatchExportCode(param)
-      if (res.result === 0) {
+      if (res && res.result === 0) {
         this.$message.success('下载成功！')
       }
     },
@@ -470,7 +470,7 @@ export default {
         queryString = quer[1] && quer[1].trim()
       }
       queryAgents({ agentQuery: queryString }).then(res => {
-        if (res.result === 0 && res.data && res.data.length !== 0) {
+        if (res && res.result === 0 && res.data && res.data.length !== 0) {
           const results = []
           res.data.forEach(item => {
             results.push({
@@ -523,7 +523,7 @@ export default {
         queryString = quer[1] && quer[1].trim()
       }
       queryAgents({ agentQuery: queryString }).then(res => {
-        if (res.result === 0 && res.data && res.data.length !== 0) {
+        if (res && res.result === 0 && res.data && res.data.length !== 0) {
           const results = []
           res.data.forEach(item => {
             results.push({
