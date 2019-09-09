@@ -283,9 +283,11 @@ export default {
       this.selectList.forEach(i => {
         if (i.billingModel.length > 1) {
           param.TWO = 0
-          i.billingModel.forEach(item => {
-            this.arrCDZChargePattern.push(item.name)
-          })
+          if (this.arrCDZChargePattern.length === 0) {
+            i.billingModel.forEach(item => {
+              this.arrCDZChargePattern.push(item.name)
+            })
+          }
         }
         if (i.billingModel.length === 1) {
           param[i.billingModel[0].name]++
