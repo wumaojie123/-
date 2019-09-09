@@ -412,7 +412,8 @@
         const res = await outsideDeviceImportExecuteORM({ ids: this.selectDevices.join(',') })
         if (res && res.result === 0) {
           this.$message.success('映射成功！')
-          this.queryImportDetailList()
+          this.showImportDetailFlag = false
+          // this.queryImportDetailList()
           this.queryImportDeviceList()
         }
       },
