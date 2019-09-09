@@ -102,6 +102,11 @@
           <span>{{ scope.row.equipmentId }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="外部编号" align="center" prop="thirdValue">
+        <template slot-scope="scope">
+          <span>{{ scope.row.thirdValue }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="设备类型" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentTypeName }}</span>
