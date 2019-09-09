@@ -496,7 +496,7 @@
       // 上传文件成功
       handleSuccess(par) {
         if (par.result === 0) {
-          this.$message.success('导入数据成功！')
+          this.$message.success(`操作成功：${par.description}`)
           this.queryImportDeviceList()
         } else if (par.result === -1) {
           this.$message.error(par.description)
