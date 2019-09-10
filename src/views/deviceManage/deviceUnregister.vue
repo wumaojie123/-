@@ -98,7 +98,7 @@ export default {
         { key: 'equipmentTypeText', label: '设备类型' },
         { key: 'value', label: '设备编号' },
         { key: 'communicationText', label: '通信方式' },
-        { key: 'chargePattern', label: '支持计费方式' },
+        { key: 'chargePattern', label: '计费方式' },
         { key: 'sourceText', label: '设备来源' },
         { key: 'updated', label: '操作时间' }
       ],
