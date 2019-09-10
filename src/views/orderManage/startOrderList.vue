@@ -223,12 +223,14 @@ export default {
           item.money1 = item.money
           var unitName = '分钟'
           item.chargePatternTypeName = '按时长计费'
+          item.serviceDurings1 = item.serviceDurings + unitName
+          item.actualTime = item.actualTime + unitName
           if (item.groupServiceCostWay === 'ELEC') {
             unitName = '度'
             item.chargePatternTypeName = '按电量计费'
+            item.serviceDurings1 = item.electric + '度'
+            item.actualTime = item.actualElectric + '度'
           }
-          item.serviceDurings1 = item.serviceDurings + unitName
-          item.actualTime = item.actualTime + unitName
 
           if (
             item.continuousPackageNames &&
