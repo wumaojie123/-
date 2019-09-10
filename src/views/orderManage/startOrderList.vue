@@ -85,7 +85,7 @@ export default {
             'startTime',
             'endTime',
             'actualTime',
-            'actualDurings',
+            'durings',
             'refundMoney',
             'createTime'
           ],
@@ -226,15 +226,16 @@ export default {
 
           if (item.groupServiceCostWay === 'ELEC') {
             unitName = '度'
-            this.commProps.cell.prop[14] = 'elecActualTime'
-            item.elecActualTime = item.actualTime
+            // this.$set(this.commProps)
+            // this.commProps.cell.prop[14] = 'elecActualTime'
+            item.durings = item.actualTime
             item.chargePatternTypeName = '按电量计费'
             item.serviceDurings1 = item.electric + '度'
             item.actualTime = item.actualElectric
               ? item.actualElectric + '度'
               : ''
           } else {
-            this.commProps.cell.prop[14] = 'actualDurings'
+            item.durings = item.actualDurings
             item.serviceDurings1 = item.serviceDurings
               ? item.serviceDurings + unitName
               : ''
