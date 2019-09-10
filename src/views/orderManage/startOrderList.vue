@@ -229,7 +229,9 @@ export default {
             unitName = '度'
             item.chargePatternTypeName = '按电量计费'
             item.serviceDurings1 = item.electric + '度'
-            item.actualTime = item.actualElectric + '度'
+            item.actualTime = item.actualElectric
+              ? item.actualElectric + '度'
+              : ''
           }
 
           if (
