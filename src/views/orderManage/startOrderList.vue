@@ -224,14 +224,17 @@ export default {
           var unitName = '分钟'
           item.chargePatternTypeName = '按时长计费'
           item.serviceDurings1 = item.serviceDurings + unitName
-          item.actualTime = item.actualTime + unitName
           if (item.groupServiceCostWay === 'ELEC') {
             unitName = '度'
+            this.commProps.cell.prop[14] = 'elecActualTime'
+            item.elecActualTime = item.actualTime
             item.chargePatternTypeName = '按电量计费'
             item.serviceDurings1 = item.electric + '度'
             item.actualTime = item.actualElectric
               ? item.actualElectric + '度'
               : ''
+          } else {
+            item.actualTime = item.actualTime + unitName
           }
 
           if (
