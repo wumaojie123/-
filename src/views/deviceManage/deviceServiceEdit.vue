@@ -13,7 +13,7 @@
           />
         </el-select>
       </template>
-      <el-button type="primary" @click="handleSaveModal">添加套餐套餐</el-button>
+      <el-button type="primary" @click="handleSaveModal">添加套餐</el-button>
     </div>
     <el-table
       :data="list"
