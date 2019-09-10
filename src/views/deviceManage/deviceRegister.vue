@@ -78,7 +78,7 @@ export default {
         // { key: 'loginFlag', label: '登录表示' },
         { key: 'equipmentTypeText', label: '设备类型' },
         { key: 'communicationText', label: '通信方式' },
-        { key: 'chargePattern', label: '支持计费方式' },
+        { key: 'chargePattern', label: '计费方式' },
         { key: 'equipmentParam', label: '设备参数' },
         { key: 'groupNumber', label: '机台号' },
         { key: 'signalText', label: '信号' },
