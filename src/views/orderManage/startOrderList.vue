@@ -234,6 +234,7 @@ export default {
               ? item.actualElectric + '度'
               : ''
           } else {
+            this.commProps.cell.prop[14] = 'actualDurings'
             item.actualTime = item.actualTime + unitName
           }
 
