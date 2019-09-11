@@ -34,6 +34,10 @@
       @show-detail="showDetail"
     />
     <el-dialog :visible.sync="detailVisible" title="订单详情">
+      <template v-if="true">
+        <power :data="powerList"/>
+      </template>
+      <div style="margin-bottom: 20px;">充电明细</div>
       <order-detail :cell="commDetail" />
       <div class="btn-wrap">
         <el-button type="primary" @click="closeDetailBox">好的</el-button>
@@ -45,6 +49,7 @@
 <script>
 import OrderList from './components/orderList'
 import OrderDetail from './components/orderDetail'
+import power from './components/power'
 import {
   queryOrder,
   getMerchantList,
@@ -54,7 +59,8 @@ import {
 export default {
   components: {
     'order-list': OrderList,
-    'order-detail': OrderDetail
+    'order-detail': OrderDetail,
+    power
   },
   data() {
     return {
@@ -117,6 +123,7 @@ export default {
       /**
        * 商户列表
        */
+      powerList: [],
       merchantList: [],
       /**
        * 查询条件
@@ -203,6 +210,33 @@ export default {
     showDetail(item) {
       this.getOrderDetail(item.outTradeNo, item.payType)
       console.log(`💗💗详情`)
+      this.getPowerInfo(item)
+    },
+    async getPowerInfo(item) {
+      setTimeout(() => {
+        this.powerList = [
+          {
+            statisticsDate: '09-10',
+            dayPayCount: 10,
+            dayOnlineIncomde: 30
+          },
+          {
+            statisticsDate: '09-15',
+            dayPayCount: 30,
+            dayOnlineIncomde: 60
+          },
+          {
+            statisticsDate: '09-20',
+            dayPayCount: 20,
+            dayOnlineIncomde: 90
+          }
+        ]
+      }, 1000)
+      console.log(JSON.stringify(this.powerList))
+      // const res = await getPower()
+      // if (res.result === 0) {
+      //   this.powerList = res.data
+      // }
     },
     async getOrderDetail(outTradeNo, payType) {
       var result = await queryOrderDetail({ outTradeNo })

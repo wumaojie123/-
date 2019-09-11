@@ -52,7 +52,7 @@
         <el-button type="primary" @click="handleSave">保存并使用</el-button>
       </div>
     </el-dialog>
-    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="handleBatchSave"/>
+    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="handleBatchSaveBefore"/>
   </div>
 </template>
 
@@ -219,7 +219,8 @@ export default {
       console.log(selectInfo)
       this.phoneNumber = selectInfo.account
       this.name = selectInfo.name
-      this.verfyCodeVisible = true
+      this.handleSaveModal()
+      // this.verfyCodeVisible = true
     },
     async handleBatchSave() {
       if (this.clickDisabled) {

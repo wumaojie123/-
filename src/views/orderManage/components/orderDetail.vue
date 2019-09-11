@@ -1,5 +1,6 @@
 <template>
   <el-container>
+
     <el-main>
       <template v-for="(item,index) in cell.prop">
         <el-row :key="index" class="border-set">

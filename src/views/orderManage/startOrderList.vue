@@ -30,11 +30,18 @@
       @size-change="sizeChangeHd"
       @show-detail="showDetail"
     />
+    <el-dialog :visible.sync="powerVisible" title="功率曲线图">
+      <power :data="powerList" />
+      <div class="btn-wrap">
+        <el-button type="primary" @click="powerVisible=false">好的</el-button>
+      </div>
+    </el-dialog>
   </el-container>
 </template>
 
 <script>
 import OrderList from './components/orderList'
+import power from './components/power'
 import {
   queryOrder,
   getMerchantList,
@@ -42,7 +49,8 @@ import {
 } from '../../api/orderManage'
 export default {
   components: {
-    'order-list': OrderList
+    'order-list': OrderList,
+    power
   },
   data() {
     return {
@@ -95,6 +103,11 @@ export default {
             { width: '170' }
           ]
         },
+        handler: {
+          isShow: true,
+          text: '操作',
+          list: []
+        },
         pagination: {
           totalCount: 0,
           pageIndex: 1,
@@ -117,6 +130,8 @@ export default {
        * 商户列表
        */
       merchantList: [],
+      powerList: [],
+      powerVisible: false,
       /**
        * 选择时间相关
        */
@@ -157,6 +172,31 @@ export default {
      */
     showDetail(item) {
       console.log(`💗${item}`)
+      this.getPowerInfo(item)
+    },
+    async getPowerInfo(item) {
+      this.powerList = [
+        {
+          statisticsDate: '09-10',
+          dayPayCount: 10,
+          dayOnlineIncomde: 30
+        },
+        {
+          statisticsDate: '09-15',
+          dayPayCount: 30,
+          dayOnlineIncomde: 60
+        },
+        {
+          statisticsDate: '09-20',
+          dayPayCount: 20,
+          dayOnlineIncomde: 90
+        }
+      ]
+      // const res = await getPower()
+      // if (res.result === 0) {
+      //   this.powerList = res.data
+      this.powerVisible = true
+      // }
     },
     /**
      * 查询支付订单
@@ -190,6 +230,14 @@ export default {
         this.commProps.cell.list = []
         var data = result.data
         this.commProps.pagination.totalCount = data.total
+        this.commProps.handler.list = []
+        this.commProps.handler.list.push({
+          isShow: true,
+          name: '查看功率详情',
+          type: 'text',
+          size: 'small',
+          fn: 'show-detail'
+        })
         // this.commProps.pagination.pageIndex = data.page
         var list = data.items || []
         var index = 0
