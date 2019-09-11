@@ -30,14 +30,14 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
-    <el-dialog :visible.sync="dialogVisible" title="重置授权有效期" center>
-      <re-authorize :day="vilidDay" />
+    <el-dialog id="resetValidDay" :visible.sync="dialogVisible" title="重置授权有效期" center>
+      <re-authorize :day="validDay" :e-type="eType" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { getAllResult } from '@/api/officialAccount'
+import { getAllResult, deleteAuthorization } from '@/api/officialAccount'
 import reAuthorize from './component/reAuthorize'
 
 export default {
@@ -54,8 +54,9 @@ export default {
       pageInfo: { total: 0, pageSize: 10, currPage: 1 },
       selectList: [],
       // modify by lss 20190910 start
-      dialogVisible: true,
-      vilidDay: '' // -1 不显示 0 过期  >0 未过期
+      dialogVisible: false,
+      validDay: '', // -1 不显示 0 过期  >0 未过期
+      eType: '' // 设备类型
       // end
     }
   },
@@ -68,18 +69,36 @@ export default {
      * 解绑
      */
     unbind(item) {
+      // var rawHtml='<span style="color:red;font-size:0.24rem">解绑后沉淀粉丝、服务消息通知、配置菜单等功能将失效</span>'
       var title = `公众号${
         item.officialAccountName
-      }确认解绑吗？<p style="color:red;font-size:0.24rem">解绑后沉淀粉丝、服务消息通知、配置菜单等功能将失效</p>`
-      this.$messagebox
-        .confirm(title, '公众号解绑')
-        .then(action => {})
+      }确认解绑吗？解绑后沉淀粉丝、服务消息通知、配置菜单等功能将失效`
+      this.$confirm(title, '公众号解绑')
+        .then(action => {
+          this.unbindAuthorize(item)
+        })
         .catch(() => {})
+    },
+    async unbindAuthorize(item) {
+      var params = { appId: item.appId }
+      var result = await deleteAuthorization(params)
+      if (result.result === 0) {
+        this.$message({ message: '解绑成功', type: 'success' })
+        this.queryList()
+      }
     },
     /**
      * 重置有效期
      */
-    resetValidDate(item) {},
+    resetValidDate(item) {
+      this.eType = item.equipmentType
+      if (typeof item.day === 'undefined' || item.day === null) {
+        this.validDay = -1
+      } else {
+        this.validDay = item.day
+      }
+      this.dialogVisible = true
+    },
     async queryList(page = 1) {
       this.list = []
       this.pageInfo.currPage = page

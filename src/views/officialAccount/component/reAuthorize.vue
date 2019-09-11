@@ -18,6 +18,10 @@ export default {
     day: {
       type: [Number, String],
       default: ''
+    },
+    eType: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -34,25 +38,20 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.params.id)
+    // console.log(this.$route.params.id)
   },
   methods: {
-    reAuthorize() {}
+    reAuthorize() {
+      debugger
+      window.location.href = `/agent/rest/officialAccounts/againAuthUrl?eType=${
+        this.eType
+      }`
+    }
   }
 }
 </script>
 <style lang="less" scoped>
 .anthorize-wrap {
-  //   position: absolute;
-  //   top: 0;
-  //   left: 0;
-  //   bottom: 0;
-  //   right: 0;
-  //   overflow: scroll;
-  .content-wrap {
-    padding: 26px 16px;
-    background: #fff;
-  }
   .header {
     width: 100%;
     background: rgba(237, 244, 255, 1);
@@ -63,21 +62,28 @@ export default {
   }
   .img-wrap {
     width: 100%;
-    height: 500px;
+    height: 400px;
   }
   .img-wrap > img {
     width: 100%;
     height: 100%;
   }
   .footer {
-    // position: fixed;
-    // bottom: 0;
-    height: 80px;
-    line-height: 80px;
+    height: 50px;
+    line-height: 50px;
     background: rgba(61, 123, 232, 1);
     width: 100%;
     color: rgba(255, 255, 255, 1);
     text-align: center;
   }
+}
+#resetValidDay .el-dialog__header {
+  padding: 10px 20px 10px;
+}
+#resetValidDay .el-dialog__body {
+  padding: 0px 20px !important;
+}
+#resetValidDay .content-wrap {
+  padding: 8px;
 }
 </style>

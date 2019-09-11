@@ -40,3 +40,15 @@ export function authTypes() {
     method: 'get'
   })
 }
+
+/**
+* modify by lss 20190911
+* 解绑公众号
+*/
+export function deleteAuthorization(params) {
+  return request({
+    url: '/rest/factory/deleteAuthorization',
+    method: 'get',
+    params
+  })
+}
