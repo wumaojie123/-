@@ -212,3 +212,25 @@ export function setEquipment(data) {
     // }
   })
 }
+/**
+ * add by lss 20190903
+ * 更新计费模式
+ */
+export async function updateChargePattern(params) {
+  return request({
+    url: '/rest/factory/deleteServiceByEquipment',
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 获取计费模式
+ */
+export async function getChargePattern(params) {
+  return request({
+    url: '/rest/factory/getBillingModel',
+    method: 'get',
+    params
+  })
+}

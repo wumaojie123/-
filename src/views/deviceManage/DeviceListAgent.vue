@@ -102,6 +102,11 @@
           <span>{{ scope.row.equipmentId }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="外部编号" align="center" prop="thirdValue">
+        <template slot-scope="scope">
+          <span>{{ scope.row.thirdValue }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="设备类型" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentTypeName }}</span>
@@ -223,6 +228,9 @@
 import { getSecDeviceList, equipmentStatus, setEquipmentParam } from '@/api/getDeviceList'
 import { getDeviceType } from '@/api/getEquiedType'
 import { exportPayOrCode, exportRegisterOrCode } from '../../api/qrcodeCreate'
+import {
+  outsideDeviceImportBatchExportCode
+} from '@/api/deviceImport'
 import SetEquipmentParasForm from '@/components/SetEquipmentParas'
 import { Throttle } from '../../utils/throttle'
 import waves from '@/directive/waves' // 水波纹指令
@@ -413,17 +421,30 @@ export default {
       return false
     },
     // 导出二维码
-    importQrcode(type) {
+    async importQrcode(type) {
       // 如果没有选择设备或者选择了不同的设备就退出
       if (this.diffEquipmentType()) {
         return
       }
       // 设备id
       const equipmentIds = []
+      let hasThirdValue = true
       this.checkedRow.forEach((v) => {
         equipmentIds.push(v.equipmentId)
+        if (!v.thirdValue) {
+          hasThirdValue = false
+        }
       })
-      if (type === 'pay') {
+      if (hasThirdValue) {
+        const param = {
+          lyyEquipmentValues: equipmentIds.join(',')
+        }
+        const res = await outsideDeviceImportBatchExportCode(param)
+        if (res && res.result === 0) {
+          this.$message.success('下载成功！')
+        }
+        return
+      } else if (type === 'pay') {
         this.downLoadFileName = '支付二维码下载'
         this.loadUrl = exportPayOrCode({ valueStr: equipmentIds })
       } else if (type === 'register') {

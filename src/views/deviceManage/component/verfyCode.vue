@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="value" title="操作验证" width="45%">
+  <el-dialog :visible.sync="value" :close-on-click-modal="false" title="操作验证" width="45%">
     <el-form label-width="120px" label-position="right" >
       <el-form-item label="设备所属商家" prop="description">
         <el-input v-model="info" placeholder="请输入菜单名称" class="input-300" maxlength="6" readonly/>

@@ -62,24 +62,26 @@ export default {
           name: [
             '交易设备',
             '通信方式',
+            '计费方式',
             '交易场地',
             '商户账号',
             '用户ID',
             '启动方式',
             '充电套餐',
             '套餐金额(元)',
-            '套餐时长(分)',
+            '套餐时长/套餐电量',
             '工作状态',
             '开始充电时间',
             '结束充电时间',
-            '实际充电时长(分)',
+            '实际充电时长/实际充电电量',
             '套餐实际总时长(分)',
-            '剩余充电时长退款（退至余额）',
+            '剩余充电费用退款（退至余额）',
             '创建时间'
           ],
           prop: [
             'device', // groupNumber deviceType  deviceNo passageWay
             'communicateTypeName', // 串口CK，脉冲MC
+            'chargePatternTypeName',
             'groupName',
             'merchant', // merchantName merchantAccount
             'user', // lyyUserId lyyUserName
@@ -91,7 +93,7 @@ export default {
             'startTime',
             'endTime',
             'actualTime',
-            'actualDurings',
+            'durings',
             'refundMoney',
             'createTime'
           ],
@@ -267,7 +269,27 @@ export default {
           }
           item.packageName1 = item.packageName
           item.money1 = item.money
-          item.serviceDurings1 = item.serviceDurings
+          var unitName = '分钟'
+          item.chargePatternTypeName = '按时长计费'
+
+          if (item.groupServiceCostWay === 'ELEC') {
+            unitName = '度'
+            // this.$set(this.commProps)
+            // this.commProps.cell.prop[14] = 'elecActualTime'
+            item.durings = item.actualTime
+            item.chargePatternTypeName = '按电量计费'
+            item.serviceDurings1 = item.electric + '度'
+            item.actualTime = item.actualElectric
+              ? item.actualElectric + '度'
+              : ''
+          } else {
+            item.durings = item.actualDurings
+            item.serviceDurings1 = item.serviceDurings
+              ? item.serviceDurings + unitName
+              : ''
+            item.actualTime = item.actualTime + unitName
+          }
+
           if (
             item.continuousPackageNames &&
             item.continuousPackageNames.length > 0
@@ -276,7 +298,15 @@ export default {
               ','
             )})`
             item.money1 += `(续充${item.continuousMoney}元)`
-            item.serviceDurings1 += `(续充${item.continuousDurings}分)`
+            if (item.groupServiceCostWay === 'ELEC') {
+              item.serviceDurings1 += `(续充${(
+                item.continuousDurings / 100
+              ).toFixed(1)}${unitName})`
+            } else {
+              item.serviceDurings1 += `(续充${
+                item.continuousDurings
+              }${unitName})`
+            }
           }
 
           item.stateName = getStateName(item.state)

@@ -100,11 +100,7 @@ export default {
             'created'
           ],
           list: [],
-          style: [
-            { width: '255' },
-            { width: '255' },
-            { width: '190' }
-          ]
+          style: [{ width: '255' }, { width: '255' }, { width: '190' }]
         },
         handler: {
           isShow: true,
@@ -159,9 +155,9 @@ export default {
           '工作状态',
           '开始充电时间',
           '结束充电时间',
-          '实际充电时长(分)',
-          '套餐实际充电总时长(分)',
-          '剩余时长退款（退至充电账户余额)(元)'
+          '实际充电时长',
+          '套餐时长',
+          '剩余充电费用退款（退至充电账户余额)(元)'
         ],
         obj: {}
       },
@@ -267,6 +263,18 @@ export default {
           item.packageName1 += `(续充${item.continuousPackageNames.join(',')})`
         }
         item.stateName = getStateName(item.state)
+        if (item.groupServiceCostWay === 'ELEC') {
+          // 待修改
+          item.actualElectric = item.actualElectric + '度'
+          item.electric = item.electric + '度'
+          this.commDetail.prop[7] = 'actualElectric'
+          this.commDetail.prop[8] = 'electric'
+          this.commDetail.name[7] = '实际充电电量'
+          this.commDetail.name[8] = '套餐电量'
+        } else {
+          item.actualTime = item.actualTime + '分钟'
+          item.actualDurings = item.actualDurings + '分钟'
+        }
         // // 订单类型，0为余额充值，1为支付启动
         // if (item.payType === 0) {
         //   this.commDetail.prop = ['device', 'groupName', 'packageName', 'money']
