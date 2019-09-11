@@ -250,7 +250,15 @@ export default {
               ','
             )})`
             item.money1 += `(续充${item.continuousMoney}元)`
-            item.serviceDurings1 += `(续充${item.continuousDurings}${unitName})`
+            if (item.groupServiceCostWay === 'ELEC') {
+              item.serviceDurings1 += `(续充${(
+                item.continuousDurings / 100
+              ).toFixed(1)}${unitName})`
+            } else {
+              item.serviceDurings1 += `(续充${
+                item.continuousDurings
+              }${unitName})`
+            }
           }
 
           item.stateName = getStateName(item.state)
