@@ -109,7 +109,7 @@ export default {
             item.equipmentType = this.selectItem.equipmentType
             const statusMap = { 1: '待注册', 0: '注册成功', 2: '注册失败' }
             item.statusText = statusMap[item.status]
-            const reasonMap = { 0: '未找到设备', 1: '已绑定', 2: '失败' }
+            const reasonMap = { 0: '未找到设备', 1: '已绑定', 2: '切换计费模式失败' }
             item.reasonText = reasonMap[item.reason]
             return item
           })

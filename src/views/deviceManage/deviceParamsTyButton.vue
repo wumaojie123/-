@@ -26,27 +26,37 @@
     <div style="text-align:left;margin-top:60px;margin-left: 20px;">
       <el-button type="success" @click="back">返回上一页</el-button>
       <el-button v-if="!disabled" style="margin-left: 40px;" @click="queryList">刷新</el-button>
-      <el-button v-if="!disabled" style="margin-left: 40px;" type="primary" @click="handleSave">保存设置</el-button>
+      <el-button v-if="!disabled" style="margin-left: 40px;" type="primary" @click="handleSaveBefore">保存设置</el-button>
     </div>
+    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="handleSave"/>
   </div>
 </template>
 
 <script>
 import { tyBtn, tyBtnsetting } from '@/api/device'
+import verfyCode from './component/verfyCode'
 // import { tybtns } from './constant'
 
 export default {
   name: 'ParamC',
+  components: {
+    verfyCode
+  },
   data() {
     return {
       dataList: [],
       para: [],
       disabled: false,
-      queryParams: {}
+      queryParams: {},
+      verfyCodeVisible: false,
+      phoneNumber: '',
+      name: ''
     }
   },
   created() {
     this.queryParams = this.$route.query
+    this.phoneNumber = this.$route.query.phoneNumber
+    this.name = this.$route.query.name
     this.queryList()
   },
   methods: {
@@ -78,6 +88,19 @@ export default {
       }
       this.dataList = list
     },
+    handleSaveBefore() {
+      for (const key in this.dataList) {
+        if (this.dataList[key].componentType === 'inputInt' || this.dataList[key].componentType === 'inputFloat') {
+          const check = this.dataList[key].componentValueRange
+          if (this.dataList[key].componentValue < parseFloat(check.min) || this.dataList[key].componentValue > parseFloat(check.max)) {
+            console.log(this.dataList[key].componentValue, check.min, check.max)
+            this.$message({ message: `${this.dataList[key].name}超出取值范围`, type: 'error' })
+            return
+          }
+        }
+      }
+      this.verfyCodeVisible = true
+    },
     async handleSave() {
       for (const key in this.dataList) {
         if (this.dataList[key].componentType === 'inputInt' || this.dataList[key].componentType === 'inputFloat') {
@@ -100,6 +123,7 @@ export default {
       console.log(JSON.stringify(params))
       const res = await tyBtnsetting(params)
       if (res.result === 1) {
+        this.verfyCodeVisible = false
         this.$message({ message: '修改成功', type: 'success' })
         this.queryList()
       } else {

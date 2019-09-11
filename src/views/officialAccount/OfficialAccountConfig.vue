@@ -3,6 +3,12 @@
     <!-- 列表 -->
     <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;">
       <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+      <el-table-column label="操作" align="center" >
+        <template slot-scope="scope">
+          <el-button type="text" @click="handleNewAuth(scope.row)">重新授权</el-button>
+          <el-button type="text" @click="handleConfig(scope.row)">公众号功能配置</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       :page-sizes="[10, 20, 30, 40]"
@@ -17,16 +23,15 @@
 </template>
 
 <script>
-import { getList } from '@/api/officialAccount'
+import { getAllResult } from '@/api/officialAccount'
 
 export default {
   data() {
     return {
       list: [],
       colums: [
-        { key: 'equipmentTypeText', label: '公众号名称' },
-        { key: 'value', label: '绑定设备类型' },
-        { key: 'updated', label: '操作时间' }
+        { key: 'officialAccountName', label: '公众号名称' },
+        { key: 'equipmentTypeValue', label: '绑定设备类型' }
       ],
       pageInfo: { total: 0, pageSize: 10, currPage: 1 },
       selectList: []
@@ -40,7 +45,7 @@ export default {
       this.list = []
       this.pageInfo.currPage = page
       const postData = { pageSize: this.pageInfo.pageSize, pageIndex: this.pageInfo.currPage }
-      const res = await getList(postData)
+      const res = await getAllResult(postData)
       if (res.result === 0) {
         this.listLoading = false
         if (res.data) {
@@ -52,14 +57,14 @@ export default {
         }
       }
     },
-    handleAngent(type) {
-      if (this.selectList.length === 1) {
-        console.log('info')
-      } else if (this.selectList.length > 1) {
-        this.$message({ message: '只能编辑一条代理商信息', type: 'error' })
-      } else {
-        this.$message({ message: '请选中一条代理商信息！！', type: 'error' })
-      }
+    handleNewAuth(item) {
+      window.location.href = `/agent/rest/officialAccounts/againAuthUrl?eType=${item.equipmentType}`
+    },
+    handleConfig(item) {
+      this.$router.push({
+        path: '/EditOfficialAccount',
+        query: { appId: item.appId, eType: item.equipmentType }
+      })
     },
     handleSizeChange(pageSize) {
       this.pageInfo.pageSize = pageSize

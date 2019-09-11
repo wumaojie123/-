@@ -187,6 +187,20 @@ export function szNewEquipment(data) {
     params: data
   })
 }
+export function verifyCode(data) {
+  return request({
+    url: '/userlogin/merchant/verifyCode',
+    method: 'get',
+    params: data
+  })
+}
+export function validate(data) {
+  return request({
+    url: '/userlogin/password/verifyCode/validate',
+    method: 'post',
+    data
+  })
+}
 
 export function setEquipment(data) {
   const url = `/rest/setting/setEquipment${stringParse(data)}`
@@ -196,5 +210,27 @@ export function setEquipment(data) {
     // headers : {
     //   "Content-Type":'application/x-www-form-urlencoded; charset=UTF-8'
     // }
+  })
+}
+/**
+ * add by lss 20190903
+ * 更新计费模式
+ */
+export async function updateChargePattern(params) {
+  return request({
+    url: '/rest/factory/deleteServiceByEquipment',
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 获取计费模式
+ */
+export async function getChargePattern(params) {
+  return request({
+    url: '/rest/factory/getBillingModel',
+    method: 'get',
+    params
   })
 }

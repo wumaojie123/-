@@ -165,7 +165,7 @@ if (config.build.productionGzip) {
   )
 }
 
-if (config.build.generateAnalyzerReport || config.build.bundleAnalyzerReport) {
+if (false && (config.build.generateAnalyzerReport || config.build.bundleAnalyzerReport)) {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
     .BundleAnalyzerPlugin
 

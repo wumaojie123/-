@@ -26,16 +26,21 @@
     <div style="text-align:left;margin-top:80px;">
       <el-button @click="goBack">返回上一页</el-button>
       <el-button @click="query">重新加载页面</el-button>
-      <el-button style="margin-left: 20px;" type="primary" @click="saveNewEquipment">保存设置</el-button>
+      <el-button style="margin-left: 20px;" type="primary" @click="saveNewEquipmentBefore">保存设置</el-button>
     </div>
+    <verfyCode v-model="verfyCodeVisible" :phone-number="phoneNumber" :name="name" @on-OK="saveNewEquipment"/>
   </div>
 </template>
 
 <script>
 import { cxNewEquipment, readNewEquipment, equipmentParamDef, szNewEquipment } from '@/api/device'
+import verfyCode from './component/verfyCode'
 
 export default {
   name: 'ParamC',
+  components: {
+    verfyCode
+  },
   data() {
     return {
       params: {},
@@ -45,7 +50,10 @@ export default {
       modalData: { pulseWidth: '', pulseInterval: '' },
       type: '1',
       flag: false,
-      saveData: { pulseWidth: '', pulseInterval: '', battery: '' }
+      saveData: { pulseWidth: '', pulseInterval: '', battery: '' },
+      verfyCodeVisible: false,
+      phoneNumber: '',
+      name: ''
     }
   },
   watch: {
@@ -67,6 +75,8 @@ export default {
   },
   created() {
     this.params = this.$route.query
+    this.phoneNumber = this.$route.query.phoneNumber
+    this.name = this.$route.query.name
     this.query()
   },
   methods: {
@@ -139,6 +149,25 @@ export default {
         }
       })
     },
+    saveNewEquipmentBefore() {
+      if (this.index === this.list.length - 1) {
+        this.saveData.pulseWidth = this.modalData.pulseWidth
+        this.saveData.pulseInterval = this.modalData.pulseInterval
+      }
+      if (!this.saveData.pulseWidth || !this.saveData.pulseInterval) {
+        this.$message({ message: '脉冲设置或脉冲间隔不能为空', type: 'error' })
+        return
+      }
+      if (this.modalData.pulseWidth < 10 || this.modalData.pulseWidth > 1000) {
+        this.$message({ message: '脉冲宽度为10~1000整数', type: 'error' })
+        return
+      }
+      if (this.modalData.pulseInterval < 10 || this.modalData.pulseInterval > 1000) {
+        this.$message({ message: '"脉冲间隔为10~1000整数', type: 'error' })
+        return
+      }
+      this.verfyCodeVisible = true
+    },
     async saveNewEquipment() {
       if (this.index === this.list.length - 1) {
         this.saveData.pulseWidth = this.modalData.pulseWidth
@@ -171,6 +200,7 @@ export default {
       }
       const res = await szNewEquipment(params)
       if (res.result === 1) {
+        this.verfyCodeVisible = false
         this.$message({ message: '设置成功', type: 'success' })
       }
     },

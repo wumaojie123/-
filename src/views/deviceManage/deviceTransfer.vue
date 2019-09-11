@@ -55,6 +55,11 @@
           <span>{{ scope.row.equipmentValue }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="外部编号" align="center" prop="thirdValue">
+        <template slot-scope="scope">
+          <span>{{ scope.row.thirdValue }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="设备类型" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentTypeName }}</span>
@@ -180,6 +185,10 @@ import { agentEquipmentList, setEquipmentParam } from '@/api/getDeviceList'
 import { childMerchants } from '@/api/businessManage'
 import { queryAgents } from '@/api/getAgentUserId'
 import { transfer, transferAgent } from '@/api/transferDevice'
+import {
+  outsideDeviceImportBatchExportCode
+} from '@/api/deviceImport'
+
 import { Throttle } from '@/utils/throttle'
 import { exportPayOrCode, exportRegisterOrCode } from '@/api/qrcodeCreate'
 import SetEquipmentParasForm from '@/components/SetEquipmentParas'
@@ -310,14 +319,29 @@ export default {
         })
     },
     // 导出二维码
-    importQrcode(type) {
+    async importQrcode(type) {
       if (this.diffEquipmentType()) {
         return
       }
       // 设备id
       const equipmentIds = []
-      this.willTranfers.forEach((v) => { equipmentIds.push(v.equipmentValue) })
-      if (type === 'pay') {
+      let hasThirdValue = true
+      this.willTranfers.forEach((v) => {
+        equipmentIds.push(v.equipmentValue)
+        if (!v.thirdValue) {
+          hasThirdValue = false
+        }
+      })
+      if (hasThirdValue) {
+        const param = {
+          lyyEquipmentValues: equipmentIds.join(',')
+        }
+        const res = await outsideDeviceImportBatchExportCode(param)
+        if (res && res.result === 0) {
+          this.$message.success('下载成功！')
+        }
+        return
+      } else if (type === 'pay') {
         this.downLoadFileName = '支付二维码下载'
         this.loadUrl = exportPayOrCode({ valueStr: equipmentIds })
       } else if (type === 'register') {

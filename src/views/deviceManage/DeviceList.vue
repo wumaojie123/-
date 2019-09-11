@@ -93,6 +93,11 @@
           <span>{{ scope.row.equipmentId }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="外部编号" align="center" prop="thirdValue">
+        <template slot-scope="scope">
+          <span>{{ scope.row.thirdValue }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="设备类型" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentTypeName }}</span>
@@ -228,6 +233,10 @@ import { getFirstDeviceList, equipmentStatus, setEquipmentParam } from '@/api/ge
 import { getDeviceType } from '@/api/getEquiedType'
 import SetEquipmentParasForm from '@/components/SetEquipmentParas'
 import { exportPayOrCode, exportRegisterOrCode } from '@/api/qrcodeCreate'
+import {
+  outsideDeviceImportBatchExportCode
+} from '@/api/deviceImport'
+
 import { Throttle } from '@/utils/throttle'
 import waves from '@/directive/waves' // 水波纹指令
 import QRCode from 'qrcode'
@@ -443,17 +452,30 @@ export default {
       return false
     },
     // 导出二维码
-    importQrcode(type) {
+    async importQrcode(type) {
       // 如果没有选择设备或者选择了不同的设备就退出
       if (this.diffEquipmentType()) {
         return
       }
       // 设备id
       const equipmentIds = []
+      let hasThirdValue = true
       this.checkedRow.forEach((v) => {
         equipmentIds.push(v.equipmentId)
+        if (!v.thirdValue) {
+          hasThirdValue = false
+        }
       })
-      if (type === 'pay') {
+      if (hasThirdValue) {
+        const param = {
+          lyyEquipmentValues: equipmentIds.join(',')
+        }
+        const res = await outsideDeviceImportBatchExportCode(param)
+        if (res && res.result === 0) {
+          this.$message.success('下载成功！')
+        }
+        return
+      } else if (type === 'pay') {
         this.downLoadFileName = '支付二维码下载'
         this.loadUrl = exportPayOrCode({ valueStr: equipmentIds })
       } else if (type === 'register') {
@@ -476,8 +498,9 @@ export default {
         return
       }
       if (type === 'disable') {
-        this.$confirm('禁用设备后，用户将无法付款启动该设备。你可以通过“解除禁用”来恢复使用。\n 确定要禁用设备吗？', '温馨提示', {
+        this.$confirm('<p>禁用设备后，用户将无法付款启动该设备。你可以通过“解除禁用”来恢复使用。确定要禁用设备吗？</p><p class="tips" style="color: red;">（注意：“禁用设备 / 解除禁用”功能，目前只适用于  按摩椅、足疗机、按摩垫、洗衣机、充电桩、扭蛋机）</p>', '温馨提示', {
           distinguishCancelAndClose: true,
+          dangerouslyUseHTMLString: true,
           confirmButtonText: '确定',
           cancelButtonText: '取消'
         })

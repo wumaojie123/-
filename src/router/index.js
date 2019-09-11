@@ -201,8 +201,29 @@ export let constantRouterMap = [
       {
         path: '/EditOfficialAccount',
         component: () => import('@/views/officialAccount/EditOfficialAccount'),
-        name: 'agentList',
-        meta: { title: '工作号配置' },
+        name: 'EditOfficialAccount',
+        meta: { title: '公众号编辑' },
+        hidden: true
+      },
+      {
+        path: '/officialAccountResult',
+        component: () => import('@/views/officialAccount/officialAccountResult'),
+        name: 'officialAccountResult',
+        meta: { title: '公众号结果' },
+        hidden: true
+      },
+      {
+        path: '/OfficialAccountError',
+        component: () => import('@/views/officialAccount/OfficialAccountError'),
+        name: 'OfficialAccountError',
+        meta: { title: '公众号授权结果' },
+        hidden: true
+      },
+      {
+        path: '/OfficialAccountDetail',
+        component: () => import('@/views/officialAccount/OfficialAccountDetail'),
+        name: 'OfficialAccountDetail',
+        meta: { title: '公众号详情' },
         hidden: true
       }
     ]

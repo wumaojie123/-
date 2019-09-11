@@ -1,22 +1,37 @@
 <template>
   <div class="content-area">
     <!-- 列表 -->
-    <el-button class="creat-btn" type="primary" icon="el-icon-edit" @click="()=>handleEdit('add')">添加服务套餐</el-button>
-    <el-table v-loading="listLoading" :data="list" :height="550" border highlight-current-row style="width: 100%;margin-bottom: 20px;" >
-      <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center">
-        <template slot-scope="scope">
-          {{ item.render?item.render(scope.row[item.key]):scope.row[item.key] }}
-        </template>
+    <el-button
+      class="creat-btn"
+      type="primary"
+      icon="el-icon-edit"
+      @click="()=>handleEdit('add')"
+    >添加服务套餐</el-button>
+    <el-table
+      v-loading="listLoading"
+      :data="list"
+      :height="550"
+      border
+      highlight-current-row
+      style="width: 100%;margin-bottom: 20px;"
+    >
+      <el-table-column
+        v-for="(item, index) in colums"
+        :key="index"
+        :prop="item.key"
+        :label="item.label"
+        :width="item.width"
+        :sortable="item.sortable"
+        align="center"
+      >
+        <template
+          slot-scope="scope"
+        >{{ item.render?item.render(scope.row[item.key]):scope.row[item.key] }}</template>
       </el-table-column>
       <el-table-column width="150px" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="()=>handleEdit('edit',scope.row)">编辑</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="()=>handleDelete(scope.row)">删除</el-button>
+          <el-button size="mini" @click="()=>handleEdit('edit',scope.row)">编辑</el-button>
+          <el-button size="mini" type="danger" @click="()=>handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -28,17 +43,28 @@
       background
       layout="total, prev, pager, next, sizes, jumper"
       @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"/>
-    <edit-dialog :query-list="queryList" :visible="vis_edit" :handle-close="handleClose" :action-row="actionRow" :action-type="actionType" />
+      @current-change="handleCurrentChange"
+    />
+    <edit-dialog
+      :query-list="queryList"
+      :visible="vis_edit"
+      :handle-close="handleClose"
+      :action-row="actionRow"
+      :action-type="actionType"
+    />
   </div>
 </template>
 
 <script>
 const deviceTypeMap = {
-  XYJ: '洗衣机', CDZ: '充电桩', AMY: '按摩椅', ZLJ: '足疗机', AMD: '按摩垫'
+  XYJ: '洗衣机',
+  CDZ: '充电桩',
+  AMY: '按摩椅',
+  ZLJ: '足疗机',
+  AMD: '按摩垫'
 }
 const communicationMap = ['无', '脉冲', '串口']
-const billingMap = ['无', '按时长计费']
+const billingMap = ['无', '按时长计费', '按电量计费']
 import { fetchList, putService } from '@/api/sellManage'
 import { parseTime } from '@/utils/index'
 import { Message } from 'element-ui'
@@ -50,14 +76,34 @@ export default {
       listLoading: true,
       list: [],
       colums: [
-        { key: 'equipmentType', label: '设备类型', render: (text) => deviceTypeMap[text] },
-        { key: 'communication', label: '通信方式', render: (text) => communicationMap[text] },
-        { key: 'billing', label: '计费方式', render: (text) => billingMap[text] },
+        {
+          key: 'equipmentType',
+          label: '设备类型',
+          render: text => deviceTypeMap[text]
+        },
+        {
+          key: 'communication',
+          label: '通信方式',
+          render: text => communicationMap[text]
+        },
+        { key: 'billing', label: '计费方式', render: text => billingMap[text] },
         { key: 'description', label: '套餐名称' },
-        { key: 'price', label: '价格', render: (text) => text + '元' },
-        { key: 'serviceTime', label: '时长', render: (text) => text ? text + '分钟' : '-' },
-        { key: 'coins', label: '模拟投币数', render: (text) => text ? text + '币' : '-' },
-        { key: 'updated', label: '最新编辑时间', render: (text) => parseTime(text) }
+        { key: 'price', label: '价格', render: text => text + '元' },
+        {
+          key: 'val',
+          label: '时长/电量'
+          // render: text => (text ? text + '分钟' : '-')
+        },
+        {
+          key: 'resultCoins',
+          label: '模拟投币数',
+          render: text => (text ? text + '币' : '-')
+        },
+        {
+          key: 'updated',
+          label: '最新编辑时间',
+          render: text => parseTime(text)
+        }
       ],
       pageInfo: { total: 0, pageSize: 10, currPage: 1 },
       actionType: '',
@@ -71,27 +117,33 @@ export default {
   methods: {
     handleDelete(row) {
       const self = this
-      self.$confirm('确定要删除该服务套餐吗？', '删除服务套餐', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        closeOnClickModal: false
-      }).then(() => {
-        self.listLoading = true
-        putService({
-          agentGroupServiceId: row.agentGroupServiceId,
-          deleted: 1
-        }).then(res => {
-          if (res.result === 0) {
-            Message({
-              message: '删除成功！',
-              type: 'success'
+      self
+        .$confirm('确定要删除该服务套餐吗？', '删除服务套餐', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          closeOnClickModal: false
+        })
+        .then(() => {
+          self.listLoading = true
+          putService({
+            agentGroupServiceId: row.agentGroupServiceId,
+            deleted: 1
+          })
+            .then(res => {
+              if (res.result === 0) {
+                Message({
+                  message: '删除成功！',
+                  type: 'success'
+                })
+                self.queryList()
+              }
             })
-            self.queryList()
-          }
-        }).finally(() => { self.listLoading = false })
-      }).catch(() => {
-      })
+            .finally(() => {
+              self.listLoading = false
+            })
+        })
+        .catch(() => {})
     },
     handleEdit(actionType, actionRow) {
       this.actionType = actionType
@@ -105,14 +157,30 @@ export default {
       this.listLoading = true
       this.pageInfo.currPage = page
       const postData = { pageSize: this.pageInfo.pageSize, pageIndex: page }
-      fetchList(postData).then(res => {
-        if (res.data) {
-          this.list = res.data.items || []
-          this.pageInfo.total = res.data.total || 0
-        } else {
-          this.pageInfo.total = 0
-        }
-      }).finally(() => { this.listLoading = false })
+      fetchList(postData)
+        .then(res => {
+          if (res.data) {
+            this.list = res.data.items || []
+            this.pageInfo.total = res.data.total || 0
+            this.list.forEach(i => {
+              if (i.billing === 2) {
+                i.val = i.electric + '度'
+              } else {
+                i.val = i.serviceTime ? i.serviceTime + '分钟' : '-'
+              }
+              if (i.communication === 2) {
+                i.resultCoins = 0
+              } else {
+                i.resultCoins = i.coins
+              }
+            })
+          } else {
+            this.pageInfo.total = 0
+          }
+        })
+        .finally(() => {
+          this.listLoading = false
+        })
     },
     // 翻页
     handleSizeChange(pageSize) {
@@ -131,8 +199,8 @@ export default {
 }
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
-.creat-btn{
-  float:right;
-  margin-bottom:20px;
+.creat-btn {
+  float: right;
+  margin-bottom: 20px;
 }
 </style>
