@@ -10,7 +10,7 @@ export function getList(query) {
 
 export function getState(query) {
   return request({
-    url: '/article/detail',
+    url: '/equipment/error/queryEquipmentType',
     method: 'get',
     params: query
   })

@@ -33,11 +33,12 @@
       </div>
       <el-button v-if="!selRow" type="primary" @click="getList(true)">查询</el-button>
     </div>
-    <div v-if="!(!selRow&&tableData&&tableData.length==0)" class="mid-box">
+    <div v-if="(!(!selRow&&((tableData&&tableData.length==0)||tableData==null)))&&equipment_detail" class="mid-box">
       <div>设备编号：{{ equipment_detail.equipmentTypeName }} {{ equipment_detail.equipmentId }}</div>
       <div v-if="tableData&&tableData.length>0">
         当前设备状态：
-        <div class="mid-offline">离线 > 3天</div>
+        <div v-if="!equipment_detail.online" class="mid-offline">离线{{ equipment_detail.days?` > ${equipment_detail.days}天`:'' }}</div>
+        <div v-if="equipment_detail.online" class="mid-online">在线</div>
         <a class="mid-reload" @click="getEquipmentState(true)">刷新</a>
       </div>
       <div>
@@ -56,7 +57,7 @@
       <el-table-column align="center" prop="timeMap" label="离线时间点">
         <template slot-scope="scope">
           <div class="table-timeMap">
-            <div v-for="(item, index) in scope.row.timeMap" :key="index" class="table-timeMap-item">
+            <div v-for="(item, index) in scope.row.times" :key="index" class="table-timeMap-item">
               {{ parseTimeMap(item) }}
             </div>
           </div>
@@ -110,18 +111,19 @@ export default {
       date_sel: '',
       equipment_id: '',
       listQuery: { total: 99, pageSize: 10, pageIndex: 1 },
-      tableData: [],
+      tableData: null,
       loading_table: false,
       pickerOptions: {
         disabledDate(time) {
-          const halfYear = 365 / 2 * 24 * 3600 * 1000
+          const halfYear = 180 * 24 * 3600 * 1000
           const item_time = time.getTime()
           const now_time = Date.now()
           return item_time > now_time || item_time < (now_time - halfYear)
         }
       },
-      equipment_detail: {},
-      page_data: {}
+      equipment_detail: null,
+      page_data: {},
+      nowOption: null
     }
   },
   computed: {
@@ -139,10 +141,10 @@ export default {
   created() {
     if (this.selRow) {
       this.getList(true)
-      this.equipment_detail = {
-        equipmentTypeName: this.selRow.equipmentTypeName,
-        equipmentId: this.selRow.equipmentId
-      }
+      // this.equipment_detail = {
+      //   equipmentTypeName: this.selRow.equipmentTypeName,
+      //   equipmentId: this.selRow.equipmentId
+      // }
     }
   },
   methods: {
@@ -150,9 +152,9 @@ export default {
       return parseTime(value)
     },
     postExport() {
-      const param = 'userName=' + this.query.userName + '&startDate=' + this.dateRange[0] + '&endDate=' + this.dateRange[1] + '&groupId=' + this.query.groupId + '&equipmentValue=' + this.query.equipmentValue
+      const param = 'value=' + this.nowOption.value + '&startDate=' + this.nowOption.startDate + '&endDate=' + this.nowOption.endDate
       console.log(param)
-      location.href = encodeURI('/agent/rest/export/benefit/equipment?' + param)
+      location.href = encodeURI('/agent/equipment/error/export?' + param)
     },
     handleSizeChange(val) {
       this.listQuery.pageSize = val
@@ -162,9 +164,15 @@ export default {
       if (reload) {
         this.loading_table = true
       }
-      getState().then((res) => {
-        // if (res.result === 0) {
-        // }
+      getState({ value: this.nowOption.value }).then((res) => {
+        if (res.result === 0) {
+          this.equipment_detail = {
+            equipmentTypeName: res.data.typeName,
+            equipmentId: res.data.value,
+            online: res.data.online,
+            days: res.data.days
+          }
+        }
       }).finally(() => {
         if (reload) {
           this.loading_table = false
@@ -176,6 +184,8 @@ export default {
       let { equipment_id } = this
       if (selRow) {
         equipment_id = selRow.equipmentId
+      } else {
+        this.equipment_detail = null
       }
       let date = []
       if (reload) {
@@ -203,6 +213,7 @@ export default {
           message: '请填写设备编号',
           type: 'error'
         })
+        this.tableData = null
         return
       }
       const jsonData = {
@@ -218,22 +229,20 @@ export default {
         date
       }
       this.tableData = []
+      this.nowOption = JSON.parse(JSON.stringify({
+        value: equipment_id,
+        startDate: date[0],
+        endDate: date[1],
+        pageSize: listQuery.pageSize,
+        pageIndex: listQuery.pageIndex
+      }))
       getList(jsonData).then((res) => {
         if (res.result === 0 && res.data) {
           if (res.data.date) {
-            const tableData = []
-            res.data.date.map((item) => {
-              if (res.data.map && res.data.map[item.date]) {
-                tableData.push({
-                  ...item,
-                  timeMap: res.data.map[item.date]
-                })
-              }
-            })
-            this.tableData = tableData
+            this.tableData = res.data.date
+            this.getEquipmentState()
           }
           this.listQuery = { total: res.data.total, pageSize: res.data.pageSize, pageIndex: res.data.page }
-          this.getEquipmentState()
         }
       }).finally(() => {
         this.loading_table = false
