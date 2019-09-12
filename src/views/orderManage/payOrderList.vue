@@ -212,7 +212,6 @@ export default {
       this.queryPowerList(item, '1')
     },
     async queryPowerList(item, firstFlag) {
-      item.id = '1000705'
       var result = await queryPowerListByTradeno({ outTradeNo: item.outTradeNo })
       if (result.result === 0) {
         var list = result.data || []
