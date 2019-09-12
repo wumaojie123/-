@@ -170,6 +170,11 @@
           <span>{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="查看" align="center">
+        <template slot-scope="scope">
+          <a style="color:#409eff" @click="showDetail(scope.row)">离线明细</a>
+        </template>
+      </el-table-column>
     </el-table>
     <div class="pagination-container">
       <el-pagination
@@ -212,6 +217,14 @@
       </span>
     </el-dialog>
     <!-- 设置注册状态弹窗end -->
+    <!-- 离线明细 -->
+    <el-dialog v-if="vis_detail" :visible.sync="vis_detail" width="800px" title="设备离线明细">
+      <device-offline ref="DeviceOffline" :save-vis-export="saveVisExport" :sel-row="selRow"/>
+      <div slot="footer" class="dialog-footer">
+        <el-button v-if="vis_export" @click="exportDetail" >导出数据</el-button>
+        <el-button type="primary" @click="vis_detail = false">关 闭</el-button>
+      </div>
+    </el-dialog>
   </el-main>
 </template>
 
@@ -227,6 +240,7 @@ import {
 import { Throttle } from '@/utils/throttle'
 import waves from '@/directive/waves' // 水波纹指令
 import QRCode from 'qrcode'
+import DeviceOffline from './DeviceOffline'
 
 const calendarTypeOptions = [
   { key: 0, display_name: '冻结' },
@@ -238,10 +252,14 @@ export default {
     waves
   },
   components: {
-    SetEquipmentParasForm
+    SetEquipmentParasForm,
+    DeviceOffline
   },
   data() {
     return {
+      vis_export: false,
+      selRow: null,
+      vis_detail: false,
       tableKey: 0,
       loadUrl: '',
       equipmentParaDialog: false,
@@ -357,6 +375,16 @@ export default {
     this.minHeightTable = clientHeight - 334
   },
   methods: {
+    saveVisExport(value) {
+      this.vis_export = value
+    },
+    exportDetail() {
+      this.$refs.DeviceOffline.postExport()
+    },
+    showDetail(row) {
+      this.vis_detail = true
+      this.selRow = row
+    },
     renderHeader(h) {
       return [h('p', {}, ['设备参数']), h('p', {}, ['(脉冲宽度/脉冲间隔/待机电平)'])]
     },
