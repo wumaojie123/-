@@ -26,6 +26,7 @@
     <order-list
       :cell="commProps.cell"
       :pagination="commProps.pagination"
+      :handler="commProps.handler"
       @current-change="currentChangeHd"
       @size-change="sizeChangeHd"
       @show-detail="showDetail"
@@ -45,7 +46,8 @@ import power from './components/power'
 import {
   queryOrder,
   getMerchantList,
-  getStateName
+  getStateName,
+  chargingOrderPowerList
 } from '../../api/orderManage'
 export default {
   components: {
@@ -134,6 +136,7 @@ export default {
       merchantList: [],
       powerList: [],
       powerVisible: false,
+      repeatCount: 100000000,
       /**
        * 选择时间相关
        */
@@ -173,32 +176,50 @@ export default {
      * 详情
      */
     showDetail(item) {
-      console.log(`💗${item}`)
-      this.getPowerInfo(item)
+      this.queryPowerList(item, '1')
     },
-    async getPowerInfo(item) {
-      this.powerList = [
-        {
-          statisticsDate: '09-10',
-          dayPayCount: 10,
-          dayOnlineIncomde: 30
-        },
-        {
-          statisticsDate: '09-15',
-          dayPayCount: 30,
-          dayOnlineIncomde: 60
-        },
-        {
-          statisticsDate: '09-20',
-          dayPayCount: 20,
-          dayOnlineIncomde: 90
+    async queryPowerList(item, firstFlag) {
+      var result = await chargingOrderPowerList({ orderId: item.id })
+      if (result.result === 0) {
+        var list = result.data || []
+        if (firstFlag === '1' && list.length === 0) {
+          this.$message({
+            message: '暂无数据',
+            type: 'warning'
+          })
+          this.powerTrendVisible = false
+          return
         }
-      ]
-      // const res = await getPower()
-      // if (res.result === 0) {
-      //   this.powerList = res.data
-      this.powerVisible = true
-      // }
+        if (firstFlag !== '1' && list.length === 0) {
+          return
+        }
+        this.powerTrendVisible = true
+        var powerList = []
+        list.forEach(i => {
+          powerList.push({
+            dayPayCount: i.chargingPower,
+            statisticsDate: i.chargingTime
+          })
+        })
+        this.$nextTick(() => {
+          this.powerData = powerList
+        })
+        if (firstFlag === '1' && list.length > 0) {
+          this.repeatQueryPowerList(item)
+        }
+      }
+    },
+
+    wait(millisecond) {
+      return new Promise((resolve, reject) => {
+        setTimeout(resolve, millisecond)
+      })
+    },
+    async repeatQueryPowerList(item) {
+      while (this.repeatCount--) {
+        await this.wait(1000 * 60 * 20)
+        this.queryPowerList(item)
+      }
     },
     /**
      * 查询支付订单
@@ -233,13 +254,6 @@ export default {
         var data = result.data
         this.commProps.pagination.totalCount = data.total
         this.commProps.handler.list = []
-        this.commProps.handler.list.push({
-          isShow: true,
-          name: '查看功率详情',
-          type: 'text',
-          size: 'small',
-          fn: 'show-detail'
-        })
         // this.commProps.pagination.pageIndex = data.page
         var list = data.items || []
         var index = 0
@@ -250,12 +264,21 @@ export default {
           } else {
             item.device = `充电桩${item.deviceNo}`
           }
+          var showFlag = false
           if (item.communicateType === 'CK') {
             item.device += `-${item.passageWay}插座`
             item.communicateTypeName = '串口'
+            showFlag = true
           } else {
             item.communicateTypeName = '脉冲'
           }
+          this.commProps.handler.list.push({
+            isShow: showFlag,
+            name: '查看功率图',
+            type: 'text',
+            size: 'small',
+            fn: 'show-detail'
+          })
           if (item.outTradeNo === '0' || item.outTradeNo === '1') {
             item.startType = '余额启动'
           } else {
