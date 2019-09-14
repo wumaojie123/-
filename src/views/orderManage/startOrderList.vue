@@ -188,13 +188,13 @@ export default {
             message: '暂无数据',
             type: 'warning'
           })
-          this.powerTrendVisible = false
+          this.powerVisible = false
           return
         }
         if (firstFlag !== '1' && list.length === 0) {
           return
         }
-        this.powerTrendVisible = true
+        this.powerVisible = true
         var powerList = []
         list.forEach(i => {
           powerList.push({
