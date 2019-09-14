@@ -31,10 +31,10 @@
       @size-change="sizeChangeHd"
       @show-detail="showDetail"
     />
-    <el-dialog :visible.sync="powerVisible" title="功率曲线图">
+    <el-dialog :visible.sync="powerVisible" :show-close="false" :close-on-click-modal="false" title="功率曲线图">
       <power :data="powerList" />
       <div class="btn-wrap">
-        <el-button type="primary" @click="powerVisible=false">好的</el-button>
+        <el-button type="primary" @click="powerVisible=false;repeatCount=0">好的</el-button>
       </div>
     </el-dialog>
   </el-container>
@@ -136,7 +136,7 @@ export default {
       merchantList: [],
       powerList: [],
       powerVisible: false,
-      repeatCount: 100000000,
+      repeatCount: 0,
       /**
        * 选择时间相关
        */
@@ -176,6 +176,7 @@ export default {
      * 详情
      */
     showDetail(item) {
+      this.repeatCount = 1000000000
       this.queryPowerList(item, '1')
     },
     async queryPowerList(item, firstFlag) {
@@ -202,7 +203,7 @@ export default {
           })
         })
         this.$nextTick(() => {
-          this.powerData = powerList
+          this.powerList = powerList
         })
         if (firstFlag === '1' && list.length > 0) {
           this.repeatQueryPowerList(item)

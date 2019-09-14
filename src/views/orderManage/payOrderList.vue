@@ -33,7 +33,12 @@
       @size-change="sizeChangeHd"
       @show-detail="showDetail"
     />
-    <el-dialog :visible.sync="detailVisible" title="订单详情">
+    <el-dialog
+      :visible.sync="detailVisible"
+      :show-close="false"
+      :close-on-click-modal="false"
+      title="订单详情"
+    >
       <template v-if="powerTrendVisible">
         <power :data="powerList" />
       </template>
@@ -122,7 +127,7 @@ export default {
        */
       powerList: [],
       merchantList: [],
-      repeatCount: 100000000,
+      repeatCount: 0,
       powerTrendVisible: false,
       /**
        * 查询条件
@@ -209,10 +214,13 @@ export default {
     showDetail(item) {
       this.getOrderDetail(item.outTradeNo, item.payType)
       console.log(`💗💗详情`)
+      this.repeatCount = 1000000000
       this.queryPowerList(item, '1')
     },
     async queryPowerList(item, firstFlag) {
-      var result = await queryPowerListByTradeno({ outTradeNo: item.outTradeNo })
+      var result = await queryPowerListByTradeno({
+        outTradeNo: item.outTradeNo
+      })
       if (result.result === 0) {
         var list = result.data || []
         if (firstFlag === '1' && list.length === 0) {
@@ -231,7 +239,7 @@ export default {
           })
         })
         this.$nextTick(() => {
-          this.powerData = powerList
+          this.powerList = powerList
         })
         if (firstFlag === '1' && list.length > 0) {
           this.repeatQueryPowerList(item)
@@ -307,6 +315,7 @@ export default {
     },
     closeDetailBox() {
       this.detailVisible = false
+      this.repeatCount = 0
     },
     /**
      * 查询支付订单
