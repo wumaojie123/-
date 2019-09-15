@@ -52,6 +52,11 @@ export let constantRouterMap = [
     hidden: true
   },
   {
+    path: '/operationLog',
+    component: () => import('@/views/userCenter/operationLog'),
+    hidden: true
+  },
+  {
     path: '/data',
     component: () => import('@/views/data/data'),
     hidden: true
