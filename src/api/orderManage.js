@@ -70,3 +70,19 @@ export function getStateName(state) {
   }
   return str
 }
+
+export function chargingOrderPowerList(param) {
+  return request({
+    url: '/query/charging/orderPowerList',
+    method: 'get',
+    params: param
+  })
+}
+
+export function queryPowerListByTradeno(param) {
+  return request({
+    url: '/query/charging/getPowerListByTradeno',
+    method: 'get',
+    params: param
+  })
+}

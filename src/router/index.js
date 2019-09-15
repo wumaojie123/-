@@ -306,6 +306,13 @@ export let constantRouterMap = [
         name: 'unregister',
         meta: { title: '设备解绑' },
         hidden: true
+      },
+      {
+        path: 'deviceOffline',
+        component: () => import('@/views/deviceManage/DeviceOffline.vue'),
+        name: 'deviceOffline',
+        meta: { title: '设备在线、离线明细' },
+        hidden: true
       }
     ]
   },

@@ -33,9 +33,14 @@
       @size-change="sizeChangeHd"
       @show-detail="showDetail"
     />
-    <el-dialog :visible.sync="detailVisible" title="订单详情">
-      <template v-if="true">
-        <power :data="powerList"/>
+    <el-dialog
+      :visible.sync="detailVisible"
+      :show-close="false"
+      :close-on-click-modal="false"
+      title="订单详情"
+    >
+      <template v-if="powerTrendVisible">
+        <power :data="powerList" />
       </template>
       <div style="margin-bottom: 20px;">充电明细</div>
       <order-detail :cell="commDetail" />
@@ -54,7 +59,8 @@ import {
   queryOrder,
   getMerchantList,
   queryOrderDetail,
-  getStateName
+  getStateName,
+  queryPowerListByTradeno
 } from '../../api/orderManage'
 export default {
   components: {
@@ -121,6 +127,8 @@ export default {
        */
       powerList: [],
       merchantList: [],
+      repeatCount: 0,
+      powerTrendVisible: false,
       /**
        * 查询条件
        */
@@ -206,33 +214,49 @@ export default {
     showDetail(item) {
       this.getOrderDetail(item.outTradeNo, item.payType)
       console.log(`💗💗详情`)
-      this.getPowerInfo(item)
+      this.repeatCount = 1000000000
+      this.queryPowerList(item, '1')
     },
-    async getPowerInfo(item) {
-      setTimeout(() => {
-        this.powerList = [
-          {
-            statisticsDate: '09-10',
-            dayPayCount: 10,
-            dayOnlineIncomde: 30
-          },
-          {
-            statisticsDate: '09-15',
-            dayPayCount: 30,
-            dayOnlineIncomde: 60
-          },
-          {
-            statisticsDate: '09-20',
-            dayPayCount: 20,
-            dayOnlineIncomde: 90
-          }
-        ]
-      }, 1000)
-      console.log(JSON.stringify(this.powerList))
-      // const res = await getPower()
-      // if (res.result === 0) {
-      //   this.powerList = res.data
-      // }
+    async queryPowerList(item, firstFlag) {
+      var result = await queryPowerListByTradeno({
+        outTradeNo: item.outTradeNo
+      })
+      if (result.result === 0) {
+        var list = result.data || []
+        if (firstFlag === '1' && list.length === 0) {
+          this.powerTrendVisible = false
+          return
+        }
+        if (firstFlag !== '1' && list.length === 0) {
+          return
+        }
+        this.powerTrendVisible = true
+        var powerList = []
+        list.forEach(i => {
+          powerList.push({
+            dayPayCount: i.chargingPower,
+            statisticsDate: i.chargingTime
+          })
+        })
+        this.$nextTick(() => {
+          this.powerList = powerList
+        })
+        if (firstFlag === '1' && list.length > 0) {
+          this.repeatQueryPowerList(item)
+        }
+      }
+    },
+
+    wait(millisecond) {
+      return new Promise((resolve, reject) => {
+        setTimeout(resolve, millisecond)
+      })
+    },
+    async repeatQueryPowerList(item) {
+      while (this.repeatCount--) {
+        await this.wait(1000 * 60 * 20)
+        this.queryPowerList(item)
+      }
     },
     async getOrderDetail(outTradeNo, payType) {
       var result = await queryOrderDetail({ outTradeNo })
@@ -291,6 +315,7 @@ export default {
     },
     closeDetailBox() {
       this.detailVisible = false
+      this.repeatCount = 0
     },
     /**
      * 查询支付订单
@@ -376,7 +401,7 @@ export default {
           // isShow:false,name:'查看',type:'text',size:'small'，fn:
           this.commProps.handler.list.push({
             isShow: isShowDetail,
-            name: '查看订单详情',
+            name: '查看充电详情',
             type: 'text',
             size: 'small',
             fn: 'show-detail'
