@@ -2,11 +2,14 @@
   <div class="anthorize-wrap">
     <div class="header">{{ title }}</div>
     <div class="content-wrap">
-      <h3>如何重置授权有效期？</h3>
+      <h2 style="font-weight:bold">如何重置授权有效期？</h2>
+      <p
+        style="line-height:28px;margin-top:10px;"
+      >如何重置授权有效期？点击底部【重置授权有效期】按钮，进入扫码授权页，用公众号管理员手机微信扫描二维码进入权限确认页面，若【素材管理】权限处于已勾选状态，则去掉勾选后点击授权；若【素材管理】权限处于非勾选状态，则勾选后点击授权；</p>
       <div>
         <div class="img-wrap">
           <img src="../images/authorize-bg.png" >
-        </div>如何重置授权有效期？点击底部【重置授权有效期】按钮，进入扫码授权页，用公众号管理员手机微信扫描二维码进入权限确认页面，若【素材管理】权限处于已勾选状态，则去掉勾选后点击授权；若【素材管理】权限处于非勾选状态，则勾选后点击授权；
+        </div>
       </div>
     </div>
     <div class="footer" @click="reAuthorize">重置授权有效期</div>
