@@ -31,11 +31,13 @@ export default {
     return {
       params: {},
       dataInfo: {},
+      lyyEquipmentId: '',
       saveData: { pulseWidth: '', pulseInterval: '', battery: '' }
     }
   },
   created() {
     this.params = this.$route.query
+    this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.query()
   },
   methods: {
@@ -84,7 +86,8 @@ export default {
         drag: 0,
         interfaceType: 0,
         interfaceBaudRate: 0,
-        noteTypes: 1
+        noteTypes: 1,
+        lyyEquipmentId: this.lyyEquipmentId
       }
       const res = await szNewEquipment(params)
       if (res.result === 1) {

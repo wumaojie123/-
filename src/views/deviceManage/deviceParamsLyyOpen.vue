@@ -55,7 +55,8 @@ export default {
       count: 5,
       verfyCodeVisible: false,
       phoneNumber: '',
-      name: ''
+      name: '',
+      lyyEquipmentId: ''
     }
   },
   watch: {
@@ -70,6 +71,7 @@ export default {
   created() {
     this.uniqueCode = this.$route.query.uniqueCode
     this.phoneNumber = this.$route.query.phoneNumber
+    this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.name = this.$route.query.name
     this.query()
   },
@@ -185,7 +187,8 @@ export default {
       const postData = {
         data: JSON.stringify({ params: JSON.stringify(dataInfo), cmd: this.cmd }),
         functionCode: 'BSYS_SAAS_SETTING',
-        uniqueCode: this.uniqueCode
+        uniqueCode: this.uniqueCode,
+        lyyEquipmentId: this.lyyEquipmentId
       }
       const res = await query(postData)
       if (res.result === 1) {

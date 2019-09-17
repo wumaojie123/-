@@ -172,7 +172,8 @@
       </el-table-column>
       <el-table-column label="查看" align="center">
         <template slot-scope="scope">
-          <a style="color:#409eff" @click="showDetail(scope.row)">离线明细</a>
+          <div v-if="!showOffline(scope.row.equipmentTypeName)">-</div>
+          <a v-else style="color:#409eff" @click="showDetail(scope.row)">离线明细</a>
         </template>
       </el-table-column>
     </el-table>
@@ -375,6 +376,9 @@ export default {
     this.minHeightTable = clientHeight - 334
   },
   methods: {
+    showOffline(key) {
+        return ['按摩椅', '按摩垫', '足疗机', '娃娃机', '兑币机', '扭蛋机'].includes(key)
+    },
     saveVisExport(value) {
       this.vis_export = value
     },
