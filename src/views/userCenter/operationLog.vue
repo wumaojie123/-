@@ -67,7 +67,7 @@ export default {
         { key: 'equipmentTypeNameText', label: '操作设备' },
         { key: 'distributorNameText', label: '操作商家' },
         { key: 'created', label: '操作时间' },
-        { key: 'createdby', label: '操作人' }
+        { key: 'agentPhone', label: '操作人' }
       ],
       pageInfo: { total: 0, pageSize: 10, currPage: 1 },
       equipmentTypesArr: typeMap
