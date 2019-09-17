@@ -3,6 +3,7 @@
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
       <el-form-item label="操作商家">
         <el-select v-model="queryParams.lyyDistributorId" placeholder="请选择" style="width: 300px;" filterable>
+          <el-option label="全部" value=""/>
           <el-option
             v-for="item in merchantList"
             :key="item.value"
