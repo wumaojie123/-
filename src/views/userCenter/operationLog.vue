@@ -84,7 +84,7 @@ export default {
       const postData = this.queryParams
       postData.pageSize = this.pageInfo.pageSize
       postData.pageIndex = this.pageInfo.currPage
-      if (this.queryParams.type === 0) {
+      if (this.queryParams.type === '0' || this.queryParams.type === 0) {
         postData.type = ''
       }
 
