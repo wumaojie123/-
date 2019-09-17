@@ -1,9 +1,9 @@
 <template>
   <section class="tend-wrapper" style="margin-bottom: 30px;">
     <div class="title">
-      <div class="left">
+      <!-- <div class="left">
         <span class="select">功率曲线</span>
-      </div>
+      </div> -->
     </div>
     <section class="echart"/>
   </section>
