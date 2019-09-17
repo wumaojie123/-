@@ -64,8 +64,8 @@ export default {
       merchantList: [],
       colums: [
         { key: 'typeText', label: '操作类型' },
-        { key: 'equipmentTypeName', label: '操作设备' },
-        { key: 'distributorName', label: '操作商家' },
+        { key: 'equipmentTypeNameText', label: '操作设备' },
+        { key: 'distributorNameText', label: '操作商家' },
         { key: 'created', label: '操作时间' },
         { key: 'createdby', label: '操作人' }
       ],
@@ -94,6 +94,8 @@ export default {
           let list = res.data.items || []
           list = list.map(item => {
             item.typeText = typeMap[item.type]
+            item.equipmentTypeNameText = `${item.equipmentTypeName}-${item.equipmentValue}`
+            item.distributorNameText = `${item.distributorName}=${item.distributorPhone}`
             return item
           })
           this.list = list
