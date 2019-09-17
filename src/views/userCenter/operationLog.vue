@@ -1,7 +1,7 @@
 <template>
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
-      <el-form-item label="选择绑定商家">
+      <el-form-item label="操作商家">
         <el-select v-model="queryParams.lyyDistributorId" placeholder="请选择" style="width: 300px;" filterable>
           <el-option
             v-for="item in merchantList"
