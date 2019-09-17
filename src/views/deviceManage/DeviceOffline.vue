@@ -294,7 +294,7 @@ export default {
   }
 }
 </script>
-<style rel="stylesheet/scss" lang="scss" >
+<style rel="stylesheet/scss" lang="scss" scoped>
 .agent-list-container{
   max-width: 1100px;
 }
