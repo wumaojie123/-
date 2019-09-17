@@ -197,7 +197,7 @@ export default {
               query: {
                 uniqueCode: data.uniqueCode,
                 name: data.distributor,
-                lyyEquipmentId: this.selectItems[0].value,
+                lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
                 phoneNumber: data.account
               }
             })
@@ -210,7 +210,7 @@ export default {
                 uniqueCode: data.uniqueCode,
                 loginFlag: data.loginFlag,
                 name: data.distributor,
-                lyyEquipmentId: this.selectItems[0].value,
+                lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
                 phoneNumber: data.account
               }
             })
@@ -221,7 +221,7 @@ export default {
               equipmentTypeName: data.equipmentTypeName,
               name: data.distributor,
               phoneNumber: data.account,
-              lyyEquipmentId: this.selectItems[0].value
+              lyyEquipmentId: this.selectItems[0].lyyEquipmentId
             }
             if (
               data.loginFlag === 5 ||
@@ -247,7 +247,7 @@ export default {
             path: '/deviceServiceEdit',
             query: {
               value: this.selectItems[0].value,
-              lyyEquipmentId: this.selectItems[0].value,
+              lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
               equipmentType: this.queryParams.equipmentType,
               communication: this.selectItems[0].communication,
               name: data.distributor,
@@ -259,7 +259,7 @@ export default {
           this.$router.push({
             path: '/unregister',
             query: {
-              lyyEquipmentId: this.selectItems[0].value,
+              lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
               value: this.selectItems[0].value,
               equipmentType: this.queryParams.equipmentType,
               name: data.distributor,
