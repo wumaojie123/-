@@ -94,8 +94,8 @@ export default {
           let list = res.data.items || []
           list = list.map(item => {
             item.typeText = typeMap[item.type]
-            item.equipmentTypeNameText = `${item.equipmentTypeName}-${item.equipmentValue}`
-            item.distributorNameText = `${item.distributorName}=${item.distributorPhone}`
+            item.equipmentTypeNameText = `${item.equipmentTypeName}${item.equipmentValue}`
+            item.distributorNameText = `${item.distributorName}-${item.distributorPhone}`
             return item
           })
           this.list = list
