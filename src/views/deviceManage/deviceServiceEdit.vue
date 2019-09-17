@@ -451,7 +451,8 @@ export default {
       this.$confirm('确定要删除该服务套餐吗？', '删除服务套餐').then(
         async() => {
           const res = await dateleEquipmentService({
-            lyyGroupServiceId: this.handleItemData.lyyGroupServiceId
+            lyyGroupServiceId: this.handleItemData.lyyGroupServiceId,
+            lyyEquipmentId: this.lyyEquipmentId
           })
           if (res.result === 0) {
             this.$message({ message: '删除套餐成功', type: 'success' })

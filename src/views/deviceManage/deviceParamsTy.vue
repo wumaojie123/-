@@ -27,13 +27,15 @@ export default {
       uniqueCode: '',
       verfyCodeVisible: false,
       phoneNumber: '',
-      name: ''
+      name: '',
+      lyyEquipmentId: ''
     }
   },
   created() {
     this.uniqueCode = this.$route.query.uniqueCode
     this.loginFlag = this.$route.query.loginFlag
     this.phoneNumber = this.$route.query.phoneNumber
+    this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.name = this.$route.query.name
     this.query()
   },
@@ -54,7 +56,7 @@ export default {
     },
     handleClick(index, item) {
       if (item.params) {
-        this.$router.push({ path: '/deviceParamsTyButton', query: { uniqueCode: this.uniqueCode, functionCode: item.functionCode, loginFlag: this.loginFlag, queryFunctionCode: item.queryFunctionCode }})
+        this.$router.push({ path: '/deviceParamsTyButton', query: { lyyEquipmentId: this.lyyEquipmentId, uniqueCode: this.uniqueCode, functionCode: item.functionCode, loginFlag: this.loginFlag, queryFunctionCode: item.queryFunctionCode }})
       } else {
         this.$confirm(`确定${item.name}?`, '温馨提示').then(() => {
           this.handleInfo(item)
@@ -78,7 +80,8 @@ export default {
     },
     async handleSave() {
       const postData = {
-        uniqueCode: this.uniqueCode
+        uniqueCode: this.uniqueCode,
+        lyyEquipmentId: this.lyyEquipmentId
       }
       const res = await tyPost(postData)
       if (res.result === 1) {

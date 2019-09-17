@@ -50,12 +50,14 @@ export default {
       queryParams: {},
       verfyCodeVisible: false,
       phoneNumber: '',
+      lyyEquipmentId: '',
       name: ''
     }
   },
   created() {
     this.queryParams = this.$route.query
     this.phoneNumber = this.$route.query.phoneNumber
+    this.lyyEquipmentId = this.$route.query.lyyEquipmentId
     this.name = this.$route.query.name
     this.queryList()
   },
