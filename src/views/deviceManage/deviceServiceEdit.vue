@@ -444,7 +444,7 @@ export default {
     delServiceBefore(item) {
       this.verfyCodeVisible = true
       this.actionType = 'del'
-      this.handleItemData = JSON.pase(JSON.stringify(item))
+      this.handleItemData = JSON.parse(JSON.stringify(item))
     },
     // 删除服务套餐
     delService() {
