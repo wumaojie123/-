@@ -6,7 +6,7 @@ export const mapInfo = {
   XYJ: [
     [
       { title: '扫码洗衣', desc: '顾客可在公众号菜单进入扫码页面', url: 'pages/sweep-code-charging.html', label: 1 },
-      { title: '我的', desc: '顾客可在公众号菜单查看钱包余额、充电记录及充值、消费记录等信息', url: 'pages/my-wash.html', label: 2 }
+      { title: '我的', desc: '顾客可在公众号菜单查看钱包余额、充电记录及充值、消费记录等信息', url: 'pages/html/my-wash.html', label: 2 }
     ],
     { title: '商户管理平台', desc: '商家可在公众号菜单进入私有化商户管理平台', url: 'https://b.leyaoyao.com/group/index.html', label: 3 },
     { title: '附近洗衣机', desc: '顾客可在公众号菜单查看厂家附近的洗衣机', url: 'pages/nearby-washer-pile.html', label: 4 }
@@ -19,7 +19,7 @@ export const mapInfo = {
   CDZ: [
     [
       { title: '扫码充电', desc: '顾客可在公众号菜单进入扫码页面', url: 'pages/sweep-code-charging.html', label: 1 },
-      { title: '我的', desc: '顾客可在公众号菜单查看钱包余额、洗衣记录及充值、消费记录等信息', url: 'pages/my-charging.html', label: 2 }
+      { title: '我的', desc: '顾客可在公众号菜单查看钱包余额、洗衣记录及充值、消费记录等信息', url: 'pages/html/my-charging.html', label: 2 }
     ],
     { title: '商户管理平台', desc: '商家可在公众号菜单进入私有化商户管理平台', url: 'https://b.leyaoyao.com/group/index.html', label: 3 },
     { title: '附近充电桩', desc: '顾客可在公众号菜单查看厂家附近的充电桩', url: 'pages/nearby-charge-pile.html', label: 3 }
