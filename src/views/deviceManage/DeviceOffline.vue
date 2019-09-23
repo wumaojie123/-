@@ -33,6 +33,7 @@
       </div>
       <el-button v-if="!selRow" type="primary" @click="getList(true)">查询</el-button>
     </div>
+    <div v-if="!selRow" class="type-tip">仅支持：按摩类（按摩椅、足疗机、按摩垫），娃娃机，兑币机，扭蛋机</div>
     <div v-if="(!(!selRow&&((tableData&&tableData.length==0)||tableData==null)))&&equipment_detail" class="mid-box">
       <div>设备编号：{{ equipment_detail.equipmentTypeName }} {{ equipment_detail.equipmentId }}</div>
       <div v-if="tableData&&tableData.length>0">
@@ -369,5 +370,9 @@ export default {
         -webkit-box-shadow: inset 0 0 5px #ebeef5;
         border-radius: 0;
         background:#ebeef5;
+    }
+    .type-tip{
+      color:#ff3300;
+      margin-top: 10px;
     }
 </style>
