@@ -157,7 +157,7 @@ export default {
         if (item.url.indexOf('https://b.leyaoyao.com/group/index.html') > -1) {
           item.url = `${item.url}?ag=${this.ag}`
         } else {
-          item.url = `${item.url}?appId=${this.appId}&ut=2`
+          item.url = `${item.url}?appId=${this.appId}&ut=3`
         }
         return item
       })
@@ -175,7 +175,7 @@ export default {
               if (item2.url.indexOf('https://b.leyaoyao.com/group/index.html') > -1) {
                 obj = { url: `${item2.url}`, name: item2.title, type: 'view', editable: false, sub_button: [] }
               } else {
-                obj = { url: `${item2.url}?appId=${this.appId}&ut=2`, name: item2.title, type: 'view', editable: false, sub_button: [] }
+                obj = { url: `${item2.url}?appId=${this.appId}&ut=3`, name: item2.title, type: 'view', editable: false, sub_button: [] }
               }
               arr2.push(obj)
             })
@@ -186,7 +186,7 @@ export default {
               const obj = { url: `${item.url}`, name: item.title, type: 'view', editable: false, sub_button: [] }
               val.push(obj)
             } else {
-              const obj = { url: `${item.url}?appId=${this.appId}&ut=2`, name: item.title, type: 'view', editable: false, sub_button: [] }
+              const obj = { url: `${item.url}?appId=${this.appId}&ut=3`, name: item.title, type: 'view', editable: false, sub_button: [] }
               val.push(obj)
             }
           }

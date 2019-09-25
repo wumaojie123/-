@@ -243,13 +243,13 @@ export default {
      * 订单列表
      */
     async getList() {
-      var param = JSON.parse(JSON.stringify(this.searchParam))
+      const param = JSON.parse(JSON.stringify(this.searchParam))
       param.pageIndex = this.commProps.pagination.pageIndex
       param.pageSize = this.commProps.pagination.pageSize
       if (param.date) {
         param.date = this.searchParam.date + ' 00:00:00'
       }
-      var result = await queryOrder(param, 'start')
+      const result = await queryOrder(param, 'start')
       if (result.result === 0) {
         this.commProps.cell.list = []
         var data = result.data
@@ -259,7 +259,7 @@ export default {
         var list = data.items || []
         var index = 0
         list.forEach(item => {
-          var groupNumber = item.groupNumber
+          const groupNumber = item.groupNumber
           if (groupNumber) {
             item.device = `${groupNumber}号机-充电桩${item.deviceNo}`
           } else {
@@ -314,22 +314,13 @@ export default {
             item.actualTime = item.actualTime + unitName
           }
 
-          if (
-            item.continuousPackageNames &&
-            item.continuousPackageNames.length > 0
-          ) {
-            item.packageName1 += `(续充${item.continuousPackageNames.join(
-              ','
-            )})`
+          if (item.continuousPackageNames && item.continuousPackageNames.length > 0) {
+            item.packageName1 += `(续充${item.continuousPackageNames.join(',')})`
             item.money1 += `(续充${item.continuousMoney}元)`
             if (item.groupServiceCostWay === 'ELEC') {
-              item.serviceDurings1 += `(续充${(
-                item.continuousDurings / 100
-              ).toFixed(1)}${unitName})`
+              item.serviceDurings1 += `(续充${(item.continuousDurings / 100).toFixed(1)}${unitName})`
             } else {
-              item.serviceDurings1 += `(续充${
-                item.continuousDurings
-              }${unitName})`
+              item.serviceDurings1 += `(续充${item.continuousDurings}${unitName})`
             }
           }
 
@@ -345,29 +336,18 @@ export default {
      * 导出
      */
     download() {
-      var param = ''
-      if (
-        this.searchParam.adOrgId === '' &&
-        this.searchParam.deviceNo === '' &&
-        this.searchParam.userId === ''
-      ) {
+      let param = ''
+      if (this.searchParam.adOrgId === '' && this.searchParam.deviceNo === '' && this.searchParam.userId === '') {
         this.$message({
           message: '请输入商户账号、设备编号、用户ID进行导出',
           type: 'error'
         })
         return false
       }
-      param +=
-        '&adOrgId=' +
-        this.searchParam.adOrgId +
-        '&deviceNo=' +
-        this.searchParam.deviceNo +
-        '&userId=' +
-        this.searchParam.userId
+      param += '&adOrgId=' + this.searchParam.adOrgId + '&deviceNo=' + this.searchParam.deviceNo + '&userId=' + this.searchParam.userId
       if (this.searchParam.date) {
         param += '&date=' + this.searchParam.date + ' 00:00:00'
       }
-      // console.log("💗时间:"+this.searchParam.date)
       // url 待修改
       location.href = encodeURI('/agent/export/startupOrders?1=1' + param)
     }
