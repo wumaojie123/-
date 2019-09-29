@@ -150,6 +150,7 @@ export default {
           'packageName1',
           'stateName',
           'startTime',
+          'endText',
           'endTime',
           'actualTime',
           'actualDurings',
@@ -162,6 +163,7 @@ export default {
           '充电套餐',
           '工作状态',
           '开始充电时间',
+          '结束充电方式',
           '结束充电时间',
           '实际充电时长',
           '套餐时长',
@@ -278,6 +280,8 @@ export default {
         } else {
           item.communicateTypeName = '脉冲'
         }
+        const map = { 0: '正常关闭', 1: '商家端口远程停止', 2: '用户手动结束充电', 3: '设备启动失败', 4: '设备故障', 5: '订单未激活', 6: '订单服务时长为空', 7: '同一通道号重复下单关闭' }
+        item.endText = map[item.closeAction] || ''
 
         item.packageName1 = item.packageName
         if (

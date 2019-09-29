@@ -75,6 +75,7 @@ export default {
             '工作状态',
             '开始充电时间',
             '结束充电时间',
+            '结束充电方式',
             '实际充电时长/实际充电电量',
             '套餐实际总时长(分)',
             '剩余充电费用退款（退至余额）',
@@ -94,6 +95,7 @@ export default {
             'stateName', // state  订单状态（启动超时-3，启动失败-2，已结束-1，启动中0，工作中1，已终止2
             'startTime',
             'endTime',
+            'endText',
             'actualTime',
             'durings',
             'refundMoney',
@@ -323,6 +325,10 @@ export default {
               item.serviceDurings1 += `(续充${item.continuousDurings}${unitName})`
             }
           }
+
+          // 结束充电方式
+          const map = { 0: '正常关闭', 1: '商家端口远程停止', 2: '用户手动结束充电', 3: '设备启动失败', 4: '设备故障', 5: '订单未激活', 6: '订单服务时长为空', 7: '同一通道号重复下单关闭' }
+          item.endText = map[item.closeAction] || ''
 
           item.stateName = getStateName(item.state)
           item.curIndex = index
