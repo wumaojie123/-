@@ -46,6 +46,7 @@
 <script>
 import editDialog from './component/edit'
 import { getConfig } from '@/api/officialAccount'
+import { getAngent } from '@/api/angentManage'
 
 export default {
   components: {
@@ -65,7 +66,8 @@ export default {
       serviceVisible: false,
       params: {},
       allVisible: false,
-      subscribeMode: ''
+      subscribeMode: '',
+      ag: ''
     }
   },
   created() {
@@ -73,6 +75,12 @@ export default {
     this.getConfigInfo()
   },
   methods: {
+    async getAngentInfo() {
+      const res = await getAngent()
+      if (res.result === 0) {
+        this.ag = res.data.agentUserId
+      }
+    },
     async getConfigInfo() {
       const res = await getConfig({ appId: this.appId })
       if (res.result === 0) {

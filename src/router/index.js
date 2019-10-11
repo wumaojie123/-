@@ -313,6 +313,13 @@ export let constantRouterMap = [
         name: 'deviceOffline',
         meta: { title: '设备在线、离线明细' },
         hidden: true
+      },
+      {
+        path: '/deviceModify',
+        component: () => import('@/views/deviceManage/deviceModify.vue'),
+        name: 'deviceModify',
+        meta: { title: '设备' },
+        hidden: true
       }
     ]
   },

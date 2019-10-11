@@ -46,8 +46,8 @@
           <el-form-item label="设备类型" prop="equipmentTypeName">
             <el-select v-model="form.equipmentTypeName" placeholder="请选择">
               <el-option
-                v-for="item in equipmentTypeName"
-                :key="item.value"
+                v-for="(item,index) in equipmentTypeName"
+                :key="index"
                 :label="item.label"
                 :value="item.value"/>
             </el-select>
@@ -76,6 +76,7 @@
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-goods" @click="disabledEquipment('disable')">禁用设备</el-button>
       <el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="disabledEquipment('enable')">解除禁用</el-button>
       <el-button style="margin-left: 10px;" type="primary" icon="el-icon-setting" @click="equipmentSetPara">设置设备参数</el-button>
+      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-setting" @click="updateEquipmentModel">修改设备型号</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -101,6 +102,11 @@
       <el-table-column label="设备类型" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.equipmentTypeName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="设备协议" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.protocolDTO && scope.row.protocolDTO.title }}</span>
         </template>
       </el-table-column>
       <el-table-column label="在线状态" align="center">
@@ -575,6 +581,41 @@ export default {
       QRCode.toCanvas(canvas, url + checkedRow.equipmentId, {
         width: 200,
         height: 200
+      })
+    },
+    // 修改设备参数
+    updateEquipmentModel() {
+      if (this.checkedRow.length > 1) {
+        this.$message({ message: '修改设备型号只支持单选', type: 'warning' })
+        return
+      }
+      if (this.checkedRow.length === 0) {
+        this.$message({ message: '请选择设备', type: 'warning' })
+        return
+      }
+      const item = this.checkedRow[0]
+      if (!(item.equipmentTypeName === '充电桩' || item.equipmentTypeName === '洗衣机')) {
+        this.$message({ message: '请选择充电桩,洗衣机设备', type: 'warning' })
+        return
+      }
+      if (item.loginFlag !== 10000) {
+        this.$message({ message: '设备不支持', type: 'warning' })
+        return
+      }
+      const map = {
+        '充电桩': 'CDZ',
+        '洗衣机': 'XYJ'
+      }
+      this.$router.push({
+        path: '/deviceModify',
+        query: {
+          lyyEquipmentId: item.equipmentId,
+          value: item.equipmentId,
+          equipmentType: map[item.equipmentTypeName],
+          name: item.agentUserName,
+          phoneNumber: item.account,
+          type: item.online ? 0 : 1
+        }
       })
     },
     handleCreateQRCode() {

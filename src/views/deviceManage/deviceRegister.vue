@@ -23,6 +23,7 @@
         <el-button type="primary" @click="handlePage(1)">设备参数设置</el-button>
         <el-button type="primary" @click="handlePage(2)">设备服务套餐</el-button>
         <el-button type="primary" @click="handlePage(3)">解绑设备</el-button>
+        <el-button type="primary" @click="handlePage(4)">修改设备型号</el-button>
       </el-form-item>
     </el-form>
     <!-- 列表 -->
@@ -77,6 +78,7 @@ export default {
         // { key: 'interfaceFlag', label: '接口板' },
         // { key: 'loginFlag', label: '登录表示' },
         { key: 'equipmentTypeText', label: '设备类型' },
+        { key: 'protocolDTOTitle', label: '设备型号' },
         { key: 'communicationText', label: '通信方式' },
         { key: 'chargePattern', label: '计费方式' },
         { key: 'equipmentParam', label: '设备参数' },
@@ -140,6 +142,9 @@ export default {
             //   TIME: '按时长计费',
             //   ELEC: '按电量计费'
             // }
+            const title = (item.protocolDTO && item.protocolDTO.title) || ''
+            console.log(title)
+            item.protocolDTOTitle = title
             item.communicationText = communicationMap[item.communication]
             if (item.communication !== 2) {
               item.chargePattern = '--'
@@ -183,6 +188,11 @@ export default {
       this.pageInfo.total = 0
       this.queryList(this.pageInfo.currPage)
     },
+    /**
+     *
+     * @params {String} type `1: 设备参数设置 2: 设置服务套餐 3: 解绑设备 4: 修改设备型号`
+     *
+     */
     handlePage(type) {
       if (this.selectItems.length === 1) {
         const data = this.selectItems[0]
@@ -239,7 +249,7 @@ export default {
             }
           }
         } else if (type === 2) {
-          if (data.online === 0) {
+          if (data.online === 0 && type !== 4) {
             this.$message({ message: '设备离线', type: 'error' })
             return
           }
@@ -266,6 +276,29 @@ export default {
               phoneNumber: data.account
             }
           })
+        } else if (type === 4) {
+          if (!this.selectItems[0].communicationText) {
+            return
+          }
+          if (!(['CDZ', 'XYJ'].indexOf(this.selectItems[0].equipmentType) > -1)) {
+            this.$message({ message: '请选择充电桩,洗衣机设备', type: 'warning' })
+            return
+          }
+          if (this.selectItems[0].loginFlag === 10000) {
+            this.$router.push({
+              path: '/deviceModify',
+              query: {
+                lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
+                value: this.selectItems[0].value,
+                equipmentType: this.queryParams.equipmentType,
+                name: data.distributor,
+                phoneNumber: data.account,
+                type: 1
+              }
+            })
+          } else {
+            this.$message({ message: '设备不支持', type: 'warning' })
+          }
         }
       } else if (this.selectItems.length > 1) {
         this.$message({ message: '请选择设备', type: 'error' })

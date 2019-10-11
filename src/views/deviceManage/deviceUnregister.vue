@@ -20,6 +20,7 @@
           clearable
         />
         <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
+        <el-button type="primary" style="margin-left: 20px;" @click="handleUpdateModel">修改设备型号</el-button>
         <el-button type="primary" style="margin-left: 20px;" @click="handleRegister">设备注册</el-button>
         <router-link :to="{path: '/registerRecord'}">
           <el-button type="success" style="margin-left: 20px;">设备注册记录</el-button>
@@ -99,6 +100,7 @@ export default {
         { key: 'value', label: '设备编号' },
         { key: 'communicationText', label: '通信方式' },
         { key: 'chargePattern', label: '计费方式' },
+        { key: 'protocolDTOTitle', label: '设备型号' },
         { key: 'sourceText', label: '设备来源' },
         { key: 'updated', label: '操作时间' }
       ],
@@ -161,6 +163,9 @@ export default {
             } else {
               item.chargePattern = '--'
             }
+            const title = (item.protocolDTO && item.protocolDTO.title) || ''
+            console.log(title)
+            item.protocolDTOTitle = title
             return item
           })
           this.list = list
@@ -295,6 +300,29 @@ export default {
       })
 
       return param
+    },
+    handleUpdateModel() {
+      if (this.selectList.length === 0) {
+        this.$message({ message: '请选择要修改协议的设备', type: 'error' })
+        return
+      }
+      if (this.selectList.length > 1) {
+        this.$message({ message: '修改设备型号只支持单选', type: 'error' })
+        return
+      }
+      if (this.selectList[0].loginFlag === 10000) {
+        this.$router.push({
+          path: '/deviceModify',
+          query: {
+            lyyEquipmentId: this.selectList[0].lyyEquipmentId,
+            value: this.selectList[0].value,
+            equipmentType: this.selectList[0].equipmentType,
+            type: 0
+          }
+        })
+      } else {
+        this.$message({ message: '设备不支持', type: 'warning' })
+      }
     }
   }
 }

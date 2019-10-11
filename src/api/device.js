@@ -194,6 +194,40 @@ export function verifyCode(data) {
     params: data
   })
 }
+/**
+ * 根据设备查询商户下同类型的协议
+ * @param {*} data
+ */
+export function protocolList(data) {
+  return request({
+    url: '/rest/factory/protocolList',
+    method: 'get',
+    params: data
+  })
+}
+/**
+ * 检验设备计费模式是否相同
+ *
+ * @param {*} data
+ */
+export function checkBillingModel(data) {
+  return request({
+    url: '/rest/factory/checkBillingModel',
+    method: 'get',
+    params: data
+  })
+}
+/**
+ * 更新设备类型
+ * @param {*} data
+ */
+export function updateEquipmentModel(data) {
+  return request({
+    url: '/rest/factory/updateEquipmentModel',
+    method: 'post',
+    data
+  })
+}
 export function validate(data) {
   return request({
     url: '/userlogin/password/verifyCode/validate',
