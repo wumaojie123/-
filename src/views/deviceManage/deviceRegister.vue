@@ -74,9 +74,7 @@ export default {
       deviceMapInfo: deviceMap,
       colums: [
         { key: 'value', label: '设备编号' },
-        // { key: 'isLyyOpen', label: '开发平台' },
-        // { key: 'interfaceFlag', label: '接口板' },
-        // { key: 'loginFlag', label: '登录表示' },
+        { key: 'loginFlag', label: '登录表示' },
         { key: 'equipmentTypeText', label: '设备类型' },
         { key: 'protocolDTOTitle', label: '设备型号' },
         { key: 'communicationText', label: '通信方式' },
@@ -137,14 +135,13 @@ export default {
                 : item.source === 0
                   ? '平台导入'
                   : ''
-            const communicationMap = { 0: '无', 1: '脉冲', 2: '串口' }
             // const chargePatternMap = {
-            //   TIME: '按时长计费',
+              //   TIME: '按时长计费',
             //   ELEC: '按电量计费'
             // }
             const title = (item.protocolDTO && item.protocolDTO.title) || ''
-            console.log(title)
             item.protocolDTOTitle = title
+            const communicationMap = { 0: '无', 1: '脉冲', 2: '串口' }
             item.communicationText = communicationMap[item.communication]
             if (item.communication !== 2) {
               item.chargePattern = '--'
@@ -160,9 +157,7 @@ export default {
             item.statusText = statusMap[item.status]
             const signalMap = { 1: '弱', 2: '中', 3: '强', 4: '很强' }
             item.signalText = signalMap[item.signal] || '中'
-            item.groupNumber = item.groupNumber
-              ? `${item.groupNumber}号机`
-              : '未设置'
+            item.groupNumber = item.groupNumber ? `${item.groupNumber}号机` : '未设置'
             return item
           })
           this.list = list
@@ -297,7 +292,7 @@ export default {
               }
             })
           } else {
-            this.$message({ message: '设备不支持', type: 'warning' })
+            this.$message({ message: '请选择设备型号不为空的设备', type: 'warning' })
           }
         }
       } else if (this.selectItems.length > 1) {

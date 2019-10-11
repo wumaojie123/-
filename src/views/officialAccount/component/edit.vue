@@ -83,7 +83,7 @@
             <el-input v-model="menuInfo.name" placeholder="请输入菜单名称" class="input-300" maxlength="6" />
           </el-form-item>
           <el-form-item label="菜单链接" prop="price">
-            <el-input v-model="menuInfo.url" :rows="4" placeholder="请输入以https://为开头的菜单链接" type="textarea" class="input-300" clearable maxlength="100"/>
+            <el-input v-model="menuInfo.url" :rows="4" placeholder="请输入以https://或http：//为开头的菜单链接" type="textarea" class="input-300" clearable maxlength="100"/>
           </el-form-item>
         </el-form>
       </div>
@@ -289,8 +289,8 @@ export default {
         return
       }
       if (this.selfMenu) {
-        if (this.menuInfo.url.indexOf('https://') !== 0) {
-          this.$message({ message: '请输入以https://为开头的自定义菜单链接', type: 'error' })
+        if (this.menuInfo.url.indexOf('https://') !== 0 || this.menuInfo.url.indexOf('http://') !== 0) {
+          this.$message({ message: '请输入以https://或http：//为开头的菜单链接', type: 'error' })
           return
         }
       }

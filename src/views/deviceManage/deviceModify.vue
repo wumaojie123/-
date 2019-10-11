@@ -59,7 +59,9 @@ export default {
       billingModel: '',
       verfyCodeVisible: false,
       phoneNumber: '',
-      name: ''
+      name: '',
+      isShowDialog: false,
+      deviceWorkType: ''
     }
   },
   created() {
@@ -99,13 +101,20 @@ export default {
       }
     },
     updateModel() {
-      this.$confirm(`您修改的设备型号支持的计费方式为【按xx计费】，与设备此前的计费方式不一致，确定后请务必联系商家前往管理后台重新添加设备服务套餐。`, '计费方式变更').then(() => {
-        if (this.queryString.type === 0 || this.queryString.type === '0') {
-          this.verfyCodeVisible = false
-        } else if (this.queryString.type === '1' || this.queryString.type === 1) {
-          this.verfyCodeVisible = true
+      if (this.isShowDialog) {
+        const map = { 'TIME': '按时长', 'ELEC': '按电量' }
+        this.$confirm(`您修改的设备型号支持的计费方式为【${map[this.deviceWorkType]}计费】，与设备此前的计费方式不一致，确定后请务必联系商家前往管理后台重新添加设备服务套餐。`, '计费方式变更').then(() => {
+          if (this.queryString.type === 0 || this.queryString.type === '0') {
+            this.verfyCodeVisible = false
+          } else if (this.queryString.type === '1' || this.queryString.type === 1) {
+            this.verfyCodeVisible = true
+          }
+        })
+      } else {
+        if (this.queryString.type === '1' || this.queryString.type === 1) {
+            this.verfyCodeVisible = true
         }
-      })
+      }
     },
     /**
      * 跟新协议
@@ -120,6 +129,11 @@ export default {
         record: this.queryString.type === 1,
         protocolId: this.selectItems[0].id,
         accountId: this.accountId
+      }
+      if (this.isShowDialog) {
+        postData.billingModel = this.deviceWorkType
+      } else {
+        postData.billingModel = ''
       }
       updateEquipmentModel(postData).then(res => {
         this.listLoading = false
@@ -137,6 +151,7 @@ export default {
      * 查询协议
      */
     checkModel() {
+      this.isShowDialog = false
       const postData = {
         equipmentValue: this.queryString.value,
         protocolId: this.selectItems[0].id,
@@ -144,8 +159,13 @@ export default {
       }
       checkBillingModel(postData).then(res => {
         this.listLoading = false
-        if (res.data) {
-          console.log('kkk')
+        if (res.result === 0) {
+          if (res.description !== '0') {
+            this.isShowDialog = true
+            this.deviceWorkType = res.description
+          } else {
+            this.isShowDialog = false
+          }
         }
       })
     },

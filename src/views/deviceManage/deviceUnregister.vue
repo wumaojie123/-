@@ -1,24 +1,15 @@
 <template>
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
+
       <el-form-item label="设备类型">
         <el-select v-model="queryParams.equipmentType" placeholder="请选择">
-          <el-option
-            v-for="item in equipmentTypesArr"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
+          <el-option v-for="item in equipmentTypesArr" :key="item.value" :label="item.label" :value="item.value"/>
         </el-select>
       </el-form-item>
+
       <el-form-item label="设备编号">
-        <el-input
-          v-model="queryParams.equipmentValue"
-          placeholder="输入多台设备时用,隔开"
-          class="input-300"
-          maxlength="100"
-          clearable
-        />
+        <el-input v-model="queryParams.equipmentValue" placeholder="输入多台设备时用,隔开" class="input-300" maxlength="100" clearable/>
         <el-button type="primary" icon="el-icon-search" @click="filerQueryList">查询</el-button>
         <el-button type="primary" style="margin-left: 20px;" @click="handleUpdateModel">修改设备型号</el-button>
         <el-button type="primary" style="margin-left: 20px;" @click="handleRegister">设备注册</el-button>
@@ -26,15 +17,10 @@
           <el-button type="success" style="margin-left: 20px;">设备注册记录</el-button>
         </router-link>
       </el-form-item>
+
     </el-form>
     <!-- 列表 -->
-    <el-table
-      :data="list"
-      border
-      highlight-current-row
-      style="width: 100%;margin-bottom: 20px;"
-      @selection-change="handleSelectionChange"
-    >
+    <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" />
       <el-table-column
         v-for="(item, index) in colums"
@@ -47,6 +33,7 @@
       />
     </el-table>
     <div style="padding-bottom: 10px;font-size: 16px;">合计设备数：{{ pageInfo.total }}台</div>
+
     <el-pagination
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pageInfo.pageSize"
@@ -310,7 +297,7 @@ export default {
         this.$message({ message: '修改设备型号只支持单选', type: 'error' })
         return
       }
-      if (this.selectList[0].loginFlag === 10000) {
+      if (this.selectList[0].loginFlag === 10000 && this.selectList[0].communicationText) {
         this.$router.push({
           path: '/deviceModify',
           query: {
@@ -321,7 +308,7 @@ export default {
           }
         })
       } else {
-        this.$message({ message: '设备不支持', type: 'warning' })
+        this.$message({ message: '请选择设备型号不为空的设备', type: 'warning' })
       }
     }
   }
