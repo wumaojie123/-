@@ -614,7 +614,7 @@ export default {
           equipmentType: map[item.equipmentTypeName],
           name: item.agentUserName,
           phoneNumber: item.account,
-          type: item.online ? 0 : 1
+          type: item.isRegister === '已注册' ? 1 : 0
         }
       })
     },

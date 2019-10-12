@@ -155,7 +155,11 @@ export default {
       list = list.map(item => {
         item.checked = false
         if (item.url.indexOf('https://b.leyaoyao.com/group/index.html') > -1) {
-          item.url = `${item.url}?ag=${this.ag}`
+          if (window.location.host === 'ag.leyaoyao.com') {
+            item.url = `${item.url}?ag=${this.ag}`
+          } else {
+            item.url = `https://sb.leyaoyao.com/group/index.html?ag=${this.ag}`
+          }
         } else {
           item.url = `${item.url}?appId=${this.appId}&ut=3`
         }
@@ -183,7 +187,7 @@ export default {
             val.push(obj)
           } else {
             if (item.url.indexOf('https://b.leyaoyao.com/group/index.html') > -1) {
-              const obj = { url: `${item.url}`, name: item.title, type: 'view', editable: false, sub_button: [] }
+              const obj = { url: `${item.url}?ag=${this.ag}`, name: item.title, type: 'view', editable: false, sub_button: [] }
               val.push(obj)
             } else {
               const obj = { url: `${item.url}?appId=${this.appId}&ut=3`, name: item.title, type: 'view', editable: false, sub_button: [] }
