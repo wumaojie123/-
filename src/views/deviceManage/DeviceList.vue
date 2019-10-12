@@ -104,7 +104,7 @@
           <span>{{ scope.row.equipmentTypeName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="设备协议" align="center">
+      <el-table-column label="设备型号" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.protocolDTO && scope.row.protocolDTO.title }}</span>
         </template>
