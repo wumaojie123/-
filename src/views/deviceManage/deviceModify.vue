@@ -5,7 +5,7 @@
     </section>
     <!-- 列表 -->
     <div style="margin: 10px 0;font-size: 16px;">设备型号设置<span style="color: #888;">（请选择与主板匹配的型号）</span></div>
-    <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" height="500">
+    <el-table v-loading="loading" :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;" height="500">
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-radio
@@ -50,6 +50,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       check: -1,
       queryString: {},
       list: [],
@@ -81,8 +82,9 @@ export default {
           this.protocolId = res.data.protocolId
           this.accountId = res.data.accountId
           let list = res.data.list || []
-          list = list.map(item => {
+          list = list.map((item, index) => {
             if (this.protocolId === item.id) {
+              this.check = index
               item.check = true
             } else {
               item.check = false
@@ -164,8 +166,12 @@ export default {
         protocolId: this.selectItems[0].id,
         equipmentType: 'CDZ'
       }
+      this.loading = true
       checkBillingModel(postData).then(res => {
         this.listLoading = false
+        setTimeout(() => {
+          this.loading = false
+        }, 500)
         if (res.result === 0) {
           if (res.description !== '0') {
             this.isShowDialog = true
