@@ -106,7 +106,7 @@ export default {
       }
     },
     updateModel() {
-      if (this.queryList.equipmentType === 'CDZ') {
+      if (this.queryString.equipmentType === 'CDZ') {
         if (this.isShowDialog) {
           const map = { 'TIME': '按时长', 'ELEC': '按电量' }
           this.$confirm(`您修改的设备型号支持的计费方式为【${map[this.deviceWorkType]}计费】，与设备此前的计费方式不一致，确定后请务必联系商家前往管理后台重新添加设备服务套餐。`, '计费方式变更').then(() => {
