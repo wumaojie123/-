@@ -49,9 +49,9 @@ export default {
       check: -1,
       list: [],
       colums: [
-        { key: 'merchantName', label: '商家名称' },
+        { key: 'merchantName', label: '商户品牌名称' },
         { key: 'userName', label: '账号' },
-        { key: 'linkName', label: '联系人' },
+        { key: 'linkName', label: '商家名称' },
         { key: 'phone', label: '手机号码' },
         { key: 'createDate', label: '创建日期' },
         { key: 'equipmentTypes', label: '设备类型', render: (text) => text.length > 0 ? text.toString() : '-' },

@@ -29,6 +29,7 @@
       :cell="commProps.cell"
       :pagination="commProps.pagination"
       :handler="commProps.handler"
+      :listloading="commProps.listloading"
       @current-change="currentChangeHd"
       @size-change="sizeChangeHd"
       @show-detail="showDetail"
@@ -106,8 +107,12 @@ export default {
             'created'
           ],
           list: [],
+
           style: [{ width: '255' }, { width: '255' }, { width: '190' }]
         },
+        // 点击查询按钮加载中flag   20191014 by mojianpei
+        listloading: false,
+
         handler: {
           isShow: true,
           text: '操作',
@@ -280,7 +285,16 @@ export default {
         } else {
           item.communicateTypeName = '脉冲'
         }
-        const map = { 0: '正常关闭', 1: '商家端口远程停止', 2: '用户手动结束充电', 3: '设备启动失败', 4: '设备故障', 5: '订单未激活', 6: '订单服务时长为空', 7: '同一通道号重复下单关闭' }
+        const map = {
+          0: '正常关闭',
+          1: '商家端口远程停止',
+          2: '用户手动结束充电',
+          3: '设备启动失败',
+          4: '设备故障',
+          5: '订单未激活',
+          6: '订单服务时长为空',
+          7: '同一通道号重复下单关闭'
+        }
         item.endText = map[item.closeAction] || ''
 
         item.packageName1 = item.packageName
@@ -324,7 +338,7 @@ export default {
     /**
      * 查询支付订单
      */
-    queryPayOrderList() {
+    async queryPayOrderList() {
       if (
         this.searchParam.adOrgId === '' &&
         this.searchParam.deviceNo === '' &&
@@ -338,7 +352,17 @@ export default {
         return false
       }
 
-      this.getList()
+      // 订单管理-支付订单添加loading提示  20191010 by mojianpei
+      this.commProps.listloading = true
+      this.getList().then(res => {
+        this.commProps.listloading = false
+        if (this.commProps.cell.list.length === 0) {
+          this.$message({
+            message: '暂无数据',
+            type: 'info'
+          })
+        }
+      })
     },
     async getList() {
       var param = JSON.parse(JSON.stringify(this.searchParam))
