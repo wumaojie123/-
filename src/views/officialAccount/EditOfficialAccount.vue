@@ -84,7 +84,7 @@ export default {
     async getConfigInfo() {
       const res2 = await getAngent()
       if (res2.result === 0) {
-        this.ag = res2.data.agentUserId
+        this.ag = res2.data.agentUserId + ''
       }
       const res = await getConfig({ appId: this.appId })
       if (res.result === 0) {
