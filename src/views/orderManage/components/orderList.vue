@@ -2,7 +2,8 @@
 <template>
   <el-container>
     <el-main>
-      <el-table v-loading="listloading" :data="cell.list" border>
+      <!-- 撤销修改 mojianpei   v-loading="listloading" -->
+      <el-table :data="cell.list" border>
         <!-- 1、表格 -->
         <template v-for="(item,index) in cell.name">
           <el-table-column
@@ -65,10 +66,10 @@ export default {
      * list:数据
      * style:样式
      */
-    listloading: {
-      type: Boolean,
-      default: false
-    },
+    // listloading: {
+    //   type: Boolean,
+    //   default: false
+    // },
     cell: {
       type: Object,
       default: function() {

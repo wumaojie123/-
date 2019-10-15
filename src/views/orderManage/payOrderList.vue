@@ -29,11 +29,11 @@
       :cell="commProps.cell"
       :pagination="commProps.pagination"
       :handler="commProps.handler"
-      :listloading="commProps.listloading"
       @current-change="currentChangeHd"
       @size-change="sizeChangeHd"
       @show-detail="showDetail"
     />
+    <!-- 撤销修改by mojianpei  :listloading="commProps.listloading" -->
     <el-dialog
       :visible.sync="detailVisible"
       :show-close="false"
@@ -111,7 +111,7 @@ export default {
           style: [{ width: '255' }, { width: '255' }, { width: '190' }]
         },
         // 点击查询按钮加载中flag   20191014 by mojianpei
-        listloading: false,
+        // listloading: false,
 
         handler: {
           isShow: true,
@@ -352,17 +352,19 @@ export default {
         return false
       }
 
+      this.getList()
+
       // 订单管理-支付订单添加loading提示  20191010 by mojianpei
-      this.commProps.listloading = true
-      this.getList().then(res => {
-        this.commProps.listloading = false
-        if (this.commProps.cell.list.length === 0) {
-          this.$message({
-            message: '暂无数据',
-            type: 'info'
-          })
-        }
-      })
+      // this.commProps.listloading = true
+      // this.getList().then(res => {
+      //   this.commProps.listloading = false
+      //   if (this.commProps.cell.list.length === 0) {
+      //     this.$message({
+      //       message: '暂无数据',
+      //       type: 'info'
+      //     })
+      //   }
+      // })
     },
     async getList() {
       var param = JSON.parse(JSON.stringify(this.searchParam))

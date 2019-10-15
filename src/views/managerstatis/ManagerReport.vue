@@ -34,12 +34,13 @@
               <router-link :to="{path: '/placeReport', query: {agentUserName: scope.row.agentUserName, associateSellerPhone: scope.row.associateSellerPhone, begin: dateRange[0], end: dateRange[1]}}" class="lyy-a-link">{{ scope.row.associateSellerPhone }}</router-link>
             </template>
           </el-table-column>
+          <!-- 撤销修改 mojianpei -->
           <!-- <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/> -->
-          <el-table-column label="商户品牌名称" align="center" prop="agentBrandName" width="250" >
+          <!-- <el-table-column label="商户品牌名称" align="center" prop="agentBrandName" width="250" >
             <template slot-scope="scope">
               <span>{{ scope.row.agentBrandName }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="商家名称" align="center" prop="agentUserName" width="250" >
             <template slot-scope="scope">
               <span>{{ scope.row.agentUserName }}</span>
@@ -243,7 +244,7 @@ export default {
       showCoinsFields: false, // 展示投币相关
       showMaterialFields: false, // 展示出礼相关
       colums: [
-        { key: 'agentBrandName', label: '商户品牌名称', width: 250 },
+        // 撤销修改 mojianpei { key: 'agentBrandName', label: '商户品牌名称', width: 250 },
         { key: 'agentUserName', label: '商家名称', width: 250 },
         { key: 'orderCount', label: '订单数量', sortable: true },
         { key: 'totalIncome', label: '收入总额(元)', sortable: true },
