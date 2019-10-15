@@ -76,7 +76,7 @@
       <el-button v-waves style="margin-left: 10px;" type="primary" icon="el-icon-goods" @click="disabledEquipment('disable')">禁用设备</el-button>
       <el-button style="margin-left: 10px;" type="primary" icon="el-icon-view" @click="disabledEquipment('enable')">解除禁用</el-button>
       <el-button style="margin-left: 10px;" type="primary" icon="el-icon-setting" @click="equipmentSetPara">设置设备参数</el-button>
-      <el-button style="margin-left: 10px;" type="primary" icon="el-icon-setting" @click="updateEquipmentModel">修改设备型号</el-button>
+      <el-button style="margin-left: 10px;margin-top: 10px;" type="primary" icon="el-icon-setting" @click="updateEquipmentModel">修改设备型号</el-button>
     </div>
     <el-table
       v-loading="listLoading"
