@@ -106,6 +106,7 @@ export default {
       }
     },
     updateModel() {
+      debugger
       if (this.queryString.equipmentType === 'CDZ') {
         if (this.isShowDialog) {
           const map = { 'TIME': '按时长', 'ELEC': '按电量' }
@@ -119,6 +120,8 @@ export default {
         } else {
           if (this.queryString.type === '1' || this.queryString.type === 1) {
               this.verfyCodeVisible = true
+          } else {
+            this.update()
           }
         }
       } else {
