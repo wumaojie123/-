@@ -13,12 +13,12 @@
         <el-button :disabled="text !== '获取验证码' || flag" style="width: 112px;" type="primary" @click="getCode">{{ text }}</el-button>
         <span class="input-anno">请及时让商家告知手机验证码</span>
       </el-form-item>
-      <el-form-item label="商家名称">
-        <el-input v-model="baseInfo.merchantName" :disabled="disableFlag" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" clearable />
-        <span class="input-anno" style="color:red;">注意：“商家名称”设置后，商家可以在手机B端后台修改。修改路径：我的 > 品牌信息设置 > 商户品牌名称。</span>
+      <el-form-item label="商户品牌名称">
+        <el-input v-model="baseInfo.merchantName" :disabled="disableFlag" placeholder="请输入商户品牌名称" type="tel" class="input-300" maxlength="16" clearable />
+        <span class="input-anno" style="color:red;">注意：“商户品牌名称”设置后，商家可以在手机B端后台修改。修改路径：我的 > 品牌信息设置 > 商户品牌名称。</span>
       </el-form-item>
-      <el-form-item label="联系人姓名">
-        <el-input v-model="baseInfo.linkName" :disabled="disableFlag" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" clearable />
+      <el-form-item label="商家名称">
+        <el-input v-model="baseInfo.linkName" :disabled="disableFlag" placeholder="请输入商家名称" type="text" class="input-300" maxlength="16" clearable />
         <span class="input-anno" style="color:red;">注意：“姓名”设置后，将显示在手机B端后台的账号信息中，且无法修改，请慎重填写！</span>
       </el-form-item>
       <!-- 撤销修改 mojianpei -->
@@ -26,9 +26,9 @@
         <el-input v-model="baseInfo.merchantName" :disabled="disableFlag" placeholder="请输入商户品牌名称" type="tel" class="input-300" maxlength="16" clearable />
         <span class="input-anno" style="color:red;">注意：“商户品牌名称”设置后，商家可以在手机B端后台修改。修改路径：我的 > 品牌信息设置 > 商户品牌名称。</span>
       </el-form-item>
-      <el-form-item label="商家名称">
-        <el-input v-model="baseInfo.linkName" :disabled="disableFlag" placeholder="请输入商家名称" type="text" class="input-300" maxlength="16" clearable />
-        <span class="input-anno" style="color:red;">注意：“商家名称”设置后，将显示在手机B端后台的账号信息中，且无法修改，请慎重填写！</span>
+      <el-form-item label="商户品牌名称">
+        <el-input v-model="baseInfo.linkName" :disabled="disableFlag" placeholder="请输入商户品牌名称" type="text" class="input-300" maxlength="16" clearable />
+        <span class="input-anno" style="color:red;">注意：“商户品牌名称”设置后，将显示在手机B端后台的账号信息中，且无法修改，请慎重填写！</span>
       </el-form-item> -->
       <el-form-item label="备注信息">
         <el-input v-model="baseInfo.description" style="width: 550px;" placeholder="请输入10字以内备注信息（备注信息仅供你自己查看，便于记录商家信息）" type="text" class="input-300" maxlength="10" clearable />

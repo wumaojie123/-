@@ -13,7 +13,7 @@
 
     <el-submenu v-else :class="item.icon" :index="item.name||item.path">
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta.icon" :title="item.meta.title"/>
+        <item v-if="item.meta" :icon="item.meta.icon" :title="item.meta.title" />
       </template>
       <template v-for="child in item.children" v-if="!child.hidden">
         <sidebar-item
@@ -22,10 +22,17 @@
           :item="child"
           :key="child.path"
           :base-path="resolvePath(child.path)"
-          class="nest-menu"/>
-        <a v-else :href="child.path" :key="child.name" target="_blank" @click="clickLink(child.path,$event)">
+          class="nest-menu"
+        />
+        <a
+          v-else
+          :href="child.path"
+          :key="child.name"
+          target="_blank"
+          @click="clickLink(child.path,$event)"
+        >
           <el-menu-item :index="resolvePath(child.path)">
-            <item v-if="child.meta" :icon="child.meta.icon" :title="child.meta.title"/>
+            <item v-if="child.meta" :icon="child.meta.icon" :title="child.meta.title" />
           </el-menu-item>
         </a>
       </template>
@@ -66,7 +73,9 @@ export default {
     // console.log('===')
     // console.log(this.item)
   },
+
   methods: {
+    // fix by mjp 修改菜单显示规则
     hasOneShowingChild(children) {
       const showingChildren = children.filter(item => {
         if (item.hidden) {
@@ -77,7 +86,7 @@ export default {
           return true
         }
       })
-      if (showingChildren.length === 1) {
+      if (showingChildren.length === 1 && showingChildren[0].meta.title === '首页') {
         return true
       }
       return false
@@ -89,6 +98,7 @@ export default {
       return validateURL(routePath)
     },
     clickLink(routePath, e) {
+      // console.log(2222222,this.item.children[0].meta.title)
       if (!this.isExternalLink(routePath)) {
         e.preventDefault()
         const path = this.resolvePath(routePath)
@@ -100,7 +110,7 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-  .menu-wrapper {
-    background-color: red;
-  }
+.menu-wrapper {
+  background-color: red;
+}
 </style>
