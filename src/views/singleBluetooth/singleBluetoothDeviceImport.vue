@@ -21,6 +21,11 @@
           <el-form-item label="生产商标识" prop="salt">
             <el-input v-model="form.salt" style="width: 250px;" clearable maxlength="16" placeholder="请输入长度为16位的生产商标识" />
           </el-form-item>
+          <el-form-item label="设备通信方式" prop="communicationType">
+            <el-select v-model="form.communicationType" placeholder="请选择">
+              <el-option v-for="(item, index) in merchantList" :key="index" :label="item" :value="index">{{ item }}</el-option>
+            </el-select>
+          </el-form-item>
         </el-col>
       </el-row>
       <el-upload
@@ -69,13 +74,17 @@ export default {
       infoChecked: false,
       form: {
         agent: '',
-        salt: ''
+        salt: '',
+        communicationType: ''
       },
       rules: {
         salt: [
           { required: true, message: '请输入长度为16位的生产商标识', trigger: 'blur' },
           { min: 16, max: 16, message: '长度为16个字符', trigger: 'blur' },
           { validator: validateChinese, trigger: 'blur' }
+        ],
+        communicationType: [
+          { required: true, message: '请选择设备通信方式', trigger: 'blur' }
         ]
       },
       isCanClickTag: true,
@@ -85,6 +94,10 @@ export default {
         { key: 'value', label: '设备编号' },
         { key: 'failNote', label: '导入失败原因' }
       ],
+      merchantList: {
+        'MC': '脉冲',
+        'CK': '串口'
+      },
       failList: [],
       dialogVisible: false,
       failtTest: ''
@@ -92,7 +105,7 @@ export default {
   },
   computed: {
     url() {
-      return '/agent/lyyEquipmentBluetooth/import?agentUserId=' + this.form.agent + '&salt=' + this.form.salt
+      return '/agent/lyyEquipmentBluetooth/import?agentUserId=' + this.form.agent + '&salt=' + this.form.salt + '&communicationType=' + this.form.communicationType
     }
   },
   methods: {
