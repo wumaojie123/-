@@ -34,8 +34,7 @@
               <router-link :to="{path: '/placeReport', query: {agentUserName: scope.row.agentUserName, associateSellerPhone: scope.row.associateSellerPhone, begin: dateRange[0], end: dateRange[1]}}" class="lyy-a-link">{{ scope.row.associateSellerPhone }}</router-link>
             </template>
           </el-table-column>
-          <!--  mojianpei 20191018 -->
-          <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/>
+          <!-- <el-table-column v-for="(item, index) in colums" :key="index" :prop="item.key" :label="item.label" :width="item.width" :sortable="item.sortable" align="center"/> -->
           <el-table-column label="商户品牌名称" align="center" prop="businessName" width="250" >
             <template slot-scope="scope">
               <span>{{ scope.row.businessName }}</span>
@@ -236,7 +235,7 @@ export default {
   data() {
     return {
       roletype: '商家',
-      queryParams: { agentUserName: '', associateSellerPhone: '', associateSellerName: '' },
+      queryParams: { agentUserName: '', businessName: '', associateSellerPhone: '', associateSellerName: '' },
       dateRange: [],
       listLoading: true,
       list: [],
@@ -306,7 +305,7 @@ export default {
       this.queryList()
     },
     resetQueryParams() {
-      this.queryParams = { agentUserName: '', associateSellerPhone: '', associateSellerName: '' }
+      this.queryParams = { agentUserName: '', businessName: '', associateSellerPhone: '', associateSellerName: '' }
       this.dateRange = []
       this.dateRange[0] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
       this.dateRange[1] = parseTime(Date.now() - 24 * 60 * 60 * 1000, '{y}-{m}-{d}')
@@ -332,6 +331,7 @@ export default {
         this.listLoading = false
         if (res.data) {
           const list = res.data && res.data.items || []
+          // console.log(list, 55555)
           if (this.active === 'merchant') {
             this.list = list
           } else if (this.active === 'agent') {
