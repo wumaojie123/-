@@ -77,7 +77,7 @@ export default {
           return true
         }
       })
-      if (showingChildren.length === 1) {
+      if (showingChildren.length === 1 && showingChildren[0].meta.title === '首页') {
         return true
       }
       return false
