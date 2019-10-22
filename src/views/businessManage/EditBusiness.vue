@@ -5,13 +5,13 @@
         <el-input v-model="baseInfo.userName" placeholder="请输入商家账号" type="text" class="input-300" maxlength="11" disabled />
         <span class="input-anno">账号暂不支持修改</span>
       </el-form-item>
-      <el-form-item label="商家名称">
-        <el-input v-model="baseInfo.merchantName" placeholder="请输入商家名称" type="tel" class="input-300" maxlength="16" disabled />
-        <span class="input-anno">“商家名称”设置后，商家可以在手机B端后台修改。修改路径：我的 > 品牌信息设置 > 商户品牌名称</span>
+      <el-form-item label="商户品牌名称">
+        <el-input v-model="baseInfo.merchantName" placeholder="请输入商户品牌名称" type="tel" class="input-300" maxlength="16" disabled />
+        <span class="input-anno">“商户品牌名称”设置后，商家可以在手机B端后台修改。修改路径：我的 > 品牌信息设置 > 商户品牌名称</span>
       </el-form-item>
-      <el-form-item label="联系人姓名">
-        <el-input v-model="baseInfo.linkName" placeholder="请输入联系人姓名" type="text" class="input-300" maxlength="16" disabled />
-        <span class="input-anno">“姓名”设置后，将显示在手机B端后台的账号信息中，且无法修改。未设置的，请通知商家前往B端后台设置</span>
+      <el-form-item label="商家名称">
+        <el-input v-model="baseInfo.linkName" placeholder="请输入商家名称" type="text" class="input-300" maxlength="16" disabled />
+        <span class="input-anno">“商家名称”设置后，将显示在手机B端后台的账号信息中，且无法修改。未设置的，请通知商家前往B端后台设置</span>
       </el-form-item>
       <el-form-item label="备注信息">
         <el-input v-model="baseInfo.description" style="width: 550px;" placeholder="请输入10字以内备注信息（备注信息仅供你自己查看，便于记录商家信息）" type="text" class="input-300" maxlength="10" clearable />
