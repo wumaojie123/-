@@ -78,13 +78,13 @@ const validatePrice = (rule, value, callback) => {
 //     callback(new Error('服务时间必须为大于0的小于等于1440(24小时)正整数'))
 //   }
 // }
-// const validateElectric = (rule, value, callback) => {
-//   if (/^-?\d+\.?\d{0,1}$/.test(value) && value < 50 && value > 0) {
-//     callback()
-//   } else {
-//     callback(new Error('电量必须为大于0的正数，电量需小于50，最多一位小数'))
-//   }
-// }
+const validateElectric = (rule, value, callback) => {
+  if (/^-?\d+\.?\d{0,3}$/.test(value) && value < 9.99 && value > 0) {
+    callback()
+  } else {
+    callback(new Error('电量必须为大于0的正数，电量需小于9.99，最多三位小数'))
+  }
+}
 // const validateServiceTime2 = (rule, value, callback) => {
 //   if (value === '' || (isPosInt(value) && value <= 1440)) {
 //     callback()
@@ -161,8 +161,8 @@ export default {
           // { validator: validateServiceTime }
         ],
         electric: [
-          // { required: true, message: '请输入电量', trigger: 'change' },
-          // { validator: validateElectric }
+          { required: true, message: '请输入电量', trigger: 'change' },
+          { validator: validateElectric }
         ]
       },
       loading_submit: false,

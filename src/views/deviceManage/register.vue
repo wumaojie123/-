@@ -141,10 +141,10 @@ import { deviceMapInfo, communicationMap } from './constant'
 import verfyCode from './component/verfyCode'
 // import { mul } from '@/utils/index'
 const validateElectric = (rule, value, callback) => {
-  if (/^-?\d+\.?\d{0,1}$/.test(value) && value < 50 && value > 0) {
+  if (/^-?\d+\.?\d{0,3}$/.test(value) && value < 9.99 && value > 0) {
     callback()
   } else {
-    callback(new Error('电量必须为大于0的正数，电量需小于50，最多一位小数'))
+    callback(new Error('电量必须为大于0的正数，电量需小于9.99，最多三位小数'))
   }
 }
 export default {
