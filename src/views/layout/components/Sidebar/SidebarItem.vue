@@ -2,11 +2,15 @@
   <div v-if="!item.hidden&&item.children" :class="item.icon" class="menu-wrapper">
     <template v-if="hasOneShowingChild(item.children) && !onlyOneChild.children&&!item.alwaysShow">
       <a :href="onlyOneChild.path" target="_blank" @click="clickLink(onlyOneChild.path,$event)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
+        <el-menu-item
+          :index="resolvePath(onlyOneChild.path)"
+          :class="{'submenu-title-noDropdown':!isNest}"
+        >
           <item
             v-if="onlyOneChild.meta"
             :icon="onlyOneChild.meta.icon||item.meta.icon"
-            :title="onlyOneChild.meta.title"/>
+            :title="onlyOneChild.meta.title"
+          />
         </el-menu-item>
       </a>
     </template>
@@ -86,7 +90,13 @@ export default {
           return true
         }
       })
-      if (showingChildren.length === 1 && showingChildren[0].meta.title === '首页') {
+      // 菜单显示逻辑更新 by mjp 20191028
+      if (
+        (showingChildren.length === 1 &&
+          showingChildren[0].name === 'Dashboard') ||
+        this.item.name === ''
+      ) {
+        console.log('showingChildren', showingChildren)
         return true
       }
       return false
