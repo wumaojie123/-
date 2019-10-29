@@ -34,7 +34,7 @@ export function validateAlphabets(str) {
  * 验证手机格式
  */
 export function validateTel(value) {
-  return /^1[34578]\d{9}$/.test(value)
+  return /^1[345789]\d{9}$/.test(value)
 }
 /**
  * 判断是否是大于0的整数
