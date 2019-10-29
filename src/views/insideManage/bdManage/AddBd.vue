@@ -32,11 +32,11 @@
 
 <script>
 // import { telCheck } from '@/utils/rules'
-import insideManage from '@/api/insideManage'
 // import { getCode } from '@/api/angentManage'
 // import { getQRCode } from '@/api/advertiseDivideOne'
-import { verifyCode, validate } from '@/api/device'
 // import QRCode from 'qrcode'
+import { verifyCode, validate } from '@/api/device'
+import insideManage from '@/api/insideManage'
 export default {
   data() {
     // 无号段验证的手机验证
@@ -54,7 +54,7 @@ export default {
     // }
     return {
       code: false,
-      isgetCode: false,
+      isgetCode: false, // 是否发送了验证码
       flag: false,
       time: 60,
       timer: null,
@@ -78,7 +78,7 @@ export default {
     }
   },
   methods: {
-    // 获取手机验证码
+    // 获取手机验证码 modify by mjp 2019-10-29
     getPhoneCode() {
       console.log('发送验证码')
       if (!/^1\d{10}/.test(this.BDInfo.phone)) {
@@ -137,6 +137,8 @@ export default {
       //   console.log('返回的验证码', res)
       // })
     },
+
+    // 验证码校验
     validateCode(valid) {
       const params = {
         phoneNumber: this.BDInfo.phone,
