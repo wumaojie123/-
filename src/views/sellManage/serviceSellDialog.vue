@@ -223,13 +223,13 @@ export default {
           return
         } else if (
           !(
-            /^-?\d+\.?\d{0,1}$/.test(this.ruleForm.electric) &&
-            this.ruleForm.electric < 50 &&
+            /^-?\d+\.?\d{0,3}$/.test(this.ruleForm.electric) &&
+            this.ruleForm.electric < 9.99 &&
             this.ruleForm.electric > 0
           )
         ) {
           Message({
-            message: '电量必须为大于0的正数，电量需小于50，最多一位小数',
+            message: '电量必须为大于0的正数，电量需小于9.99，最多三位小数',
             type: 'warning'
           })
           return
