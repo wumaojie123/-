@@ -10,7 +10,7 @@
   >
     <el-form :model="form">
       <el-form-item :label-width="formLabelWidth" label="场地名称">
-        <el-input v-model="form.name" autocomplete="off" placeholder="请输入场地名称"/>
+        <el-input v-model="form.groupName" autocomplete="off" placeholder="请输入场地名称"/>
       </el-form-item>
       <el-form-item :label-width="formLabelWidth" label="所属地区">
         <el-cascader
@@ -52,6 +52,9 @@
 <script>
   import { mapGetters } from 'vuex'
   import { addressType } from '../../constant'
+  import {
+    factorySaveEquipmentGroupApi
+  } from '@/api/device'
 
   export default {
     mixins: [],
@@ -74,11 +77,15 @@
       return {
         addressType,
         form: {
-          name: '',
+          groupName: '',
           type: '',
           address: '',
           isDefault: false,
-          zone: []
+          zone: [],
+          addressType: '',
+          groupId: '',
+          lyyDistributorId: '',
+          districtId: ''
         },
         formLabelWidth: '100px',
         cascaderProps: {
@@ -95,12 +102,17 @@
         this.form.type = value
       },
       districtChange(val) {
+        console.log('test', val)
         this.form.zone = val
       },
       confirm() {
         console.log('test', this.form)
-        this.$emit('confirmAddGroupName')
-        this.$emit('closeAddGroupModal')
+        factorySaveEquipmentGroupApi(this.form).then((res) => {
+          if (res.result === 0) {
+            console.log(res)
+            this.$emit('confirmAddGroupName')
+          }
+        })
       },
       cancel() {
         this.$emit('closeAddGroupModal')

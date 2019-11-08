@@ -176,8 +176,10 @@
   import {
     agentGroupServiceList,
     batchRegisteredEquipment,
-    merchants
+    merchants,
+    factoryGroupListApi
   } from '@/api/device'
+
   import { priceCheck, serviceTimeCheck, conisCheck } from '@/utils/rules'
   import { deviceMapInfo, communicationMap } from './constant'
   import verfyCode from './component/verfyCode'
@@ -269,6 +271,7 @@
       this.communication = this.$route.query.communication
       this.phoneNumber = this.$route.query.phoneNumber
       this.name = this.$route.query.name
+      this.lyyDistributorId = this.$route.query.lyyDistributorId
       this.chargePattern = this.$route.query.chargePattern
       /* eslint-disable-next-line */
       if (this.communication == 2) {
@@ -300,21 +303,27 @@
         await this.getZoneList()
         this.visible.groupModal = true
       },
-      confirmAddGroupName() {
-        this.getGroupNameList()
+      async confirmAddGroupName() {
+        await this.closeAddGroupModal()
+        await this.getGroupNameList()
       },
       // 售货机-获取场地列表
       async getGroupNameList() {
         const postData = {
-          communication: this.communication,
-          equipmentType: this.deviceType,
           pageSize: 400,
-          pageIndex: 1
+          pageIndex: 1,
+          lyyDistributorId: 1032498
         }
-        const res = await agentGroupServiceList(postData)
+        const res = await factoryGroupListApi(postData)
         if (res.result === 0) {
           if (res.data) {
-            this.shjList = res.data.items || []
+            const shjList = res.data.items || []
+            this.shjList = shjList.map((v, i) => {
+              return {
+                ...v,
+                zone: `${v.provinceName}${v.cityName}${v.district}`
+              }
+            })
             this.pageInfo.total = res.data.total || 0
           } else {
             this.pageInfo.total = 0
@@ -323,6 +332,12 @@
       },
       // 查询服务套餐
       async queryList() {
+        // 售货机逻辑
+        if (this.deviceType === 'SHJ') {
+          this.getGroupNameList()
+          return
+        }
+        // 非售货机逻辑
         this.list = []
         const postData = {
           communication: this.communication,
@@ -349,8 +364,7 @@
         if (res.result === 0) {
           let list = res.data || []
           list = list.map(item => {
-            // item.label =`${ item.account }${ item.name }`
-            item.label = item.account + item.name
+            item.label = `${item.account}${item.name}`
             return item
           })
           this.merchantList = list
@@ -358,7 +372,6 @@
       },
       handleSelectionChange(value) {
         this.selectList = value
-        console.log(JSON.stringify(this.selectList))
       },
       handleSaveModal() {
         this.dialogFormVisible = true
@@ -431,7 +444,6 @@
             arr.push(item.coins)
           }
         })
-        console.log()
         if (arr.length === Array.from(new Set(arr)).length) {
           return true
         } else {
@@ -454,7 +466,6 @@
         const selectInfo = this.merchantList.filter(
           item => item.adOrgId === this.lyyDistributorId
         )[0]
-        console.log(selectInfo)
         this.phoneNumber = selectInfo.account
         this.name = selectInfo.name
         this.handleSaveModal()
@@ -479,7 +490,6 @@
         const selectInfo = this.merchantList.filter(
           item => item.adOrgId === this.lyyDistributorId
         )[0]
-        console.log(selectInfo)
         this.phoneNumber = selectInfo.account
         this.name = selectInfo.name
         const params = {
@@ -513,7 +523,6 @@
         }
       },
       handleBatchShjSave() {
-        console.log('shj-test')
       },
       handleCancel() {
         window.history.go(-1)

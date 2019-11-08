@@ -268,3 +268,25 @@ export async function getChargePattern(params) {
     params
   })
 }
+
+/**
+ * 查询场地列表
+ */
+export async function factoryGroupListApi(params) {
+  return request({
+    url: '/rest/factory/groupList',
+    method: 'get',
+    params
+  })
+}
+
+/**
+ * 保存投放地址
+ */
+export async function factorySaveEquipmentGroupApi(data) {
+  return request({
+    url: '/rest/factory/saveEquipmentGroup',
+    method: 'post',
+    data
+  })
+}
