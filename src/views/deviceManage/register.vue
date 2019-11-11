@@ -351,7 +351,7 @@
           lyyDistributorId: this.distributorId
         }
         const res = await factoryGroupListApi(postData)
-        if (res.result === 0) {
+        if (res && res.result === 0) {
           if (res.data) {
             const shjList = res.data.items || []
             this.shjList = shjList.map((v, i) => {
@@ -385,7 +385,7 @@
           postData.billing = this.chargePattern === 'ELEC' ? 2 : 1
         }
         const res = await agentGroupServiceList(postData)
-        if (res.result === 0) {
+        if (res && res.result === 0) {
           this.listLoading = false
           if (res.data) {
             this.list = res.data.items || []
@@ -397,7 +397,7 @@
       },
       async getMerchantList() {
         const res = await merchants()
-        if (res.result === 0) {
+        if (res && res.result === 0) {
           let list = res.data || []
           list = list.map(item => {
             item.label = `${item.account}${item.name}`
@@ -544,7 +544,7 @@
           this.clickDisabled = false
         }, 3000)
         const res = await batchRegisteredEquipment(params)
-        if (res.result === 0) {
+        if (res && res.result === 0) {
           this.verfyCodeVisible = false
           this.$message({
             message: '设备注册记录可查看设备注册进度',
@@ -588,9 +588,9 @@
           businessType: this.businessType
         }
         const res = await equipmentBatchRegisterEquipmentApi(reqData)
-        if (res.result === 0) {
+        if (res && res.result === 0) {
           this.$message({
-            message: '设备注册记录可查看设备注册进度',
+            message: res.description || '注册成功',
             type: 'success'
           })
           this.handleCancel()
