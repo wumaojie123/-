@@ -9,6 +9,7 @@ export function unbundling(data) {
     data
   })
 }
+
 // 添加设备服务套餐
 export function saveEquipmentService(data) {
   return request({
@@ -17,6 +18,7 @@ export function saveEquipmentService(data) {
     data
   })
 }
+
 // 查询是否套餐重复
 export function equipmentServiceRepeat(data) {
   return request({
@@ -25,6 +27,7 @@ export function equipmentServiceRepeat(data) {
     data
   })
 }
+
 // 批量注册设备
 export function batchRegisteredEquipment(data) {
   return request({
@@ -33,6 +36,7 @@ export function batchRegisteredEquipment(data) {
     data
   })
 }
+
 // 批量注册设备
 export function merchants() {
   return request({
@@ -40,6 +44,7 @@ export function merchants() {
     method: 'get'
   })
 }
+
 // 批量注册设备
 export function dateleEquipmentService(data) {
   return request({
@@ -48,6 +53,7 @@ export function dateleEquipmentService(data) {
     data
   })
 }
+
 // 更新设备服务套餐
 export function updateEquipmentService(data) {
   return request({
@@ -65,6 +71,7 @@ export function groupServiceList(data) {
     params: data
   })
 }
+
 // 查询设备注册纪录列表
 export function registeredLogList(data) {
   return request({
@@ -73,6 +80,7 @@ export function registeredLogList(data) {
     params: data
   })
 }
+
 // 查询注册详情
 export function registeredDetailList(data) {
   return request({
@@ -81,6 +89,7 @@ export function registeredDetailList(data) {
     params: data
   })
 }
+
 // 查询注册详情
 export function registeredList(data) {
   return request({
@@ -89,6 +98,7 @@ export function registeredList(data) {
     params: data
   })
 }
+
 // 获取服务套餐列表
 export function agentGroupServiceList(data) {
   return request({
@@ -97,6 +107,7 @@ export function agentGroupServiceList(data) {
     params: data
   })
 }
+
 // 获取服务套餐列表
 export function configList(data) {
   return request({
@@ -187,6 +198,7 @@ export function szNewEquipment(data) {
     params: data
   })
 }
+
 export function verifyCode(data) {
   return request({
     url: '/userlogin/merchant/verifyCode',
@@ -194,6 +206,7 @@ export function verifyCode(data) {
     params: data
   })
 }
+
 /**
  * 根据设备查询商户下同类型的协议
  * @param {*} data
@@ -205,6 +218,7 @@ export function protocolList(data) {
     params: data
   })
 }
+
 /**
  * 检验设备计费模式是否相同
  *
@@ -217,6 +231,7 @@ export function checkBillingModel(data) {
     params: data
   })
 }
+
 /**
  * 更新设备类型
  * @param {*} data
@@ -228,6 +243,7 @@ export function updateEquipmentModel(data) {
     data
   })
 }
+
 export function validate(data) {
   return request({
     url: '/userlogin/password/verifyCode/validate',
@@ -246,6 +262,7 @@ export function setEquipment(data) {
     // }
   })
 }
+
 /**
  * add by lss 20190903
  * 更新计费模式
@@ -288,5 +305,16 @@ export async function factorySaveEquipmentGroupApi(data) {
     url: '/rest/factory/saveEquipmentGroup',
     method: 'post',
     data
+  })
+}
+
+export function equipmentBatchRegisterEquipmentApi(data) {
+  const url = `/rest/equipment/registerEquipment${stringParse(data)}`
+  return request({
+    url: url,
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json'
+    }
   })
 }

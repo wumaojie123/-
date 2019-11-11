@@ -32,6 +32,7 @@
     </el-form>
     <!-- 列表 -->
     <el-table
+      :height="tableHeight"
       :data="list"
       border
       highlight-current-row
@@ -39,15 +40,28 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="55"/>
-      <el-table-column
-        v-for="(item, index) in colums"
-        :key="index"
-        :prop="item.key"
-        :label="item.label"
-        :width="item.width"
-        :sortable="item.sortable"
-        align="center"
-      />
+      <template v-if="queryParams.equipmentType==='CDZ'">
+        <el-table-column
+          v-for="(item, index) in colums"
+          :key="index"
+          :prop="item.key"
+          :label="item.label"
+          :width="item.width"
+          :sortable="item.sortable"
+          align="center"
+        />
+      </template>
+      <template v-if="queryParams.equipmentType==='SHJ'">
+        <el-table-column
+          v-for="(item, index) in shjColums"
+          :key="index"
+          :prop="item.key"
+          :label="item.label"
+          :width="item.width"
+          :sortable="item.sortable"
+          align="center"
+        />
+      </template>
     </el-table>
     <div style="padding-bottom: 10px;font-size: 16px;">合计设备数：{{ pageInfo.total }}台</div>
 
@@ -112,6 +126,15 @@
           { key: 'sourceText', label: '设备来源' },
           { key: 'updated', label: '操作时间' }
         ],
+        shjColums: [
+          { key: 'equipmentTypeText', label: '设备类型' },
+          { key: 'value', label: '设备编号' },
+          { key: 'communicationText', label: '通信方式' },
+          { key: 'distributor', label: '商家名称' },
+          { key: 'protocolDTOTitle', label: '设备型号' },
+          { key: 'sourceText', label: '设备来源' },
+          { key: 'updated', label: '操作时间' }
+        ],
         pageInfo: { total: 0, pageSize: 10, currPage: 1 },
         selectList: [],
         showPatternBoxFlag: false,
@@ -122,13 +145,26 @@
         arrCDZChargePattern: [],
         tempChargePattern: '',
         selectedPattern: '',
-        tempEquipmentArr: []
+        tempEquipmentArr: [],
+        tableHeight: 700
       }
     },
     created() {
+      this.initTableHeight()
       this.queryList()
     },
     methods: {
+      // 列表初始高度
+      initTableHeight() {
+        this.$nextTick(() => {
+          const mainDOMHeight = document.querySelector('.main-container').offsetHeight
+          if (mainDOMHeight > 0) {
+            this.tableHeight = mainDOMHeight - 300
+          } else {
+            this.tableHeight = 700
+          }
+        })
+      },
       changeDeviceType(value) {
         this.queryParams.equipmentType = value
         this.queryList()
@@ -195,7 +231,7 @@
       },
       handleAngent(type) {
         if (this.selectList.length === 1) {
-          console.log('kkk')
+          console.log(this.selectList.length)
         } else if (this.selectList.length > 1) {
           this.$message({ message: '只能编辑一条代理商信息', type: 'error' })
         } else {
@@ -307,6 +343,10 @@
               deviceType: this.queryParams.equipmentType,
               equipmentArr: equipmentArr,
               communication: equipmentType[0],
+              distributorId: this.selectList[0].lyyDistributorId,
+              lyyEquipmentTypeId: this.selectList[0].lyyEquipmentTypeId,
+              account: this.selectList[0].account,
+              distributor: this.selectList[0].distributor,
               chargePattern: this.selectedPattern
             }
           })

@@ -2,7 +2,7 @@
   <div class="content-area">
     <el-form :inline="true" style="margin-bottom: 20px;" label-width="90px" label-position="right">
       <el-form-item label="设备类型">
-        <el-select v-model="queryParams.equipmentType" placeholder="请选择">
+        <el-select v-model="queryParams.equipmentType" placeholder="请选择" @change="changeDeviceType">
           <el-option
             v-for="item in equipmentTypesArr"
             :key="item.value"
@@ -27,14 +27,20 @@
       </el-form-item>
     </el-form>
     <!-- 列表 -->
-    <el-table :data="list" border highlight-current-row style="width: 100%;margin-bottom: 20px;">
+    <el-table
+      :height="tableHeight"
+      :data="list"
+      border
+      highlight-current-row
+      style="width: 100%;margin-bottom: 20px;">
       <el-table-column label="操作" width="55" align="center">
         <template slot-scope="scope">
           <el-radio
             :label="scope.$index"
             v-model="check"
             @change.native="getTemplateRow(scope.$index)"
-          >&nbsp;</el-radio>
+          >&nbsp;
+          </el-radio>
         </template>
       </el-table-column>
       <el-table-column
@@ -62,245 +68,262 @@
 </template>
 
 <script>
-import { registeredList } from '@/api/device'
-import { deviceMap, deviceMapInfo } from './constant'
+  import { registeredList } from '@/api/device'
+  import { deviceMap, deviceMapInfo } from './constant'
 
-export default {
-  data() {
-    return {
-      check: -1,
-      queryParams: { equipmentType: 'CDZ', equipmentValue: '', registered: 1 },
-      list: [],
-      deviceMapInfo: deviceMap,
-      colums: [
-        { key: 'value', label: '设备编号' },
-        { key: 'loginFlag', label: '登录表示' },
-        { key: 'equipmentTypeText', label: '设备类型' },
-        { key: 'protocolDTOTitle', label: '设备型号' },
-        { key: 'communicationText', label: '通信方式' },
-        { key: 'chargePattern', label: '计费方式' },
-        { key: 'equipmentParam', label: '设备参数' },
-        { key: 'groupNumber', label: '机台号' },
-        { key: 'signalText', label: '信号' },
-        { key: 'onlineText', label: '在线状态' },
-        { key: 'statusText', label: '禁用状态' },
-        { key: 'account', label: '账号' },
-        { key: 'distributor', label: '商家名称' },
-        { key: 'area', label: '区域' },
-        { key: 'registerDate', label: '注册时间' }
-      ],
-      pageInfo: { total: 0, pageSize: 10, currPage: 1 },
-      selectItems: [],
-      equipmentTypesArr: deviceMap
-    }
-  },
-  created() {
-    this.queryList()
-  },
-  methods: {
-    getChargePatternText(model) {
-      const chargePatternMap = {
-        TIME: '按时长计费',
-        ELEC: '按电量计费'
+  export default {
+    data() {
+      return {
+        check: -1,
+        queryParams: { equipmentType: 'CDZ', equipmentValue: '', registered: 1 },
+        list: [],
+        deviceMapInfo: deviceMap,
+        colums: [
+          { key: 'value', label: '设备编号' },
+          { key: 'loginFlag', label: '登录表示' },
+          { key: 'equipmentTypeText', label: '设备类型' },
+          { key: 'protocolDTOTitle', label: '设备型号' },
+          { key: 'communicationText', label: '通信方式' },
+          { key: 'chargePattern', label: '计费方式' },
+          { key: 'equipmentParam', label: '设备参数' },
+          { key: 'groupNumber', label: '机台号' },
+          { key: 'signalText', label: '信号' },
+          { key: 'onlineText', label: '在线状态' },
+          { key: 'statusText', label: '禁用状态' },
+          { key: 'account', label: '账号' },
+          { key: 'distributor', label: '商家名称' },
+          { key: 'area', label: '区域' },
+          { key: 'registerDate', label: '注册时间' }
+        ],
+        pageInfo: { total: 0, pageSize: 10, currPage: 1 },
+        selectItems: [],
+        equipmentTypesArr: deviceMap,
+        tableHeight: 700
       }
-      model = model || []
-      var text = ''
-      model.forEach(i => {
-        text += chargePatternMap[i.name] + ','
-      })
-      if (text !== '') {
-        text = text.substr(0, text.length - 1)
-      }
-      return text
     },
-    queryList(page = 1) {
-      this.selectItems = []
-      this.list = []
-      this.pageInfo.currPage = page
-      const postData = {
-        pageSize: this.pageInfo.pageSize,
-        pageIndex: this.pageInfo.currPage
-      }
-      for (const key in this.queryParams) {
-        postData[key] = this.queryParams[key]
-      }
-      registeredList(postData).then(res => {
-        this.listLoading = false
-        if (res.data) {
-          let list = res.data.items || []
-          list = list.map(item => {
-            item.sourceText =
-              item.source === 1
-                ? '商家解绑'
-                : item.source === 0
+    created() {
+      this.initTableHeight()
+      this.queryList()
+    },
+    methods: {
+      // 列表初始高度
+      initTableHeight() {
+        this.$nextTick(() => {
+          const mainDOMHeight = document.querySelector('.main-container').offsetHeight
+          if (mainDOMHeight > 0) {
+            this.tableHeight = mainDOMHeight - 300
+          } else {
+            this.tableHeight = 700
+          }
+        })
+      },
+      changeDeviceType(value) {
+        this.queryParams.equipmentType = value
+        this.queryList()
+      },
+      getChargePatternText(model) {
+        const chargePatternMap = {
+          TIME: '按时长计费',
+          ELEC: '按电量计费'
+        }
+        model = model || []
+        var text = ''
+        model.forEach(i => {
+          text += chargePatternMap[i.name] + ','
+        })
+        if (text !== '') {
+          text = text.substr(0, text.length - 1)
+        }
+        return text
+      },
+      queryList(page = 1) {
+        this.selectItems = []
+        this.list = []
+        this.pageInfo.currPage = page
+        const postData = {
+          pageSize: this.pageInfo.pageSize,
+          pageIndex: this.pageInfo.currPage
+        }
+        for (const key in this.queryParams) {
+          postData[key] = this.queryParams[key]
+        }
+        registeredList(postData).then(res => {
+          this.listLoading = false
+          if (res.data) {
+            let list = res.data.items || []
+            list = list.map(item => {
+              item.sourceText =
+                item.source === 1
+                  ? '商家解绑'
+                  : item.source === 0
                   ? '平台导入'
                   : ''
-            // const chargePatternMap = {
+              // const chargePatternMap = {
               //   TIME: '按时长计费',
-            //   ELEC: '按电量计费'
-            // }
-            const title = (item.protocolDTO && item.protocolDTO.title) || ''
-            item.protocolDTOTitle = title
-            const communicationMap = { 0: '无', 1: '脉冲', 2: '串口' }
-            item.communicationText = communicationMap[item.communication]
-            if (item.communication !== 2) {
-              item.chargePattern = '--'
-            } else {
-              item.chargePattern = this.getChargePatternText(item.billingModel)
-              item.billing = item.billingModel[0].name
-            }
-            const equipmentTypeMap = deviceMapInfo
-            item.equipmentTypeText = equipmentTypeMap[item.equipmentType]
-            const onlineMap = { 0: '不在线', 1: '在线' }
-            item.onlineText = onlineMap[item.online]
-            const statusMap = { disabled: '禁用', '1Normal': '启用' }
-            item.statusText = statusMap[item.status]
-            const signalMap = { 1: '弱', 2: '中', 3: '强', 4: '很强' }
-            item.signalText = signalMap[item.signal] || '中'
-            item.groupNumber = item.groupNumber ? `${item.groupNumber}号机` : '未设置'
-            return item
-          })
-          this.list = list
-          this.pageInfo.total = res.data.total || 0
-        } else {
-          this.pageInfo.total = 0
-        }
-      })
-    },
-    getTemplateRow(value) {
-      this.check = value
-      this.selectItems = [this.list[value]]
-    },
-    handleSizeChange(pageSize) {
-      this.pageInfo.pageSize = pageSize
-      this.pageInfo.total = 0
-      this.queryList(1)
-    },
-    handleCurrentChange(page) {
-      this.queryList(page)
-    },
-    filerQueryList() {
-      this.pageInfo.total = 0
-      this.queryList(this.pageInfo.currPage)
-    },
-    /**
-     *
-     * @params {String} type `1: 设备参数设置 2: 设置服务套餐 3: 解绑设备 4: 修改设备型号`
-     *
-     */
-    handlePage(type) {
-      if (this.selectItems.length === 1) {
-        const data = this.selectItems[0]
-        if (type === 1) {
-          if (data.online === 0) {
-            this.$message({ message: '设备离线', type: 'error' })
-            return
-          }
-          if (this.selectItems[0].isLyyOpen === 1) {
-            this.$router.push({
-              path: '/deviceParamsLyyOpen',
-              query: {
-                uniqueCode: data.uniqueCode,
-                name: data.distributor,
-                lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
-                phoneNumber: data.account
+              //   ELEC: '按电量计费'
+              // }
+              const title = (item.protocolDTO && item.protocolDTO.title) || ''
+              item.protocolDTOTitle = title
+              const communicationMap = { 0: '无', 1: '脉冲', 2: '串口' }
+              item.communicationText = communicationMap[item.communication]
+              if (item.communication !== 2) {
+                item.chargePattern = '--'
+              } else {
+                item.chargePattern = this.getChargePatternText(item.billingModel)
+                item.billing = item.billingModel[0].name
               }
+              const equipmentTypeMap = deviceMapInfo
+              item.equipmentTypeText = equipmentTypeMap[item.equipmentType]
+              const onlineMap = { 0: '不在线', 1: '在线' }
+              item.onlineText = onlineMap[item.online]
+              const statusMap = { disabled: '禁用', '1Normal': '启用' }
+              item.statusText = statusMap[item.status]
+              const signalMap = { 1: '弱', 2: '中', 3: '强', 4: '很强' }
+              item.signalText = signalMap[item.signal] || '中'
+              item.groupNumber = item.groupNumber ? `${item.groupNumber}号机` : '未设置'
+              return item
             })
-            return
-          }
-          if (this.selectItems[0].interfaceFlag) {
-            this.$router.push({
-              path: '/deviceParamsTy',
-              query: {
-                uniqueCode: data.uniqueCode,
-                loginFlag: data.loginFlag,
-                name: data.distributor,
-                lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
-                phoneNumber: data.account
-              }
-            })
+            this.list = list
+            this.pageInfo.total = res.data.total || 0
           } else {
-            const query = {
-              value: data.value,
-              typeValue: data.equipmentType,
-              equipmentTypeName: data.equipmentTypeName,
-              name: data.distributor,
-              phoneNumber: data.account,
-              lyyEquipmentId: this.selectItems[0].lyyEquipmentId
+            this.pageInfo.total = 0
+          }
+        })
+      },
+      getTemplateRow(value) {
+        this.check = value
+        this.selectItems = [this.list[value]]
+      },
+      handleSizeChange(pageSize) {
+        this.pageInfo.pageSize = pageSize
+        this.pageInfo.total = 0
+        this.queryList(1)
+      },
+      handleCurrentChange(page) {
+        this.queryList(page)
+      },
+      filerQueryList() {
+        this.pageInfo.total = 0
+        this.queryList(this.pageInfo.currPage)
+      },
+      /**
+       *
+       * @params {String} type `1: 设备参数设置 2: 设置服务套餐 3: 解绑设备 4: 修改设备型号`
+       *
+       */
+      handlePage(type) {
+        if (this.selectItems.length === 1) {
+          const data = this.selectItems[0]
+          if (type === 1) {
+            if (data.online === 0) {
+              this.$message({ message: '设备离线', type: 'error' })
+              return
             }
-            if (
-              data.loginFlag === 5 ||
-              data.loginFlag === 7 ||
-              data.loginFlag === 14 ||
-              data.loginFlag === 16
-            ) {
-              this.$router.push({ path: '/deviceParamsDBJ', query: query })
-            } else if (
-              /^(AMY)|(AMD)|(ZLJ)|(XYJ)|(CDZ)$/.test(data.equipmentType)
-            ) {
-              this.$router.push({ path: '/deviceLifeParams', query: query })
+            if (this.selectItems[0].isLyyOpen === 1) {
+              this.$router.push({
+                path: '/deviceParamsLyyOpen',
+                query: {
+                  uniqueCode: data.uniqueCode,
+                  name: data.distributor,
+                  lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
+                  phoneNumber: data.account
+                }
+              })
+              return
+            }
+            if (this.selectItems[0].interfaceFlag) {
+              this.$router.push({
+                path: '/deviceParamsTy',
+                query: {
+                  uniqueCode: data.uniqueCode,
+                  loginFlag: data.loginFlag,
+                  name: data.distributor,
+                  lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
+                  phoneNumber: data.account
+                }
+              })
             } else {
-              this.$router.push({ path: '/deviceParamsOthers', query: query })
+              const query = {
+                value: data.value,
+                typeValue: data.equipmentType,
+                equipmentTypeName: data.equipmentTypeName,
+                name: data.distributor,
+                phoneNumber: data.account,
+                lyyEquipmentId: this.selectItems[0].lyyEquipmentId
+              }
+              if (
+                data.loginFlag === 5 ||
+                data.loginFlag === 7 ||
+                data.loginFlag === 14 ||
+                data.loginFlag === 16
+              ) {
+                this.$router.push({ path: '/deviceParamsDBJ', query: query })
+              } else if (
+                /^(AMY)|(AMD)|(ZLJ)|(XYJ)|(CDZ)$/.test(data.equipmentType)
+              ) {
+                this.$router.push({ path: '/deviceLifeParams', query: query })
+              } else {
+                this.$router.push({ path: '/deviceParamsOthers', query: query })
+              }
             }
-          }
-        } else if (type === 2) {
-          if (data.online === 0 && type !== 4) {
-            this.$message({ message: '设备离线', type: 'error' })
-            return
-          }
-          this.$router.push({
-            path: '/deviceServiceEdit',
-            query: {
-              value: this.selectItems[0].value,
-              lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
-              equipmentType: this.queryParams.equipmentType,
-              communication: this.selectItems[0].communication,
-              name: data.distributor,
-              phoneNumber: data.account,
-              billing: data.billing
+          } else if (type === 2) {
+            if (data.online === 0 && type !== 4) {
+              this.$message({ message: '设备离线', type: 'error' })
+              return
             }
-          })
-        } else if (type === 3) {
-          this.$router.push({
-            path: '/unregister',
-            query: {
-              lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
-              value: this.selectItems[0].value,
-              equipmentType: this.queryParams.equipmentType,
-              name: data.distributor,
-              phoneNumber: data.account
-            }
-          })
-        } else if (type === 4) {
-          if (!this.selectItems[0].communicationText) {
-            return
-          }
-          if (!(['CDZ', 'XYJ'].indexOf(this.selectItems[0].equipmentType) > -1)) {
-            this.$message({ message: '请选择充电桩,洗衣机设备', type: 'warning' })
-            return
-          }
-          if (this.selectItems[0].loginFlag === 10000) {
             this.$router.push({
-              path: '/deviceModify',
+              path: '/deviceServiceEdit',
+              query: {
+                value: this.selectItems[0].value,
+                lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
+                equipmentType: this.queryParams.equipmentType,
+                communication: this.selectItems[0].communication,
+                name: data.distributor,
+                phoneNumber: data.account,
+                billing: data.billing
+              }
+            })
+          } else if (type === 3) {
+            this.$router.push({
+              path: '/unregister',
               query: {
                 lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
                 value: this.selectItems[0].value,
                 equipmentType: this.queryParams.equipmentType,
                 name: data.distributor,
-                phoneNumber: data.account,
-                type: 1
+                phoneNumber: data.account
               }
             })
-          } else {
-            this.$message({ message: '请选择设备型号不为空的设备', type: 'warning' })
+          } else if (type === 4) {
+            if (!this.selectItems[0].communicationText) {
+              return
+            }
+            if (!(['CDZ', 'XYJ'].indexOf(this.selectItems[0].equipmentType) > -1)) {
+              this.$message({ message: '请选择充电桩,洗衣机设备', type: 'warning' })
+              return
+            }
+            if (this.selectItems[0].loginFlag === 10000) {
+              this.$router.push({
+                path: '/deviceModify',
+                query: {
+                  lyyEquipmentId: this.selectItems[0].lyyEquipmentId,
+                  value: this.selectItems[0].value,
+                  equipmentType: this.queryParams.equipmentType,
+                  name: data.distributor,
+                  phoneNumber: data.account,
+                  type: 1
+                }
+              })
+            } else {
+              this.$message({ message: '请选择设备型号不为空的设备', type: 'warning' })
+            }
           }
+        } else if (this.selectItems.length > 1) {
+          this.$message({ message: '请选择设备', type: 'error' })
+        } else {
+          this.$message({ message: '请选择设备', type: 'error' })
         }
-      } else if (this.selectItems.length > 1) {
-        this.$message({ message: '请选择设备', type: 'error' })
-      } else {
-        this.$message({ message: '请选择设备', type: 'error' })
       }
     }
   }
-}
 </script>

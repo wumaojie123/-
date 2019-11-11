@@ -3,7 +3,7 @@
     <h1 style="margin: 10px 0px;">
       注册设备：已选{{ equipmentArr.length }}台；
       设备类型：{{ deviceType | deviceFilter }}；
-      通信方式：{{ communication | communicationFilter }}；
+      <span v-if="communication!=null">通信方式：{{ communication | communicationFilter }}；</span>
       <span v-if="communication==2">
         计费方式：{{ chargePatternText }}
       </span>
@@ -133,17 +133,28 @@
     </div>
     <div v-else>
       <div class="shj-list">
-        <p class="distributor-name">绑定商家（13760651286）</p>
+        <p class="distributor-name">绑定商家：{{ distributor }}（{{ account }}）</p>
+        <div class="table-title-info">
+          <span>请选择设备类型</span>
+          <el-select v-model="businessType" placeholder="请选择设备类型">
+            <el-option
+              v-for="item in businessTypeList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+        </div>
         <div class="table-title-info">
           <span>选择投放场地</span>
           <el-button type="primary" @click="showAddGroupNameModal">添加投放场地</el-button>
         </div>
         <el-table
           :data="shjList"
+          :height="tableHeight"
           border
           highlight-current-row
           style="width: 100%;margin-bottom: 20px;"
-          height="400"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55"/>
@@ -164,6 +175,7 @@
         </div>
         <AddGroupModal
           :visible.sync="visible.groupModal"
+          :distributor-id="distributorId"
           @closeAddGroupModal="closeAddGroupModal"
           @confirmAddGroupName="confirmAddGroupName"
         />
@@ -177,11 +189,12 @@
     agentGroupServiceList,
     batchRegisteredEquipment,
     merchants,
-    factoryGroupListApi
+    factoryGroupListApi,
+    equipmentBatchRegisterEquipmentApi
   } from '@/api/device'
 
   import { priceCheck, serviceTimeCheck, conisCheck } from '@/utils/rules'
-  import { deviceMapInfo, communicationMap } from './constant'
+  import { deviceMapInfo, communicationMap, shjBusinessTypeList } from './constant'
   import verfyCode from './component/verfyCode'
   import AddGroupModal from './component/addGroupModal'
   // import { mul } from '@/utils/index'
@@ -208,6 +221,8 @@
     data() {
       return {
         lyyDistributorId: '',
+        distributorId: '',
+        lyyEquipmentTypeId: '',
         list: [],
         shjList: [],
         colums: [
@@ -257,7 +272,10 @@
         chargePattern: '',
         visible: {
           groupModal: false
-        }
+        },
+        tableHeight: 700,
+        businessType: '',
+        businessTypeList: shjBusinessTypeList
       }
     },
     computed: {
@@ -271,8 +289,14 @@
       this.communication = this.$route.query.communication
       this.phoneNumber = this.$route.query.phoneNumber
       this.name = this.$route.query.name
-      this.lyyDistributorId = this.$route.query.lyyDistributorId
       this.chargePattern = this.$route.query.chargePattern
+
+      // 售货机
+      this.distributorId = this.$route.query.distributorId
+      this.distributor = this.$route.query.distributor
+      this.account = this.$route.query.account
+
+      this.lyyEquipmentTypeId = this.$route.query.lyyEquipmentTypeId
       /* eslint-disable-next-line */
       if (this.communication == 2) {
         if (this.chargePattern === 'ELEC') {
@@ -291,8 +315,19 @@
       }
       this.queryList()
       this.getMerchantList()
+      this.initTableHeight()
     },
     methods: {
+      initTableHeight() {
+        this.$nextTick(() => {
+          const mainDOMHeight = document.querySelector('.main-container').offsetHeight
+          if (mainDOMHeight > 0) {
+            this.tableHeight = mainDOMHeight - 350
+          } else {
+            this.tableHeight = 700
+          }
+        })
+      },
       closeAddGroupModal() {
         this.visible.groupModal = false
       },
@@ -310,9 +345,9 @@
       // 售货机-获取场地列表
       async getGroupNameList() {
         const postData = {
-          pageSize: 400,
+          pageSize: 800,
           pageIndex: 1,
-          lyyDistributorId: 1032498
+          lyyDistributorId: this.distributorId
         }
         const res = await factoryGroupListApi(postData)
         if (res.result === 0) {
@@ -522,7 +557,43 @@
           })
         }
       },
-      handleBatchShjSave() {
+      async handleBatchShjSave() {
+        if (this.selectList.length === 0) {
+          this.$message({
+            message: '请选择一个投放场地',
+            type: 'error'
+          })
+          return
+        }
+        if (this.selectList.length > 1) {
+          this.$message({
+            message: '只能选择一个投放场地',
+            type: 'error'
+          })
+          return
+        }
+        if (!this.businessType) {
+          this.$message({
+            message: '请选择业务类型',
+            type: 'error'
+          })
+          return
+        }
+        const reqData = {
+          values: this.equipmentArr.join(','),
+          groupId: this.selectList[0].groupId,
+          typeId: this.lyyEquipmentTypeId, // 售货机类型id - 1001131
+          href: location.href,
+          businessType: this.businessType
+        }
+        const res = await equipmentBatchRegisterEquipmentApi(reqData)
+        if (res.result === 0) {
+          this.$message({
+            message: '设备注册记录可查看设备注册进度',
+            type: 'success'
+          })
+          this.handleCancel()
+        }
       },
       handleCancel() {
         window.history.go(-1)
@@ -539,8 +610,7 @@
   .table-title-info {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    padding-right: 140px;
+    padding: 10px 140px 10px 10px;
     align-items: center;
   }
 </style>

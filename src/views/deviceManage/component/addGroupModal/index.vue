@@ -1,11 +1,12 @@
 <template lang="html">
   <el-dialog
     :visible.sync="visible"
-    :before-close="beforeClose"
+    :before-close="cancel"
     title="添加投放场地"
     class="add-group-modal"
-    width="400px"
+    width="450px"
     destroy-on-close
+    center
     @close="cancel"
   >
     <el-form :model="form">
@@ -27,7 +28,7 @@
       </el-form-item>
       <el-form-item :label-width="formLabelWidth" label="地址类型">
         <el-select
-          v-model="form.type"
+          v-model="form.addressType"
           filterable
           placeholder="请选择"
           @change="changeAddressType">
@@ -52,9 +53,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import { addressType } from '../../constant'
-  import {
-    factorySaveEquipmentGroupApi
-  } from '@/api/device'
+  import { factorySaveEquipmentGroupApi } from '@/api/device'
 
   export default {
     mixins: [],
@@ -63,14 +62,9 @@
         type: Boolean,
         default: false
       },
-      data: {
-        type: Object,
-        default: () => ({})
-      },
-      fn: {
-        type: Boolean,
-        default: () => {
-        }
+      distributorId: {
+        type: Number,
+        default: 0
       }
     },
     data() {
@@ -78,14 +72,11 @@
         addressType,
         form: {
           groupName: '',
-          type: '',
           address: '',
           isDefault: false,
           zone: [],
           addressType: '',
-          groupId: '',
-          lyyDistributorId: '',
-          districtId: ''
+          groupId: ''
         },
         formLabelWidth: '100px',
         cascaderProps: {
@@ -99,26 +90,20 @@
     },
     methods: {
       changeAddressType(value) {
-        this.form.type = value
+        this.form.addressType = value
       },
       districtChange(val) {
-        console.log('test', val)
         this.form.zone = val
       },
-      confirm() {
-        console.log('test', this.form)
-        factorySaveEquipmentGroupApi(this.form).then((res) => {
-          if (res.result === 0) {
-            console.log(res)
-            this.$emit('confirmAddGroupName')
-          }
-        })
+      async confirm() {
+        this.form.districtId = this.form.zone[2]
+        this.form.lyyDistributorId = this.distributorId
+        const res = await factorySaveEquipmentGroupApi(this.form)
+        console.log('test', res)
+        this.$emit('confirmAddGroupName')
       },
       cancel() {
         this.$emit('closeAddGroupModal')
-      },
-      beforeClose(done) {
-        this.cancel()
       }
     }
   }

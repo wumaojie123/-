@@ -473,3 +473,38 @@ export const addressType = [
   { 'name': '高中&职业技术学院', 'value': 'SCHOOL,004' },
   { 'name': '其他', 'value': 'OTHERS,001' }
 ]
+
+export const shjBusinessTypeList = [
+  {
+    value: 3,
+    label: '自动售货机'
+  },
+  {
+    value: 1,
+    label: '福袋机'
+  },
+  {
+    value: 2,
+    label: '口红机'
+  },
+  {
+    value: 4,
+    label: '冰淇淋机'
+  },
+  {
+    value: 8,
+    label: '电子烟售货机'
+  },
+  {
+    value: 11,
+    label: '豆浆机'
+  },
+  {
+    value: 12,
+    label: '咖啡机'
+  },
+  {
+    value: 13,
+    label: '格子机'
+  }
+]
