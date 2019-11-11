@@ -282,24 +282,26 @@
           equipmentType.push(item.communication)
           equipmentList.push({
             type: item.equipmentType,
-            name: item.shopName
+            name: item.distributorId
           })
         })
-        const isSameType = equipmentList.some(item => item.type !== equipmentList[0].type)
-        const isSameName = equipmentList.some(item => item.name !== equipmentList[0].name)
-        if (isSameType) {
-          this.$message({
-            message: '无法批量注册不同的设备类型',
-            type: 'error'
-          })
-          return
-        }
-        if (isSameName) {
-          this.$message({
-            message: '无法批量给不同的商家注册设备',
-            type: 'error'
-          })
-          return
+        if (this.queryParams.equipmentType === 'SHJ') {
+          const isSameType = equipmentList.some(item => item.type !== equipmentList[0].type)
+          const isSameName = equipmentList.some(item => item.name !== equipmentList[0].name)
+          if (isSameType) {
+            this.$message({
+              message: '无法批量注册不同的设备类型',
+              type: 'error'
+            })
+            return
+          }
+          if (isSameName) {
+            this.$message({
+              message: '无法批量给不同的商家注册设备',
+              type: 'error'
+            })
+            return
+          }
         }
         const flag = equipmentType.some(item => item !== equipmentType[0])
         if (flag) {
