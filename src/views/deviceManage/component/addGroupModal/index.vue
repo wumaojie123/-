@@ -16,7 +16,7 @@
       <el-form-item :label-width="formLabelWidth" label="所属地区">
         <el-cascader
           v-model="form.zone"
-          :options="areaList"
+          :options="areaList.filter(v=>v.value!=-1)"
           :change-on-select="true"
           :props="cascaderProps"
           filterable
@@ -63,8 +63,8 @@
         default: false
       },
       distributorId: {
-        type: Number,
-        default: 0
+        type: String,
+        default: ''
       }
     },
     data() {
@@ -99,8 +99,19 @@
         this.form.districtId = this.form.zone[2]
         this.form.lyyDistributorId = this.distributorId
         const res = await factorySaveEquipmentGroupApi(this.form)
-        console.log('test', res)
-        this.$emit('confirmAddGroupName')
+        if (res.result === 0) {
+          this.form = {
+            groupName: '',
+            address: '',
+            isDefault: false,
+            zone: [],
+            addressType: '',
+            groupId: ''
+          }
+          this.$emit('confirmAddGroupName')
+        } else {
+          this.$message({ message: res.description || '添加场地失败', type: 'error' })
+        }
       },
       cancel() {
         this.$emit('closeAddGroupModal')

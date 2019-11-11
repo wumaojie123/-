@@ -110,8 +110,9 @@
       initTableHeight() {
         this.$nextTick(() => {
           const mainDOMHeight = document.querySelector('.main-container').offsetHeight
+          const elFormHeight = document.querySelector('.el-form').offsetHeight
           if (mainDOMHeight > 0) {
-            this.tableHeight = mainDOMHeight - 300
+            this.tableHeight = mainDOMHeight - elFormHeight - 180
           } else {
             this.tableHeight = 700
           }

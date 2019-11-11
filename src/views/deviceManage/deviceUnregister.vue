@@ -158,8 +158,9 @@
       initTableHeight() {
         this.$nextTick(() => {
           const mainDOMHeight = document.querySelector('.main-container').offsetHeight
+          const elFormHeight = document.querySelector('.el-form').offsetHeight
           if (mainDOMHeight > 0) {
-            this.tableHeight = mainDOMHeight - 300
+            this.tableHeight = mainDOMHeight - elFormHeight - 180
           } else {
             this.tableHeight = 700
           }
@@ -229,15 +230,6 @@
         this.check = value
         this.selectList = [this.list[value]]
       },
-      handleAngent(type) {
-        if (this.selectList.length === 1) {
-          console.log(this.selectList.length)
-        } else if (this.selectList.length > 1) {
-          this.$message({ message: '只能编辑一条代理商信息', type: 'error' })
-        } else {
-          this.$message({ message: '请选中一条代理商信息！！', type: 'error' })
-        }
-      },
       handleSizeChange(pageSize) {
         this.pageInfo.pageSize = pageSize
         this.pageInfo.total = 0
@@ -302,15 +294,17 @@
             })
             return
           }
+        } else {
+          const flag = equipmentType.some(item => item !== equipmentType[0])
+          if (flag) {
+            this.$message({
+              message: '只能选择同一种通信方式的设备进行注册',
+              type: 'error'
+            })
+            return
+          }
         }
-        const flag = equipmentType.some(item => item !== equipmentType[0])
-        if (flag) {
-          this.$message({
-            message: '只能选择同一种通信方式的设备进行注册',
-            type: 'error'
-          })
-          return
-        }
+
         // 判断计费模式
         // var tempChargePattern = ''
         // var selectedPattern = ''
@@ -345,7 +339,7 @@
               deviceType: this.queryParams.equipmentType,
               equipmentArr: equipmentArr,
               communication: equipmentType[0],
-              distributorId: this.selectList[0].lyyDistributorId,
+              distributorId: String(this.selectList[0].lyyDistributorId),
               lyyEquipmentTypeId: this.selectList[0].lyyEquipmentTypeId,
               account: this.selectList[0].account,
               distributor: this.selectList[0].distributor,
