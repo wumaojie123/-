@@ -98,8 +98,25 @@
       async confirm() {
         this.form.districtId = this.form.zone[2]
         this.form.lyyDistributorId = this.distributorId
+        const {
+          groupName,
+          addressType,
+          districtId
+        } = this.form
+        if (!groupName) {
+          this.$message({ message: '请输入场地名称', type: 'error' })
+          return
+        }
+        if (!districtId) {
+          this.$message({ message: '请输入所属地区', type: 'error' })
+          return
+        }
+        if (!addressType) {
+          this.$message({ message: '请选择地址类型', type: 'error' })
+          return
+        }
         const res = await factorySaveEquipmentGroupApi(this.form)
-        if (res.result === 0) {
+        if (res && res.result === 0) {
           this.form = {
             groupName: '',
             address: '',
