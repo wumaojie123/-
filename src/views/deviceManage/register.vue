@@ -357,7 +357,8 @@
             this.shjList = shjList.map((v, i) => {
               return {
                 ...v,
-                zone: `${v.provinceName}${v.cityName}${v.district}`
+                zone: `${v.provinceName}${v.cityName}${v.district}`,
+                isDefault: `${v.isDefault === 'Y' ? '默认' : ''}`
               }
             })
             this.pageInfo.total = res.data.total || 0
