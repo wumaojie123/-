@@ -30,7 +30,7 @@
       <el-switch v-model="incomeValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
     </p>
     <div>商户可在每日9:00接收昨日收益统计提醒，<el-popover placement="top-start" trigger="hover">
-      <img src="./images/1.png" class="popver-img" style="width: 300px;height: 448px;">
+      <img src="./images/incometip.png" class="popver-img" style="width: 300px;height: 448px;">
       <span slot="reference" style="color: #409EFF;">查看示例></span>
     </el-popover></div>
     <!-- 交易通知 -->
@@ -39,7 +39,7 @@
       <el-switch v-model="trateVlue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
     </p>
     <div>客户扫码交易后商家可在公众号接收交易提醒通知，<el-popover placement="top-start" trigger="hover">
-      <img src="./images/2.png" class="popver-img" style="width: 300px;height: 448px;">
+      <img src="./images/tratetip.png" class="popver-img" style="width: 300px;height: 448px;">
       <span slot="reference" style="color: #409EFF;">查看示例></span>
     </el-popover></div>
     <!-- 设备警告通知 -->
@@ -48,7 +48,7 @@
       <el-switch v-model="equipWarnValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
     </p>
     <div>设备上报烟雾告警，商家可在公众号接收提醒，<el-popover placement="top-start" trigger="hover">
-      <img src="./images/title.png" class="popver-img" style="width: 300px;height: 448px;">
+      <img src="./images/equipwarning.png" class="popver-img" style="width: 300px;height: 448px;">
       <span slot="reference" style="color: #409EFF;">查看示例></span>
     </el-popover></div>
 
@@ -98,9 +98,9 @@ export default {
       publicTypeVisible: false,
       subscribeMode: 0,
       ag: '',
-      incomeValue: true, // 收益统计通知
-      trateVlue: true, // 交易通知
-      equipWarnValue: true // 设备警告通知
+      incomeValue: 'Y', // 收益统计通知
+      trateVlue: 'Y', // 交易通知
+      equipWarnValue: 'Y' // 设备警告通知
 
     }
   },
