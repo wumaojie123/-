@@ -15,6 +15,7 @@
         <el-input v-model="tempLead2" placeholder="请先关注后使用" class="input-500" maxlength="30"/>
       </div>
     </el-radio>
+    <!-- 服务消息通知 -->
     <p class="title" style="margin-top: 20px;">
       <span>服务消息通知</span>
       <el-switch v-model="configValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
@@ -23,6 +24,34 @@
       <img src="./images/title.png" class="popver-img" style="width: 300px;height: 448px;">
       <span slot="reference" style="color: #409EFF;">查看示例></span>
     </el-popover></div>
+    <!-- 收益统计通知 -->
+    <p class="title" style="margin-top: 20px;">
+      <span>收益统计通知</span>
+      <el-switch v-model="incomeValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
+    </p>
+    <div>商户可在每日9:00接收昨日收益统计提醒，<el-popover placement="top-start" trigger="hover">
+      <img src="./images/1.png" class="popver-img" style="width: 300px;height: 448px;">
+      <span slot="reference" style="color: #409EFF;">查看示例></span>
+    </el-popover></div>
+    <!-- 交易通知 -->
+    <p class="title" style="margin-top: 20px;">
+      <span>交易通知</span>
+      <el-switch v-model="trateVlue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
+    </p>
+    <div>客户扫码交易后商家可在公众号接收交易提醒通知，<el-popover placement="top-start" trigger="hover">
+      <img src="./images/2.png" class="popver-img" style="width: 300px;height: 448px;">
+      <span slot="reference" style="color: #409EFF;">查看示例></span>
+    </el-popover></div>
+    <!-- 设备警告通知 -->
+    <p class="title" style="margin-top: 20px;">
+      <span>设备警告通知</span>
+      <el-switch v-model="equipWarnValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
+    </p>
+    <div>设备上报烟雾告警，商家可在公众号接收提醒，<el-popover placement="top-start" trigger="hover">
+      <img src="./images/title.png" class="popver-img" style="width: 300px;height: 448px;">
+      <span slot="reference" style="color: #409EFF;">查看示例></span>
+    </el-popover></div>
+
     <p class="title" style="margin-top: 20px;">
       <span>公众号菜单配置</span>
       <el-switch v-model="value" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
@@ -68,7 +97,11 @@ export default {
       isFirstAuth: 'N',
       publicTypeVisible: false,
       subscribeMode: 0,
-      ag: ''
+      ag: '',
+      incomeValue: true, // 收益统计通知
+      trateVlue: true, // 交易通知
+      equipWarnValue: true // 设备警告通知
+
     }
   },
   beforeMount() {
@@ -101,6 +134,10 @@ export default {
         this.menuList = res.data.menuConfig && res.data.menuConfig.button || []
         this.configValue = res.data.templateSuccess === 'Y' && res.data.isTemplateAuth === 'Y'
         this.value = res.data.menuSuccess === 'Y' && res.data.isMenuAuth === 'Y'
+        // 添加三个消息推送
+        // this.incomeValue = res.data.sendBenefitMsg === 'Y'
+        // this.trateVlue = res.data.sendPaymentMsg === 'Y'
+        // this.equipWarnValue = res.data.sendFaultMsg === 'Y'
         if (this.isFirstAuth === 'Y') {
           this.configValue = true
           this.value = true
@@ -175,6 +212,10 @@ export default {
         this.params.industryId1 = this.dataInfo.primaryIndustryCode
         this.params.industryId2 = this.dataInfo.forceIndustryCode
       }
+      // 增加三个消息的参数
+      this.params.sendPaymentMsg = this.trateVlue
+      this.params.sendBenefitMsg = this.incomeValue
+      this.params.sendFaultMsg = this.equipWarnValue
       console.log(this.params.type)
       const res = await updateConfig(this.params)
       if (res.result === 0) {
