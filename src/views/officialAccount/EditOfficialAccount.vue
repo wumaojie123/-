@@ -2,69 +2,170 @@
   <div class="official-account-edit" style="margin: 20px;">
     <p class="title">关注公众号方式</p>
     <el-radio v-model="subscribeMode" label="0">
-      <span>支付后引导关注<span style="color: #888;">（顾客扫码支付后页面会引导顾客关注公众号)</span></span>
+      <span>
+        支付后引导关注
+        <span style="color: #888;">（顾客扫码支付后页面会引导顾客关注公众号)</span>
+      </span>
       <div class="radio-wrap">
         <span class="title-desc">引导关注语</span>
-        <el-input v-model="tempLead1" placeholder="关注公众号，可接收充电消息通知" class="input-500" maxlength="30"/>
+        <el-input
+          v-model="tempLead1"
+          placeholder="关注公众号，可接收充电消息通知"
+          class="input-500"
+          maxlength="30"
+        />
       </div>
-    </el-radio><br>
+    </el-radio>
     <el-radio v-model="subscribeMode" label="1">
-      <span>先关注后支付<span style="color: #888;">（顾客扫码必须先关注公众号才可进行消费）</span></span>
+      <span>
+        先关注后支付
+        <span style="color: #888;">（顾客扫码必须先关注公众号才可进行消费）</span>
+      </span>
       <div class="radio-wrap">
         <span class="title-desc">引导关注语</span>
-        <el-input v-model="tempLead2" placeholder="请先关注后使用" class="input-500" maxlength="30"/>
+        <el-input v-model="tempLead2" placeholder="请先关注后使用" class="input-500" maxlength="30" />
       </div>
     </el-radio>
     <!-- 服务消息通知 -->
     <p class="title" style="margin-top: 20px;">
       <span>服务消息通知</span>
-      <el-switch v-model="configValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
+      <el-switch
+        v-model="configValue"
+        active-color="#13ce66"
+        size="big"
+        inactive-color="#f0f0f0"
+        style="margin-left: 20px;"
+      />
     </p>
-    <div>客户扫码消费后可在公众号接收服务开始、服务结束消息通知，<el-popover placement="top-start" trigger="hover">
-      <img src="./images/title.png" class="popver-img" style="width: 300px;height: 448px;">
-      <span slot="reference" style="color: #409EFF;">查看示例></span>
-    </el-popover></div>
-    <!-- 收益统计通知 -->
-    <p class="title" style="margin-top: 20px;">
-      <span>收益统计通知</span>
-      <el-switch v-model="incomeValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
-    </p>
-    <div>商户可在每日9:00接收昨日收益统计提醒，<el-popover placement="top-start" trigger="hover">
-      <img src="./images/incometip.png" class="popver-img" style="width: 300px;height: 448px;">
-      <span slot="reference" style="color: #409EFF;">查看示例></span>
-    </el-popover></div>
-    <!-- 交易通知 -->
-    <p class="title" style="margin-top: 20px;">
-      <span>交易通知</span>
-      <el-switch v-model="trateVlue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
-    </p>
-    <div>客户扫码交易后商家可在公众号接收交易提醒通知，<el-popover placement="top-start" trigger="hover">
-      <img src="./images/tratetip.png" class="popver-img" style="width: 300px;height: 448px;">
-      <span slot="reference" style="color: #409EFF;">查看示例></span>
-    </el-popover></div>
-    <!-- 设备警告通知 -->
-    <p class="title" style="margin-top: 20px;">
-      <span>设备警告通知</span>
-      <el-switch v-model="equipWarnValue" active-color="#13ce66" size="big" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
-    </p>
-    <div>设备上报烟雾告警，商家可在公众号接收提醒，<el-popover placement="top-start" trigger="hover">
-      <img src="./images/equipwarning.png" class="popver-img" style="width: 300px;height: 448px;">
-      <span slot="reference" style="color: #409EFF;">查看示例></span>
-    </el-popover></div>
-
+    <div v-if="configValue">
+      <!-- 洗衣提醒 -->
+      <div v-if="accountType==='XYJ'" class="tip-item-box">
+        <span :class="'tip-box'+(configValue?' active-tip':'')" @click="chargeTip=!chargeTip">
+          <i class="tip-default-icon" />
+          <span class="tip-txt">洗衣提醒</span>
+        </span>
+        <div>
+          客户扫码洗衣后可在公众号接收洗衣开始、洗衣结束消息通知，
+          <el-popover placement="top-start" trigger="hover">
+            <img
+              src="./images/tratewasher.png"
+              class="popver-img"
+              style="width: 300px;height: 448px;"
+            >
+            <span slot="reference" style="color: #409EFF;">查看示例></span>
+          </el-popover>
+        </div>
+      </div>
+      <!-- 充电提醒 -->
+      <div v-else class="tip-item-box">
+        <span :class="'tip-box'+(configValue?' active-tip':'')" @click="chargeTip=!chargeTip">
+          <i class="tip-default-icon" />
+          <span class="tip-txt">充电提醒</span>
+        </span>
+        <div>
+          客户扫码充电后可在公众号接收充电开始、充电结束消息通知，
+          <el-popover placement="top-start" trigger="hover">
+            <img src="./images/title.png" class="popver-img" style="width: 300px;height: 448px;">
+            <span slot="reference" style="color: #409EFF;">查看示例></span>
+          </el-popover>
+        </div>
+      </div>
+      <!-- 收益统计通知 -->
+      <div class="tip-item-box">
+        <span :class="'tip-box'+(sendBenefitMsg?' active-tip':'')" @click="sendBenefitMsg=!sendBenefitMsg">
+          <i class="tip-default-icon" />
+          <span class="tip-txt">收益统计通知</span>
+        </span>
+        <div>
+          商户可在每日9:00接收昨日收益统计提醒，
+          <el-popover placement="top-start" trigger="hover">
+            <img
+              v-if="accountType==='XYJ'"
+              src="./images/incomewasher.png"
+              class="popver-img"
+              style="width: 300px;height: 448px;"
+            >
+            <img
+              v-else
+              src="./images/incometip.png"
+              class="popver-img"
+              style="width: 300px;height: 448px;"
+            >
+            <span slot="reference" style="color: #409EFF;">查看示例></span>
+          </el-popover>
+        </div>
+      </div>
+      <!-- 交易通知 -->
+      <div class="tip-item-box">
+        <span :class="'tip-box'+(sendPaymentMsg?' active-tip':'')" @click="sendPaymentMsg=!sendPaymentMsg">
+          <i class="tip-default-icon" />
+          <span class="tip-txt">交易通知</span>
+        </span>
+        <div>
+          客户扫码交易后商家可在公众号接收交易提醒通知，
+          <el-popover placement="top-start" trigger="hover">
+            <img
+              v-if="accountType==='XYJ'"
+              src="./images/tratewasher.png"
+              class="popver-img"
+              style="width: 300px;height: 448px;"
+            >
+            <img
+              v-else
+              src="./images/tratetip.png"
+              class="popver-img"
+              style="width: 300px;height: 448px;"
+            >
+            <span slot="reference" style="color: #409EFF;">查看示例></span>
+          </el-popover>
+        </div>
+      </div>
+      <!-- 设备警告通知 洗衣机没有设备警告-->
+      <div v-if="accountType !== 'XYJ'" class="tip-item-box">
+        <span :class="'tip-box'+(sendFaultMsg?' active-tip':'')" @click="sendFaultMsg=!sendFaultMsg">
+          <i class="tip-default-icon" />
+          <span class="tip-txt">设备警告通知</span>
+        </span>
+        <div>
+          设备上报烟雾告警，商家可在公众号接收提醒，
+          <el-popover placement="top-start" trigger="hover">
+            <img
+              src="./images/equipwarning.png"
+              class="popver-img"
+              style="width: 300px;height: 448px;"
+            >
+            <span slot="reference" style="color: #409EFF;">查看示例></span>
+          </el-popover>
+        </div>
+      </div>
+    </div>
     <p class="title" style="margin-top: 20px;">
       <span>公众号菜单配置</span>
-      <el-switch v-model="value" active-color="#13ce66" inactive-color="#f0f0f0" style="margin-left: 20px;"/>
+      <el-switch
+        v-model="value"
+        active-color="#13ce66"
+        inactive-color="#f0f0f0"
+        style="margin-left: 20px;"
+      />
     </p>
     <!-- 公众号菜单 -->
     <template v-show="dataInfo.isMenuAuth === 'Y'">
-      <edit-dialog v-show="value" ref="datepicker" :ag="ag" :device-type="dataInfo.eType" :app-id="appId" :action-type="actionType" :menu-list="menuList" @on-OK="update"/>
+      <edit-dialog
+        v-show="value"
+        ref="datepicker"
+        :ag="ag"
+        :device-type="dataInfo.eType"
+        :app-id="appId"
+        :action-type="actionType"
+        :menu-list="menuList"
+        @on-OK="update"
+      />
     </template>
     <div style="margin: 20px 40px 0 80px;">
       <el-button type="success" @click="handlePreview">公众号菜单预览</el-button>
       <el-button type="primary" @click="updateConfig">保存</el-button>
     </div>
-    <preview v-model="previewVisible" :menu="params.menus"/>
+    <preview v-model="previewVisible" :menu="params.menus" />
   </div>
 </template>
 
@@ -87,7 +188,7 @@ export default {
       dataInfo: {},
       appId: '',
       value: true,
-      configValue: true,
+      configValue: false,
       actionType: '',
       menuList: [],
       industry: '',
@@ -98,10 +199,11 @@ export default {
       publicTypeVisible: false,
       subscribeMode: 0,
       ag: '',
-      incomeValue: 'Y', // 收益统计通知
-      trateVlue: 'Y', // 交易通知
-      equipWarnValue: 'Y' // 设备警告通知
-
+      chargeTip: 'Y', // 充电通知
+      sendBenefitMsg: 'Y', // 收益统计通知
+      sendPaymentMsg: 'Y', // 交易通知
+      sendFaultMsg: 'Y', // 设备警告通知
+      accountType: 'XY2J' // 公众号类型
     }
   },
   beforeMount() {
@@ -131,13 +233,15 @@ export default {
         } else if (this.subscribeMode === '1') {
           this.tempLead2 = res.data.lead || '请先关注后使用'
         }
-        this.menuList = res.data.menuConfig && res.data.menuConfig.button || []
+        this.menuList = (res.data.menuConfig && res.data.menuConfig.button) || []
         this.configValue = res.data.templateSuccess === 'Y' && res.data.isTemplateAuth === 'Y'
+        this.chargeTip = res.data.templateSuccess === 'Y' && res.data.isTemplateAuth === 'Y'
         this.value = res.data.menuSuccess === 'Y' && res.data.isMenuAuth === 'Y'
         // 添加三个消息推送
-        // this.incomeValue = res.data.sendBenefitMsg === 'Y'
-        // this.trateVlue = res.data.sendPaymentMsg === 'Y'
-        // this.equipWarnValue = res.data.sendFaultMsg === 'Y'
+        this.sendBenefitMsg = res.data.sendBenefitMsg === 'Y'
+        this.sendPaymentMsg = res.data.sendPaymentMsg === 'Y'
+        this.sendFaultMsg = res.data.sendFaultMsg === 'Y'
+        this.accountType = res.data.eType
         if (this.isFirstAuth === 'Y') {
           this.configValue = true
           this.value = true
@@ -152,8 +256,8 @@ export default {
       this.industry = val
     },
     /**
-       * 跟新配置信息
-       */
+     * 跟新配置信息
+     */
     update(data) {
       console.log('data')
       const params = {
@@ -192,7 +296,10 @@ export default {
         }
       })
       if (result) {
-        this.$message({ message: '二级菜单超过一个，一级菜单名称不能超过5个汉字', type: 'error' })
+        this.$message({
+          message: '二级菜单超过一个，一级菜单名称不能超过5个汉字',
+          type: 'error'
+        })
         return
       }
       console.log(JSON.stringify(this.params))
@@ -213,9 +320,9 @@ export default {
         this.params.industryId2 = this.dataInfo.forceIndustryCode
       }
       // 增加三个消息的参数
-      this.params.sendPaymentMsg = this.trateVlue
-      this.params.sendBenefitMsg = this.incomeValue
-      this.params.sendFaultMsg = this.equipWarnValue
+      this.params.sendPaymentMsg = this.sendPaymentMsg ? 'Y' : 'N'
+      this.params.sendBenefitMsg = this.sendBenefitMsg ? 'Y' : 'N'
+      this.params.sendFaultMsg = this.sendFaultMsg ? 'Y' : 'N'
       console.log(this.params.type)
       const res = await updateConfig(this.params)
       if (res.result === 0) {
@@ -229,24 +336,56 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.official-account-edit{
+.official-account-edit {
+  .tip-item-box {
+    margin-bottom: 15px;
+  }
+  .tip-box {
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 10px;
+    vertical-align: middle;
+    position: relative;
+    cursor: pointer;
+    .tip-txt {
+      vertical-align: middle;
+    }
+    .tip-default-icon {
+      vertical-align: middle;
+      margin-right: 10px;
+      display: inline-block;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      background: url('./images/noselect.png') center center no-repeat;
+      background-size: 20px 20px;
+    }
+  }
+  .tip-item-box{
+    .tip-box.active-tip{
+      .tip-default-icon{
+        background: url('./images/select.png') center center no-repeat;
+      background-size: 20px 20px;
+    }
+    }
+  }
   font-size: 14px;
-  .title{
+  .title {
     margin-bottom: 20px;
     font-weight: 700;
     font-size: 16px;
   }
-  .radio-wrap{
-    color: rgb(96, 98, 102);;
+  .radio-wrap {
+    color: rgb(96, 98, 102);
     margin-left: 20px;
     margin-top: 20px;
   }
-  .title-desc{
-    display:inline-block;
+  .title-desc {
+    display: inline-block;
     margin-right: 20px;
   }
 }
-.input-500{
+.input-500 {
   width: 500px;
 }
 </style>
