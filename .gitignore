@@ -25,3 +25,4 @@ config/index.js
 
 package-lock.json
 config/*
+.history/

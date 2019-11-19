@@ -1,7 +1,7 @@
 <template>
   <div class="official-account-edit" style="margin: 20px;">
     <p class="title">关注公众号方式</p>
-    <el-radio v-model="subscribeMode" label="0">
+    <div style="margin-bottom:30px;"><el-radio v-model="subscribeMode" label="0">
       <span>
         支付后引导关注
         <span style="color: #888;">（顾客扫码支付后页面会引导顾客关注公众号)</span>
@@ -15,8 +15,8 @@
           maxlength="30"
         />
       </div>
-    </el-radio>
-    <el-radio v-model="subscribeMode" label="1">
+    </el-radio></div>
+    <div><el-radio v-model="subscribeMode" label="1">
       <span>
         先关注后支付
         <span style="color: #888;">（顾客扫码必须先关注公众号才可进行消费）</span>
@@ -25,7 +25,7 @@
         <span class="title-desc">引导关注语</span>
         <el-input v-model="tempLead2" placeholder="请先关注后使用" class="input-500" maxlength="30" />
       </div>
-    </el-radio>
+    </el-radio></div>
     <!-- 服务消息通知 -->
     <p class="title" style="margin-top: 20px;">
       <span>服务消息通知</span>
