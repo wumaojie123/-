@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .m-act-del{
+right: 10px;
+top: 10px;
+margin-top: -6px;
+position: absolute;
+display: inline-block;
+width: 20px;
+height: 20px;
+overflow: hidden;
+background: #db384c;
+border-radius: 50%;
+}
+
+.m-act-del::before, .m-act-del::after {
+content: '';
+position: absolute;
+height: 2px;
+width: 70%;
+top: 50%; 
+left: 3px;
+margin-top: -1px;
+background: #fff;
+}
+
+.m-act-del::before {
+-webkit-transform: rotate(45deg);
+transform: rotate(45deg);
+}
+
+
+.m-act-del::after {
+-webkit-transform: rotate(-45deg);
+transform: rotate(-45deg);
+}
+    </style>
+  </head>
+  <body>
+    <div class="m-act-del"></div>
+   
+
+    <script>
+      var text = 'you are right';
+      console.log(text);
+    </script>
+  </body>
+</html>
